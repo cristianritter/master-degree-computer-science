@@ -1,0 +1,7 @@
+[08:10:20] 451 repos elegiveis, 450 ja concluidos, processando 11
+[08:10:20] config aplicada: 13 smells ligados
+[08:10:20] (1/11) apache/openejb -> test-smells-openejb
+[08:10:50]   ERRO: RuntimeError: nao consegui remover clone anterior: C:\Users\crist\.jnose_projects\test-smells-openejb
+[08:11:20]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-openejb
+[08:11:20] (2/11) apache/sis -> test-smells-sis
+[08:11:50]   ERRO: RuntimeError: nao consegui remover clone anterior: C:\Users\crist\.jnose_projects\test-smells-sis

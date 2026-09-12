@@ -1,0 +1,7 @@
+[07:55:01] 451 repos elegiveis, 450 ja concluidos, processando 1
+[07:55:04] config aplicada: 13 smells ligados
+[07:55:04] (1/1) apache/bahir-flink -> test-smells-bahir-flink
+[07:55:05]   2 candidato(s) a teste sem classe removido(s): flink-connector-flume\src\test\java\org\apache\flink\streaming\connectors\flume\DockerTest.java, flink-connector-kudu\src\test\java\org\apache\flink\streaming\connectors\kudu\DockerTest.java
+[07:55:17]   bytestsmells: 116 linhas (100%)
+[07:55:28]   byclasstest: 23 linhas (100%)
+[07:55:28] fim

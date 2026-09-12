@@ -1,0 +1,23 @@
+[02:01:16] 451 repos elegiveis, 450 ja concluidos, processando 12
+[02:01:16] config aplicada: 13 smells ligados
+[02:01:16] (1/12) apache/bahir-flink -> test-smells-bahir-flink
+[03:31:21]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[03:31:21]   reiniciando o JNose
+[03:31:37] config aplicada: 13 smells ligados
+[03:32:07]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-bahir-flink
+[03:32:07] (2/12) apache/openejb -> test-smells-openejb
+[05:02:46]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[05:02:46]   reiniciando o JNose
+[05:03:09] config aplicada: 13 smells ligados
+[05:03:39]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-openejb
+[05:03:39] (3/12) apache/sis -> test-smells-sis
+[06:33:55]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[06:33:55]   reiniciando o JNose
+[06:34:18] config aplicada: 13 smells ligados
+[06:34:48]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-sis
+[06:34:48] (4/12) apache/storm -> test-smells-storm
+[20:25:09]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[20:25:09]   reiniciando o JNose
+[20:25:48] config aplicada: 13 smells ligados
+[20:26:18]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-storm
+[20:26:18] (5/12) apache/tomee -> test-smells-tomee

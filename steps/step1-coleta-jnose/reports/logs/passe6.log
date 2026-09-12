@@ -1,0 +1,54 @@
+[08:12:48] 451 repos elegiveis, 450 ja concluidos, processando 11
+[08:12:52] JNose fora do ar; subindo
+[08:12:52]   reiniciando o JNose
+[08:12:58]   console do JNose em D:\master-degree-git\MLCQ\reports\jnose\20260912-081258.{out,err}
+[08:13:06] config aplicada: 13 smells ligados
+[08:13:06] config aplicada: 13 smells ligados
+[08:13:06] (1/11) apache/openejb -> test-smells-openejb
+[08:13:33]   4 candidato(s) a teste sem classe removido(s): openejb\container\openejb-core\src\test\java\org\apache\openejb\meta\MetaTest.java, openejb\container\openejb-junit\src\main\java\org\apache\openejb\junit\TestResource.java, openejb\container\openejb-junit\src\main\java\org\apache\openejb\junit\TestSecurity.java ...
+[08:13:53]   bytestsmells: 4489 linhas (100%)
+[08:14:06]   byclasstest: 636 linhas (100%)
+[08:14:09] (2/11) apache/sis -> test-smells-sis
+[08:14:20]   2 candidato(s) a teste sem classe removido(s): core\sis-utility\src\test\java\org\apache\sis\test\TestStep.java, storage\sis-netcdf\src\test\java\org\apache\sis\internal\netcdf\TestData.java
+[08:14:38]   bytestsmells: 10023 linhas (100%)
+[08:14:51]   byclasstest: 503 linhas (100%)
+[08:14:52] (3/11) apache/storm -> test-smells-storm
+[08:15:08]   2 candidato(s) a teste sem classe removido(s): storm-client\test\jvm\org\apache\storm\testing\IntegrationTest.java, storm-client\test\jvm\org\apache\storm\testing\PerformanceTest.java
+[08:15:23]   bytestsmells: 4681 linhas (100%)
+[08:15:35]   byclasstest: 243 linhas (100%)
+[08:15:36] (4/11) apache/tomee -> test-smells-tomee
+[08:15:54]   4 candidato(s) a teste sem classe removido(s): container\openejb-core\src\test\java\org\apache\openejb\meta\MetaTest.java, container\openejb-junit\src\main\java\org\apache\openejb\junit\TestResource.java, container\openejb-junit\src\main\java\org\apache\openejb\junit\TestSecurity.java ...
+[08:16:11]   bytestsmells: 6312 linhas (100%)
+[08:16:22]   byclasstest: 1066 linhas (100%)
+[08:16:26] (5/11) eclipse/xtext-core -> test-smells-xtext-core
+[08:16:40]   3 candidato(s) a teste sem classe removido(s): org.eclipse.xtext.testing\src\org\eclipse\xtext\testing\RepeatedTest.java, org.eclipse.xtext.testing\src\org\eclipse\xtext\testing\smoketest\IgnoredBySmokeTest.java, org.eclipse.xtext.tests\src-gen\org\eclipse\xtext\serializer\assignmentFinderTest\TestEnum.java
+[08:16:56]   bytestsmells: 7234 linhas (100%)
+[08:17:08]   byclasstest: 429 linhas (100%)
+[08:17:11] (6/11) facebook/buck -> test-smells-buck
+[08:23:02]   4 candidato(s) a teste sem classe removido(s): src\com\facebook\buck\jvm\java\TestType.java, test\com\facebook\buck\cli\testdata\java_library_with_tests\Test.java, test\com\facebook\buck\jvm\java\abi\source\AnnotationWithClassArrayForTreeBackedTest.java ...
+[08:23:25]   bytestsmells: 17461 linhas (100%)
+[08:23:36]   byclasstest: 1356 linhas (100%)
+[08:23:41] (7/11) oracle/visualvm -> test-smells-visualvm
+[08:24:23]   1 candidato(s) a teste sem classe removido(s): visualvm\libs.profiler\lib.profiler\test\qa-functional\src\org\graalvm\visualvm\lib\jfluid\tests\jfluid\profilingpoints\BasicTest.java
+[08:24:35]   bytestsmells: 440 linhas (100%)
+[08:24:46]   byclasstest: 26 linhas (100%)
+[08:24:48] (8/11) spring-projects/spring-boot -> test-smells-spring-boot
+[08:25:03]   10 candidato(s) a teste sem classe removido(s): spring-boot-project\spring-boot-test\src\main\java\org\springframework\boot\test\context\TestComponent.java, spring-boot-project\spring-boot-test\src\main\java\org\springframework\boot\test\context\TestConfiguration.java, spring-boot-project\spring-boot-tools\spring-boot-autoconfigure-processor\src\test\java\org\springframework\boot\autoconfigureprocessor\TestAutoConfigureAfter.java ...
+[08:28:10]   MORTO: AnaliseMorta: bytestsmells: analise morreu (pct=25, 0.5s de CPU em 180s, sem thread do JNose)
+[08:28:10]   reiniciando o JNose
+[08:28:15]   console do JNose em D:\master-degree-git\MLCQ\reports\jnose\20260912-082815.{out,err}
+[08:28:31] config aplicada: 13 smells ligados
+[08:28:33] (9/11) spring-projects/spring-data-gemfire -> test-smells-spring-data-gemfire
+[08:31:42]   MORTO: AnaliseMorta: bytestsmells: analise morreu (pct=25, 1.6s de CPU em 180s, sem thread do JNose)
+[08:31:42]   reiniciando o JNose
+[08:31:48]   console do JNose em D:\master-degree-git\MLCQ\reports\jnose\20260912-083148.{out,err}
+[08:31:58] config aplicada: 13 smells ligados
+[08:31:58] (10/11) spring-projects/spring-framework -> test-smells-spring-framework
+[08:32:22]   8 candidato(s) a teste sem classe removido(s): spring-beans\src\test\java\org\springframework\tests\sample\beans\TestAnnotation.java, spring-context\src\test\java\org\springframework\aop\aspectj\autoproxy\TestAnnotation.java, spring-core\src\test\java\org\springframework\core\type\TestAutowired.java ...
+[08:33:05]   bytestsmells: 50528 linhas (100%)
+[08:33:23]   byclasstest: 1963 linhas (100%)
+[08:33:26] (11/11) spring-projects/spring-integration -> tests-smells-spring-integration
+[08:33:38]   2 candidato(s) a teste sem classe removido(s): spring-integration-test\src\main\java\org\springframework\integration\test\context\SpringIntegrationTest.java, spring-integration-test-support\src\main\java\org\springframework\integration\test\condition\LongRunningTest.java
+[08:33:58]   bytestsmells: 18260 linhas (100%)
+[08:34:12]   byclasstest: 950 linhas (100%)
+[08:34:13] fim

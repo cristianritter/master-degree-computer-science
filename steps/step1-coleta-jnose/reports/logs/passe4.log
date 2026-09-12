@@ -1,0 +1,12 @@
+[07:55:44] 451 repos elegiveis, 450 ja concluidos, processando 11
+[07:55:44] config aplicada: 13 smells ligados
+[07:55:44] (1/11) apache/openejb -> test-smells-openejb
+[07:56:18]   8 candidato(s) a teste sem classe removido(s): openejb\container\openejb-junit\src\main\java\org\apache\openejb\junit\TestResource.java, openejb\container\openejb-junit\src\main\java\org\apache\openejb\junit\TestResourceTypes.java, openejb\container\openejb-junit\src\main\java\org\apache\openejb\junit\TestSecurity.java ...
+[08:02:27]   MORTO: AnaliseMorta: bytestsmells: analise morreu (pct=25, 0.6s de CPU em 180s, sem thread do JNose)
+[08:02:27]   reiniciando o JNose
+[08:02:32]   console do JNose em D:\master-degree-git\MLCQ\reports\jnose\20260912-080232.{out,err}
+[08:02:59] config aplicada: 13 smells ligados
+[08:03:29]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-openejb
+[08:03:29] (2/11) apache/sis -> test-smells-sis
+[08:03:39]   2 candidato(s) a teste sem classe removido(s): core\sis-utility\src\test\java\org\apache\sis\test\TestStep.java, storage\sis-netcdf\src\test\java\org\apache\sis\internal\netcdf\TestData.java
+[08:03:59]   bytestsmells: 10023 linhas (100%)

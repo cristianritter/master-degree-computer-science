@@ -1,0 +1,8 @@
+[07:33:23] 451 repos elegiveis, 450 ja concluidos, processando 1
+[07:33:23] config aplicada: 13 smells ligados
+[07:33:23] (1/1) apache/bahir-flink -> test-smells-bahir-flink
+[07:36:27]   MORTO: AnaliseMorta: bytestsmells: analise morreu (pct=25, 0.9s de CPU em 180s, sem thread do JNose)
+[07:36:27]   reiniciando o JNose
+[07:36:33]   console do JNose em D:\master-degree-git\MLCQ\reports\jnose\20260912-073633.{out,err}
+[07:37:20] config aplicada: 13 smells ligados
+[07:37:24] fim

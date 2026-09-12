@@ -1,0 +1,1894 @@
+{
+ "BasicoDotNet": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/BasicoDotNet.git"
+ },
+ "Batery_charger_register": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/Batery_charger_register.git"
+ },
+ "collections-java-api-2023": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/collections-java-api-2023.git"
+ },
+ "cristianritter": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/cristianritter.git"
+ },
+ "decibelimetro_api": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/decibelimetro_api.git"
+ },
+ "dio-lab-open-source": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/dio-lab-open-source.git"
+ },
+ "Elegance": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/Elegance.git"
+ },
+ "EnergyMeter": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/EnergyMeter.git"
+ },
+ "FitBox_STM": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/FitBox_STM.git"
+ },
+ "FolderSync2": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/FolderSync2.git"
+ },
+ "master-degree-computer-science": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/master-degree-computer-science.git"
+ },
+ "quine_mcclusky_bench": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/quine_mcclusky_bench.git"
+ },
+ "test-smell-canal": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smell-canal.git"
+ },
+ "test-smellls-rocketmq": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smellls-rocketmq.git"
+ },
+ "test-smells-acceleo": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-acceleo.git"
+ },
+ "test-smells-accumulo": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-accumulo.git"
+ },
+ "test-smells-accumulo-fluo": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-accumulo-fluo.git"
+ },
+ "test-smells-accumulo-testing": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-accumulo-testing.git"
+ },
+ "test-smells-activemq": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-activemq.git"
+ },
+ "test-smells-activemq-apollo": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-activemq-apollo.git"
+ },
+ "test-smells-aCute": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aCute.git"
+ },
+ "test-smells-admiral": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-admiral.git"
+ },
+ "test-smells-agera": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-agera.git"
+ },
+ "test-smells-airavata": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-airavata.git"
+ },
+ "test-smells-alexa-skills-kit-sdk-for-java": {
+  "default_branch": "2.0.x",
+  "clone": "https://github.com/cristianritter/test-smells-alexa-skills-kit-sdk-for-java.git"
+ },
+ "test-smells-alibaba-druid": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-alibaba-druid.git"
+ },
+ "test-smells-amazon-kinesis-client": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-amazon-kinesis-client.git"
+ },
+ "test-smells-amazon-kinesis-video-streams-parser-library": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-amazon-kinesis-video-streams-parser-library.git"
+ },
+ "test-smells-amazon-s3-developer-guide": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-amazon-s3-developer-guide.git"
+ },
+ "test-smells-ambari": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-ambari.git"
+ },
+ "test-smells-ambry": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ambry.git"
+ },
+ "test-smells-ant": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ant.git"
+ },
+ "test-smells-ant-ivy": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ant-ivy.git"
+ },
+ "test-smells-ant-ivyde": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ant-ivyde.git"
+ },
+ "test-smells-apache-atlas": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-apache-atlas.git"
+ },
+ "test-smells-apex-core": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-apex-core.git"
+ },
+ "test-smells-apex-malhar": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-apex-malhar.git"
+ },
+ "test-smells-ApplicationInsights-Java": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-ApplicationInsights-Java.git"
+ },
+ "test-smells-arcgis-runtime-samples-android": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-arcgis-runtime-samples-android.git"
+ },
+ "test-smells-arcgis-runtime-samples-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-arcgis-runtime-samples-java.git"
+ },
+ "test-smells-archiva": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-archiva.git"
+ },
+ "test-smells-aries": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-aries.git"
+ },
+ "test-smells-aries-jax-rs-whiteboard": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aries-jax-rs-whiteboard.git"
+ },
+ "test-smells-aries-jpa": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aries-jpa.git"
+ },
+ "test-smells-aries-rsa": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aries-rsa.git"
+ },
+ "test-smells-ARouter": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-ARouter.git"
+ },
+ "test-smells-artemis": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-artemis.git"
+ },
+ "test-smells-aspectj": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aspectj.git"
+ },
+ "test-smells-asterixdb": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-asterixdb.git"
+ },
+ "test-smells-atlas": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-atlas.git"
+ },
+ "test-smells-aurora": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aurora.git"
+ },
+ "test-smells-auto": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-auto.git"
+ },
+ "test-smells-avro": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-avro.git"
+ },
+ "test-smells-aws-cloudtrail-processing-library": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aws-cloudtrail-processing-library.git"
+ },
+ "test-smells-aws-doc-sdk-examples": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-aws-doc-sdk-examples.git"
+ },
+ "test-smells-aws-maven": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aws-maven.git"
+ },
+ "test-smells-aws-sdk-java-v2": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aws-sdk-java-v2.git"
+ },
+ "test-smells-aws-toolkit-eclipse": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-aws-toolkit-eclipse.git"
+ },
+ "test-smells-azure-chat-for-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-azure-chat-for-java.git"
+ },
+ "test-smells-azure-devops-intellij": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-azure-devops-intellij.git"
+ },
+ "test-smells-azure-maven-plugins": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-azure-maven-plugins.git"
+ },
+ "test-smells-azure-tools-for-java": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-azure-tools-for-java.git"
+ },
+ "test-smells-bahir-flink": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-bahir-flink.git"
+ },
+ "test-smells-beam": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-beam.git"
+ },
+ "test-smells-bigtop": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-bigtop.git"
+ },
+ "test-smells-binnavi": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-binnavi.git"
+ },
+ "test-smells-birt": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-birt.git"
+ },
+ "test-smells-blockly-android": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-blockly-android.git"
+ },
+ "test-smells-bookkeeper": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-bookkeeper.git"
+ },
+ "test-smells-bpmn2-modeler": {
+  "default_branch": "0.1.0.Final-master",
+  "clone": "https://github.com/cristianritter/test-smells-bpmn2-modeler.git"
+ },
+ "test-smells-brooklyn-library": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-brooklyn-library.git"
+ },
+ "test-smells-brooklyn-server": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-brooklyn-server.git"
+ },
+ "test-smells-buck": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-buck.git"
+ },
+ "test-smells-buildship": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-buildship.git"
+ },
+ "test-smells-bval": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-bval.git"
+ },
+ "test-smells-caja": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-caja.git"
+ },
+ "test-smells-calcite": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-calcite.git"
+ },
+ "test-smells-calcite-avatica": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-calcite-avatica.git"
+ },
+ "test-smells-caliper": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-caliper.git"
+ },
+ "test-smells-camel": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-camel.git"
+ },
+ "test-smells-cassandra": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-cassandra.git"
+ },
+ "test-smells-cayenne": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-cayenne.git"
+ },
+ "test-smells-ceylon": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ceylon.git"
+ },
+ "test-smells-cf-java-client": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-cf-java-client.git"
+ },
+ "test-smells-cf-java-client-sap": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-cf-java-client-sap.git"
+ },
+ "test-smells-cft": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-cft.git"
+ },
+ "test-smells-che": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-che.git"
+ },
+ "test-smells-che-ls-jdt": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-che-ls-jdt.git"
+ },
+ "test-smells-chemistry-opencmis": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-chemistry-opencmis.git"
+ },
+ "test-smells-chukwa": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-chukwa.git"
+ },
+ "test-smells-clerezza": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-clerezza.git"
+ },
+ "test-smells-clickhouse-java": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-clickhouse-java.git"
+ },
+ "test-smells-closure-compiler": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-closure-compiler.git"
+ },
+ "test-smells-closure-stylesheets": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-closure-stylesheets.git"
+ },
+ "test-smells-closure-templates": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-closure-templates.git"
+ },
+ "test-smells-cloud-espm-v2": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-cloud-espm-v2.git"
+ },
+ "test-smells-cloud-platform-iot-starterkit": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-cloud-platform-iot-starterkit.git"
+ },
+ "test-smells-cloudstack": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-cloudstack.git"
+ },
+ "test-smells-cobar": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-cobar.git"
+ },
+ "test-smells-commons-beanutils": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-beanutils.git"
+ },
+ "test-smells-commons-bsf": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-bsf.git"
+ },
+ "test-smells-commons-chain": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-chain.git"
+ },
+ "test-smells-commons-collections": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-collections.git"
+ },
+ "test-smells-commons-compress": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-compress.git"
+ },
+ "test-smells-commons-configuration": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-configuration.git"
+ },
+ "test-smells-commons-crypto": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-crypto.git"
+ },
+ "test-smells-commons-dbcp": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-dbcp.git"
+ },
+ "test-smells-commons-dbutils": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-dbutils.git"
+ },
+ "test-smells-commons-digester": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-digester.git"
+ },
+ "test-smells-commons-functor": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-functor.git"
+ },
+ "test-smells-commons-imaging": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-imaging.git"
+ },
+ "test-smells-commons-io": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-io.git"
+ },
+ "test-smells-commons-jcs": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-jcs.git"
+ },
+ "test-smells-commons-jelly": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-jelly.git"
+ },
+ "test-smells-commons-jexl": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-jexl.git"
+ },
+ "test-smells-commons-jxpath": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-jxpath.git"
+ },
+ "test-smells-commons-math": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-math.git"
+ },
+ "test-smells-commons-net": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-net.git"
+ },
+ "test-smells-commons-numbers": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-numbers.git"
+ },
+ "test-smells-commons-ognl": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-ognl.git"
+ },
+ "test-smells-commons-pool": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-pool.git"
+ },
+ "test-smells-commons-proxy": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-proxy.git"
+ },
+ "test-smells-commons-text": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-text.git"
+ },
+ "test-smells-commons-validator": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-validator.git"
+ },
+ "test-smells-commons-vfs": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-commons-vfs.git"
+ },
+ "test-smells-concierge": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-concierge.git"
+ },
+ "test-smells-conscrypt": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-conscrypt.git"
+ },
+ "test-smells-copybara": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-copybara.git"
+ },
+ "test-smells-corrosion": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-corrosion.git"
+ },
+ "test-smells-creadur-rat": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-creadur-rat.git"
+ },
+ "test-smells-crunch": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-crunch.git"
+ },
+ "test-smells-ctakes": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-ctakes.git"
+ },
+ "test-smells-curator": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-curator.git"
+ },
+ "test-smells-cxf": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-cxf.git"
+ },
+ "test-smells-cxf-fediz": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-cxf-fediz.git"
+ },
+ "test-smells-datafu": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-datafu.git"
+ },
+ "test-smells-dawnsci": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-dawnsci.git"
+ },
+ "test-smells-defense-solutions-proofs-of-concept": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-defense-solutions-proofs-of-concept.git"
+ },
+ "test-smells-deltaspike": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-deltaspike.git"
+ },
+ "test-smells-derby": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-derby.git"
+ },
+ "test-smells-directory-fortress-commander": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-directory-fortress-commander.git"
+ },
+ "test-smells-directory-fortress-core": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-directory-fortress-core.git"
+ },
+ "test-smells-directory-kerby": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-directory-kerby.git"
+ },
+ "test-smells-directory-ldap-api": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-directory-ldap-api.git"
+ },
+ "test-smells-directory-server": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-directory-server.git"
+ },
+ "test-smells-directory-studio": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-directory-studio.git"
+ },
+ "test-smells-ditto": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ditto.git"
+ },
+ "test-smells-dltk.core": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-dltk.core.git"
+ },
+ "test-smells-drill": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-drill.git"
+ },
+ "test-smells-druid": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-druid.git"
+ },
+ "test-smells-eagle": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-eagle.git"
+ },
+ "test-smells-eavp": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-eavp.git"
+ },
+ "test-smells-eclipse-collections": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-eclipse-collections.git"
+ },
+ "test-smells-eclipse-integration-tcserver": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-eclipse-integration-tcserver.git"
+ },
+ "test-smells-eclipse.jdt.core": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-eclipse.jdt.core.git"
+ },
+ "test-smells-eclipse.jdt.ls": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-eclipse.jdt.ls.git"
+ },
+ "test-smells-eclipse.platform.swt": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-eclipse.platform.swt.git"
+ },
+ "test-smells-eclipse.platform.ui": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-eclipse.platform.ui.git"
+ },
+ "test-smells-egit": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-egit.git"
+ },
+ "test-smells-egit-github": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-egit-github.git"
+ },
+ "test-smells-elk": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-elk.git"
+ },
+ "test-smells-empire-db": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-empire-db.git"
+ },
+ "test-smells-error-prone": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-error-prone.git"
+ },
+ "test-smells-error-prone-javac": {
+  "default_branch": "upstream",
+  "clone": "https://github.com/cristianritter/test-smells-error-prone-javac.git"
+ },
+ "test-smells-ExoPlayer": {
+  "default_branch": "release-v2",
+  "clone": "https://github.com/cristianritter/test-smells-ExoPlayer.git"
+ },
+ "test-smells-facebook-android-sdk": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-facebook-android-sdk.git"
+ },
+ "test-smells-facebook-java-business-sdk": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-facebook-java-business-sdk.git"
+ },
+ "test-smells-falcon": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-falcon.git"
+ },
+ "test-smells-fastr": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-fastr.git"
+ },
+ "test-smells-felix": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-felix.git"
+ },
+ "test-smells-fineract": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-fineract.git"
+ },
+ "test-smells-fineract-cn-customer": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-fineract-cn-customer.git"
+ },
+ "test-smells-fineract-cn-portfolio": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-fineract-cn-portfolio.git"
+ },
+ "test-smells-flink": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-flink.git"
+ },
+ "test-smells-freemarker": {
+  "default_branch": "2.3-gae",
+  "clone": "https://github.com/cristianritter/test-smells-freemarker.git"
+ },
+ "test-smells-fresco": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-fresco.git"
+ },
+ "test-smells-gcm": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gcm.git"
+ },
+ "test-smells-gdata-java-client": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gdata-java-client.git"
+ },
+ "test-smells-gef": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gef.git"
+ },
+ "test-smells-gef-legacy": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gef-legacy.git"
+ },
+ "test-smells-gemoc-studio": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gemoc-studio.git"
+ },
+ "test-smells-geode": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-geode.git"
+ },
+ "test-smells-geometry-api-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-geometry-api-java.git"
+ },
+ "test-smells-geoportal-server-harvester": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-geoportal-server-harvester.git"
+ },
+ "test-smells-giraph": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-giraph.git"
+ },
+ "test-smells-gitiles": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gitiles.git"
+ },
+ "test-smells-golo-lang": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-golo-lang.git"
+ },
+ "test-smells-google-authenticator": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-google-authenticator.git"
+ },
+ "test-smells-google-java-format": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-google-java-format.git"
+ },
+ "test-smells-gora": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gora.git"
+ },
+ "test-smells-graal": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-graal.git"
+ },
+ "test-smells-grails-ide": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-grails-ide.git"
+ },
+ "test-smells-graphouse": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-graphouse.git"
+ },
+ "test-smells-graphql_java_gen": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-graphql_java_gen.git"
+ },
+ "test-smells-greenhouse": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-greenhouse.git"
+ },
+ "test-smells-griffin": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-griffin.git"
+ },
+ "test-smells-groovy": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-groovy.git"
+ },
+ "test-smells-GT": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-GT.git"
+ },
+ "test-smells-gtfs-realtime-bindings": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-gtfs-realtime-bindings.git"
+ },
+ "test-smells-guava": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-guava.git"
+ },
+ "test-smells-guice": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-guice.git"
+ },
+ "test-smells-hadoop": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-hadoop.git"
+ },
+ "test-smells-hadoop-common": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-hadoop-common.git"
+ },
+ "test-smells-hadoop-mapreduce": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-hadoop-mapreduce.git"
+ },
+ "test-smells-hama": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hama.git"
+ },
+ "test-smells-hawkbit": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hawkbit.git"
+ },
+ "test-smells-hawkbit-extensions": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hawkbit-extensions.git"
+ },
+ "test-smells-hbase": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hbase.git"
+ },
+ "test-smells-helix": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-helix.git"
+ },
+ "test-smells-hillview": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hillview.git"
+ },
+ "test-smells-hive": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hive.git"
+ },
+ "test-smells-hono": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hono.git"
+ },
+ "test-smells-hover": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-hover.git"
+ },
+ "test-smells-httpcomponents-client": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-httpcomponents-client.git"
+ },
+ "test-smells-httpcomponents-core": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-httpcomponents-core.git"
+ },
+ "test-smells-ibm-cos-sdk-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ibm-cos-sdk-java.git"
+ },
+ "test-smells-ignite": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ignite.git"
+ },
+ "test-smells-incubator-ambari": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-ambari.git"
+ },
+ "test-smells-incubator-atlas": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-atlas.git"
+ },
+ "test-smells-incubator-batchee": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-batchee.git"
+ },
+ "test-smells-incubator-brooklyn": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-brooklyn.git"
+ },
+ "test-smells-incubator-heron": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-heron.git"
+ },
+ "test-smells-incubator-hivemall": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-hivemall.git"
+ },
+ "test-smells-incubator-hudi": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-hudi.git"
+ },
+ "test-smells-incubator-myriad": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-myriad.git"
+ },
+ "test-smells-incubator-pinot": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-pinot.git"
+ },
+ "test-smells-incubator-ratis": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-ratis.git"
+ },
+ "test-smells-incubator-samoa": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-samoa.git"
+ },
+ "test-smells-incubator-sentry": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-sentry.git"
+ },
+ "test-smells-incubator-taverna-common-activities": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-taverna-common-activities.git"
+ },
+ "test-smells-incubator-taverna-engine": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-taverna-engine.git"
+ },
+ "test-smells-incubator-taverna-workbench": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-taverna-workbench.git"
+ },
+ "test-smells-incubator-tez": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-incubator-tez.git"
+ },
+ "test-smells-ion-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ion-java.git"
+ },
+ "test-smells-j2cl": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-j2cl.git"
+ },
+ "test-smells-j2objc": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-j2objc.git"
+ },
+ "test-smells-james-mime4j": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-james-mime4j.git"
+ },
+ "test-smells-james-project": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-james-project.git"
+ },
+ "test-smells-january": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-january.git"
+ },
+ "test-smells-janusgraph-utils": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-janusgraph-utils.git"
+ },
+ "test-smells-java-buildpack-dependency-builder": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-java-buildpack-dependency-builder.git"
+ },
+ "test-smells-java-debug": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-java-debug.git"
+ },
+ "test-smells-jclouds": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-jclouds.git"
+ },
+ "test-smells-JDI": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-JDI.git"
+ },
+ "test-smells-jena": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-jena.git"
+ },
+ "test-smells-jetty.project": {
+  "default_branch": "jetty-12.1.x",
+  "clone": "https://github.com/cristianritter/test-smells-jetty.project.git"
+ },
+ "test-smells-jgit": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-jgit.git"
+ },
+ "test-smells-jimfs": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-jimfs.git"
+ },
+ "test-smells-jnosql": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-jnosql.git"
+ },
+ "test-smells-joshua": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-joshua.git"
+ },
+ "test-smells-Jprotobuf-rpc-socket": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-Jprotobuf-rpc-socket.git"
+ },
+ "test-smells-jsinterop-generator": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-jsinterop-generator.git"
+ },
+ "test-smells-jspwiki": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-jspwiki.git"
+ },
+ "test-smells-jstorm": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-jstorm.git"
+ },
+ "test-smells-juneau": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-juneau.git"
+ },
+ "test-smells-jvm-sandbox": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-jvm-sandbox.git"
+ },
+ "test-smells-kafka": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-kafka.git"
+ },
+ "test-smells-kapua": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-kapua.git"
+ },
+ "test-smells-karaf": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-karaf.git"
+ },
+ "test-smells-karaf-cellar": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-karaf-cellar.git"
+ },
+ "test-smells-knox": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-knox.git"
+ },
+ "test-smells-kura": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-kura.git"
+ },
+ "test-smells-lens": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-lens.git"
+ },
+ "test-smells-leshan": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-leshan.git"
+ },
+ "test-smells-li-apache-kafka-clients": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-li-apache-kafka-clients.git"
+ },
+ "test-smells-litho": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-litho.git"
+ },
+ "test-smells-logging-chainsaw": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-logging-chainsaw.git"
+ },
+ "test-smells-logging-flume": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-logging-flume.git"
+ },
+ "test-smells-logging-log4j-audit": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-logging-log4j-audit.git"
+ },
+ "test-smells-lsp4j": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-lsp4j.git"
+ },
+ "test-smells-lucene-solr": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-lucene-solr.git"
+ },
+ "test-smells-m2e-core": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-m2e-core.git"
+ },
+ "test-smells-mahout": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-mahout.git"
+ },
+ "test-smells-malmo": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-malmo.git"
+ },
+ "test-smells-maps-app-android": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-maps-app-android.git"
+ },
+ "test-smells-marmotta": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-marmotta.git"
+ },
+ "test-smells-maven": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven.git"
+ },
+ "test-smells-maven-archetype": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-archetype.git"
+ },
+ "test-smells-maven-checkstyle-plugin": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-checkstyle-plugin.git"
+ },
+ "test-smells-maven-compiler-plugin": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-compiler-plugin.git"
+ },
+ "test-smells-maven-indexer": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-indexer.git"
+ },
+ "test-smells-maven-javadoc-plugin": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-javadoc-plugin.git"
+ },
+ "test-smells-maven-plugins": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-maven-plugins.git"
+ },
+ "test-smells-maven-resolver": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-resolver.git"
+ },
+ "test-smells-maven-scm": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-scm.git"
+ },
+ "test-smells-maven-surefire": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-maven-surefire.git"
+ },
+ "test-smells-metamodel": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-metamodel.git"
+ },
+ "test-smells-metron": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-metron.git"
+ },
+ "test-smells-microprofile-opentracing": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-microprofile-opentracing.git"
+ },
+ "test-smells-milo": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-milo.git"
+ },
+ "test-smells-mina": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-mina.git"
+ },
+ "test-smells-mina-sshd": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-mina-sshd.git"
+ },
+ "test-smells-mobile-buy-sdk-android": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-mobile-buy-sdk-android.git"
+ },
+ "test-smells-MOE": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-MOE.git"
+ },
+ "test-smells-mssql-jdbc": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-mssql-jdbc.git"
+ },
+ "test-smells-myfaces-tobago": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-myfaces-tobago.git"
+ },
+ "test-smells-n4js": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-n4js.git"
+ },
+ "test-smells-nattable": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-nattable.git"
+ },
+ "test-smells-netbeans-html4j": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-netbeans-html4j.git"
+ },
+ "test-smells-nifi": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-nifi.git"
+ },
+ "test-smells-nifi-minifi": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-nifi-minifi.git"
+ },
+ "test-smells-nifi-registry": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-nifi-registry.git"
+ },
+ "test-smells-nomulus": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-nomulus.git"
+ },
+ "test-smells-NullAway": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-NullAway.git"
+ },
+ "test-smells-nutch": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-nutch.git"
+ },
+ "test-smells-oci-java-sdk": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-oci-java-sdk.git"
+ },
+ "test-smells-og": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-og.git"
+ },
+ "test-smells-olingo-jpa-processor-v4": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-olingo-jpa-processor-v4.git"
+ },
+ "test-smells-olingo-odata2": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-olingo-odata2.git"
+ },
+ "test-smells-olingo-odata4": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-olingo-odata4.git"
+ },
+ "test-smells-oodt": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-oodt.git"
+ },
+ "test-smells-oozie": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-oozie.git"
+ },
+ "test-smells-openejb": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-openejb.git"
+ },
+ "test-smells-opengrok": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-opengrok.git"
+ },
+ "test-smells-openj9": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-openj9.git"
+ },
+ "test-smells-openjpa": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-openjpa.git"
+ },
+ "test-smells-openmeetings": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-openmeetings.git"
+ },
+ "test-smells-opennlp": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-opennlp.git"
+ },
+ "test-smells-opennlp-sandbox": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-opennlp-sandbox.git"
+ },
+ "test-smells-openwebbeans": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-openwebbeans.git"
+ },
+ "test-smells-openwebbeans-meecrowave": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-openwebbeans-meecrowave.git"
+ },
+ "test-smells-org.eclipse.linuxtools": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-org.eclipse.linuxtools.git"
+ },
+ "test-smells-org.eclipse.rap": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-org.eclipse.rap.git"
+ },
+ "test-smells-orion.server": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-orion.server.git"
+ },
+ "test-smells-otter": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-otter.git"
+ },
+ "test-smells-packagedrone": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-packagedrone.git"
+ },
+ "test-smells-paho.mqtt.java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-paho.mqtt.java.git"
+ },
+ "test-smells-pai": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-pai.git"
+ },
+ "test-smells-parquet-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-parquet-java.git"
+ },
+ "test-smells-parseq": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-parseq.git"
+ },
+ "test-smells-pgql-lang": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-pgql-lang.git"
+ },
+ "test-smells-phoenix": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-phoenix.git"
+ },
+ "test-smells-phoenix-omid": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-phoenix-omid.git"
+ },
+ "test-smells-physical-web": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-physical-web.git"
+ },
+ "test-smells-pivot": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-pivot.git"
+ },
+ "test-smells-plc4x": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-plc4x.git"
+ },
+ "test-smells-poi": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-poi.git"
+ },
+ "test-smells-polygene-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-polygene-java.git"
+ },
+ "test-smells-portals-pluto": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-portals-pluto.git"
+ },
+ "test-smells-project-rome": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-project-rome.git"
+ },
+ "test-smells-protobuf-dt": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-protobuf-dt.git"
+ },
+ "test-smells-pulsar": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-pulsar.git"
+ },
+ "test-smells-QMUI_Android": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-QMUI_Android.git"
+ },
+ "test-smells-qpid": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-qpid.git"
+ },
+ "test-smells-qpid-broker-j": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-qpid-broker-j.git"
+ },
+ "test-smells-qpid-jms": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-qpid-jms.git"
+ },
+ "test-smells-qpid-proton-j": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-qpid-proton-j.git"
+ },
+ "test-smells-rabbitmq-java-client": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-rabbitmq-java-client.git"
+ },
+ "test-smells-rabbitmq-jms-client": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-rabbitmq-jms-client.git"
+ },
+ "test-smells-ranger": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ranger.git"
+ },
+ "test-smells-RapidView": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-RapidView.git"
+ },
+ "test-smells-rave": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-rave.git"
+ },
+ "test-smells-rdf4j": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-rdf4j.git"
+ },
+ "test-smells-reactive-streams-commons": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-reactive-streams-commons.git"
+ },
+ "test-smells-reactor-core": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-reactor-core.git"
+ },
+ "test-smells-reactor-kafka": {
+  "default_branch": "1.3.x",
+  "clone": "https://github.com/cristianritter/test-smells-reactor-kafka.git"
+ },
+ "test-smells-reactor-netty": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-reactor-netty.git"
+ },
+ "test-smells-reddeer": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-reddeer.git"
+ },
+ "test-smells-reef": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-reef.git"
+ },
+ "test-smells-rejoiner": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-rejoiner.git"
+ },
+ "test-smells-rest.li": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-rest.li.git"
+ },
+ "test-smells-ringdroid": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-ringdroid.git"
+ },
+ "test-smells-robolectric": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-robolectric.git"
+ },
+ "test-smells-rocketmq-externals": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-rocketmq-externals.git"
+ },
+ "test-smells-royale-compiler": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-royale-compiler.git"
+ },
+ "test-smells-sagetv": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-sagetv.git"
+ },
+ "test-smells-samza": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-samza.git"
+ },
+ "test-smells-SapMachine": {
+  "default_branch": "sapmachine",
+  "clone": "https://github.com/cristianritter/test-smells-SapMachine.git"
+ },
+ "test-smells-sentry": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-sentry.git"
+ },
+ "test-smells-servicecomb-java-chassis": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-servicecomb-java-chassis.git"
+ },
+ "test-smells-servicemix-bundles": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-servicemix-bundles.git"
+ },
+ "test-smells-shindig": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-shindig.git"
+ },
+ "test-smells-shiro": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-shiro.git"
+ },
+ "test-smells-sis": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-sis.git"
+ },
+ "test-smells-skywalking": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-skywalking.git"
+ },
+ "test-smells-sling-org-apache-sling-testing-clients": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-sling-org-apache-sling-testing-clients.git"
+ },
+ "test-smells-smarthome": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-smarthome.git"
+ },
+ "test-smells-soda-for-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-soda-for-java.git"
+ },
+ "test-smells-soter": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-soter.git"
+ },
+ "test-smells-sourceediting": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-sourceediting.git"
+ },
+ "test-smells-spatial-framework-for-hadoop": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spatial-framework-for-hadoop.git"
+ },
+ "test-smells-spring-amqp": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-amqp.git"
+ },
+ "test-smells-spring-batch": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-batch.git"
+ },
+ "test-smells-spring-batch-admin": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-batch-admin.git"
+ },
+ "test-smells-spring-boot": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-boot.git"
+ },
+ "test-smells-spring-data-cassandra": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-cassandra.git"
+ },
+ "test-smells-spring-data-commons": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-commons.git"
+ },
+ "test-smells-spring-data-couchbase": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-couchbase.git"
+ },
+ "test-smells-spring-data-dev-tools": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-dev-tools.git"
+ },
+ "test-smells-spring-data-examples": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-examples.git"
+ },
+ "test-smells-spring-data-gemfire": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-gemfire.git"
+ },
+ "test-smells-spring-data-graph": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-graph.git"
+ },
+ "test-smells-spring-data-jdbc-ext": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-jdbc-ext.git"
+ },
+ "test-smells-spring-data-jpa": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-jpa.git"
+ },
+ "test-smells-spring-data-keyvalue": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-keyvalue.git"
+ },
+ "test-smells-spring-data-mongodb": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-mongodb.git"
+ },
+ "test-smells-spring-data-neo4j": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-neo4j.git"
+ },
+ "test-smells-spring-data-redis": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-redis.git"
+ },
+ "test-smells-spring-data-relational": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-relational.git"
+ },
+ "test-smells-spring-data-rest": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-rest.git"
+ },
+ "test-smells-spring-data-solr": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-data-solr.git"
+ },
+ "test-smells-spring-framework": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-framework.git"
+ },
+ "test-smells-spring-hadoop": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-hadoop.git"
+ },
+ "test-smells-spring-hateoas": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-hateoas.git"
+ },
+ "test-smells-spring-ide": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-ide.git"
+ },
+ "test-smells-spring-integration-aws": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-integration-aws.git"
+ },
+ "test-smells-Spring-Integration-in-Action": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-Spring-Integration-in-Action.git"
+ },
+ "test-smells-spring-integration-java-dsl": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-integration-java-dsl.git"
+ },
+ "test-smells-spring-integration-samples": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-integration-samples.git"
+ },
+ "test-smells-spring-ldap": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-ldap.git"
+ },
+ "test-smells-spring-loaded": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-loaded.git"
+ },
+ "test-smells-spring-mvc-showcase": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-mvc-showcase.git"
+ },
+ "test-smells-spring-restdocs": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-restdocs.git"
+ },
+ "test-smells-spring-retry": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-retry.git"
+ },
+ "test-smells-spring-roo": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-roo.git"
+ },
+ "test-smells-spring-security": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-security.git"
+ },
+ "test-smells-spring-session": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-session.git"
+ },
+ "test-smells-spring-social": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-social.git"
+ },
+ "test-smells-spring-social-facebook": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-social-facebook.git"
+ },
+ "test-smells-spring-social-linkedin": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-social-linkedin.git"
+ },
+ "test-smells-spring-statemachine": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-statemachine.git"
+ },
+ "test-smells-spring-vault": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-vault.git"
+ },
+ "test-smells-spring-ws": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-spring-ws.git"
+ },
+ "test-smells-spring-xd": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-spring-xd.git"
+ },
+ "test-smells-sqoop": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-sqoop.git"
+ },
+ "test-smells-stanbol": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-stanbol.git"
+ },
+ "test-smells-storm": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-storm.git"
+ },
+ "test-smells-streams": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-streams.git"
+ },
+ "test-smells-struts": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-struts.git"
+ },
+ "test-smells-struts-examples": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-struts-examples.git"
+ },
+ "test-smells-struts1": {
+  "default_branch": "trunk",
+  "clone": "https://github.com/cristianritter/test-smells-struts1.git"
+ },
+ "test-smells-syncope": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-syncope.git"
+ },
+ "test-smells-tajo": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-tajo.git"
+ },
+ "test-smells-tapestry-5": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-tapestry-5.git"
+ },
+ "test-smells-tchannel-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-tchannel-java.git"
+ },
+ "test-smells-team-explorer-everywhere": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-team-explorer-everywhere.git"
+ },
+ "test-smells-texlipse": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-texlipse.git"
+ },
+ "test-smells-tez": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-tez.git"
+ },
+ "test-smells-thym": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-thym.git"
+ },
+ "test-smells-tika": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-tika.git"
+ },
+ "test-smells-tink": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-tink.git"
+ },
+ "test-smells-tinker": {
+  "default_branch": "dev",
+  "clone": "https://github.com/cristianritter/test-smells-tinker.git"
+ },
+ "test-smells-tinkerpop": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-tinkerpop.git"
+ },
+ "test-smells-titan.EclipsePlug-ins": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-titan.EclipsePlug-ins.git"
+ },
+ "test-smells-tomcat": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-tomcat.git"
+ },
+ "test-smells-tomee": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-tomee.git"
+ },
+ "test-smells-triquetrum": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-triquetrum.git"
+ },
+ "test-smells-tycho": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-tycho.git"
+ },
+ "test-smells-uaa": {
+  "default_branch": "develop",
+  "clone": "https://github.com/cristianritter/test-smells-uaa.git"
+ },
+ "test-smells-uima-uimafit": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-uima-uimafit.git"
+ },
+ "test-smells-uima-uimaj": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-uima-uimaj.git"
+ },
+ "test-smells-unomi": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-unomi.git"
+ },
+ "test-smells-uReplicator": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-uReplicator.git"
+ },
+ "test-smells-visualvm": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-visualvm.git"
+ },
+ "test-smells-volley": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-volley.git"
+ },
+ "test-smells-vorto": {
+  "default_branch": "development",
+  "clone": "https://github.com/cristianritter/test-smells-vorto.git"
+ },
+ "test-smells-vso-httpclient-java": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-vso-httpclient-java.git"
+ },
+ "test-smells-vxquery": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-vxquery.git"
+ },
+ "test-smells-weblogic-monitoring-exporter": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-weblogic-monitoring-exporter.git"
+ },
+ "test-smells-wicket": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-wicket.git"
+ },
+ "test-smells-Wilma": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-Wilma.git"
+ },
+ "test-smells-xenon": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xenon.git"
+ },
+ "test-smells-xmlgraphics-fop": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/test-smells-xmlgraphics-fop.git"
+ },
+ "test-smells-xsemantics": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xsemantics.git"
+ },
+ "test-smells-xtext-core": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xtext-core.git"
+ },
+ "test-smells-xtext-eclipse": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xtext-eclipse.git"
+ },
+ "test-smells-xtext-extras": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xtext-extras.git"
+ },
+ "test-smells-xtext-idea": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xtext-idea.git"
+ },
+ "test-smells-xtext-lib": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xtext-lib.git"
+ },
+ "test-smells-xtext-xtend": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-xtext-xtend.git"
+ },
+ "test-smells-zeppelin": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-zeppelin.git"
+ },
+ "test-smells-zookeeper": {
+  "default_branch": "master",
+  "clone": "https://github.com/cristianritter/test-smells-zookeeper.git"
+ },
+ "tests-smells-spring-integration": {
+  "default_branch": "main",
+  "clone": "https://github.com/cristianritter/tests-smells-spring-integration.git"
+ }
+}

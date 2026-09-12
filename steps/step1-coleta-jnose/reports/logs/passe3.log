@@ -1,0 +1,52 @@
+########## ALVO: tomee
+[00:12:39] 451 repos elegiveis, 450 ja concluidos, processando 1
+[00:12:39] config aplicada: 13 smells ligados
+[00:12:39] (1/1) apache/tomee -> test-smells-tomee
+[01:43:16]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[01:43:16]   reiniciando o JNose
+[01:43:40] config aplicada: 13 smells ligados
+[01:44:10]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-tomee
+[01:44:10] fim
+########## ALVO: xtext-core
+[01:44:10] 451 repos elegiveis, 450 ja concluidos, processando 1
+[01:44:11] config aplicada: 13 smells ligados
+[01:44:11] (1/1) eclipse/xtext-core -> test-smells-xtext-core
+[03:14:28]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[03:14:28]   reiniciando o JNose
+[03:14:53] config aplicada: 13 smells ligados
+[03:15:23]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-xtext-core
+[03:15:23] fim
+########## ALVO: visualvm
+[03:15:23] 451 repos elegiveis, 450 ja concluidos, processando 1
+[03:15:24] config aplicada: 13 smells ligados
+[03:15:24] (1/1) oracle/visualvm -> test-smells-visualvm
+[04:46:04]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[04:46:04]   reiniciando o JNose
+[04:46:27] config aplicada: 13 smells ligados
+[04:46:57]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-visualvm
+[04:46:57] fim
+########## ALVO: spring-boot
+[04:46:57] 451 repos elegiveis, 450 ja concluidos, processando 1
+[04:46:58] config aplicada: 13 smells ligados
+[04:46:58] (1/1) spring-projects/spring-boot -> test-smells-spring-boot
+[06:17:18]   TIMEOUT: TimeoutError: bytestsmells: nao concluiu em 5400s (ultimo pct=25)
+[06:17:18]   reiniciando o JNose
+[06:17:46] config aplicada: 13 smells ligados
+[06:18:16]   aviso: nao consegui apagar C:\Users\crist\.jnose_projects\test-smells-spring-boot
+[06:18:16] fim
+########## ALVO: spring-data-gemfire
+[06:18:17] 451 repos elegiveis, 450 ja concluidos, processando 1
+[06:18:18] config aplicada: 13 smells ligados
+[06:18:18] (1/1) spring-projects/spring-data-gemfire -> test-smells-spring-data-gemfire
+########## ALVO: spring-framework
+[07:31:35] 451 repos elegiveis, 450 ja concluidos, processando 1
+[07:31:35] config aplicada: 13 smells ligados
+[07:31:35] (1/1) spring-projects/spring-framework -> test-smells-spring-framework
+[07:36:35]   ERRO: ConnectionError: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /bytestsmells?4-54.-lvProjetos-0-lkResultado (Caused by NewConnectionError("HTTPConnection(host='localhost', port=8080): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+[07:36:38] fim
+########## ALVO: spring-integration
+[07:36:39] 451 repos elegiveis, 450 ja concluidos, processando 5
+[07:36:44] JNose fora do ar; subindo
+[07:36:44]   reiniciando o JNose
+[07:36:49]   console do JNose em D:\master-degree-git\MLCQ\reports\jnose\20260912-073649.{out,err}
+########## PASSE 3 FIM

@@ -1,0 +1,11 @@
+[08:41:39] 451 repos elegiveis, 451 ja concluidos, processando 2
+[08:41:40] config aplicada: 13 smells ligados
+[08:41:40] (1/2) spring-projects/spring-boot -> test-smells-spring-boot
+[08:41:56]   13 candidato(s) a teste sem classe removido(s): spring-boot-project\spring-boot-test\src\main\java\org\springframework\boot\test\context\SpringBootTest.java, spring-boot-project\spring-boot-test-autoconfigure\src\main\java\org\springframework\boot\test\autoconfigure\data\jdbc\DataJdbcTest.java, spring-boot-project\spring-boot-test-autoconfigure\src\main\java\org\springframework\boot\test\autoconfigure\data\ldap\DataLdapTest.java ...
+[08:42:15]   bytestsmells: 11848 linhas (100%)
+[08:42:29]   byclasstest: 1410 linhas (100%)
+[08:42:46] (2/2) spring-projects/spring-data-gemfire -> test-smells-spring-data-gemfire
+[08:43:00]   1 candidato(s) a teste sem classe removido(s): src\test\java\org\springframework\data\gemfire\test\mock\annotation\GemFireUnitTest.java
+[08:43:20]   bytestsmells: 8128 linhas (100%)
+[08:43:32]   byclasstest: 357 linhas (100%)
+[08:43:32] fim
