@@ -1,0 +1,9 @@
+gerado por montar_analise.py em 2026-09-15 23:10:11
+
+rotulo            sev_media  (severidade media como valor continuo (0-3), sem dicotomizar)
+agregacao         soma  (soma do smell em todas as classes de teste ligadas)
+metodos           caminho_exato, convencao, referencia_estatica
+max_testes        10
+nome_divergente   excluido
+estratos          positivo_confiavel, negativo_confiavel, disputado, negativo_1_review
+linhas            1306

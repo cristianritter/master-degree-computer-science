@@ -2,3 +2,7 @@
 __pycache__/
 *.pyc
 .validacao/
+
+# arquivo de 104 MB acima do limite do GitHub; versionado em partes de 45 MB
+# (ver steps/step2-binding/README.md, secao 10)
+steps/step2-binding/dados/test_smell_occurrences.csv.gz
