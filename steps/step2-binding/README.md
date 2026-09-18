@@ -799,7 +799,8 @@ Mesmas colunas nos dois; muda só qual binding alimentou as linhas (seção 6).
 | `n_testes`, `test_paths` | classes de teste agregadas |
 | `n_testes_nome_divergente` | quantas delas têm o nome corrompido pelo defeito de classe aninhada. **Filtrar ou estratificar por esta coluna é obrigatório em análise com Eager/Lazy Test** |
 | `loc_teste`, `n_metodos_teste` | totais do lado do teste; `n_metodos_teste` é o denominador de `--agregacao densidade` |
-| `ts_*` (13), `ts_n_distintos`, `ts_n_total` | test smells agregados pela regra de `--agregacao` |
+| `ts_*` (13), `ts_n_total` | test smells agregados pela regra de `--agregacao` |
+| `ts_n_distintos` | quantos dos 13 smells aparecem em ao menos uma classe de teste ligada. É **união**, não a agregação escolhida — somar "quantos smells distintos cada classe tem" não dá "quantos smells distintos existem", e produzia 19 num arquivo com 3 testes |
 
 O `.params.txt` ao lado traz comando, commit, versão do Python, sha256 das entradas,
 cobertura e descartes.

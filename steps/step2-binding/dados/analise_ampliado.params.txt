@@ -1,7 +1,7 @@
-gerado por montar_analise.py em 2026-09-17 21:38:29
+gerado por montar_analise.py em 2026-09-18 05:53:44
 
 comando           python montar_analise.py --rotulo sev_media --saida analise_ampliado.csv --metodos caminho_exato convencao referencia_estatica --max-testes 10
-commit            ecef934 (tools com mudanca nao commitada)
+commit            6f9c791 (tools com mudanca nao commitada)
 python            3.12.10 (Windows)
 
 rotulo            sev_media  (severidade media como valor continuo (0-3), sem dicotomizar)
