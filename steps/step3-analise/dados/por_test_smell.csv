@@ -1,0 +1,53 @@
+ramo,recorte,test_smell,desfecho,n,rho,p,p_ajustado,ic_baixo,ic_alto,zeros_pct
+deterministico,todas,Assertion Roulette,bruto,730,0.077854,0.035428,0.282817,0.00532,0.149574,32.6
+deterministico,todas,Assertion Roulette,densidade,726,0.062022,0.094951,0.282817,-0.010791,0.134181,32.37
+deterministico,todas,Conditional Test Logic,bruto,730,-0.016011,0.665937,0.752798,-0.088472,0.05662,67.53
+deterministico,todas,Conditional Test Logic,densidade,726,-0.028068,0.450309,0.596687,-0.100626,0.044788,67.36
+deterministico,todas,Dependent Test,bruto,730,0.044701,0.227785,0.470115,-0.027954,0.116887,86.3
+deterministico,todas,Dependent Test,densidade,726,0.044132,0.235058,0.470115,-0.028724,0.116523,86.36
+deterministico,todas,Duplicate Assert,bruto,730,0.061308,0.097898,0.282817,-0.011307,0.13328,66.58
+deterministico,todas,Duplicate Assert,densidade,726,0.059435,0.109595,0.284947,-0.013387,0.13163,66.53
+deterministico,todas,Eager Test,bruto,730,0.013,0.72593,0.754967,-0.059621,0.085484,45.75
+deterministico,todas,Eager Test,densidade,726,-0.020251,0.586026,0.692576,-0.092879,0.052591,45.45
+deterministico,todas,Exception Catching Throwing,bruto,730,0.066884,0.070904,0.282817,-0.005708,0.138775,72.05
+deterministico,todas,Exception Catching Throwing,densidade,726,0.069764,0.060257,0.282817,-0.003016,0.141808,72.18
+deterministico,todas,General Fixture,bruto,730,0.0134,0.717853,0.754967,-0.059222,0.085881,84.38
+deterministico,todas,General Fixture,densidade,726,0.008194,0.825618,0.825618,-0.064609,0.08091,84.3
+deterministico,todas,Lazy Test,bruto,730,0.029365,0.42836,0.596687,-0.043292,0.101713,42.88
+deterministico,todas,Lazy Test,densidade,726,0.038298,0.302878,0.526431,-0.034563,0.110754,42.56
+deterministico,todas,Magic Number Test,bruto,730,0.086638,0.019187,0.282817,0.014162,0.158208,53.15
+deterministico,todas,Magic Number Test,densidade,726,0.07391,0.046485,0.282817,0.001152,0.14589,53.03
+deterministico,todas,Mystery Guest,bruto,730,0.022548,0.543147,0.672468,-0.050099,0.094957,92.74
+deterministico,todas,Mystery Guest,densidade,726,0.027533,0.45899,0.596687,-0.045322,0.100097,92.84
+deterministico,todas,Redundant Assertion,bruto,730,-0.035067,0.344205,0.526431,-0.107358,0.037594,96.16
+deterministico,todas,Redundant Assertion,densidade,726,-0.035897,0.334222,0.526431,-0.108379,0.036964,96.14
+deterministico,todas,Resource Optimism,bruto,730,0.03811,0.303929,0.526431,-0.034551,0.110369,93.84
+deterministico,todas,Resource Optimism,densidade,726,0.044482,0.231362,0.470115,-0.028374,0.116868,93.94
+deterministico,todas,Verbose Test,bruto,730,0.07682,0.037952,0.282817,0.004279,0.148556,60.96
+deterministico,todas,Verbose Test,densidade,726,0.064905,0.080521,0.282817,-0.007897,0.137022,60.88
+deterministico,sem_nome_divergente,Assertion Roulette,bruto,677,0.074884,0.051447,0.380126,-0.000472,0.149394,32.35
+deterministico,sem_nome_divergente,Assertion Roulette,densidade,677,0.056252,0.143763,0.380126,-0.019183,0.131049,32.35
+deterministico,sem_nome_divergente,Conditional Test Logic,bruto,677,-0.010133,0.792487,0.792487,-0.085421,0.06527,68.39
+deterministico,sem_nome_divergente,Conditional Test Logic,densidade,677,-0.023546,0.540938,0.642342,-0.098724,0.0519,68.39
+deterministico,sem_nome_divergente,Dependent Test,bruto,677,0.04028,0.29542,0.507648,-0.03518,0.115284,86.85
+deterministico,sem_nome_divergente,Dependent Test,densidade,677,0.035259,0.359791,0.519698,-0.040201,0.110319,86.85
+deterministico,sem_nome_divergente,Duplicate Assert,bruto,677,0.059926,0.119319,0.380126,-0.015497,0.134671,67.06
+deterministico,sem_nome_divergente,Duplicate Assert,densidade,677,0.055912,0.146202,0.380126,-0.019523,0.130715,67.06
+deterministico,sem_nome_divergente,Eager Test,bruto,677,0.011547,0.76433,0.792487,-0.063862,0.086825,41.8
+deterministico,sem_nome_divergente,Eager Test,densidade,677,-0.028305,0.462319,0.601014,-0.103438,0.047149,41.8
+deterministico,sem_nome_divergente,Exception Catching Throwing,bruto,677,0.060626,0.115054,0.380126,-0.014795,0.135361,73.26
+deterministico,sem_nome_divergente,Exception Catching Throwing,densidade,677,0.062883,0.102111,0.380126,-0.012529,0.137585,73.26
+deterministico,sem_nome_divergente,General Fixture,bruto,677,0.019835,0.60655,0.685665,-0.055602,0.095046,83.9
+deterministico,sem_nome_divergente,General Fixture,densidade,677,0.013373,0.728442,0.789145,-0.062043,0.088637,83.9
+deterministico,sem_nome_divergente,Lazy Test,bruto,677,0.023396,0.54352,0.642342,-0.052049,0.098575,38.55
+deterministico,sem_nome_divergente,Lazy Test,densidade,677,0.031435,0.414294,0.566929,-0.044023,0.106536,38.55
+deterministico,sem_nome_divergente,Magic Number Test,bruto,677,0.084657,0.027588,0.380126,0.009363,0.158996,53.62
+deterministico,sem_nome_divergente,Magic Number Test,densidade,677,0.072463,0.05949,0.380126,-0.002906,0.147014,53.62
+deterministico,sem_nome_divergente,Mystery Guest,bruto,677,0.038009,0.323522,0.507648,-0.037452,0.113039,92.76
+deterministico,sem_nome_divergente,Mystery Guest,densidade,677,0.039216,0.308377,0.507648,-0.036244,0.114232,92.76
+deterministico,sem_nome_divergente,Redundant Assertion,bruto,677,-0.037355,0.331924,0.507648,-0.112392,0.038105,96.31
+deterministico,sem_nome_divergente,Redundant Assertion,densidade,677,-0.038901,0.312291,0.507648,-0.11392,0.03656,96.31
+deterministico,sem_nome_divergente,Resource Optimism,bruto,677,0.05197,0.176877,0.383234,-0.023475,0.126826,93.8
+deterministico,sem_nome_divergente,Resource Optimism,densidade,677,0.053673,0.163087,0.383234,-0.021769,0.128506,93.8
+deterministico,sem_nome_divergente,Verbose Test,bruto,677,0.071552,0.062774,0.380126,-0.003821,0.146118,61.74
+deterministico,sem_nome_divergente,Verbose Test,densidade,677,0.05686,0.13947,0.380126,-0.018573,0.131649,61.74

@@ -6,7 +6,7 @@ produção), usando as duas tabelas que o step 2 entregou.
 **Este step é exploratório.** Avançar por um caminho, olhar o resultado e voltar para pegar
 outro é esperado — o que precisa existir é a justificativa de cada decisão e o registro do
 que foi percorrido. O mapa das opções está na seção 12 do README do step 2; o caderno das
-tentativas está na seção 5 daqui.
+tentativas está na seção 6 daqui.
 
 Entrada: `steps/step2-binding/dados/analise_deterministico.csv` e `analise_ampliado.csv`
 Saída: `dados/`
@@ -123,11 +123,15 @@ step3-analise/
 │   ├── comum.py               caminhos, leitura das tabelas do step 2, precisao de cada ramo
 │   ├── estat.py               Spearman, IC por z de Fisher e parcial, sem scipy
 │   ├── caracterizar.py        distribuicoes, antes de qualquer teste
-│   ├── explorar.py            test smell x code smell, nas tres definicoes de desfecho
+│   ├── explorar.py            rodada 1: test smell x code smell, tres desfechos
+│   ├── por_test_smell.py      rodada 2a: cada um dos 13 smells isolado, com FDR
+│   ├── extremos.py            rodada 2b: Mann-Whitney entre estratos extremos
 │   └── conferir_resultados.py reapura todo numero deste README
 └── dados/
     ├── caracterizacao.csv     as estatisticas descritivas
-    └── exploracao.csv         um resultado por linha, com IC e p
+    ├── exploracao.csv         rodada 1, um resultado por linha
+    ├── por_test_smell.csv     rodada 2a, 52 resultados com p ajustado
+    └── extremos.csv           rodada 2b, 6 resultados com p ajustado
 ```
 
 `comum.py` carrega o `comum.py` do step 2 por caminho para reusar a lista dos 13 smells,
@@ -232,7 +236,108 @@ exploram, e o caderno abaixo registra o que já foi tentado.
 
 ---
 
-## 5. Caderno de tentativas
+## 5. Segunda rodada — smells individuais e extremos de evidência
+
+Duas hipóteses que a primeira rodada não testou, atacadas com o ajuste para comparações
+múltiplas já embutido.
+
+```bash
+python tools/por_test_smell.py --csv     # analise 1
+python tools/extremos.py --csv           # analise 2
+```
+
+### 5.1 Análise 1 — cada test smell isolado
+
+Até aqui o desfecho foi sempre agregado. A pergunta agora é se **algum smell específico se
+comporta diferente do conjunto** — plausível, porque Eager Test e Lazy Test dependem da
+classe de produção para serem detectados, enquanto Assertion Roulette e Verbose Test são
+propriedades internas do teste. Se existisse relação com code smell, os primeiros eram os
+candidatos naturais.
+
+52 testes (13 smells × bruto/densidade × com/sem o filtro de `nome_divergente`), ramo
+determinístico, contra o code smell agregado. **Nenhum sobrevive à correção FDR** — o menor
+p ajustado é 0,283.
+
+Os cinco que alcançam significância nominal:
+
+| test smell | desfecho | rho | p | p ajustado |
+|---|---|---:|---:|---:|
+| Magic Number Test | bruto | 0,087 | 0,019 | 0,283 |
+| Assertion Roulette | bruto | 0,078 | 0,035 | 0,283 |
+| Verbose Test | bruto | 0,077 | 0,037 | 0,283 |
+| Magic Number Test | densidade | 0,074 | 0,046 | 0,283 |
+| Magic Number Test | bruto, filtrado | 0,085 | 0,027 | 0,380 |
+
+**O achado com mais conteúdo aqui é negativo, e é interessante.** Os dois smells que
+*deveriam* ser os melhores candidatos — Eager Test e Lazy Test, os únicos que dependem da
+classe de produção para serem detectados — dão rho de −0,020 e 0,038 em densidade. São os
+mais próximos de zero da tabela inteira.
+
+E o filtro de `nome_divergente` funciona como esperado, o que valida o controle do step 1:
+
+| smell | densidade, todas as linhas | sem `nome_divergente` |
+|---|---:|---:|
+| Eager Test | −0,020 (N=726) | −0,028 (N=677) |
+| Lazy Test | 0,038 (N=726) | 0,031 (N=677) |
+| **General Fixture** (controle) | 0,008 (N=726) | 0,013 (N=677) |
+
+General Fixture não depende da classe de produção e não deveria mudar com o filtro — não
+muda. O controle se comporta como previsto.
+
+### 5.2 Análise 2 — extremos de evidência, por Mann-Whitney
+
+A correlação pressupõe relação monotônica ao longo de toda a faixa. O desenho do MLCQ
+sustenta melhor uma comparação de extremos, usando os estratos que o step 2 definiu:
+classes em que a **maioria dos revisores concordou** que há code smell contra classes em
+que **2+ revisores concordaram que não há**.
+
+O estrato negativo é especialmente forte aqui: pelo desenho amostral, qualquer sinalização
+teria escalado a amostra para mais revisores, então são negativos com corroboração.
+
+Ramo determinístico — 42 positivos, 523 negativos, 165 fora (arquivo com amostras de mais
+de um estrato, ou de estrato intermediário):
+
+| desfecho | mediana positivos | mediana negativos | delta | p | p ajustado |
+|---|---:|---:|---:|---:|---:|
+| bruto | 18,0 | 14,0 | 0,113 | 0,223 | 0,334 |
+| densidade | 1,552 | 1,609 | 0,032 | 0,736 | 0,736 |
+| distintos | 5,0 | 4,0 | 0,154 | 0,094 | 0,282 |
+
+Ramo ampliado — 76 positivos, 976 negativos:
+
+| desfecho | mediana positivos | mediana negativos | delta | p | p ajustado |
+|---|---:|---:|---:|---:|---:|
+| bruto | 46,0 | 27,0 | 0,084 | 0,222 | 0,667 |
+| densidade | 1,506 | 1,543 | 0,029 | 0,673 | 0,673 |
+| distintos | 5,0 | 5,0 | 0,039 | 0,571 | 0,673 |
+
+**Nenhum resultado significativo, nem antes nem depois do ajuste.** E o detalhe mais
+eloquente está nas medianas de densidade: 1,552 contra 1,609 no determinístico, 1,506
+contra 1,543 no ampliado. Nos dois ramos o grupo **negativo** tem densidade de test smell
+ligeiramente *maior* — diferença sem significância, mas que mostra ausência de separação,
+não uma tendência fraca na direção esperada.
+
+### 5.3 O que as duas rodadas somam
+
+Três operacionalizações independentes da mesma hipótese, todas nulas:
+
+| rodada | pergunta | resultado |
+|---|---|---|
+| 1 | densidade de test smell correlaciona com severidade de code smell? | rho 0,047, IC [−0,026, 0,120] |
+| 2a | algum test smell específico correlaciona? | nenhum sobrevive ao FDR (mín. 0,283) |
+| 2b | classes com code smell confirmado têm testes mais smelly? | delta ≤ 0,154, nenhum p < 0,05 |
+
+O acúmulo importa: um nulo pode ser operacionalização infeliz, três nulos por caminhos
+diferentes apontam para o mesmo lugar. Com a precisão do binding medida (94,2%) e o poder
+calculado, **a leitura é que, nestes dados, densidade de test smell e severidade de code
+smell não têm relação detectável.**
+
+Isso não é o mesmo que "não existe relação no mundo" — as ressalvas da seção 8 limitam o
+alcance, em especial o fato de que o MLCQ anota *percepção de revisor*, não defeito
+observado.
+---
+
+## 6. Caderno de tentativas
 
 Uma linha por análise rodada, **incluindo as que não deram em nada**. Serve para o artigo
 poder dizer quantos caminhos foram percorridos, com número em vez de estimativa (step 2,
@@ -264,8 +369,13 @@ quando o tamanho é normalizado ou controlado:
 | determinístico | blob | bruto | 0,148 | 0,038 | 0,561 | −0,005 (p=0,948) |
 | ampliado | blob | distintos | 0,121 | 0,018 | 0,560 | −0,058 (p=0,259) |
 
-Nenhum ajuste para comparações múltiplas foi aplicado — quando a exploração fechar, o
-artigo reporta o total e aplica correção, ou declara o regime como exploratório.
+| 41–92 | 18/09 | determinístico | `sev_media` | cada test smell, bruto e densidade | agregado, com e sem filtro | 52 testes, **nenhum sobrevive ao FDR** |
+| 93–98 | 18/09 | ambos | estrato | os três, Mann-Whitney | extremos | 6 testes, nenhum p < 0,05 |
+
+**98 testes rodados no total.** Os 40 da primeira rodada saíram sem ajuste (e estão
+reportados assim); os 58 da segunda já saem com p ajustado por Benjamini-Hochberg dentro de
+cada família. Quando a exploração fechar, o artigo reporta o total e declara o regime como
+exploratório — é o que o volume de testes exige.
 
 > **Este número já foi corrigido uma vez.** A primeira versão desta seção dizia "22 testes,
 > 3 significâncias", contando só a rodada em que `--por-smell` tinha sido usado num ramo só.
@@ -274,7 +384,7 @@ artigo reporta o total e aplica correção, ou declara o regime como exploratór
 
 ---
 
-## 6. Reproduzir do zero
+## 7. Reproduzir do zero
 
 O step 3 não recoleta nada: ele lê as duas tabelas do step 2. Se elas não existirem,
 `gerar_analises.py` as refaz em segundos.
@@ -288,21 +398,27 @@ python tools/caracterizar.py --csv
 # 2. a rodada exploratoria completa: 2 ramos, 5 recortes, 3 desfechos, parciais
 python tools/explorar.py --por-smell --csv
 
-# 3. conferir que todo numero do README ainda sai do dado
+# 3. rodada 2a: cada test smell isolado, com correcao para comparacoes multiplas
+python tools/por_test_smell.py --csv
+
+# 4. rodada 2b: extremos de evidencia, Mann-Whitney
+python tools/extremos.py --csv
+
+# 5. conferir que todo numero do README ainda sai do dado
 python tools/conferir_resultados.py
 ```
 
-Os três levam segundos. Nenhum depende de rede, de clone ou do JNose — só dos dois CSVs
+Os cinco levam segundos. Nenhum depende de rede, de clone ou do JNose — só dos dois CSVs
 do step 2, cujos sha256 estão gravados nos `.params.txt` que os acompanham.
 
 **A ordem importa.** `explorar.py --csv` reescreve `exploracao.csv`, e
 `conferir_resultados.py` compara o README contra ele: rodar o verificador sem ter rodado a
 exploração completa acusa divergência — que foi exatamente o que aconteceu ao montar esta
-seção, e está registrado na seção 5.
+seção, e está registrado na seção 6.
 
 ---
 
-## 7. Ressalvas herdadas
+## 8. Ressalvas herdadas
 
 Todas já documentadas no step 2 e no `NOTAS-METODOLOGICAS.md`, repetidas aqui porque
 afetam a interpretação de qualquer resultado deste step:

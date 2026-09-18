@@ -99,7 +99,7 @@ def conferir_primeira_rodada():
 
 
 def conferir_caderno():
-    """O caderno da secao 5 declara um total de testes; o CSV tem que conter todos eles."""
+    """O caderno da secao 6 declara um total de testes; o CSV tem que conter todos eles."""
     print("\nCADERNO DE TENTATIVAS (secao 5)")
     print("-" * 31)
     caminho = os.path.join(c.DADOS, "exploracao.csv")
@@ -127,6 +127,54 @@ def conferir_caderno():
            ", ".join(sorted({r["desfecho"] for r in nominais})))
 
 
+def conferir_segunda_rodada():
+    """As duas analises da secao 5: nenhuma sobrevive ao ajuste para comparacoes multiplas."""
+    import csv
+    print("")
+    print("SEGUNDA RODADA (secao 5)")
+    print("-" * 24)
+
+    caminho = os.path.join(c.DADOS, "por_test_smell.csv")
+    if not os.path.exists(caminho):
+        exigir(False, "por_test_smell.csv existe", "ausente - rode por_test_smell.py --csv")
+    else:
+        with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+            L = list(csv.DictReader(f))
+        exigir(len(L) == 52, "analise 1 tem 52 testes", len(L))
+        sobrevivem = [r for r in L if float(r["p_ajustado"]) < 0.05]
+        exigir(len(sobrevivem) == 0,
+               "nenhum test smell sobrevive ao ajuste FDR", len(sobrevivem))
+        menor = min(float(r["p_ajustado"]) for r in L)
+        exigir(perto(menor, 0.283, 0.001), "menor p ajustado e 0,283", "%.3f" % menor)
+        # Eager e Lazy sao os que dependem da classe de producao: sao os mais proximos de
+        # zero, que e o achado negativo com mais conteudo da secao
+        for smell, esp in (("Eager Test", -0.020), ("Lazy Test", 0.038)):
+            r = [x for x in L if x["test_smell"] == smell and x["desfecho"] == "densidade"
+                 and x["recorte"] == "todas"][0]
+            exigir(perto(float(r["rho"]), esp), "%s em densidade: rho %.3f" % (smell, esp),
+                   r["rho"][:6])
+
+    caminho = os.path.join(c.DADOS, "extremos.csv")
+    if not os.path.exists(caminho):
+        exigir(False, "extremos.csv existe", "ausente - rode extremos.py --csv")
+        return
+    with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+        L = list(csv.DictReader(f))
+    exigir(len(L) == 6, "analise 2 tem 6 testes", len(L))
+    nominais = [r for r in L if float(r["p"]) < 0.05]
+    exigir(len(nominais) == 0, "nenhum extremo alcanca p < 0,05", len(nominais))
+    det = {r["desfecho"]: r for r in L if r["ramo"] == "deterministico"}
+    exigir(int(det["bruto"]["n_positivo"]) == 42 and int(det["bruto"]["n_negativo"]) == 523,
+           "deterministico: 42 positivos e 523 negativos confiaveis",
+           "%s e %s" % (det["bruto"]["n_positivo"], det["bruto"]["n_negativo"]))
+    # o grupo negativo tem densidade LIGEIRAMENTE MAIOR: ausencia de separacao, nao
+    # tendencia fraca na direcao esperada
+    dens = det["densidade"]
+    exigir(float(dens["mediana_negativo"]) > float(dens["mediana_positivo"]),
+           "na densidade, a mediana do grupo negativo e maior que a do positivo",
+           "%s vs %s" % (dens["mediana_negativo"], dens["mediana_positivo"]))
+
+
 def main():
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -135,6 +183,7 @@ def main():
 
     conferir_caracterizacao()
     conferir_primeira_rodada()
+    conferir_segunda_rodada()
     conferir_caderno()
 
     print()
