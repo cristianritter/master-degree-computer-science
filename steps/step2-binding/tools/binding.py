@@ -46,8 +46,23 @@ import comum as c
 # convencao de teste de integracao do maven-failsafe.
 SUFIXOS = ["Test", "Tests", "TestCase", "IT", "ITCase"]
 
+# Marcas de raiz de source tree. O que vem depois da ULTIMA delas e o caminho de pacote -
+# e o que permite dizer se o teste esta espelhado no mesmo pacote da producao.
+MARCAS_RAIZ = ("java", "classes", "src", "test", "tests", "kotlin", "scala")
+
+
+def caminho_de_pacote(caminho):
+    partes = [x for x in os.path.dirname(caminho).split("/") if x]
+    ultima = -1
+    for i, x in enumerate(partes):
+        if x in MARCAS_RAIZ:
+            ultima = i
+    return "/".join(partes[ultima + 1:])
+
+
 CAB_BINDING = [
-    "github_repo", "production_path", "test_path", "metodo", "ambiguo", "n_candidatos",
+    "github_repo", "production_path", "test_path", "metodo", "evidencia",
+    "ambiguo", "n_candidatos",
 ]
 
 CAB_PRODUCTION = [
@@ -104,31 +119,41 @@ def main():
 
     for (repo, prod), amostras in sorted(por_arquivo.items()):
         status = amostras[0]["repo_status"]
-        encontrados = []      # (test_path, metodo)
+        encontrados = []      # (test_path, metodo, evidencia)
 
         if status == "HASH_OK":
             for t in por_producao.get((repo, prod), []):
-                encontrados.append((t, "caminho_exato"))
+                encontrados.append((t, "caminho_exato", ""))
 
             base = os.path.basename(prod)[:-5] if prod.endswith(".java") else os.path.basename(prod)
-            ja = {t for t, _ in encontrados}
+            ja = {t for t, _, _ in encontrados}
+            pac_prod = caminho_de_pacote(prod)
             for suf in SUFIXOS:
                 for t in por_nome.get((repo, base + suf), []):
                     if t not in ja:
-                        encontrados.append((t, "convencao"))
+                        # O indice por_nome e por BASENAME, entao um XTest de outro pacote
+                        # do mesmo repositorio casa aqui. Nem sempre e erro - a arvore de
+                        # testes do JDK nao espelha a de producao, e LinkedListTest esta
+                        # noutro pacote legitimamente -, mas e o caso do NorTranslatorTest
+                        # de /mips casando com o NorTranslator de /ppc. Vira EVIDENCIA, nao
+                        # filtro: caminho_espelhado quando o pacote coincide, so_basename
+                        # quando so o nome coincide.
+                        ev = ("caminho_espelhado" if caminho_de_pacote(t) == pac_prod
+                              else "so_basename")
+                        encontrados.append((t, "convencao", ev))
                         ja.add(t)
 
             for t in refs.get((repo, prod), []):
                 if t not in ja:
-                    encontrados.append((t, "referencia_estatica"))
+                    encontrados.append((t, "referencia_estatica", ""))
                     ja.add(t)
 
         # ambiguo marca o par cujo metodo produziu mais de um candidato. Nao e erro - uma
         # classe pode ter varios testes - mas para a convencao e sinal de risco: e o caso
         # do AppTest que aparece 159 vezes no mesmo repositorio.
-        n_por_metodo = collections.Counter(m for _, m in encontrados)
-        for t, m in encontrados:
-            pares.append([repo, prod, t, m, int(n_por_metodo[m] > 1), n_por_metodo[m]])
+        n_por_metodo = collections.Counter(m for _, m, _ in encontrados)
+        for t, m, ev in encontrados:
+            pares.append([repo, prod, t, m, ev, int(n_por_metodo[m] > 1), n_por_metodo[m]])
             metodo_cobertura[m] += 1
 
         if encontrados:
@@ -148,7 +173,7 @@ def main():
             "|".join(sorted({a["estrato"] for a in amostras})),
             max(int(a["sev_max"]) for a in amostras),
             status,
-            len(encontrados), "|".join(sorted({m for _, m in encontrados})), motivo,
+            len(encontrados), "|".join(sorted({m for _, m, _ in encontrados})), motivo,
         ])
 
     n = c.escrever_csv(os.path.join(c.DADOS, "binding.csv"), CAB_BINDING, pares)

@@ -82,7 +82,13 @@ def sortear(args):
     estratos = collections.defaultdict(list)
     for p in pares:
         k = (p["github_repo"], p["production_path"], p["test_path"])
-        ev = evidencia.get(k, "") if p["metodo"] == "referencia_estatica" else ""
+        # a estrategia 3 traz a evidencia do refs_producao.csv; a convencao ja traz a
+        # dela no proprio binding.csv (caminho_espelhado x so_basename), e sao riscos
+        # diferentes o bastante para virarem estratos separados.
+        if p["metodo"] == "referencia_estatica":
+            ev = evidencia.get(k, "")
+        else:
+            ev = (p.get("evidencia") or "").strip()
         estratos[(p["metodo"], ev)].append((p, ev))
 
     rnd = random.Random(args.semente)

@@ -174,11 +174,33 @@ teste apontando para eles (legitimamente até 8), e colapsar isso numa linha por
 forçaria a decidir agora como agregar vários testes, deixando a decisão enterrada no dado.
 Ela fica em `montar_analise.py`.
 
-**O binding é feito por caminho, nunca por nome de classe.** O `ProductionFileName` do
-JNose é caminho completo, e o campo `path` do MLCQ é relativo ao repositório; reduzidos ao
-mesmo formato eles coincidem exatamente, porque o `HASH_OK` garante o mesmo commit. Casar
-por nome inventaria ligações: 2.956 basenames de teste aparecem em mais de um arquivo
-dentro do mesmo repositório — `AppTest` ocorre **159 vezes** em `maven-plugins`.
+**O par sai sempre como caminho, e a comparação com o MLCQ é por caminho.** O
+`ProductionFileName` do JNose é caminho completo, e o campo `path` do MLCQ é relativo ao
+repositório; reduzidos ao mesmo formato eles coincidem exatamente, porque o `HASH_OK`
+garante o mesmo commit.
+
+Casar **teste** por nome, porém, inventa ligações: 2.956 basenames de teste aparecem em
+mais de um arquivo dentro do mesmo repositório — `AppTest` ocorre **159 vezes** em
+`maven-plugins`. A estratégia `convencao` procura `XTest` por basename no repositório, e
+por isso carrega uma coluna `evidencia` que diz se o teste está no mesmo pacote da
+produção:
+
+| evidência da `convencao` | pares | o que é |
+|---|---:|---|
+| `caminho_espelhado` | 50 | teste e produção no mesmo caminho de pacote |
+| `so_basename` | 43 | só o nome coincide; o pacote é outro |
+
+As duas existem porque nenhuma das duas é descartável. `so_basename` inclui erro real —
+`NorTranslatorTest` de `/ppc` casando com o `NorTranslator` de `/mips`, no mesmo
+repositório — e também ligação legítima: a árvore de testes do JDK não espelha a de
+produção, e `LinkedList.java` ↔ `LinkedListTest.java` é correto ali. Distinguir as duas é
+trabalho da auditoria, que por isso as trata como estratos separados.
+
+> Esta separação foi acrescentada depois da primeira versão do step, ao montar a
+> ferramenta de auditoria: o README afirmava que a `convencao` casava por caminho, e a
+> implementação casava por basename. O código e a documentação discordavam em silêncio, e
+> foi o preparo da conferência par a par que expôs isso — antes de qualquer par ter sido
+> julgado.
 
 O método de cada par é uma **coluna**, não um pressuposto, porque os métodos têm precisão
 diferente e o artigo precisa poder mostrar que o achado se mantém em mais de um:
@@ -186,7 +208,7 @@ diferente e o artigo precisa poder mostrar que o achado se mantém em mais de um
 | método | o que é | cobertura |
 |---|---|---|
 | `caminho_exato` | o `ProductionFileName` que o próprio JNose resolveu | 675 pares, 15,8% das amostras |
-| `convencao` | `X.java` ← `XTest` / `XTests` / `XTestCase` / `XIT` / `XITCase`, casando por caminho | +93 pares, +1,7% |
+| `convencao` | `X.java` ← `XTest` / `XTests` / `XTestCase` / `XIT` / `XITCase`, casando por basename no repositório, com o espelhamento de pacote como evidência | +93 pares, +1,7% |
 | `referencia_estatica` | a classe de teste referencia o tipo de produção no código | ver abaixo |
 
 `caminho_exato` é viesado: a resolução parte do nome da classe, errado nas 6.842 linhas de
@@ -364,19 +386,23 @@ python tools/auditar_binding.py --por-estrato 30  # amostra menor
 python tools/auditar_binding.py --apurar         # precisão por estrato, com IC95%
 ```
 
-Com o binding completo são **5 estratos e 250 pares** no padrão:
+Com o binding completo são **6 estratos e 293 pares** no padrão:
 
 | estrato | pares no binding | sorteados |
 |---|---:|---:|
 | `caminho_exato` | 675 | 50 |
-| `convencao` | 93 | 50 |
+| `convencao/caminho_espelhado` | 50 | **50 (censo)** |
+| `convencao/so_basename` | 43 | **43 (censo)** |
 | `referencia_estatica/import_fqn` | 14.092 | 50 |
 | `referencia_estatica/mesmo_pacote` | 1.875 | 50 |
 | `referencia_estatica/wildcard` | 134 | 50 |
 
-250 pares a ~1 min cada é meio dia de trabalho. `--por-estrato 30` reduz para 150 ao custo
-de alargar o intervalo de confiança de cada estrato de ~±14 pp para ~±18 pp no pior caso
-(p≈0,5).
+São **293 pares**. Os dois estratos de `convencao` são censo — todos os pares são
+conferidos, então ali não há erro de amostragem e a precisão sai exata, sem intervalo.
+
+293 pares a ~1 min cada é meio dia de trabalho. `--por-estrato 30` reduz para ~183 ao custo
+de alargar o intervalo de confiança dos estratos amostrados de ~±14 pp para ~±18 pp no pior
+caso (p≈0,5); os dois de `convencao` seguem sendo censo.
 
 A amostragem é deliberadamente **não proporcional**: as estratégias raras precisam de N
 próprio para ter precisão estimável — proporcional daria 2 pares de `convencao`. O peso de
@@ -594,8 +620,9 @@ MLCQ.
 | `production_path` | arquivo de produção anotado no MLCQ |
 | `test_path` | classe de teste ligada a ele |
 | `metodo` | `caminho_exato`, `convencao` ou `referencia_estatica` |
-| `ambiguo` | 1 se aquele método produziu mais de um candidato para esta produção |
-| `n_candidatos` | quantos candidatos aquele método produziu |
+| `evidencia` | só para `convencao`: `caminho_espelhado` (mesmo pacote) ou `so_basename` (só o nome coincide). Vazio nos outros métodos — a evidência da estratégia 3 mora em `refs_producao.csv` |
+| `ambiguo` | 1 se aquele método ligou **mais de uma classe de teste** a esta produção. Não é erro — uma classe pode ter vários testes — e **não** significa "escolheu o arquivo errado" |
+| `n_candidatos` | quantas classes de teste aquele método ligou a esta produção |
 
 ### `production_files.csv` — 1 linha por arquivo de produção anotado
 
@@ -812,3 +839,7 @@ dois emite veredito; o julgamento é de quem audita.
   (`Latest`, `Contest`); herdado do step 1.
 - **`mesmo_pacote` casa identificador solto** e pode ligar um `<Tipo>` homônimo de outro
   pacote. É o estrato de auditoria com maior risco esperado.
+- **`convencao/so_basename` (43 pares) casa `XTest` de qualquer pacote do repositório.**
+  Contém erro comprovado (`NorTranslator` de `/mips` com o teste de `/ppc`) e também
+  ligação legítima (árvore de testes do JDK). Os dois estratos de `convencao` são
+  auditados por censo, então esse risco sai medido exatamente.
