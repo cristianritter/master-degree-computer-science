@@ -986,16 +986,49 @@ dois emite veredito; o julgamento é de quem audita.
 
 ---
 
-## 12. Recomendações para o step 3 — e o porquê de cada uma
+## 12. O espaço de análise disponível para o step 3
 
-**Registrado em 18/09/2026, antes de qualquer análise ter sido rodada.** A data importa:
-uma escolha de desenho feita depois de ver o resultado é justificativa, não método, e é a
-primeira coisa que um revisor procura. Todas as tabelas desta seção saem de
-`python tools/poder_analise.py`.
+Esta seção é um **mapa dos caminhos**, não uma escolha fechada. O trabalho é exploratório:
+avançar por um caminho, olhar o resultado e voltar para pegar outro é legítimo e esperado —
+o que o artigo precisa é que cada decisão esteja embasada e que o caminho percorrido esteja
+descrito. Todas as tabelas saem de `python tools/poder_analise.py`.
 
-O step 2 não decide nada disso — ele entrega os dois ramos e as cinco colunas de rótulo
-lado a lado justamente para que a escolha seja do step 3. O que segue é a leitura dos
-números, para que a decisão seja tomada com eles à vista.
+O que segue é a leitura dos números *antes* de rodar qualquer análise, porque saber quanto
+poder cada opção tem muda por onde começar. Se o resultado mandar voltar, volta-se.
+
+### 12.0 O tamanho do espaço, e por que isso importa na escrita
+
+As opções que o step 2 entrega se combinam em cerca de **200 análises distintas**:
+
+| dimensão | opções |
+|---|---:|
+| ramo de binding | 2 |
+| regra de rótulo | 5 |
+| recorte (4 smells + agregado) | 5 |
+| agregação do test smell | 4 |
+
+Some ainda `--max-testes`, filtro por `estrato` e por `n_testes_nome_divergente`. Com esse
+espaço, **alguma combinação dá p < 0,05 por acaso** — é o problema conhecido como *garden
+of forking paths*, e ele não é resolvido escolhendo antes: é resolvido dizendo o que se
+fez.
+
+Isso não restringe a exploração. Restringe só a **frase final**:
+
+- *"Exploramos o espaço de análise e encontramos X, com o caminho descrito"* — honesto,
+  publicável, e o leitor calibra a confiança sozinho.
+- *"Testamos a hipótese X e ela se confirmou"*, depois de 40 tentativas — é o que não se
+  sustenta numa revisão.
+
+Por isso vale ir anotando o que foi rodado e o que cada tentativa deu, mesmo o que não
+funcionou. Não para provar que nada foi olhado antes — para poder dizer quantos caminhos
+foram percorridos quando chegar a hora de escrever. Se o número final de tentativas for
+alto, há correções estatísticas aplicáveis; se for baixo, também é bom saber.
+
+### 12.0.1 Por onde começar, e por quê
+
+O step 2 não decide nada disso — ele entrega os dois ramos e as regras de rótulo lado a
+lado justamente para que a escolha seja do step 3. A leitura dos números abaixo sugere uma
+ordem de partida, não uma sentença:
 
 ### 12.1 O quadro completo do que está disponível
 
@@ -1029,9 +1062,9 @@ sem smell.
 | `feature envy`, `sev_media` | 307 | — | r ≥ 0,159 |
 | `data class`, `sev_media` | 277 | — | r ≥ 0,168 |
 
-### 12.2 Recomendação 1 — `sev_media` como rótulo principal
+### 12.2 Caminho de partida 1 — `sev_media` como rótulo
 
-**A decisão.** A análise principal usa a severidade média contínua. As dicotomizações
+**A sugestão.** Comecar pela severidade média contínua. As dicotomizações
 entram como análise de sensibilidade, não como variável primária.
 
 **Por que, em três frentes que apontam para o mesmo lado:**
@@ -1062,9 +1095,9 @@ condicionada ao roteamento. Ela é melhor que `any > none`, não é limpa. O que
 coluna `estrato`: comparar dentro de estrato, ou entre os extremos `negativo_confiavel` e
 `positivo_confiavel`, isola o efeito do roteamento.
 
-### 12.3 Recomendação 2 — análise agregada como primária, por smell como secundária
+### 12.3 Caminho de partida 2 — análise agregada antes da análise por smell
 
-**A decisão.** A análise principal usa a severidade do smell avaliado de cada arquivo,
+**A sugestão.** Comecar pela severidade do smell avaliado de cada arquivo,
 qualquer que seja ele. A análise por smell individual entra depois, com a ressalva de poder.
 
 **Por quê.** O MLCQ anota cada amostra para **um** smell específico, então o N por smell é
@@ -1089,9 +1122,9 @@ que "prediz *blob* especificamente". O agregado responde a primeira; as análise
 respondem a segunda quando o N permite — `long method` (251) e `blob` (196) têm N razoável,
 `data class` (114) é o caso magro.
 
-### 12.4 Recomendação 3 — os dois ramos, como perguntas diferentes
+### 12.4 Caminho de partida 3 — os dois ramos, como perguntas diferentes
 
-**A decisão.** Rodar as duas tabelas, declarando agora o que cada uma responde:
+**A sugestão.** Rodar as duas tabelas sabendo o que cada uma responde:
 
 | ramo | pergunta que responde | N | precisão |
 |---|---|---:|---:|
@@ -1108,10 +1141,11 @@ cobra caro:
 - *O custo é de construto, não de precisão.* O ramo ampliado tem **10,1%** de precisão para
   a pergunta "este teste testa esta classe" (seção 5). O problema dele não é tamanho de
   amostra — é que mede outra coisa, e nenhum N conserta isso.
-- *E escolher depois de ver o resultado é o mesmo defeito que este step documenta no
-  MLCQ.* A seção 3 critica o rótulo por ser circular com o desenho amostral. Escolher o
-  binding em função de ele dar ou não dado suficiente é a mesma família de problema, agora
-  cometido por nós.
+- *Trocar de ramo não é o problema; trocar sem dizer é.* Voltar e usar o ampliado depois
+  de ver o determinístico é legítimo — desde que o artigo diga que os dois foram rodados e
+  o que cada um deu. O que não se sustenta é apresentar o ampliado como "o mesmo resultado
+  com mais amostras", porque ele responde outra pergunta (10,1% de precisão para a
+  original).
 
 **Como usar o ampliado legitimamente.** Como análise separada, com a pergunta própria dela
 escrita: *"classes exercitadas por suítes com muito test smell têm mais code smell?"*. É
@@ -1121,7 +1155,7 @@ O que não dá é apresentá-lo como "o mesmo resultado, com mais amostras".
 
 ### 12.5 A hierarquia das decisões, por impacto
 
-Para a escrita, vale saber qual decisão move mais o resultado:
+Se for preciso voltar e trocar alguma coisa, vale saber qual troca move mais o resultado:
 
 | decisão | efeito no detectável | custo |
 |---|---|---|
