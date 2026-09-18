@@ -860,6 +860,7 @@ step2-binding/
 │   ├── dossie_auditoria.py    monta a evidencia de cada par para a conferencia
 │   ├── registrar_auditoria.py grava vereditos incrementalmente (dois criterios)
 │   ├── candidatos_auditoria.py os arquivos homonimos que a regra NAO escolheu
+│   ├── poder_analise.py       efeito minimo detectavel por ramo e por regra de rotulo
 │   └── conferir_dados.py      reapura todo numero deste README
 └── dados/
     ├── mlcq_reviews.csv              14.739 linhas
@@ -914,6 +915,9 @@ python tools/gerar_analises.py
 
 # 7. conferir que todo numero do README ainda vale
 python tools/conferir_dados.py
+
+# 8. o poder disponivel para o step 3, por ramo e por regra de rotulo
+python tools/poder_analise.py
 ```
 
 Os passos 1, 2 e 4 levam segundos (o 1 completo, ~1,5 min pelas ocorrências). O passo 3 é
@@ -979,3 +983,167 @@ dois emite veredito; o julgamento é de quem audita.
   Contém erro comprovado (`NorTranslator` de `/mips` com o teste de `/ppc`) e também
   ligação legítima (árvore de testes do JDK). Os dois estratos de `convencao` são
   auditados por censo, então esse risco sai medido exatamente.
+
+---
+
+## 12. Recomendações para o step 3 — e o porquê de cada uma
+
+**Registrado em 18/09/2026, antes de qualquer análise ter sido rodada.** A data importa:
+uma escolha de desenho feita depois de ver o resultado é justificativa, não método, e é a
+primeira coisa que um revisor procura. Todas as tabelas desta seção saem de
+`python tools/poder_analise.py`.
+
+O step 2 não decide nada disso — ele entrega os dois ramos e as cinco colunas de rótulo
+lado a lado justamente para que a escolha seja do step 3. O que segue é a leitura dos
+números, para que a decisão seja tomada com eles à vista.
+
+### 12.1 O quadro completo do que está disponível
+
+Menor efeito detectável com α = 0,05 bicaudal e poder de 80%. Para rótulo contínuo é a
+correlação `r`; para rótulo dicotômico é a diferença padronizada `d` entre os grupos com e
+sem smell.
+
+**Ramo determinístico — 730 arquivos, precisão do binding 94,2%**
+
+| análise | N | prevalência | efeito mínimo detectável |
+|---|---:|---:|---|
+| agregado, `sev_media` | 730 | — | **r ≥ 0,104** |
+| agregado, `any > none` | 730 | 27,9% | d ≥ 0,23 |
+| agregado, `any ≥ major` | 730 | 19,3% | d ≥ 0,26 |
+| agregado, `maioria > none` | 730 | 6,0% | d ≥ 0,44 |
+| agregado, `unânime` | 730 | 1,0% | d ≥ 1,06 |
+| `long method`, `sev_media` | 251 | — | r ≥ 0,176 |
+| `blob`, `sev_media` | 196 | — | r ≥ 0,199 |
+| `feature envy`, `sev_media` | 186 | — | r ≥ 0,204 |
+| `data class`, `sev_media` | 114 | — | r ≥ 0,260 |
+
+**Ramo ampliado — 1.369 arquivos, precisão 10,1% (estrito) / 94,8% (amplo)**
+
+| análise | N | prevalência | efeito mínimo detectável |
+|---|---:|---:|---|
+| agregado, `sev_media` | 1.369 | — | r ≥ 0,076 |
+| agregado, `any > none` | 1.369 | 28,0% | d ≥ 0,17 |
+| agregado, `maioria > none` | 1.369 | 5,8% | d ≥ 0,32 |
+| `long method`, `sev_media` | 443 | — | r ≥ 0,133 |
+| `blob`, `sev_media` | 378 | — | r ≥ 0,144 |
+| `feature envy`, `sev_media` | 307 | — | r ≥ 0,159 |
+| `data class`, `sev_media` | 277 | — | r ≥ 0,168 |
+
+### 12.2 Recomendação 1 — `sev_media` como rótulo principal
+
+**A decisão.** A análise principal usa a severidade média contínua. As dicotomizações
+entram como análise de sensibilidade, não como variável primária.
+
+**Por que, em três frentes que apontam para o mesmo lado:**
+
+*Poder.* `sev_media` detecta r ≥ 0,104 no agregado. A melhor dicotomização (`any`) exige
+d ≥ 0,23, e a menos circular (`maioria`) exige **d ≥ 0,44** — quase meio desvio-padrão de
+diferença entre classes com e sem smell, efeito grande demais para ser plausível nesta
+literatura. `unânime` exige d ≥ 1,06 e é inutilizável como variável principal: não por
+estar errada, mas por ter 7 positivos.
+
+*Circularidade.* A seção 3 mostra que `any > none` é quase um detector de "esta amostra foi
+ao crosscheck": das 1.227 amostras revisadas a partir de 26/07/2019, 100% já eram positivas
+antes. Dicotomizar por `any` importa esse defeito inteiro para a variável dependente.
+
+*Informação descartada.* Dicotomizar joga fora a diferença entre uma classe que três
+revisores marcaram como `critical` e outra que um marcou como `minor`. São 14.739 revisões;
+a média usa todas.
+
+**O que isso custa.** Uma variável contínua com 72% de zeros não é normal, então o teste
+tem que ser não-paramétrico (Spearman) ou um modelo que trate o excesso de zeros. É ônus de
+escolha de teste, não de dado — e a alternativa dicotômica tem o mesmo problema em forma
+pior.
+
+**A ressalva que o artigo precisa declarar.** `sev_media` **não é imune ao desenho
+amostral.** A tabela da seção 3 mostra média 0,000 nas amostras de 2 revisores e 0,59–0,80
+nas de 4 ou mais, porque só as sinalizadas foram para o crosscheck. A média continua
+condicionada ao roteamento. Ela é melhor que `any > none`, não é limpa. O que mitiga é a
+coluna `estrato`: comparar dentro de estrato, ou entre os extremos `negativo_confiavel` e
+`positivo_confiavel`, isola o efeito do roteamento.
+
+### 12.3 Recomendação 2 — análise agregada como primária, por smell como secundária
+
+**A decisão.** A análise principal usa a severidade do smell avaliado de cada arquivo,
+qualquer que seja ele. A análise por smell individual entra depois, com a ressalva de poder.
+
+**Por quê.** O MLCQ anota cada amostra para **um** smell específico, então o N por smell é
+pequeno por construção: 715 dos 730 arquivos do ramo determinístico têm exatamente um smell
+avaliado. Agregar recupera o N inteiro do ramo sem misturar avaliações de smells diferentes
+no mesmo arquivo.
+
+**O impacto é grande e é de graça:**
+
+| | N | r detectável |
+|---|---:|---:|
+| determinístico, agregado | 730 | **0,104** |
+| determinístico, `data class` | 114 | 0,260 |
+| ampliado, `data class` | 277 | 0,168 |
+
+O agregado do ramo determinístico tem **mais poder que qualquer análise por smell do ramo
+ampliado** — sem custo nenhum de validade de construto. Se poder é a preocupação, é aqui
+que se ganha, não trocando de binding.
+
+**O que isso custa.** "Densidade de test smell prediz code smell" é uma pergunta mais fraca
+que "prediz *blob* especificamente". O agregado responde a primeira; as análises por smell
+respondem a segunda quando o N permite — `long method` (251) e `blob` (196) têm N razoável,
+`data class` (114) é o caso magro.
+
+### 12.4 Recomendação 3 — os dois ramos, como perguntas diferentes
+
+**A decisão.** Rodar as duas tabelas, declarando agora o que cada uma responde:
+
+| ramo | pergunta que responde | N | precisão |
+|---|---|---:|---:|
+| `analise_deterministico` | classes com **teste dedicado** | 730 | 94,2% |
+| `analise_ampliado` | classes **exercitadas por alguma suíte** | 1.369 | 94,8% sob esse construto |
+
+**Por que não usar o ampliado como plano B.** A tentação é natural: se o N do
+determinístico não bastar, incluir o ampliado. Os números dizem que isso não resolve e
+cobra caro:
+
+- *O ganho é marginal.* Dobrar o N move o detectável de r ≥ 0,104 para r ≥ 0,076 no
+  agregado, e de ~0,20 para ~0,15 por smell. Não é a diferença entre concluir e não
+  concluir.
+- *O custo é de construto, não de precisão.* O ramo ampliado tem **10,1%** de precisão para
+  a pergunta "este teste testa esta classe" (seção 5). O problema dele não é tamanho de
+  amostra — é que mede outra coisa, e nenhum N conserta isso.
+- *E escolher depois de ver o resultado é o mesmo defeito que este step documenta no
+  MLCQ.* A seção 3 critica o rótulo por ser circular com o desenho amostral. Escolher o
+  binding em função de ele dar ou não dado suficiente é a mesma família de problema, agora
+  cometido por nós.
+
+**Como usar o ampliado legitimamente.** Como análise separada, com a pergunta própria dela
+escrita: *"classes exercitadas por suítes com muito test smell têm mais code smell?"*. É
+uma RQ defensável, com 94,8% de precisão medida para esse construto, e serve como
+triangulação — se o achado aparece nos dois ramos, ele é robusto à definição de binding.
+O que não dá é apresentá-lo como "o mesmo resultado, com mais amostras".
+
+### 12.5 A hierarquia das decisões, por impacto
+
+Para a escrita, vale saber qual decisão move mais o resultado:
+
+| decisão | efeito no detectável | custo |
+|---|---|---|
+| dicotomizar por `maioria` em vez de usar `sev_media` | d ≥ 0,44 contra r ≥ 0,10 | nenhum ganho em troca |
+| por smell em vez de agregado | r ≥ 0,26 contra r ≥ 0,10 (`data class`) | responde pergunta mais específica |
+| ramo ampliado em vez do determinístico | r ≥ 0,076 contra r ≥ 0,104 | precisão de construto cai a 10,1% |
+
+**A regra de rótulo é a alavanca mais forte, e a mais barata.** A estratégia de binding é a
+mais cara e a que menos move o número. Essa ordem é contraintuitiva — o step 2 gastou 41,5
+minutos de clonagem e meio dia de auditoria na estratégia 3, e ela é a decisão de menor
+impacto sobre o poder. O trabalho não foi desperdiçado: foi o que permitiu **medir** que
+ela é de menor impacto, e o que produziu o achado de construto da seção 5.
+
+### 12.6 O que continua não medido
+
+- **Recall do binding.** A auditoria mede precisão; as ligações verdadeiras perdidas não
+  foram medidas (`NOTAS-METODOLOGICAS.md`, seção 1). Se o step 3 der nulo, isso vira
+  ameaça relevante e vale o desenho complementar: sortear arquivos de produção não ligados
+  e procurar teste à mão.
+- **Concordância humana sobre a auditoria.** Os 293 vereditos são automatizados. Uma
+  conferência humana de ~30 pares produz a taxa de concordância, que é o número que
+  transforma "primeira passada automatizada" em algo reportável (notas, seção 9).
+- **Atenuação residual.** Mesmo com 94,2% de precisão, 6% de pares falsos atenuam a
+  correlação. Com a precisão medida, dá para estimar o quanto — e isso só vale a pena se o
+  resultado for nulo (notas, seção 2).

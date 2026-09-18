@@ -211,6 +211,11 @@ Foi daí que veio o número que te chamou atenção: 759 amostras × 5,8% = **44
 Não é falha do binding. É a prevalência da regra da maioria (5,2% em todo o MLCQ) aplicada
 a um N de 759.
 
+> **O número disso está medido.** No ramo determinístico (730 arquivos), dicotomizar por
+> maioria exige detectar d ≥ 0,44 — quase meio desvio-padrão — enquanto a severidade
+> contínua detecta r ≥ 0,104. A regra `unanime`, com 7 positivos, exigiria d ≥ 1,06.
+> A tabela completa está na seção 12 do `README.md`, e sai de `poder_analise.py`.
+
 **A saída:** com `--rotulo sev_media` a questão não se coloca. Em vez de dicotomizar em
 positivo/negativo, cada arquivo entra com a severidade média das suas revisões (0 a 3),
 como valor contínuo. Todas as linhas ligadas entram na análise, sem limiar para discutir,

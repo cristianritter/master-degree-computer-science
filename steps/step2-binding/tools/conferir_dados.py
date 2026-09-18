@@ -455,14 +455,85 @@ def secao_6():
         exigir(n == linhas_esperadas, "analise_%s.csv tem %d linhas" % (nome, linhas_esperadas), n)
 
 
+
+def secao_12():
+    """As tabelas de poder da secao 12, que sustentam as recomendacoes para o step 3.
+
+    Sao numeros de DESENHO, nao de resultado: se um rerun do binding mudar o N e ninguem
+    reapurar, a recomendacao datada passa a citar um poder que o dado nao tem mais.
+    """
+    titulo("SECAO 12 - poder disponivel para o step 3")
+
+    import poder_analise as pa
+
+    smells = sorted(c.CODE_SMELLS)
+    esperado = {
+        "analise_deterministico.csv": {
+            "linhas": 730, "agregado": 730, "zeros": 72.1,
+            "por_smell": {"blob": 196, "data class": 114, "feature envy": 186,
+                          "long method": 251},
+            "positivos": {"any": 204, "any_major": 141, "maioria": 44, "unanime": 7},
+        },
+        "analise_ampliado.csv": {
+            "linhas": 1369, "agregado": 1369, "zeros": 72.0,
+            "por_smell": {"blob": 378, "data class": 277, "feature envy": 307,
+                          "long method": 443},
+            "positivos": {"any": 384, "any_major": 253, "maioria": 79, "unanime": 9},
+        },
+    }
+
+    for arquivo, esp in esperado.items():
+        caminho = os.path.join(c.DADOS, arquivo)
+        if not os.path.exists(caminho):
+            exigir(False, "%s existe" % arquivo, "ausente - rode gerar_analises.py")
+            continue
+        linhas_csv = c.ler_csv(caminho)
+        print("  %s:" % arquivo)
+
+        for sm, n_esp in esp["por_smell"].items():
+            col = pa.coluna(sm, "sev_media")
+            n = sum(1 for r in linhas_csv if (r[col] or "").strip())
+            exigir(n == n_esp, "N de %s em %s" % (sm, arquivo), n)
+
+        vals = []
+        for r in linhas_csv:
+            v = [float(r[pa.coluna(sm, "sev_media")]) for sm in smells
+                 if (r[pa.coluna(sm, "sev_media")] or "").strip()]
+            if v:
+                vals.append(max(v))
+        exigir(len(vals) == esp["agregado"], "N agregado de %s" % arquivo, len(vals))
+        r_det = pa.r_detectavel(len(vals), 0.05, 0.80)
+        print("    agregado N=%d  r detectavel=%.3f" % (len(vals), r_det))
+
+        # um arquivo tem quase sempre UM smell avaliado: e o que justifica a recomendacao 2
+        um_so = sum(1 for r in linhas_csv
+                    if sum(1 for sm in smells
+                           if (r[pa.coluna(sm, "sev_media")] or "").strip()) == 1)
+        print("    arquivos com exatamente 1 smell avaliado: %d de %d (%.1f%%)"
+              % (um_so, len(linhas_csv), 100 * um_so / len(linhas_csv)))
+        exigir(um_so / len(linhas_csv) > 0.95,
+               "quase todo arquivo de %s tem um unico smell avaliado" % arquivo,
+               "%.1f%%" % (100 * um_so / len(linhas_csv)))
+
+        for regra, pos_esp in esp["positivos"].items():
+            pos = 0
+            for r in linhas_csv:
+                v = [r[pa.coluna(sm, regra)] for sm in smells
+                     if (r[pa.coluna(sm, regra)] or "").strip()]
+                if v and any(x == "1" for x in v):
+                    pos += 1
+            exigir(pos == pos_esp, "positivos por %s em %s" % (regra, arquivo), pos)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--secao", type=int, choices=[2, 3, 4, 5, 6], action="append",
+    ap.add_argument("--secao", type=int, choices=[2, 3, 4, 5, 6, 12], action="append",
                     help="confere so esta secao do README (repetivel)")
     args = ap.parse_args()
 
-    secoes = {2: secao_2, 3: secao_3, 4: secao_4, 5: secao_5, 6: secao_6}
-    for n in (args.secao or [2, 3, 4, 5, 6]):
+    secoes = {2: secao_2, 3: secao_3, 4: secao_4, 5: secao_5, 6: secao_6,
+              12: secao_12}
+    for n in (args.secao or [2, 3, 4, 5, 6, 12]):
         secoes[n]()
 
     print()
