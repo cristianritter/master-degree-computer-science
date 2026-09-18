@@ -29,30 +29,23 @@ import argparse
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))), "tools"))
 import comum as c
 import estat
-import explorar as ex
+from variaveis import desfechos, estrato_unico
 
 EXTREMOS = ("positivo_confiavel", "negativo_confiavel")
 
 
 def grupo_de(linha):
-    """O estrato do arquivo, so quando ele e inequivoco.
-
-    Um arquivo com varias amostras pode cair em mais de um estrato; esses ficam de fora,
-    porque classifica-lo exigiria uma regra de desempate que seria mais uma decisao
-    escondida.
-    """
-    estratos = {e for e in (linha["estratos"] or "").split("|") if e}
-    if len(estratos) != 1:
-        return None
-    unico = estratos.pop()
+    """O estrato do arquivo, so quando ele e inequivoco E e um dos extremos."""
+    unico = estrato_unico(linha)
     return unico if unico in EXTREMOS else None
 
 
 def desfecho_de(linha, chave):
-    d = ex.desfechos(linha)
+    d = desfechos(linha)
     if d is None:
         return None
     return d.get(chave)
@@ -122,7 +115,7 @@ def main():
         rodar(ramo, c.ler_ramo(ramo), saida)
 
     if args.csv:
-        destino = os.path.join(c.DADOS, "extremos.csv")
+        destino = os.path.join(c.dados_de(__file__), "extremos.csv")
         n = c.escrever_csv(destino,
                            ["ramo", "desfecho", "n_positivo", "n_negativo",
                             "mediana_positivo", "mediana_negativo", "delta", "p",

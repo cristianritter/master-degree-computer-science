@@ -21,7 +21,8 @@ import math
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))), "tools"))
 import comum as c
 
 
@@ -181,7 +182,7 @@ def main():
     print("=" * 92)
 
     if args.csv:
-        destino = os.path.join(c.DADOS, "caracterizacao.csv")
+        destino = os.path.join(c.dados_de(__file__), "caracterizacao.csv")
         n = c.escrever_csv(destino, ["ramo", "lado", "variavel"] + ORDEM, todas)
         print("\ncaracterizacao.csv  %d linhas" % n)
 

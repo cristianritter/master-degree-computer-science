@@ -29,44 +29,11 @@ import math
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))), "tools"))
 import comum as c
 import estat
-
-
-def desfechos(linha):
-    """As tres definicoes de 'quanto test smell tem o teste desta classe'."""
-    total = c.num(linha["ts_n_total"])
-    metodos = c.num(linha["n_metodos_teste"])
-    distintos = c.num(linha["ts_n_distintos"])
-    if total is None or distintos is None:
-        return None
-    return {
-        "bruto": total,
-        "densidade": total / metodos if metodos else None,
-        "distintos": distintos,
-    }
-
-
-def rotulo_agregado(linha):
-    """Severidade do smell avaliado no arquivo, qualquer que seja ele."""
-    v = [c.num(linha[c.coluna_cs(sm, "sev_media")]) for sm in c.CODE_SMELLS]
-    v = [x for x in v if x is not None]
-    return max(v) if v else None
-
-
-def pares(linhas, chave_desfecho, rotulo):
-    x, y, tam = [], [], []
-    for r in linhas:
-        d = desfechos(r)
-        lab = rotulo(r)
-        met = c.num(r["n_metodos_teste"])
-        if d is None or lab is None or d[chave_desfecho] is None or met is None:
-            continue
-        x.append(d[chave_desfecho])
-        y.append(lab)
-        tam.append(met)
-    return x, y, tam
+from variaveis import desfechos, pares, rotulo_agregado
 
 
 def bloco(nome, linhas, rotulo, sufixo=""):
@@ -147,7 +114,7 @@ def main():
                     tudo.append([ramo, sm] + l)
 
     if args.csv:
-        destino = os.path.join(c.DADOS, "exploracao.csv")
+        destino = os.path.join(c.dados_de(__file__), "exploracao.csv")
         arredondado = [[x if isinstance(x, str) or isinstance(x, int)
                         else ("" if x == "" else round(x, 6)) for x in linha]
                        for linha in tudo]

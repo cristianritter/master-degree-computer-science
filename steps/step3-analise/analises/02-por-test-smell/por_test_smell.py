@@ -28,10 +28,11 @@ import math
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))), "tools"))
 import comum as c
 import estat
-import explorar as ex
+from variaveis import rotulo_agregado
 
 
 def series(linhas, smell, normalizar):
@@ -40,7 +41,7 @@ def series(linhas, smell, normalizar):
     x, y, tam = [], [], []
     for r in linhas:
         v = c.num(r[col])
-        lab = ex.rotulo_agregado(r)
+        lab = rotulo_agregado(r)
         met = c.num(r["n_metodos_teste"])
         if v is None or lab is None or met is None:
             continue
@@ -124,7 +125,7 @@ def main():
                                    round(r["rho"], 6), round(r["p"], 6),
                                    round(r["p_ajustado"], 6), round(r["lo"], 6),
                                    round(r["hi"], 6), round(r["zeros"], 2)])
-        destino = os.path.join(c.DADOS, "por_test_smell.csv")
+        destino = os.path.join(c.dados_de(__file__), "por_test_smell.csv")
         n = c.escrever_csv(destino,
                            ["ramo", "recorte", "test_smell", "desfecho", "n", "rho", "p",
                             "p_ajustado", "ic_baixo", "ic_alto", "zeros_pct"], linhas_csv)

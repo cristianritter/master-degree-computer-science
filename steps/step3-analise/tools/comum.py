@@ -88,6 +88,15 @@ def num(valor):
     return float(v)
 
 
+def dados_de(arquivo_do_script):
+    """A pasta dados/ ao lado do script que chamou.
+
+    Cada analise mora na sua pasta com o proprio dados/ e o proprio README, para que o
+    artefato nunca fique longe do codigo que o produziu nem do texto que o interpreta.
+    """
+    return os.path.join(os.path.dirname(os.path.abspath(arquivo_do_script)), "dados")
+
+
 def escrever_csv(caminho, cabecalho, linhas):
     os.makedirs(os.path.dirname(caminho), exist_ok=True)
     with open(caminho, "w", encoding="utf-8", newline="") as f:

@@ -17,7 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import comum as c
 import estat
-import explorar as ex
+from variaveis import pares, rotulo_agregado
 
 falhas = []
 
@@ -39,7 +39,7 @@ def conferir_caracterizacao():
     linhas = c.ler_ramo("deterministico")
     exigir(len(linhas) == 730, "ramo deterministico tem 730 arquivos", len(linhas))
 
-    agregado = [ex.rotulo_agregado(r) for r in linhas]
+    agregado = [rotulo_agregado(r) for r in linhas]
     agregado = [v for v in agregado if v is not None]
     zeros = 100.0 * sum(1 for v in agregado if v == 0) / len(agregado)
     exigir(perto(zeros, 72.1, 0.1), "72,1% de zeros no rotulo agregado", "%.1f%%" % zeros)
@@ -68,7 +68,7 @@ def conferir_primeira_rodada():
     }
     for (ramo, chave), (rho_esp, p_esp) in sorted(esperado.items()):
         linhas = c.ler_ramo(ramo)
-        x, y, _ = ex.pares(linhas, chave, ex.rotulo_agregado)
+        x, y, _ = pares(linhas, chave, rotulo_agregado)
         rho, p, _, _, n = estat.spearman(x, y)
         exigir(perto(rho, rho_esp) and perto(p, p_esp, 0.002),
                "%s/%s: rho %.3f e p %.3f" % (ramo, chave, rho_esp, p_esp),
@@ -77,32 +77,32 @@ def conferir_primeira_rodada():
     print("\n  correlacoes parciais, controlando n_metodos_teste:")
     for chave, r_esp in (("bruto", 0.058), ("distintos", 0.055)):
         linhas = c.ler_ramo("deterministico")
-        x, y, tam = ex.pares(linhas, chave, ex.rotulo_agregado)
+        x, y, tam = pares(linhas, chave, rotulo_agregado)
         r, p, n = estat.parcial(x, y, tam)
         exigir(perto(r, r_esp), "parcial de %s cai para %.3f" % (chave, r_esp),
                "%.3f (p=%.3f)" % (r, p))
 
     print("\n  o confundidor:")
     linhas = c.ler_ramo("deterministico")
-    validos = [r for r in linhas if ex.rotulo_agregado(r) is not None
+    validos = [r for r in linhas if rotulo_agregado(r) is not None
                and c.num(r["n_metodos_teste"]) is not None]
-    rot = [ex.rotulo_agregado(r) for r in validos]
+    rot = [rotulo_agregado(r) for r in validos]
     for nome, col, esp in (("n_metodos_teste", "n_metodos_teste", 0.079),
                            ("loc_teste", "loc_teste", 0.091)):
         rho, p, _, _, n = estat.spearman(rot, [c.num(r[col]) for r in validos])
         exigir(perto(rho, esp), "code smell x %s: rho %.3f" % (nome, esp),
                "%.3f (p=%.3f)" % (rho, p))
 
-    x, y, tam = ex.pares(linhas, "bruto", ex.rotulo_agregado)
+    x, y, tam = pares(linhas, "bruto", rotulo_agregado)
     rho, _, _, _, _ = estat.spearman(x, tam)
     exigir(perto(rho, 0.554), "test smell bruto x tamanho: rho 0,554", "%.3f" % rho)
 
 
 def conferir_caderno():
-    """O caderno da secao 6 declara um total de testes; o CSV tem que conter todos eles."""
-    print("\nCADERNO DE TENTATIVAS (secao 5)")
+    """O caderno da secao 4 declara um total de testes; o CSV tem que conter todos eles."""
+    print("\nCADERNO DE TENTATIVAS (secao 4)")
     print("-" * 31)
-    caminho = os.path.join(c.DADOS, "exploracao.csv")
+    caminho = os.path.join(c.STEP, "analises", "01-correlacao-agregada", "dados", "exploracao.csv")
     if not os.path.exists(caminho):
         exigir(False, "exploracao.csv existe", "ausente - rode explorar.py --por-smell --csv")
         return
@@ -128,13 +128,13 @@ def conferir_caderno():
 
 
 def conferir_segunda_rodada():
-    """As duas analises da secao 5: nenhuma sobrevive ao ajuste para comparacoes multiplas."""
+    """As analises 02 e 03: nenhuma sobrevive ao ajuste para comparacoes multiplas."""
     import csv
     print("")
-    print("SEGUNDA RODADA (secao 5)")
+    print("ANALISES 02 e 03")
     print("-" * 24)
 
-    caminho = os.path.join(c.DADOS, "por_test_smell.csv")
+    caminho = os.path.join(c.STEP, "analises", "02-por-test-smell", "dados", "por_test_smell.csv")
     if not os.path.exists(caminho):
         exigir(False, "por_test_smell.csv existe", "ausente - rode por_test_smell.py --csv")
     else:
@@ -154,7 +154,7 @@ def conferir_segunda_rodada():
             exigir(perto(float(r["rho"]), esp), "%s em densidade: rho %.3f" % (smell, esp),
                    r["rho"][:6])
 
-    caminho = os.path.join(c.DADOS, "extremos.csv")
+    caminho = os.path.join(c.STEP, "analises", "03-extremos", "dados", "extremos.csv")
     if not os.path.exists(caminho):
         exigir(False, "extremos.csv existe", "ausente - rode extremos.py --csv")
         return
@@ -175,6 +175,32 @@ def conferir_segunda_rodada():
            "%s vs %s" % (dens["mediana_negativo"], dens["mediana_positivo"]))
 
 
+def conferir_disputados():
+    """A analise 04: inconclusiva por poder, nao nula. O verificador precisa distinguir."""
+    import csv
+    print("")
+    print("ANALISE 04 - disputados")
+    print("-" * 23)
+    caminho = os.path.join(c.STEP, "analises", "04-disputados", "dados", "disputados.csv")
+    if not os.path.exists(caminho):
+        exigir(False, "disputados.csv existe", "ausente - rode disputados.py --csv")
+        return
+    with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+        L = list(csv.DictReader(f))
+    exigir(len(L) == 6, "analise 04 tem 6 testes", len(L))
+    det = {r["desfecho"]: r for r in L if r["ramo"] == "deterministico"}
+    exigir(int(det["bruto"]["n_confirmado"]) == 42 and int(det["bruto"]["n_disputado"]) == 155,
+           "deterministico: 42 confirmados e 155 disputados",
+           "%s e %s" % (det["bruto"]["n_confirmado"], det["bruto"]["n_disputado"]))
+    nominais = [r for r in L if float(r["p"]) < 0.05]
+    exigir(len(nominais) == 0, "nenhum resultado com p < 0,05", len(nominais))
+    # o ponto da analise: TODOS os deltas ficam abaixo do detectavel - inconclusiva
+    abaixo = [r for r in L if abs(float(r["delta"])) < float(r["delta_detectavel"])]
+    exigir(len(abaixo) == 6,
+           "todos os 6 deltas ficam abaixo do detectavel (inconclusiva, nao nula)",
+           "%d de 6" % len(abaixo))
+
+
 def main():
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -184,6 +210,7 @@ def main():
     conferir_caracterizacao()
     conferir_primeira_rodada()
     conferir_segunda_rodada()
+    conferir_disputados()
     conferir_caderno()
 
     print()
