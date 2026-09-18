@@ -120,13 +120,14 @@ máximos voltaram para dentro do possível — 12 no determinístico, 13 no ampl
 step3-analise/
 ├── README.md
 ├── tools/
-│   ├── comum.py           caminhos, leitura das tabelas do step 2, precisao de cada ramo
-│   ├── estat.py           Spearman, IC por z de Fisher e correlacao parcial, sem scipy
-│   ├── caracterizar.py    distribuicoes, antes de qualquer teste
-│   └── explorar.py        test smell x code smell, nas tres definicoes de desfecho
+│   ├── comum.py               caminhos, leitura das tabelas do step 2, precisao de cada ramo
+│   ├── estat.py               Spearman, IC por z de Fisher e parcial, sem scipy
+│   ├── caracterizar.py        distribuicoes, antes de qualquer teste
+│   ├── explorar.py            test smell x code smell, nas tres definicoes de desfecho
+│   └── conferir_resultados.py reapura todo numero deste README
 └── dados/
-    ├── caracterizacao.csv  as estatisticas descritivas, para conferencia
-    └── exploracao.csv      um resultado por linha, para o caderno da secao 5
+    ├── caracterizacao.csv     as estatisticas descritivas
+    └── exploracao.csv         um resultado por linha, com IC e p
 ```
 
 `comum.py` carrega o `comum.py` do step 2 por caminho para reusar a lista dos 13 smells,
@@ -191,17 +192,22 @@ ele não tem como discordar dele.
 
 ### 4.4 Por code smell individual
 
-Ramo determinístico. Só `blob`/`bruto` alcança p < 0,05, e a versão em densidade do mesmo
-smell é −0,005:
+**Ramo determinístico.** Só `blob`/`bruto` alcança p < 0,05, e a versão em densidade do
+mesmo smell é −0,005:
 
 | smell | N | bruto | densidade | distintos |
 |---|---:|---:|---:|---:|
-| blob | 196 | 0,148 (p=0,038) | −0,005 (p=0,948) | 0,100 (p=0,163) |
+| blob | 196 | **0,148 (p=0,038)** | −0,005 (p=0,948) | 0,100 (p=0,163) |
 | data class | 114 | 0,124 (p=0,189) | 0,096 (p=0,313) | 0,174 (p=0,063) |
 | feature envy | 186 | 0,069 (p=0,351) | 0,070 (p=0,343) | 0,094 (p=0,201) |
 | long method | 251 | 0,117 (p=0,063) | 0,082 (p=0,199) | 0,088 (p=0,167) |
 
-Mesmo padrão: o que sobrevive é sempre o desfecho sensível a tamanho.
+**Ramo ampliado.** Aparece a única significância fora do ramo determinístico —
+`blob`/`distintos`, rho = 0,121 (p = 0,018). Ela segue exatamente o mesmo padrão: `rho` com
+o tamanho do teste é 0,560, e a versão em densidade do mesmo par dá −0,058 (p = 0,259).
+
+Mesmo padrão em tudo: **o que alcança significância é sempre o desfecho sensível a
+tamanho, e sempre some quando o tamanho é normalizado.**
 
 ### 4.5 O que dá para afirmar, e o que não dá
 
@@ -232,26 +238,71 @@ Uma linha por análise rodada, **incluindo as que não deram em nada**. Serve pa
 poder dizer quantos caminhos foram percorridos, com número em vez de estimativa (step 2,
 seção 12.0).
 
+A tabela abaixo é resumo; o registro completo, um resultado por linha, está em
+`dados/exploracao.csv` e é regenerado por `explorar.py --por-smell --csv`.
+
 | # | data | ramo | rótulo | desfecho | recorte | resultado |
 |---|---|---|---|---|---|---|
 | 1 | 18/09 | determinístico | `sev_media` | bruto | agregado | rho 0,092 (p=0,012) — confundido por tamanho |
 | 2 | 18/09 | determinístico | `sev_media` | densidade | agregado | rho 0,047 (p=0,204) — **nulo** |
 | 3 | 18/09 | determinístico | `sev_media` | distintos | agregado | rho 0,084 (p=0,024) — confundido por tamanho |
-| 4 | 18/09 | determinístico | `sev_media` | bruto, parcial | agregado | rho 0,058 (p=0,115) |
-| 5 | 18/09 | determinístico | `sev_media` | distintos, parcial | agregado | rho 0,055 (p=0,140) |
-| 6–8 | 18/09 | ampliado | `sev_media` | os três | agregado | tudo ~0, p > 0,5 |
-| 9–10 | 18/09 | ampliado | `sev_media` | parciais | agregado | ~0 |
-| 11–22 | 18/09 | determinístico | `sev_media` | os três | por smell (4) | só blob/bruto p<0,05 |
+| 4–6 | 18/09 | determinístico | `sev_media` | os três, parciais | agregado | 0,058 / 0,047 / 0,055 — nenhum p < 0,05 |
+| 7–9 | 18/09 | ampliado | `sev_media` | os três | agregado | tudo ~0, p > 0,5 |
+| 10–12 | 18/09 | ampliado | `sev_media` | os três, parciais | agregado | ~0 |
+| 13–24 | 18/09 | determinístico | `sev_media` | os três | por smell (4) | só blob/bruto p<0,05 |
+| 25–36 | 18/09 | ampliado | `sev_media` | os três | por smell (4) | só blob/distintos p<0,05 |
+| 37–40 | 18/09 | ambos | `sev_media` | code smell × tamanho | agregado | o confundidor: 0,079 e 0,091 no determinístico |
 
-**22 testes rodados.** Com α = 0,05, esperava-se ~1 falso positivo por acaso; apareceram 3
-significâncias nominais, todas no mesmo padrão (desfecho sensível a tamanho) e todas
-desaparecendo sob controle de tamanho. Nenhum ajuste para comparações múltiplas foi
-aplicado ainda — quando a exploração fechar, o artigo reporta o total e aplica correção, ou
-declara o regime como exploratório.
+**40 testes rodados.** Com α = 0,05, esperavam-se ~2 falsos positivos por acaso; apareceram
+**4 significâncias nominais**, todas em desfecho sensível a tamanho e todas desaparecendo
+quando o tamanho é normalizado ou controlado:
+
+| ramo | recorte | desfecho | rho | p | rho com tamanho | versão em densidade |
+|---|---|---|---:|---:|---:|---|
+| determinístico | agregado | bruto | 0,092 | 0,012 | 0,554 | 0,047 (p=0,204) |
+| determinístico | agregado | distintos | 0,084 | 0,024 | 0,433 | 0,047 (p=0,204) |
+| determinístico | blob | bruto | 0,148 | 0,038 | 0,561 | −0,005 (p=0,948) |
+| ampliado | blob | distintos | 0,121 | 0,018 | 0,560 | −0,058 (p=0,259) |
+
+Nenhum ajuste para comparações múltiplas foi aplicado — quando a exploração fechar, o
+artigo reporta o total e aplica correção, ou declara o regime como exploratório.
+
+> **Este número já foi corrigido uma vez.** A primeira versão desta seção dizia "22 testes,
+> 3 significâncias", contando só a rodada em que `--por-smell` tinha sido usado num ramo só.
+> O `conferir_resultados.py` acusou a divergência quando a rodada completa foi gravada. É
+> exatamente o erro que o caderno existe para impedir: subcontar tentativas sem perceber.
 
 ---
 
-## 6. Ressalvas herdadas
+## 6. Reproduzir do zero
+
+O step 3 não recoleta nada: ele lê as duas tabelas do step 2. Se elas não existirem,
+`gerar_analises.py` as refaz em segundos.
+
+```bash
+cd steps/step3-analise
+
+# 1. as distribuicoes, antes de qualquer teste
+python tools/caracterizar.py --csv
+
+# 2. a rodada exploratoria completa: 2 ramos, 5 recortes, 3 desfechos, parciais
+python tools/explorar.py --por-smell --csv
+
+# 3. conferir que todo numero do README ainda sai do dado
+python tools/conferir_resultados.py
+```
+
+Os três levam segundos. Nenhum depende de rede, de clone ou do JNose — só dos dois CSVs
+do step 2, cujos sha256 estão gravados nos `.params.txt` que os acompanham.
+
+**A ordem importa.** `explorar.py --csv` reescreve `exploracao.csv`, e
+`conferir_resultados.py` compara o README contra ele: rodar o verificador sem ter rodado a
+exploração completa acusa divergência — que foi exatamente o que aconteceu ao montar esta
+seção, e está registrado na seção 5.
+
+---
+
+## 7. Ressalvas herdadas
 
 Todas já documentadas no step 2 e no `NOTAS-METODOLOGICAS.md`, repetidas aqui porque
 afetam a interpretação de qualquer resultado deste step:

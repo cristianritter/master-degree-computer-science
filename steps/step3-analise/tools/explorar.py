@@ -83,7 +83,7 @@ def bloco(nome, linhas, rotulo, sufixo=""):
         rho_tam, _, _, _, _ = estat.spearman(x, tam)
         print("    %-11s %6d %8.3f %9s   [%6.3f, %6.3f]   %6.3f"
               % (chave, n, rho, estat.formatar_p(p), lo, hi, rho_tam))
-        saida.append([chave, n, rho, p, lo, hi, rho_tam])
+        saida.append(["simples", chave, n, rho, p, lo, hi, rho_tam])
     return saida
 
 
@@ -114,13 +114,30 @@ def main():
         for l in bloco("code smell agregado", linhas, rotulo_agregado):
             tudo.append([ramo, "agregado"] + l)
 
-        # sobra relacao depois de descontar o tamanho do teste?
-        print("\n  correlacao parcial, controlando n_metodos_teste:")
-        for chave in ("bruto", "distintos"):
+        print("")
+        print("  correlacao parcial, controlando n_metodos_teste:")
+        for chave in ("bruto", "densidade", "distintos"):
             x, y, tam = pares(linhas, chave, rotulo_agregado)
-            r, p, n = estat.parcial(x, y, tam)
+            r, pv, n = estat.parcial(x, y, tam)
             print("    %-11s N=%d  rho parcial=%.3f  p=%s"
-                  % (chave, n, r, estat.formatar_p(p)))
+                  % (chave, n, r, estat.formatar_p(pv)))
+            tudo.append([ramo, "agregado", "parcial", chave, n, r, pv, "", "", ""])
+
+        # o mecanismo da confusao: as outras duas pernas do triangulo. Se code smell
+        # correlaciona com tamanho do teste E test smell bruto tambem, a correlacao bruta
+        # entre os dois aparece sem que exista relacao com qualidade do teste.
+        print("")
+        print("  o confundidor, medido:")
+        validos = [r for r in linhas if rotulo_agregado(r) is not None
+                   and c.num(r["n_metodos_teste"]) is not None]
+        rot = [rotulo_agregado(r) for r in validos]
+        for nome, serie in (("code smell x n_metodos_teste",
+                             [c.num(r["n_metodos_teste"]) for r in validos]),
+                            ("code smell x loc_teste",
+                             [c.num(r["loc_teste"]) for r in validos])):
+            rho, pv, lo, hi, n = estat.spearman(rot, serie)
+            print("    %-30s rho=%6.3f  p=%s" % (nome, rho, estat.formatar_p(pv)))
+            tudo.append([ramo, "agregado", "confundidor", nome, n, rho, pv, lo, hi, ""])
 
         if args.por_smell:
             for sm in c.CODE_SMELLS:
@@ -131,9 +148,12 @@ def main():
 
     if args.csv:
         destino = os.path.join(c.DADOS, "exploracao.csv")
+        arredondado = [[x if isinstance(x, str) or isinstance(x, int)
+                        else ("" if x == "" else round(x, 6)) for x in linha]
+                       for linha in tudo]
         n = c.escrever_csv(destino,
-                           ["ramo", "code_smell", "desfecho", "n", "rho", "p",
-                            "ic_baixo", "ic_alto", "rho_com_tamanho"], tudo)
+                           ["ramo", "code_smell", "analise", "desfecho", "n", "rho", "p",
+                            "ic_baixo", "ic_alto", "rho_com_tamanho"], arredondado)
         print("\nexploracao.csv  %d linhas" % n)
 
 
