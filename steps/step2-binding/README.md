@@ -414,6 +414,45 @@ Sem isso o artigo escreveria "assumimos que o binding está correto" — a frase
 revisor ataca primeiro. Com isso ele reporta precisão observada por estratégia e trata o
 resto como ameaça à validade declarada. O custo é uma tarde de trabalho manual.
 
+### Resultado: os três estratos determinísticos
+
+`dados/auditoria_binding_auto.csv`, apurado por
+`auditar_binding.py --apurar --arquivo dados/auditoria_binding_auto.csv`:
+
+| estrato | pares | auditados | corretos | precisão | |
+|---|---:|---:|---:|---:|---|
+| `caminho_exato` | 675 | 50 | 49 | **98,0%** | IC95% 94,1%–100% |
+| `convencao/caminho_espelhado` | 50 | 50 | 42 | **84,0%** | censo, exato |
+| `convencao/so_basename` | 43 | 43 | 20 | **46,5%** | censo, exato |
+| **ponderado** | **768** | 143 | | **94,2%** | |
+
+**`caminho_exato` é sólido.** O único erro dos 50 é o modo de falha previsto pelo
+`getFileProduction`: `TestSchema` (de `exec.physical.impl`, no Drill) teve o `Test`
+removido e a varredura por basename parou em `store/pcapng/schema/Schema.java`, de outro
+pacote. Nome genérico, casado por nome de arquivo.
+
+**Os 8 erros de `caminho_espelhado` são todos do Guava, e todos do mesmo tipo:** o
+repositório mantém duas cópias de cada classe, uma JRE (`guava/src`) e uma Android
+(`android/guava/src`), com o mesmo pacote Java. O binding cruzou as variantes — ligou o
+teste Android à cópia JRE e vice-versa. Fora do Guava, o estrato não errou. É achado
+específico de repositório com *flavors*, não falha geral da regra.
+
+**`so_basename` não se sustenta: 46,5%.** Dos 23 erros, 15 são homônimo em outro pacote
+(`admin.v1` × `admin.v2` no Pulsar, `mips` × `ppc` no binnavi, a interface
+`com.ibm.dtfj.image.ImageFactory` × a implementação `...image.j9.ImageFactory` no OpenJ9) e
+8 são testes que não mencionam a classe uma única vez. Os acertos são quase todos JDK e
+libcore, onde a árvore de testes legitimamente não espelha a de produção.
+
+> **Consequência prática.** `so_basename` são 43 dos 16.869 pares (0,25%) e 43 dos 768
+> pares determinísticos (5,6%). Excluí-los sobe a precisão determinística de 94,2% para
+> **97,0%** e custa pouquíssima cobertura. A coluna `evidencia` do `binding.csv` permite
+> essa exclusão sem regerar nada — é decisão da análise, e está medida.
+> (97,0% sobre os 725 pares restantes: 675 de `caminho_exato` e 50 de `caminho_espelhado`.)
+
+Os três estratos de `referencia_estatica` (150 pares) seguem pendentes, e neles o critério
+não é "a regra casou o arquivo certo" mas "referenciar conta como testar", que precisa ser
+declarado antes de julgar.
+
 ---
 
 ## 6. As duas tabelas derivadas
@@ -826,13 +865,19 @@ dois emite veredito; o julgamento é de quem audita.
   10,9 testes por arquivo de produção, implausível como teste dedicado. Mede-se com a
   auditoria da seção 5; mitiga-se com `--max-testes 10`, que a derruba para 2,4. Não se
   elimina.
-- **A auditoria da seção 5 ainda não foi preenchida.** Até que seja, nenhuma afirmação de
-  precisão do binding tem respaldo, e a tabela de trade-off mede concentração, não
-  precisão. O ferramental (`baixar_auditoria.py`, `dossie_auditoria.py`,
-  `registrar_auditoria.py`) está pronto e os 420 arquivos já foram baixados; falta o
-  julgamento. Note que o critério muda por estratégia: nas determinísticas a pergunta é
-  "a regra casou o arquivo certo?", que é objetiva; em `referencia_estatica` é "referenciar
-  conta como testar?", que exige arbitrar e precisa ser declarado no artigo.
+- **A auditoria está pela metade: 143 dos 293 pares.** Os três estratos determinísticos
+  estão apurados (seção 5); os 150 de `referencia_estatica` não. Enquanto isso, nenhuma
+  afirmação de precisão vale para a `analise_ampliado.csv`, e a tabela de trade-off da
+  seção 4 mede concentração, não precisão.
+- **O julgamento dos 143 foi automatizado, não humano.** Feito a partir do dossiê de cada
+  par (pacote dos dois lados, imports, e as linhas do teste que citam o tipo), gravado em
+  `auditoria_binding_auto.csv`, que é arquivo separado da planilha humana justamente para a
+  distinção não se perder. O artigo deve descrevê-lo como primeira passada automatizada,
+  conferida por amostragem — não como auditoria independente. Ver
+  `NOTAS-METODOLOGICAS.md`, seção 9.
+- **Em `referencia_estatica` o critério ainda não está fechado.** Nas determinísticas a
+  pergunta é "a regra casou o arquivo certo?", que é objetiva. Ali é "referenciar conta
+  como testar?", que exige arbitrar e precisa ser declarado no artigo antes de julgar.
 - **Eager Test e Lazy Test não são confiáveis nas linhas `nome_divergente`** (queda de 28×
   e 23× no step 1). General Fixture fica estável e serve como controle.
 - **O padrão `^.*test\d*$` do JNose** casa palavras que terminam em "test" sem serem testes

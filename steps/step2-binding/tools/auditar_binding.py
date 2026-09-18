@@ -114,17 +114,29 @@ def sortear(args):
     print("preencha a coluna correto com s / n / ? e rode: python auditar_binding.py --apurar")
 
 
-def apurar():
-    linhas = c.ler_csv(SAIDA)
+def apurar(arquivo=None):
+    arquivo = arquivo or SAIDA
+    linhas = c.ler_csv(arquivo)
     por = collections.defaultdict(lambda: collections.Counter())
     for r in linhas:
         v = (r["correto"] or "").strip().lower()
         if v:
             por[r["estrato_auditoria"]][v] += 1
     if not por:
-        sys.exit("nenhuma linha preenchida em %s" % SAIDA)
+        sys.exit("nenhuma linha preenchida em %s" % arquivo)
 
     peso = {r["estrato_auditoria"]: float(r["peso_no_universo"]) for r in linhas}
+
+    # Quantos pares cada estrato tem no binding inteiro: se a auditoria cobriu todos, o
+    # estrato e censo e a precisao e exata - intervalo de confianca ali nao significa nada,
+    # porque nao houve amostragem.
+    universo = collections.Counter()
+    for r in c.ler_csv(os.path.join(c.DADOS, "binding.csv")):
+        ev = (r.get("evidencia") or "").strip()
+        universo[r["metodo"] + ("/" + ev if ev else "")] += 1
+    refs = os.path.join(c.DADOS, "refs_producao.csv")
+    if os.path.exists(refs):
+        universo.update({})  # estratos da estrategia 3 ja vem do proprio sorteio
     print("%-42s %5s %5s %5s %8s %s" % ("estrato", "s", "n", "?", "precisao", "IC95%"))
     global_num = global_den = 0.0
     for e in sorted(por):
@@ -136,9 +148,13 @@ def apurar():
         p = t["s"] / dec
         # Wald simples; com N de auditoria (30-50 por estrato) e suficiente para o texto,
         # e o script imprime o N para o leitor julgar.
-        meia = 1.96 * (p * (1 - p) / dec) ** 0.5
-        print("%-42s %5d %5d %5d %7.1f%%  +-%.1f pp  (n=%d)"
-              % (e, t["s"], t["n"], t["?"], 100 * p, 100 * meia, dec))
+        if universo.get(e) and dec >= universo[e]:
+            print("%-42s %5d %5d %5d %7.1f%%  censo (exato, n=%d)"
+                  % (e, t["s"], t["n"], t["?"], 100 * p, dec))
+        else:
+            meia = 1.96 * (p * (1 - p) / dec) ** 0.5
+            print("%-42s %5d %5d %5d %7.1f%%  +-%.1f pp  (n=%d)"
+                  % (e, t["s"], t["n"], t["?"], 100 * p, 100 * meia, dec))
         global_num += p * peso.get(e, 0)
         global_den += peso.get(e, 0)
     if global_den:
@@ -152,9 +168,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--por-estrato", type=int, default=50)
     ap.add_argument("--semente", type=int, default=42)
+    ap.add_argument("--arquivo", help="planilha a apurar (padrao: auditoria_binding.csv)")
     ap.add_argument("--apurar", action="store_true")
     args = ap.parse_args()
-    apurar() if args.apurar else sortear(args)
+    apurar(args.arquivo) if args.apurar else sortear(args)
 
 
 if __name__ == "__main__":

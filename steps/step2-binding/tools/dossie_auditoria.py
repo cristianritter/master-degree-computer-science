@@ -108,11 +108,19 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--de", type=int, default=1)
     p.add_argument("--ate", type=int, default=10 ** 9)
+    p.add_argument("--indices", help="lista separada por virgula, no lugar de --de/--ate")
+    p.add_argument("--estrato", help="so os pares deste estrato de auditoria")
     args = p.parse_args()
+    escolhidos = set(int(x) for x in args.indices.split(",")) if args.indices else None
 
     linhas = list(c.ler_csv(os.path.join(c.DADOS, "auditoria_binding.csv")))
     for i, r in enumerate(linhas, 1):
-        if i < args.de or i > args.ate:
+        if escolhidos is not None:
+            if i not in escolhidos:
+                continue
+        elif i < args.de or i > args.ate:
+            continue
+        if args.estrato and r["estrato_auditoria"] != args.estrato:
             continue
         prod, teste = ler(r["url_producao"]), ler(r["url_teste"])
         nome_prod = os.path.basename(r["production_path"])[:-5]
