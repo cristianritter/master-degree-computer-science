@@ -22,6 +22,9 @@ Saída: `dados/`
 | Ocorrências de test smell normalizadas | 2.059.905 |
 | Amostras com classe de teste identificada | **1.611 (37,5% das disponíveis)** |
 | Pares (produção, teste) no binding | 16.869 |
+| Pares auditados | 293 (6 estratos) |
+| Precisão do binding determinístico | **94,2%** |
+| Precisão do binding ampliado | **10,1%** estrito / **94,8%** amplo |
 
 ---
 
@@ -474,6 +477,7 @@ Nos três estratos determinísticos as duas leituras coincidem — lá a pergunt
 ```bash
 python tools/auditar_binding.py --apurar --arquivo dados/auditoria_binding_auto.csv
 python tools/auditar_binding.py --apurar --arquivo dados/auditoria_binding_auto.csv --criterio amplo
+python tools/conferir_dados.py --secao 5     # confere que estes numeros ainda batem
 ```
 
 ### O que isso faz com os dois ramos
@@ -767,6 +771,20 @@ repositórios com status `OK` são pulados na execução seguinte.
 | `ambiguo`, `n_testes_da_producao` | sinais de risco |
 | `url_producao`, `url_teste` | links no espelho, **no commit da coleta** |
 
+### `auditoria_binding_auto.csv` — a auditoria automatizada
+
+Mesmas 293 linhas na mesma ordem do arquivo acima, com duas colunas de veredito. Os dois
+arquivos existem separados para que juízo automatizado e juízo humano nunca se misturem na
+mesma coluna — quando a conferência humana for feita, a concordância entre eles é
+calculável linha a linha.
+
+| coluna | conteúdo |
+|---|---|
+| `correto` | critério **estrito**: a classe de produção é o alvo do teste. `s`, `n` ou `?` |
+| `correto_amplo` | critério **amplo**: o teste executa código da classe, ainda que como fixture. Vazio nos estratos determinísticos, onde as duas leituras coincidem |
+| `observacao` | a justificativa do veredito, par a par |
+| demais colunas | idênticas às de `auditoria_binding.csv` |
+
 ### `analise_deterministico.csv` e `analise_ampliado.csv` — derivados
 
 Mesmas colunas nos dois; muda só qual binding alimentou as linhas (seção 6).
@@ -809,10 +827,17 @@ código 1:
 | todo `App` do `byclasstest` está no `repos_map` do step 1 | ok — 430 Apps, 0 fora |
 | toda amostra crosscheckada já era positiva antes do corte | ok — 1.227 de 1.227 |
 
-O resto são as tabelas das seções 2, 3 e 4. Três números conferem contra o README do
+O resto são as tabelas das seções 2, 3, 4, 5 e 6. Três números conferem contra o README do
 step 1 de forma independente — `nome_divergente` (6.842), `production` preenchido (49.903)
 e as taxas por mil de Eager/Lazy/General Fixture nos dois grupos de nome — o que valida a
 normalização.
+
+A `--secao 5` reapura a auditoria: exige os 293 pares preenchidos, confere a precisão de
+cada estrato nos dois critérios e as duas precisões ponderadas (94,2% e 10,1%/94,8%), e
+verifica que `auditoria_binding_auto.csv` está na mesma ordem da planilha humana — sem
+isso, a concordância linha a linha entre juízo automático e humano não seria calculável
+depois. A `--secao 6` exige que o binding não desloque a prevalência do rótulo em mais de
+3 pp.
 
 ---
 
@@ -820,7 +845,8 @@ normalização.
 
 ```
 step2-binding/
-├── README.md
+├── README.md                  este arquivo: o que foi feito e por que
+├── NOTAS-METODOLOGICAS.md     os conceitos por tras das decisoes, para o artigo
 ├── tools/
 │   ├── comum.py               caminhos, repos_map, normalizacao de caminho
 │   ├── normalizar_mlcq.py     -> mlcq_reviews.csv, mlcq_samples.csv
@@ -832,7 +858,8 @@ step2-binding/
 │   ├── gerar_analises.py      -> as DUAS tabelas oficiais de uma vez
 │   ├── baixar_auditoria.py    baixa os arquivos dos pares sorteados (cache local)
 │   ├── dossie_auditoria.py    monta a evidencia de cada par para a conferencia
-│   ├── registrar_auditoria.py grava vereditos incrementalmente
+│   ├── registrar_auditoria.py grava vereditos incrementalmente (dois criterios)
+│   ├── candidatos_auditoria.py os arquivos homonimos que a regra NAO escolheu
 │   └── conferir_dados.py      reapura todo numero deste README
 └── dados/
     ├── mlcq_reviews.csv              14.739 linhas
@@ -843,10 +870,16 @@ step2-binding/
     ├── refs_log.csv                  1 linha por repositorio (retomavel)
     ├── binding.csv                   pares (producao, teste) com metodo
     ├── production_files.csv           4.559 arquivos anotados, ligados ou nao
-    ├── auditoria_binding.csv         planilha de auditoria manual
+    ├── test_smell_occurrences.csv.gz.part00/01/02  o .gz em 3 partes de 45 MB
+    ├── test_smell_occurrences.csv.gz.sha256        checksum do arquivo montado
+    ├── auditoria_binding.csv         planilha para auditoria HUMANA (em branco)
+    ├── auditoria_binding_auto.csv    a auditoria automatizada, 293/293 preenchidos
     ├── analise_deterministico.csv    derivado: caminho_exato + convencao
     └── analise_ampliado.csv          derivado: + referencia_estatica, max 10 testes
 ```
+
+`.cache-auditoria/` fica fora do git: sao os 501 arquivos dos pares sorteados e as arvores
+dos repositorios, tudo reconstituivel por `baixar_auditoria.py` e `candidatos_auditoria.py`.
 
 **Fonte de verdade são os CSVs normalizados e o `binding.csv`.** As duas tabelas de
 análise são regeneráveis por `gerar_analises.py` em segundos.

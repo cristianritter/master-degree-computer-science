@@ -334,6 +334,71 @@ def tradeoff(pares, samples, hash_ok):
 
 
 
+
+def secao_5():
+    """A precisao auditada da secao 5 do README.
+
+    Sem isto, os numeros mais fortes do step - 94,2% e 10,1% - ficariam so no texto, e
+    qualquer rerun do binding poderia desalinha-los do dado sem ninguem perceber.
+    """
+    titulo("SECAO 5 - auditoria da precisao")
+
+    caminho = os.path.join(c.DADOS, "auditoria_binding_auto.csv")
+    if not os.path.exists(caminho):
+        exigir(False, "auditoria_binding_auto.csv existe", "ausente")
+        return
+    aud = c.ler_csv(caminho)
+
+    exigir(len(aud) == 293, "a auditoria tem 293 pares", len(aud))
+    vazias = sum(1 for r in aud if not (r["correto"] or "").strip())
+    exigir(vazias == 0, "todos os pares tem veredito estrito", "%d em branco" % vazias)
+
+    # O sorteio e por (metodo, evidencia) e tem que continuar batendo com o binding.
+    origem = os.path.join(c.DADOS, "auditoria_binding.csv")
+    if os.path.exists(origem):
+        base = c.ler_csv(origem)
+        mesmo = (len(base) == len(aud) and
+                 all(a["production_path"] == b["production_path"] and
+                     a["test_path"] == b["test_path"] for a, b in zip(base, aud)))
+        exigir(mesmo, "auditoria_binding_auto.csv esta na mesma ordem da planilha humana",
+               "sim" if mesmo else "DIVERGE - a concordancia linha a linha nao valeria")
+
+    esperado = {
+        "caminho_exato": (98.0, 98.0),
+        "convencao/caminho_espelhado": (84.0, 84.0),
+        "convencao/so_basename": (46.5, 46.5),
+        "referencia_estatica/import_fqn": (4.0, 96.0),
+        "referencia_estatica/mesmo_pacote": (22.0, 86.0),
+        "referencia_estatica/wildcard": (4.0, 96.0),
+    }
+    peso = {r["estrato_auditoria"]: float(r["peso_no_universo"]) for r in aud}
+    obtido = {}
+    print("  precisao por estrato (estrito / amplo):")
+    for e in sorted(esperado):
+        L = [r for r in aud if r["estrato_auditoria"] == e]
+        pe = 100 * sum(1 for r in L if r["correto"] == "s") / len(L)
+        A = [r for r in L if (r.get("correto_amplo") or "").strip()]
+        pa = 100 * sum(1 for r in A if r["correto_amplo"] == "s") / len(A) if A else pe
+        obtido[e] = (pe, pa)
+        print("    %-34s %5.1f%% / %5.1f%%   (n=%d)" % (e, pe, pa, len(L)))
+        exigir(abs(pe - esperado[e][0]) < 0.1 and abs(pa - esperado[e][1]) < 0.1,
+               "precisao de %s bate com o README" % e,
+               "%.1f%% / %.1f%%" % (pe, pa))
+
+    DET = ["caminho_exato", "convencao/caminho_espelhado", "convencao/so_basename"]
+    TODOS = list(esperado)
+    for nome, grupo, alvo in (("deterministico", DET, (94.2, 94.2)),
+                              ("ampliado", TODOS, (10.1, 94.8))):
+        num_e = sum(obtido[e][0] * peso[e] for e in grupo)
+        num_a = sum(obtido[e][1] * peso[e] for e in grupo)
+        den = sum(peso[e] for e in grupo)
+        pe, pa = num_e / den, num_a / den
+        print("  ramo %-16s estrito %.1f%%  amplo %.1f%%" % (nome, pe, pa))
+        exigir(abs(pe - alvo[0]) < 0.15 and abs(pa - alvo[1]) < 0.15,
+               "precisao ponderada do ramo %s bate com o README" % nome,
+               "%.1f%% / %.1f%%" % (pe, pa))
+
+
 def secao_6():
     """A tabela de prevalencia da secao 6: o binding desloca o rotulo?
 
@@ -392,12 +457,12 @@ def secao_6():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--secao", type=int, choices=[2, 3, 4, 6], action="append",
+    ap.add_argument("--secao", type=int, choices=[2, 3, 4, 5, 6], action="append",
                     help="confere so esta secao do README (repetivel)")
     args = ap.parse_args()
 
-    secoes = {2: secao_2, 3: secao_3, 4: secao_4, 6: secao_6}
-    for n in (args.secao or [2, 3, 4, 6]):
+    secoes = {2: secao_2, 3: secao_3, 4: secao_4, 5: secao_5, 6: secao_6}
+    for n in (args.secao or [2, 3, 4, 5, 6]):
         secoes[n]()
 
     print()
