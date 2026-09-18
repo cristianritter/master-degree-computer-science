@@ -333,14 +333,71 @@ def tradeoff(pares, samples, hash_ok):
               % (nome, a, 100 * a / len(hash_ok), pc, nc, np_, razao))
 
 
+
+def secao_6():
+    """A tabela de prevalencia da secao 6: o binding desloca o rotulo?
+
+    Se deslocasse, a ligacao seria mais facil para classe suja e o binding viraria ameaca
+    a validade interna da RQ. E a checagem que sustenta a afirmacao mais forte da secao 6.
+    """
+    titulo("SECAO 6 - as duas tabelas derivadas")
+
+    samples = c.ler_csv(os.path.join(c.DADOS, "mlcq_samples.csv"))
+    pares = c.ler_csv(os.path.join(c.DADOS, "binding.csv"))
+
+    metodos_de = collections.defaultdict(set)
+    for p in pares:
+        metodos_de[(p["github_repo"], p["production_path"])].add(p["metodo"])
+
+    hash_ok = [s for s in samples if s["repo_status"] == "HASH_OK"]
+    det, tudo = [], []
+    for s in hash_ok:
+        m = metodos_de.get((s["github_repo"], s["path"]))
+        if not m:
+            continue
+        tudo.append(s)
+        if m & {"caminho_exato", "convencao"}:
+            det.append(s)
+
+    regras = ["pos_any", "pos_maioria", "pos_any_major", "pos_unanime"]
+    print("  prevalencia do rotulo por cobertura do binding:")
+    print("    %-22s %8s %s" % ("", "amostras", " ".join("%14s" % r for r in regras)))
+    taxas = {}
+    for nome, grupo in (("HASH_OK (todas)", hash_ok), ("so deterministicas", det),
+                        ("com estrategia 3", tudo)):
+        col = []
+        for r in regras:
+            n = sum(1 for s in grupo if s[r] == "1")
+            taxas[(nome, r)] = 100 * n / len(grupo)
+            col.append("%6d (%4.1f%%)" % (n, 100 * n / len(grupo)))
+        print("    %-22s %8d %s" % (nome, len(grupo), " ".join("%14s" % x for x in col)))
+
+    # O ponto da secao: ligar ou nao ligar e quase independente do rotulo.
+    for r in regras:
+        base = taxas[("HASH_OK (todas)", r)]
+        for nome in ("so deterministicas", "com estrategia 3"):
+            exigir(abs(taxas[(nome, r)] - base) < 3.0,
+                   "prevalencia de %s em '%s' fica a menos de 3 pp do universo HASH_OK" % (r, nome),
+                   "%.1f%% vs %.1f%%" % (taxas[(nome, r)], base))
+
+    # As duas tabelas existem e batem com o que o README diz que elas sao.
+    for nome, linhas_esperadas in (("deterministico", 730), ("ampliado", 1369)):
+        caminho = os.path.join(c.DADOS, "analise_%s.csv" % nome)
+        if not os.path.exists(caminho):
+            exigir(False, "analise_%s.csv existe" % nome, "ausente - rode gerar_analises.py")
+            continue
+        n = len(c.ler_csv(caminho))
+        exigir(n == linhas_esperadas, "analise_%s.csv tem %d linhas" % (nome, linhas_esperadas), n)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--secao", type=int, choices=[2, 3, 4], action="append",
+    ap.add_argument("--secao", type=int, choices=[2, 3, 4, 6], action="append",
                     help="confere so esta secao do README (repetivel)")
     args = ap.parse_args()
 
-    secoes = {2: secao_2, 3: secao_3, 4: secao_4}
-    for n in (args.secao or [2, 3, 4]):
+    secoes = {2: secao_2, 3: secao_3, 4: secao_4, 6: secao_6}
+    for n in (args.secao or [2, 3, 4, 6]):
         secoes[n]()
 
     print()

@@ -1,7 +1,7 @@
 """Monta a tabela larga de analise: 1 linha por arquivo de producao, code smell ao lado de test smell.
 
-    dados/analise_classe.csv         a tabela
-    dados/analise_classe.params.txt  os parametros que a geraram
+    dados/<saida>.csv         a tabela (--saida; ver gerar_analises.py)
+    dados/<saida>.params.txt  parametros, proveniencia e cobertura
 
 Este e o unico artefato DERIVADO do step 2, e e descartavel: as decisoes que ele toma
 - qual regra de rotulo, como agregar varios testes, quais metodos de binding aceitar -
@@ -33,7 +33,10 @@ Uso:
 """
 import argparse
 import collections
+import hashlib
 import os
+import platform
+import subprocess
 import sys
 import time
 
@@ -59,6 +62,34 @@ AGREGACOES = {
 }
 
 METODOS = ["caminho_exato", "convencao", "referencia_estatica"]
+
+# Entradas que determinam a saida. O hash de cada uma vai para o .params.txt: sem isso
+# "repetivel" e promessa; com isso, quem repetir sabe se partiu do mesmo dado.
+ENTRADAS = ["mlcq_samples.csv", "test_classes.csv", "binding.csv"]
+
+
+def sha256(caminho):
+    h = hashlib.sha256()
+    with open(caminho, "rb") as f:
+        for bloco in iter(lambda: f.read(1 << 20), b""):
+            h.update(bloco)
+    return h.hexdigest()
+
+
+def commit_do_repo():
+    """O commit em que o codigo estava, marcado se havia mudanca nao commitada em tools/."""
+    try:
+        h = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=c.STEP,
+                           capture_output=True, text=True, timeout=15)
+        if h.returncode != 0:
+            return "(fora de repositorio git)"
+        rev = h.stdout.strip()
+        st = subprocess.run(["git", "status", "--porcelain", "--", "tools"], cwd=c.STEP,
+                            capture_output=True, text=True, timeout=15)
+        return rev + (" (tools com mudanca nao commitada)" if st.stdout.strip() else "")
+    except Exception as e:
+        return "(indisponivel: %s)" % type(e).__name__
+
 
 
 def agregar(valores, agregacao, n_metodos):
@@ -91,7 +122,8 @@ def main():
                     default=["positivo_confiavel", "negativo_confiavel", "disputado",
                              "negativo_1_review"],
                     help="estratos de evidencia dos revisores a incluir")
-    ap.add_argument("--saida", default="analise_classe.csv")
+    ap.add_argument("--saida", default="analise_classe.csv",
+                    help="nome do CSV em dados/; gerar_analises.py usa os dois oficiais")
     args = ap.parse_args()
 
     samples = c.ler_csv(os.path.join(c.DADOS, "mlcq_samples.csv"))
@@ -134,12 +166,20 @@ def main():
     cab = ["github_repo", "production_path", "estratos", "n_amostras"]
     for sm in smells_ordenados:
         k = sm.replace(" ", "_")
-        cab += ["cs_" + k, "cs_%s_sev_max" % k, "cs_%s_sev_media" % k, "cs_%s_n_reviews" % k]
-    cab += ["n_testes", "test_paths", "loc_teste", "n_metodos_teste"]
+        # Todas as regras de rotulo lado a lado, pelo mesmo motivo que o mlcq_samples.csv
+        # carrega as suas: escolher a regra aqui congelaria no artefato a decisao mais
+        # discutivel do dataset (ver README secao 3). cs_<smell> e apelido da regra pedida
+        # em --rotulo, para quem quer uma coluna so.
+        cab += ["cs_" + k]
+        cab += ["cs_%s_%s" % (k, regra) for regra in sorted(ROTULOS)]
+        cab += ["cs_%s_sev_max" % k, "cs_%s_n_reviews" % k]
+    cab += ["n_testes", "n_testes_nome_divergente", "test_paths", "loc_teste",
+            "n_metodos_teste"]
     cab += [c.coluna(s) for s in c.SMELLS]
     cab += ["ts_n_distintos", "ts_n_total"]
 
     linhas = []
+    usados = 0   # pares de binding que sobreviveram aos filtros e entraram na tabela
     for chave, amostras in sorted(por_arquivo.items()):
         tpaths = sorted(testes_de.get(chave, ()))
         if not tpaths:
@@ -152,24 +192,36 @@ def main():
         for sm in smells_ordenados:
             dela = [a for a in amostras if a["smell"] == sm]
             if not dela:
-                # Nao avaliado para este smell. Vazio, nunca 0.
-                linha += ["", "", "", ""]
+                # Nao avaliado para este smell. Vazio, nunca 0 - tratar vazio como zero
+                # inventaria milhares de negativos (README, secao 6).
+                linha += [""] * (3 + len(ROTULOS))
                 continue
-            if continuo:
-                rotulo = round(max(float(a["sev_media"]) for a in dela), 4)
-            else:
-                rotulo = int(any(a[coluna_rotulo] == "1" for a in dela))
-            linha += [rotulo,
-                      max(int(a["sev_max"]) for a in dela),
-                      round(max(float(a["sev_media"]) for a in dela), 4),
+            # varias amostras (ex.: long method por funcao) colapsam num arquivo:
+            # o arquivo conta como positivo se qualquer amostra dele e positiva, e a
+            # severidade continua vira a maior entre elas.
+            def valor(regra):
+                col = ROTULOS[regra][0]
+                if regra == "sev_media":
+                    return round(max(float(a[col]) for a in dela), 4)
+                return int(any(a[col] == "1" for a in dela))
+
+            linha += [valor(args.rotulo)]
+            linha += [valor(regra) for regra in sorted(ROTULOS)]
+            linha += [max(int(a["sev_max"]) for a in dela),
                       sum(int(a["n_reviews"]) for a in dela)]
 
-        linha += [len(tpaths), "|".join(tpaths),
+        # Quantos dos testes ligados tem o nome corrompido pelo defeito de classe
+        # aninhada do jnose-core (step 1, secao 5). Fica como COLUNA, nao como filtro:
+        # excluir aqui seria irreversivel, e General Fixture continua confiavel nessas
+        # linhas. Analise com Eager/Lazy Test TEM que filtrar ou estratificar por ela.
+        n_div = sum(1 for t in ts if t["nome_divergente"] == "1")
+        linha += [len(tpaths), n_div, "|".join(tpaths),
                   sum(int(t["loc"]) for t in ts), n_metodos]
         for s in c.SMELLS:
             linha.append(agregar([int(t[c.coluna(s)]) for t in ts], args.agregacao, n_metodos))
         linha += [agregar([int(t["n_smells_distintos"]) for t in ts], args.agregacao, n_metodos),
                   agregar([int(t["n_smells_total"]) for t in ts], args.agregacao, n_metodos)]
+        usados += len(tpaths)
         linhas.append(linha)
 
     destino = os.path.join(c.DADOS, args.saida)
@@ -198,6 +250,11 @@ def main():
     params = os.path.join(c.DADOS, args.saida.replace(".csv", "") + ".params.txt")
     with open(params, "w", encoding="utf-8") as fh:
         fh.write("gerado por montar_analise.py em %s\n\n" % time.strftime("%Y-%m-%d %H:%M:%S"))
+        fh.write("comando           python %s" % " ".join(
+            [os.path.basename(sys.argv[0])] + sys.argv[1:]) + chr(10))
+        fh.write("commit            %s" % commit_do_repo() + chr(10))
+        fh.write("python            %s (%s)" % (platform.python_version(),
+                                                platform.system()) + chr(10) + chr(10))
         fh.write("rotulo            %s  (%s)\n" % (args.rotulo, desc_rotulo))
         fh.write("agregacao         %s  (%s)\n" % (args.agregacao, AGREGACOES[args.agregacao]))
         fh.write("metodos           %s\n" % ", ".join(args.metodos))
@@ -206,6 +263,21 @@ def main():
                                              else "incluido (cuidado com Eager/Lazy Test)"))
         fh.write("estratos          %s\n" % ", ".join(args.estratos))
         fh.write("linhas            %d\n" % n)
+        fh.write("colunas           %d" % len(cab) + chr(10))
+        fh.write(chr(10) + "entradas (sha256):" + chr(10))
+        for nome in ENTRADAS:
+            caminho = os.path.join(c.DADOS, nome)
+            fh.write("  %-22s %s" % (nome, sha256(caminho) if os.path.exists(caminho)
+                                     else "(ausente)") + chr(10))
+        fh.write(chr(10) + "cobertura desta configuracao:" + chr(10))
+        fh.write("  arquivos de producao com teste ligado   %d" % n + chr(10))
+        fh.write("  pares de binding usados                 %d" % usados + chr(10))
+        fh.write("  testes por arquivo de producao (media)  %.2f"
+                 % (usados / n if n else 0) + chr(10))
+        if descartados:
+            fh.write(chr(10) + "pares descartados pelos filtros:" + chr(10))
+            for k, v in descartados.most_common():
+                fh.write("  %-36s %d" % (k, v) + chr(10))
     print("\nparametros gravados em %s" % os.path.basename(params))
 
 

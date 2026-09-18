@@ -193,6 +193,32 @@ diferente e o artigo precisa poder mostrar que o achado se mantém em mais de um
 classe aninhada, onde `production` fica vazio em 93,8% — a ausência de ligação não é
 aleatória.
 
+#### O que o `ProductionFileName` do JNose é, de fato
+
+É tentador tratá-lo como oráculo — a ferramenta foi validada por outros estudos, então o
+que ela diz sobre a classe de produção estaria chancelado. **Não está**, e a distinção
+importa o suficiente para ser verificada em vez de suposta. Desmontando o
+`jnose-core-0.9.4.jar` que o step 1 usou, o método `JNoseCore.getFileProduction` carrega:
+
+```
+TEST_PREFIX  TEST_SUFFIX  TESTS_PREFIX  TESTS_SUFFIX  TEST_CASE_PREFIX  TEST_CASE_SUFFIX
+^.*test\d*$   ^.*tests\d*$   ^.*testcase\d*$   ^test.*   ^tests.*   ^testcase.*
+```
+
+e opera com `Files.walk`, `getFileName` e `endsWith`, falhando com a mensagem
+`getFileProduction: error finding file`. Ou seja: **tira o prefixo/sufixo `Test` do nome da
+classe e varre a árvore do projeto atrás de um `.java` com o nome restante.** É convenção
+de nomenclatura mais busca por basename — a mesma regra da estratégia `convencao`, só que
+aplicada ao nome da classe (errado em 6,4% das linhas) em vez do caminho.
+
+O que a literatura validou no JNose/TestSmellDetector é a **detecção de test smells**. O
+`getFileProduction` é utilitário interno, não oráculo de binding validado. Citá-lo como
+autoridade seria uma afirmação que o revisor derruba abrindo o mesmo jar.
+
+Isso não desqualifica `caminho_exato` — regra determinística e documentada é exatamente o
+que se quer. Só muda o que se pode escrever sobre ela: "aplicamos a convenção de
+nomenclatura que a ferramenta implementa", não "a ferramenta identificou a classe testada".
+
 Somadas, as duas primeiras ligam **759 de 4.300 amostras (17,7%)**, e quase não se somam
 (15,8% + 1,7%): erram nos mesmos casos. Não é falta de estratégia, é falta de sinal — foi
 o que motivou a estratégia 3.
@@ -364,17 +390,88 @@ resto como ameaça à validade declarada. O custo é uma tarde de trabalho manua
 
 ---
 
-## 6. A tabela derivada
+## 6. As duas tabelas derivadas
 
-`montar_analise.py` é o **único artefato derivado**, e é descartável. Todas as decisões são
-parâmetros, gravados em `dados/analise_classe.params.txt` ao lado do CSV:
+`montar_analise.py` produz os **únicos artefatos derivados**, e eles são descartáveis.
+`gerar_analises.py` roda as duas configurações oficiais de uma vez:
 
 ```bash
-python tools/montar_analise.py                                    # padrões
+python tools/gerar_analises.py
+```
+
+```
+dados/analise_deterministico.csv    730 linhas,   768 pares, 1,05 teste por arquivo
+dados/analise_ampliado.csv        1.369 linhas, 3.335 pares, 2,44 testes por arquivo
+```
+
+### Por que duas, e não uma
+
+Porque "este teste testa esta classe" tem duas respostas defensáveis, e **escolher entre
+elas é decisão da análise, não da coleta**:
+
+| | `analise_deterministico` | `analise_ampliado` |
+|---|---|---|
+| métodos | `caminho_exato` + `convencao` | + `referencia_estatica`, com `--max-testes 10` |
+| regra | posição do arquivo pela convenção de nomenclatura | + o teste referencia estaticamente o tipo |
+| julga intenção? | **não** — regra fechada, reexecutável | sim: referenciar não é testar |
+| arquivos de produção | 730 | 1.369 |
+| pares | 768 | 3.335 |
+| testes por arquivo | 1,05 | 2,44 |
+
+A determinística é a que se defende sem auditoria de intenção: ou o arquivo está onde a
+convenção prevê, ou não está. A ampliada dobra a cobertura ao custo de um construto mais
+frouxo.
+
+**O que as duas têm em comum importa tanto quanto o que as separa:** o binding não desloca
+a prevalência de code smell. Entre as amostras `HASH_OK`, as ligadas só pelas
+determinísticas e as ligadas com a estratégia 3:
+
+| | amostras | `pos_any` | `pos_maioria` | `pos_any_major` | `pos_unanime` |
+|---|---:|---:|---:|---:|---:|
+| HASH_OK (todas) | 4.300 | 1.116 (26,0%) | 225 (5,2%) | 719 (16,7%) | 17 (0,4%) |
+| só determinísticas | 759 | 206 (27,1%) | 44 (5,8%) | 142 (18,7%) | 7 (0,9%) |
+| com estratégia 3 | 1.611 | 438 (27,2%) | 93 (5,8%) | 286 (17,8%) | 10 (0,6%) |
+
+Ligar ou não ligar é praticamente independente do rótulo (26,0% → 27,1% → 27,2%), o que
+afasta a suspeita de que o binding ache teste mais facilmente para classe suja.
+
+> **Prevalência igual não é resultado igual.** As duas diferem justamente no lado do
+> desfecho: 768 pares contra 3.335, 1,05 contra 2,44 testes por arquivo. O test smell
+> agregado vem de conjuntos de teste diferentes, e as duas podem dar respostas diferentes
+> na etapa 3. É para isso que existem as duas — se o achado sobrevive às duas, é robusto à
+> definição de binding; se não sobrevive, a diferença é resultado, não acidente.
+
+E o "positivo confiável é escasso" não é limitação do binding: `maioria > none` rotula 5,2%
+de **todo** o MLCQ (247 de 4.770). 759 × 5,8% = 44. Com `--rotulo sev_media` a pergunta
+nem se coloca — todas as linhas ligadas entram, com severidade contínua.
+
+### Nenhuma regra de rótulo fica congelada
+
+Cada code smell aparece com **todas as regras lado a lado** — `cs_blob_any`,
+`cs_blob_maioria`, `cs_blob_unanime`, `cs_blob_any_major`, `cs_blob_sev_media` — pelo mesmo
+motivo que `mlcq_samples.csv` carrega as suas: a escolha é a decisão mais discutível do
+dataset (seção 3) e não deve ficar enterrada num artefato. `cs_blob` é apelido da regra
+pedida em `--rotulo`, para quem quer uma coluna só.
+
+Pelo mesmo motivo o defeito de classe aninhada entra como **coluna**
+(`n_testes_nome_divergente`) em vez de filtro: excluir na geração é irreversível, e
+General Fixture continua confiável nessas linhas. Análise que envolva Eager/Lazy Test tem
+que filtrar ou estratificar por ela — ou regerar com `--excluir-nome-divergente`.
+
+### Proveniência
+
+Cada CSV sai com um `.params.txt` ao lado contendo a linha de comando exata, o commit do
+repositório (marcado se `tools/` tinha mudança não commitada), a versão do Python, o
+**sha256 de cada entrada** (`mlcq_samples.csv`, `test_classes.csv`, `binding.csv`), a
+cobertura resultante e os pares descartados por filtro. Sem o hash das entradas,
+"repetível" é promessa; com ele, quem repetir sabe se partiu do mesmo dado.
+
+### Outras configurações
+
+```bash
 python tools/montar_analise.py --rotulo maioria --agregacao densidade
-python tools/montar_analise.py --rotulo sev_media                 # sem dicotomizar
 python tools/montar_analise.py --metodos caminho_exato --excluir-nome-divergente
-python tools/montar_analise.py --max-testes 5
+python tools/montar_analise.py --max-testes 5 --saida analise_max5.csv
 ```
 
 | parâmetro | opções |
@@ -549,19 +646,24 @@ repositórios com status `OK` são pulados na execução seguinte.
 | `ambiguo`, `n_testes_da_producao` | sinais de risco |
 | `url_producao`, `url_teste` | links no espelho, **no commit da coleta** |
 
-### `analise_classe.csv` — derivado
+### `analise_deterministico.csv` e `analise_ampliado.csv` — derivados
+
+Mesmas colunas nos dois; muda só qual binding alimentou as linhas (seção 6).
 
 | coluna | conteúdo |
 |---|---|
 | `github_repo`, `production_path` | o arquivo de produção |
 | `estratos`, `n_amostras` | de onde vêm os rótulos |
-| `cs_blob`, `cs_data_class`, `cs_feature_envy`, `cs_long_method` | rótulo pela regra escolhida. **Vazio = não avaliado, nunca 0** |
-| `cs_*_sev_max`, `cs_*_sev_media`, `cs_*_n_reviews` | evidência por trás de cada rótulo |
+| `cs_blob`, `cs_data_class`, `cs_feature_envy`, `cs_long_method` | apelido da regra pedida em `--rotulo`. **Vazio = não avaliado, nunca 0** |
+| `cs_<smell>_any`, `_maioria`, `_unanime`, `_any_major`, `_sev_media` | **todas as regras de rótulo lado a lado**, para a etapa 3 escolher sem regerar |
+| `cs_*_sev_max`, `cs_*_n_reviews` | evidência por trás dos rótulos |
 | `n_testes`, `test_paths` | classes de teste agregadas |
+| `n_testes_nome_divergente` | quantas delas têm o nome corrompido pelo defeito de classe aninhada. **Filtrar ou estratificar por esta coluna é obrigatório em análise com Eager/Lazy Test** |
 | `loc_teste`, `n_metodos_teste` | totais do lado do teste; `n_metodos_teste` é o denominador de `--agregacao densidade` |
-| `ts_*` (13), `ts_n_distintos`, `ts_n_total` | test smells agregados pela regra escolhida |
+| `ts_*` (13), `ts_n_distintos`, `ts_n_total` | test smells agregados pela regra de `--agregacao` |
 
-Os parâmetros que geraram o arquivo ficam em `analise_classe.params.txt` ao lado.
+O `.params.txt` ao lado traz comando, commit, versão do Python, sha256 das entradas,
+cobertura e descartes.
 
 ---
 
@@ -605,7 +707,11 @@ step2-binding/
 │   ├── refs_producao.py       estrategia 3: clona e extrai referencias test -> producao
 │   ├── binding.py             -> binding.csv, production_files.csv
 │   ├── auditar_binding.py     sorteia e apura a auditoria de precisao
-│   ├── montar_analise.py      -> analise_classe.csv (derivado, parametrizado)
+│   ├── montar_analise.py      -> uma tabela de analise (derivado, parametrizado)
+│   ├── gerar_analises.py      -> as DUAS tabelas oficiais de uma vez
+│   ├── baixar_auditoria.py    baixa os arquivos dos pares sorteados (cache local)
+│   ├── dossie_auditoria.py    monta a evidencia de cada par para a conferencia
+│   ├── registrar_auditoria.py grava vereditos incrementalmente
 │   └── conferir_dados.py      reapura todo numero deste README
 └── dados/
     ├── mlcq_reviews.csv              14.739 linhas
@@ -617,11 +723,12 @@ step2-binding/
     ├── binding.csv                   pares (producao, teste) com metodo
     ├── production_files.csv           4.559 arquivos anotados, ligados ou nao
     ├── auditoria_binding.csv         planilha de auditoria manual
-    └── analise_classe.csv            derivado, descartavel
+    ├── analise_deterministico.csv    derivado: caminho_exato + convencao
+    └── analise_ampliado.csv          derivado: + referencia_estatica, max 10 testes
 ```
 
-**Fonte de verdade são os CSVs normalizados e o `binding.csv`.** O `analise_classe.csv` é
-regenerável e não precisa ser versionado.
+**Fonte de verdade são os CSVs normalizados e o `binding.csv`.** As duas tabelas de
+análise são regeneráveis por `gerar_analises.py` em segundos.
 
 ---
 
@@ -642,12 +749,14 @@ python tools/refs_producao.py
 python tools/binding.py
 
 # 5. auditar a precisao (trabalho manual)
-python tools/auditar_binding.py
+python tools/auditar_binding.py           # sorteia 250 pares estratificados
+python tools/baixar_auditoria.py          # baixa os 420 arquivos para cache local
+python tools/dossie_auditoria.py --de 1 --ate 25   # evidencia de cada par
 #    preencher a coluna correto em dados/auditoria_binding.csv
 python tools/auditar_binding.py --apurar
 
-# 6. gerar a tabela de analise
-python tools/montar_analise.py --rotulo sev_media --excluir-nome-divergente
+# 6. gerar as duas tabelas de analise
+python tools/gerar_analises.py
 
 # 7. conferir que todo numero do README ainda vale
 python tools/conferir_dados.py
@@ -661,6 +770,13 @@ removidos após cada repositório.
 `binding.py` é rodado duas vezes de propósito: ele incorpora `refs_producao.csv` se o
 arquivo existir e avisa qual situação encontrou.
 
+O passo 5 é o único que exige trabalho humano. `baixar_auditoria.py` e
+`dossie_auditoria.py` existem para baratear esse trabalho, não para substituí-lo: o
+primeiro busca os dois arquivos de cada par uma vez (cache em `.cache-auditoria/`, fora do
+git, retomável — arquivo já baixado é pulado), e o segundo mostra, para cada par, em que
+linhas do teste o tipo de produção aparece e o que essas linhas fazem com ele. Nenhum dos
+dois emite veredito; o julgamento é de quem audita.
+
 ---
 
 ## 11. Ressalvas conhecidas
@@ -672,13 +788,24 @@ arquivo existir e avisa qual situação encontrou.
   agregada; para análise por smell individual, feature envy segue sendo o caso magro.
 - **`caminho_exato` tem ausência não-aleatória**, concentrada nas classes aninhadas
   (`nome_divergente`), que é onde o `jnose-core` falha ao resolver a produção.
+- **`caminho_exato` não é oráculo validado.** O `getFileProduction` do `jnose-core` é
+  convenção de nomenclatura mais busca por basename (seção 4) — o que a literatura validou
+  no JNose é a detecção de test smells, não a resolução da classe de produção. A regra é
+  determinística e declarável; só não pode ser citada como chancela externa.
+- **A `analise_ampliado` inclui, e a `analise_deterministico` não, pares em que o teste
+  apenas referencia a classe.** Nenhuma das duas é "a certa": a diferença entre elas é
+  informação para a etapa 3, e é por isso que as duas são versionadas.
 - **`referencia_estatica` confunde referenciar com testar.** Sem filtro a concentração é de
   10,9 testes por arquivo de produção, implausível como teste dedicado. Mede-se com a
   auditoria da seção 5; mitiga-se com `--max-testes 10`, que a derruba para 2,4. Não se
   elimina.
 - **A auditoria da seção 5 ainda não foi preenchida.** Até que seja, nenhuma afirmação de
   precisão do binding tem respaldo, e a tabela de trade-off mede concentração, não
-  precisão.
+  precisão. O ferramental (`baixar_auditoria.py`, `dossie_auditoria.py`,
+  `registrar_auditoria.py`) está pronto e os 420 arquivos já foram baixados; falta o
+  julgamento. Note que o critério muda por estratégia: nas determinísticas a pergunta é
+  "a regra casou o arquivo certo?", que é objetiva; em `referencia_estatica` é "referenciar
+  conta como testar?", que exige arbitrar e precisa ser declarado no artigo.
 - **Eager Test e Lazy Test não são confiáveis nas linhas `nome_divergente`** (queda de 28×
   e 23× no step 1). General Fixture fica estável e serve como controle.
 - **O padrão `^.*test\d*$` do JNose** casa palavras que terminam em "test" sem serem testes

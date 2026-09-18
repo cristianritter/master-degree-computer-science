@@ -1,0 +1,27 @@
+gerado por montar_analise.py em 2026-09-17 20:58:57
+
+comando           python montar_analise.py --rotulo sev_media --saida analise_deterministico.csv --metodos caminho_exato convencao
+commit            393293d (tools com mudanca nao commitada)
+python            3.12.10 (Windows)
+
+rotulo            sev_media  (severidade media como valor continuo (0-3), sem dicotomizar)
+agregacao         soma  (soma do smell em todas as classes de teste ligadas)
+metodos           caminho_exato, convencao
+max_testes        sem limite
+nome_divergente   incluido (cuidado com Eager/Lazy Test)
+estratos          positivo_confiavel, negativo_confiavel, disputado, negativo_1_review
+linhas            730
+colunas           56
+
+entradas (sha256):
+  mlcq_samples.csv       df5f15a1e0f08923cd5b63701483b40801b69a2103a439bdec16365572f2d462
+  test_classes.csv       a9cc6b84f03ea074fbd8b6b3fd985d7ca6afd25520f64133ea43199c3d7b799d
+  binding.csv            fad95bb31b647af71362b10e0be6f02d0c0b461f1ca31cca88e1ed29d2abc368
+
+cobertura desta configuracao:
+  arquivos de producao com teste ligado   730
+  pares de binding usados                 768
+  testes por arquivo de producao (media)  1.05
+
+pares descartados pelos filtros:
+  metodo_nao_aceito                    16101
