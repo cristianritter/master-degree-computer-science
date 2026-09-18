@@ -114,12 +114,21 @@ def sortear(args):
     print("preencha a coluna correto com s / n / ? e rode: python auditar_binding.py --apurar")
 
 
-def apurar(arquivo=None):
+def apurar(arquivo=None, criterio="estrito"):
+    """Precisao por estrato. O criterio escolhe a coluna de veredito.
+
+    estrito  correto        a classe de producao e o ALVO do teste
+    amplo    correto_amplo  o teste EXECUTA codigo da classe, ainda que como fixture
+
+    Nos estratos deterministicos a pergunta e "a regra casou o arquivo certo?" e as duas
+    leituras coincidem, entao correto_amplo fica vazio la e o estrito e reusado.
+    """
     arquivo = arquivo or SAIDA
     linhas = c.ler_csv(arquivo)
+    coluna = "correto_amplo" if criterio == "amplo" else "correto"
     por = collections.defaultdict(lambda: collections.Counter())
     for r in linhas:
-        v = (r["correto"] or "").strip().lower()
+        v = (r.get(coluna) or "").strip().lower() or (r["correto"] or "").strip().lower()
         if v:
             por[r["estrato_auditoria"]][v] += 1
     if not por:
@@ -169,9 +178,12 @@ def main():
     ap.add_argument("--por-estrato", type=int, default=50)
     ap.add_argument("--semente", type=int, default=42)
     ap.add_argument("--arquivo", help="planilha a apurar (padrao: auditoria_binding.csv)")
+    ap.add_argument("--criterio", choices=["estrito", "amplo"], default="estrito",
+                    help="estrito: a classe e o alvo do teste; amplo: o teste executa "
+                         "codigo da classe, ainda que como fixture")
     ap.add_argument("--apurar", action="store_true")
     args = ap.parse_args()
-    apurar(args.arquivo) if args.apurar else sortear(args)
+    apurar(args.arquivo, args.criterio) if args.apurar else sortear(args)
 
 
 if __name__ == "__main__":

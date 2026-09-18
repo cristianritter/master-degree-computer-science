@@ -105,6 +105,14 @@ def ler(url):
 
 
 def main():
+    # O console do Windows usa cp1252: uma seta ou um acento no fonte Java derrubava a
+    # impressao com UnicodeEncodeError no meio do lote, perdendo os pares seguintes.
+    # Mesmo problema de pagina de codigo que o step 1 enfrentou no repositorio atlas.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
     p = argparse.ArgumentParser()
     p.add_argument("--de", type=int, default=1)
     p.add_argument("--ate", type=int, default=10 ** 9)

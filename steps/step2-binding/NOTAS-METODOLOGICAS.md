@@ -317,6 +317,31 @@ Lista curta de afirmações tentadoras que este dataset não sustenta:
 
 ---
 
+## 10b. Validade de construto na prática: o resultado da auditoria
+
+A seção 8 define validade de construto em abstrato. A auditoria deu o exemplo concreto, e
+ele vale ser estudado porque é o achado metodológico mais forte do step 2.
+
+A mesma estratégia de binding (`referencia_estatica`) foi auditada sob duas definições:
+
+| o que se afirma | precisão |
+|---|---:|
+| "este teste **executa código** desta classe" | **94,8%** |
+| "este teste **tem como alvo** esta classe" | **10,1%** |
+
+Os pares são os mesmos. O instrumento é o mesmo. O que muda é a frase que se escreve sobre
+ele — e a diferença entre as duas frases é de 85 pontos percentuais de precisão.
+
+É isso que "validade de construto" quer dizer na prática: **o número não é bom ou ruim em
+si, ele é bom ou ruim para uma afirmação específica.** Um revisor não ataca a medição; ele
+ataca a distância entre a medição e a frase.
+
+A lição operacional: escreva primeiro a frase que o artigo vai afirmar, depois verifique se
+o instrumento mede aquilo. O caminho inverso — medir e depois escolher a frase que o número
+favorece — é como se chega a resultados que não se sustentam na revisão.
+
+---
+
 ## 11. Glossário rápido
 
 | termo | em uma linha |

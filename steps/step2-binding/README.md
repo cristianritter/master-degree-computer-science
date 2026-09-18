@@ -449,9 +449,64 @@ libcore, onde a árvore de testes legitimamente não espelha a de produção.
 > essa exclusão sem regerar nada — é decisão da análise, e está medida.
 > (97,0% sobre os 725 pares restantes: 675 de `caminho_exato` e 50 de `caminho_espelhado`.)
 
-Os três estratos de `referencia_estatica` (150 pares) seguem pendentes, e neles o critério
-não é "a regra casou o arquivo certo" mas "referenciar conta como testar", que precisa ser
-declarado antes de julgar.
+### Resultado: os três estratos de `referencia_estatica`
+
+Aqui a pergunta não é "a regra casou o arquivo certo" — é **"referenciar conta como
+testar"**, e ela tem duas respostas defensáveis. Cada par foi julgado nas duas, em colunas
+separadas (`correto` e `correto_amplo`):
+
+| critério | o que conta como par correto |
+|---|---|
+| **estrito** | a classe de produção é o **alvo** do teste. Fixture, valor de entrada/saída e infraestrutura contam como erro |
+| **amplo** | o teste **executa código** da classe, ainda que como fixture. Só homônimo, import morto, mock e menção sem uso contam como erro |
+
+| estrato | pares | estrito | amplo |
+|---|---:|---:|---:|
+| `caminho_exato` | 675 | 98,0% | 98,0% |
+| `convencao/caminho_espelhado` | 50 | 84,0% | 84,0% |
+| `convencao/so_basename` | 43 | 46,5% | 46,5% |
+| `referencia_estatica/import_fqn` | 14.092 | **4,0%** | **96,0%** |
+| `referencia_estatica/mesmo_pacote` | 1.875 | **22,0%** | **86,0%** |
+| `referencia_estatica/wildcard` | 134 | **4,0%** | **96,0%** |
+
+Nos três estratos determinísticos as duas leituras coincidem — lá a pergunta é outra.
+
+```bash
+python tools/auditar_binding.py --apurar --arquivo dados/auditoria_binding_auto.csv
+python tools/auditar_binding.py --apurar --arquivo dados/auditoria_binding_auto.csv --criterio amplo
+```
+
+### O que isso faz com os dois ramos
+
+| ramo | pares | precisão estrita | precisão ampla |
+|---|---:|---:|---:|
+| `analise_deterministico` | 768 | **94,2%** | 94,2% |
+| `analise_ampliado` | 16.869 | **10,1%** | **94,8%** |
+
+**A estratégia 3 não é uma versão mais frouxa da mesma medida — ela mede outra coisa.** Com
+96% de precisão ela identifica corretamente "este teste executa código desta classe". Com
+4% ela identifica "este teste tem esta classe como alvo". Os dois números descrevem o mesmo
+binding; o que muda é qual construto se está afirmando.
+
+O caso dominante é `RouteBuilder` do Camel: ele é a produção em **20 dos 50** pares
+sorteados de `import_fqn`, sempre pelo mesmo motivo — todo teste de rota do Camel instancia
+um `RouteBuilder` anônimo como andaime. O teste executa o código dele, e não o testa.
+
+> Que um único arquivo responda por 40% do estrato amostrado é, por si só, um alerta sobre
+> a estratégia: ela liga classes de infraestrutura a toda a suíte do projeto. A tabela de
+> concentração da seção 4 media esse risco de forma indireta; a auditoria o mostra direto.
+
+**Consequência para o artigo.** Os dois ramos continuam válidos, mas com rótulos
+diferentes, e é isso que precisa estar escrito:
+
+- `analise_deterministico` — *classes com teste dedicado*, 730 arquivos, precisão 94,2%.
+  É o construto que a RQ original pede.
+- `analise_ampliado` — *classes exercitadas por algum teste*, 1.369 arquivos, precisão
+  94,8% **sob esse construto**. Não sustenta a frase "o teste desta classe tem test smell
+  X"; sustenta "as classes que esta suíte exercita têm test smell X".
+
+Chamar o segundo de "binding com mais cobertura" seria o erro que a auditoria existe para
+evitar.
 
 ---
 
@@ -865,10 +920,13 @@ dois emite veredito; o julgamento é de quem audita.
   10,9 testes por arquivo de produção, implausível como teste dedicado. Mede-se com a
   auditoria da seção 5; mitiga-se com `--max-testes 10`, que a derruba para 2,4. Não se
   elimina.
-- **A auditoria está pela metade: 143 dos 293 pares.** Os três estratos determinísticos
-  estão apurados (seção 5); os 150 de `referencia_estatica` não. Enquanto isso, nenhuma
-  afirmação de precisão vale para a `analise_ampliado.csv`, e a tabela de trade-off da
-  seção 4 mede concentração, não precisão.
+- **A auditoria está completa: 293 de 293 pares** (seção 5). A precisão é 94,2% no ramo
+  determinístico e, no ampliado, 94,8% sob o construto "o teste exercita a classe" contra
+  **10,1%** sob "o teste tem a classe como alvo". A tabela de trade-off da seção 4 mede
+  concentração, não precisão, e continua valendo só para isso.
+- **`analise_ampliado.csv` não sustenta a RQ original.** Com 10,1% de precisão estrita, ela
+  não mede "o teste desta classe"; mede "as classes que esta suíte exercita". É um ramo
+  válido, para outra pergunta, e o artigo tem que rotulá-lo assim.
 - **O julgamento dos 143 foi automatizado, não humano.** Feito a partir do dossiê de cada
   par (pacote dos dois lados, imports, e as linhas do teste que citam o tipo), gravado em
   `auditoria_binding_auto.csv`, que é arquivo separado da planilha humana justamente para a
