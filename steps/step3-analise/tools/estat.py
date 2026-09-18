@@ -1,0 +1,99 @@
+"""Correlacao de Spearman, intervalo e valor-p, sem dependencia externa.
+
+Spearman e nao-parametrica: correlaciona POSTOS, nao valores. E o que a caracterizacao
+exige - com 72% de zeros e assimetria de ate 21, media e desvio-padrao nao descrevem os
+dados, e um unico arquivo com 1.116 ocorrencias de Lazy Test dominaria uma correlacao de
+Pearson.
+
+Empates recebem posto medio (metodo padrao), que e essencial aqui: as colunas tem centenas
+de zeros, todos empatados entre si.
+
+O valor-p e o intervalo saem da transformacao z de Fisher com aproximacao normal. Para os
+N deste step (730 e 1.369) a diferenca para a distribuicao t exata e desprezivel; com N
+abaixo de ~30 a aproximacao pioraria, e o codigo avisa.
+
+Nada aqui interpreta resultado. Interpretar e trabalho do README.
+"""
+import math
+
+
+def postos(valores):
+    """Postos com empate recebendo a media das posicoes que ocupariam."""
+    indexado = sorted(range(len(valores)), key=lambda i: valores[i])
+    r = [0.0] * len(valores)
+    i = 0
+    while i < len(indexado):
+        j = i
+        while j + 1 < len(indexado) and valores[indexado[j + 1]] == valores[indexado[i]]:
+            j += 1
+        medio = (i + j) / 2.0 + 1.0
+        for k in range(i, j + 1):
+            r[indexado[k]] = medio
+        i = j + 1
+    return r
+
+
+def pearson(x, y):
+    n = len(x)
+    mx = sum(x) / n
+    my = sum(y) / n
+    num = sum((a - mx) * (b - my) for a, b in zip(x, y))
+    dx = math.sqrt(sum((a - mx) ** 2 for a in x))
+    dy = math.sqrt(sum((b - my) ** 2 for b in y))
+    if dx == 0 or dy == 0:
+        return float("nan")
+    return num / (dx * dy)
+
+
+def normal_acum(z):
+    return 0.5 * (1 + math.erf(z / math.sqrt(2)))
+
+
+def spearman(x, y):
+    """Devolve (rho, p bicaudal, ic_baixo, ic_alto, n). NaN se nao houver variacao."""
+    assert len(x) == len(y)
+    n = len(x)
+    if n < 10:
+        return float("nan"), float("nan"), float("nan"), float("nan"), n
+    rho = pearson(postos(x), postos(y))
+    if math.isnan(rho):
+        return rho, float("nan"), float("nan"), float("nan"), n
+    # z de Fisher
+    rho_lim = max(min(rho, 0.999999), -0.999999)
+    z = math.atanh(rho_lim)
+    ep = 1.0 / math.sqrt(n - 3)
+    p = 2 * (1 - normal_acum(abs(z) / ep))
+    return rho, p, math.tanh(z - 1.96 * ep), math.tanh(z + 1.96 * ep), n
+
+
+def formatar_p(p):
+    if math.isnan(p):
+        return "    -"
+    if p < 0.001:
+        return "<0.001"
+    return "%.3f" % p
+
+
+def parcial(x, y, z_ctrl):
+    """Spearman parcial: correlacao entre x e y removendo o efeito de z_ctrl.
+
+    Calculada sobre postos, pela formula da correlacao parcial de primeira ordem. Serve
+    para a pergunta "sobra relacao depois de descontar o tamanho do teste?".
+    """
+    rx = postos(x)
+    ry = postos(y)
+    rz = postos(z_ctrl)
+    rxy = pearson(rx, ry)
+    rxz = pearson(rx, rz)
+    ryz = pearson(ry, rz)
+    den = math.sqrt((1 - rxz ** 2) * (1 - ryz ** 2))
+    if den == 0 or math.isnan(den):
+        return float("nan"), float("nan"), len(x)
+    r = (rxy - rxz * ryz) / den
+    n = len(x)
+    # um grau de liberdade a menos por variavel controlada
+    r_lim = max(min(r, 0.999999), -0.999999)
+    z = math.atanh(r_lim)
+    ep = 1.0 / math.sqrt(n - 4)
+    p = 2 * (1 - normal_acum(abs(z) / ep))
+    return r, p, n

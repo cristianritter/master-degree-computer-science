@@ -6,7 +6,7 @@ produção), usando as duas tabelas que o step 2 entregou.
 **Este step é exploratório.** Avançar por um caminho, olhar o resultado e voltar para pegar
 outro é esperado — o que precisa existir é a justificativa de cada decisão e o registro do
 que foi percorrido. O mapa das opções está na seção 12 do README do step 2; o caderno das
-tentativas está na seção 4 daqui.
+tentativas está na seção 5 daqui.
 
 Entrada: `steps/step2-binding/dados/analise_deterministico.csv` e `analise_ampliado.csv`
 Saída: `dados/`
@@ -121,9 +121,12 @@ step3-analise/
 ├── README.md
 ├── tools/
 │   ├── comum.py           caminhos, leitura das tabelas do step 2, precisao de cada ramo
-│   └── caracterizar.py    distribuicoes, antes de qualquer teste
+│   ├── estat.py           Spearman, IC por z de Fisher e correlacao parcial, sem scipy
+│   ├── caracterizar.py    distribuicoes, antes de qualquer teste
+│   └── explorar.py        test smell x code smell, nas tres definicoes de desfecho
 └── dados/
-    └── caracterizacao.csv  as estatisticas descritivas, para conferencia
+    ├── caracterizacao.csv  as estatisticas descritivas, para conferencia
+    └── exploracao.csv      um resultado por linha, para o caderno da secao 5
 ```
 
 `comum.py` carrega o `comum.py` do step 2 por caminho para reusar a lista dos 13 smells,
@@ -131,7 +134,99 @@ em vez de manter uma cópia que pode divergir — mesmo padrão que o step 2 usa
 
 ---
 
-## 4. Caderno de tentativas
+## 4. Primeira rodada — o tamanho do teste explica a associação aparente
+
+```bash
+python tools/explorar.py --ramo deterministico --por-smell --csv
+```
+
+Spearman sobre postos, IC95% por z de Fisher. Rótulo `sev_media` contínuo, agregado.
+
+### 4.1 O resultado
+
+Ramo determinístico, 730 arquivos, code smell agregado:
+
+| desfecho | N | rho | p | IC95% | rho com o tamanho do teste |
+|---|---:|---:|---:|---|---:|
+| `bruto` (soma das ocorrências) | 730 | 0,092 | 0,012 | [0,020, 0,164] | **0,554** |
+| `densidade` (soma / métodos) | 726 | 0,047 | 0,204 | [−0,026, 0,120] | −0,077 |
+| `distintos` (quantos dos 13) | 730 | 0,084 | 0,024 | [0,011, 0,155] | **0,433** |
+
+| controlando `n_metodos_teste` | N | rho parcial | p |
+|---|---:|---:|---:|
+| `bruto` | 730 | 0,058 | 0,115 |
+| `distintos` | 730 | 0,055 | 0,140 |
+
+**Leitura: a associação que aparece na contagem bruta é efeito do tamanho do teste.** Os
+dois desfechos que dependem de tamanho (`bruto` e `distintos`) dão significância nominal; o
+desfecho normalizado por tamanho (`densidade`) não dá. Quando o tamanho é controlado
+explicitamente, os dois caem para ~0,056 e deixam de ser significativos.
+
+### 4.2 O mecanismo, medido
+
+A confusão não é hipótese — as três pernas do triângulo estão medidas:
+
+| par | rho |
+|---|---:|
+| test smell bruto × tamanho do teste | 0,554 |
+| code smell × tamanho do teste (`n_metodos_teste`) | 0,079 (p = 0,032) |
+| code smell × tamanho do teste (`loc_teste`) | 0,091 (p = 0,014) |
+
+Classe de produção com mais code smell tende a ter teste maior; teste maior tem mais
+ocorrências de tudo. O produto dessas duas relações gera a correlação bruta de 0,092 sem
+que exista relação entre *qualidade* do teste e code smell.
+
+### 4.3 O ramo ampliado
+
+| desfecho | N | rho | p |
+|---|---:|---:|---:|
+| `bruto` | 1.369 | 0,015 | 0,568 |
+| `densidade` | 1.365 | 0,003 | 0,915 |
+| `distintos` | 1.369 | 0,001 | 0,973 |
+
+Tudo em zero. É o esperado: com 10,1% de precisão para o construto "o teste testa esta
+classe", a atenuação por erro de medida (`NOTAS-METODOLOGICAS.md`, seção 2) leva qualquer
+relação verdadeira para perto de zero. O ramo ampliado **não contradiz** o determinístico —
+ele não tem como discordar dele.
+
+### 4.4 Por code smell individual
+
+Ramo determinístico. Só `blob`/`bruto` alcança p < 0,05, e a versão em densidade do mesmo
+smell é −0,005:
+
+| smell | N | bruto | densidade | distintos |
+|---|---:|---:|---:|---:|
+| blob | 196 | 0,148 (p=0,038) | −0,005 (p=0,948) | 0,100 (p=0,163) |
+| data class | 114 | 0,124 (p=0,189) | 0,096 (p=0,313) | 0,174 (p=0,063) |
+| feature envy | 186 | 0,069 (p=0,351) | 0,070 (p=0,343) | 0,094 (p=0,201) |
+| long method | 251 | 0,117 (p=0,063) | 0,082 (p=0,199) | 0,088 (p=0,167) |
+
+Mesmo padrão: o que sobrevive é sempre o desfecho sensível a tamanho.
+
+### 4.5 O que dá para afirmar, e o que não dá
+
+**Não dá para afirmar que existe relação.** O único desfecho que isola qualidade de tamanho
+— densidade — dá rho = 0,047 com IC [−0,026, 0,120], que inclui o zero.
+
+**Dá para afirmar que, se existe, ela é pequena.** E isso é mais forte que um nulo comum,
+por duas razões que vêm do step 2:
+
+- *A precisão do binding está medida em 94,2%*, então o nulo não é explicável por ruído de
+  ligação. Se fosse 50%, seria.
+- *O poder está calculado*: este desenho detecta r ≥ 0,104 com 80% de poder. O limite
+  superior do IC da densidade é 0,120.
+
+Juntando: **qualquer associação entre densidade de test smell e severidade de code smell,
+em classes com teste dedicado, é menor que r ≈ 0,12.** Isso é um achado com número, não um
+"não encontramos nada".
+
+**O que fica em aberto.** A relação pode existir sob outra operacionalização — outro
+rótulo, outro recorte de smell, outra forma de agregar. É o que as próximas rodadas
+exploram, e o caderno abaixo registra o que já foi tentado.
+
+---
+
+## 5. Caderno de tentativas
 
 Uma linha por análise rodada, **incluindo as que não deram em nada**. Serve para o artigo
 poder dizer quantos caminhos foram percorridos, com número em vez de estimativa (step 2,
@@ -139,11 +234,24 @@ seção 12.0).
 
 | # | data | ramo | rótulo | desfecho | recorte | resultado |
 |---|---|---|---|---|---|---|
-| — | 18/09/2026 | — | — | — | — | caracterização; nenhum teste rodado ainda |
+| 1 | 18/09 | determinístico | `sev_media` | bruto | agregado | rho 0,092 (p=0,012) — confundido por tamanho |
+| 2 | 18/09 | determinístico | `sev_media` | densidade | agregado | rho 0,047 (p=0,204) — **nulo** |
+| 3 | 18/09 | determinístico | `sev_media` | distintos | agregado | rho 0,084 (p=0,024) — confundido por tamanho |
+| 4 | 18/09 | determinístico | `sev_media` | bruto, parcial | agregado | rho 0,058 (p=0,115) |
+| 5 | 18/09 | determinístico | `sev_media` | distintos, parcial | agregado | rho 0,055 (p=0,140) |
+| 6–8 | 18/09 | ampliado | `sev_media` | os três | agregado | tudo ~0, p > 0,5 |
+| 9–10 | 18/09 | ampliado | `sev_media` | parciais | agregado | ~0 |
+| 11–22 | 18/09 | determinístico | `sev_media` | os três | por smell (4) | só blob/bruto p<0,05 |
+
+**22 testes rodados.** Com α = 0,05, esperava-se ~1 falso positivo por acaso; apareceram 3
+significâncias nominais, todas no mesmo padrão (desfecho sensível a tamanho) e todas
+desaparecendo sob controle de tamanho. Nenhum ajuste para comparações múltiplas foi
+aplicado ainda — quando a exploração fechar, o artigo reporta o total e aplica correção, ou
+declara o regime como exploratório.
 
 ---
 
-## 5. Ressalvas herdadas
+## 6. Ressalvas herdadas
 
 Todas já documentadas no step 2 e no `NOTAS-METODOLOGICAS.md`, repetidas aqui porque
 afetam a interpretação de qualquer resultado deste step:
