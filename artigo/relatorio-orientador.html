@@ -5,7 +5,7 @@
     --ground:#F2F5F6;
     --surface:#FFFFFF;
     --ink:#17212B;
-    --muted:#5A6B79;
+    --muted:#55646F;
     --faint:#8497A4;
     --rule:#D9E0E4;
     --rule-soft:#E8EDEF;
@@ -21,7 +21,7 @@
       --ground:#0F1519;
       --surface:#161E24;
       --ink:#E4EAEE;
-      --muted:#9BABB6;
+      --muted:#A3B2BC;
       --faint:#6F818D;
       --rule:#25313A;
       --rule-soft:#1D262D;
@@ -37,7 +37,7 @@
     --ground:#0F1519;
     --surface:#161E24;
     --ink:#E4EAEE;
-    --muted:#9BABB6;
+    --muted:#A3B2BC;
     --faint:#6F818D;
     --rule:#25313A;
     --rule-soft:#1D262D;
@@ -54,7 +54,7 @@
     color:var(--ink);
     font-family:"IBM Plex Serif",Georgia,"Times New Roman",serif;
     font-size:16px;
-    line-height:1.62;
+    line-height:1.65;
     -webkit-font-smoothing:antialiased;
   }
   .wrap{
@@ -64,7 +64,7 @@
     padding-block:48px 72px;
   }
 
-  h1,h2,h3,.label,.eyebrow,th,.stat-k,.tag{
+  h1,h2,h3,.label,th,.tag,.f-t,.step-t,.ref-t{
     font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
   }
   h1{
@@ -78,7 +78,7 @@
   .sub{
     color:var(--muted);
     font-size:1.02rem;
-    margin:0 0 6px;
+    margin:0;
     max-width:44rem;
   }
   .meta{
@@ -99,9 +99,9 @@
     text-wrap:balance;
   }
   .sec{
-    margin-top:44px;
+    margin-top:46px;
     display:grid;
-    gap:14px;
+    gap:15px;
   }
   .sec-head{
     display:flex;
@@ -118,18 +118,26 @@
     flex:none;
   }
   h3{
-    font-size:.94rem;
+    font-size:.95rem;
     font-weight:600;
-    margin:0 0 -4px;
+    margin:6px 0 -6px;
     color:var(--ink);
   }
   p{margin:0;max-width:42rem;}
-  .sec p + p{margin-top:2px;}
+  .sec p + p{margin-top:4px;}
   strong{font-weight:600;}
   em{font-style:italic;}
 
-  ul{margin:0;padding-left:1.1rem;display:grid;gap:7px;max-width:42rem;}
+  ul{margin:0;padding-left:1.1rem;display:grid;gap:8px;max-width:42rem;}
   li{padding-left:2px;}
+
+  dl{margin:0;display:grid;gap:12px;max-width:42rem;}
+  dt{
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-weight:600;
+    font-size:.92rem;
+  }
+  dd{margin:1px 0 0;color:var(--muted);font-size:.96rem;}
 
   code,.mono{
     font-family:"IBM Plex Mono",ui-monospace,monospace;
@@ -161,48 +169,47 @@
     white-space:nowrap;
   }
   td{
-    padding:8px 12px 8px 0;
+    padding:9px 12px 9px 0;
     border-bottom:1px solid var(--rule-soft);
     vertical-align:top;
   }
   td:last-child,th:last-child{padding-right:0;}
-  .r{text-align:right;}
 
-  .findings{
-    display:grid;
-    gap:1px;
-    background:var(--rule);
-    border:1px solid var(--rule);
-    border-radius:6px;
-    overflow:hidden;
-  }
+  .findings{display:grid;gap:22px;}
   .f{
     background:var(--surface);
-    padding:16px 18px;
+    border:1px solid var(--rule);
+    border-radius:6px;
+    padding:20px 22px;
     display:grid;
-    grid-template-columns:auto 1fr;
-    gap:4px 14px;
-    align-items:baseline;
+    gap:11px;
   }
+  .f-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
   .f-n{
     font-family:"IBM Plex Mono",ui-monospace,monospace;
     font-size:.78rem;
     color:var(--faint);
+    flex:none;
   }
-  .f-t{font-weight:600;font-size:.98rem;}
-  .f-d{
-    grid-column:2;
-    color:var(--muted);
-    font-size:.92rem;
-    line-height:1.55;
-  }
+  .f-t{font-weight:600;font-size:1.02rem;flex:1 1 16rem;}
   .f-v{
-    grid-column:2;
     font-family:"IBM Plex Mono",ui-monospace,monospace;
     font-size:.8rem;
     color:var(--accent);
-    margin-top:3px;
+    background:var(--accent-soft);
+    padding:8px 11px;
+    border-radius:4px;
+    line-height:1.6;
   }
+  .f .label{
+    font-size:.7rem;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--faint);
+    font-weight:500;
+    margin-bottom:1px;
+  }
+  .f p{max-width:none;}
 
   .tag{
     display:inline-block;
@@ -220,12 +227,13 @@
 
   .note{
     border-left:2px solid var(--accent);
-    padding:2px 0 2px 16px;
+    padding:3px 0 3px 16px;
     color:var(--muted);
-    font-size:.95rem;
+    font-size:.97rem;
     max-width:41rem;
   }
   .note.warn{border-left-color:var(--warn);}
+  .note strong{color:var(--ink);}
 
   .pipe{
     display:grid;
@@ -237,7 +245,7 @@
   }
   .step{
     background:var(--surface);
-    padding:14px 18px;
+    padding:15px 18px;
     display:grid;
     grid-template-columns:5.5rem 1fr;
     gap:3px 16px;
@@ -253,31 +261,21 @@
   .step-d{
     grid-column:2;
     color:var(--muted);
-    font-size:.9rem;
-    line-height:1.55;
+    font-size:.92rem;
+    line-height:1.58;
   }
-  @media (max-width:520px){
+  @media (max-width:540px){
     .step{grid-template-columns:1fr;}
-    .step-d,.f-d,.f-v{grid-column:1;}
+    .step-d{grid-column:1;}
   }
-
-  .q{
-    background:var(--surface);
-    border:1px solid var(--rule);
-    border-radius:6px;
-    padding:18px 20px;
-    display:grid;
-    gap:11px;
-  }
-  .q ol{margin:0;padding-left:1.2rem;display:grid;gap:9px;}
 
   a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px;}
-  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
-  .refs{display:grid;gap:14px;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+  .refs{display:grid;gap:16px;}
   .ref{
     display:grid;
-    gap:2px;
-    padding-bottom:13px;
+    gap:3px;
+    padding-bottom:15px;
     border-bottom:1px solid var(--rule-soft);
     max-width:43rem;
   }
@@ -288,267 +286,367 @@
     font-size:.76rem;
     color:var(--faint);
   }
-  .ref-d{color:var(--muted);font-size:.92rem;}
+  .ref-d{color:var(--muted);font-size:.94rem;}
 </style>
 
 <div class="wrap">
 
   <header>
     <h1>Test smells × code smells</h1>
-    <p class="sub">Relatório de andamento dos experimentos, dos resultados encontrados e da
-    proposta de rumo para o artigo. Escrito para avaliação do orientador antes de qualquer
-    decisão sobre a escrita.</p>
+    <p class="sub">Relatório do que foi construído, dos resultados obtidos, do que cada um
+    significa e do que implicam para um possível artigo. Escrito para ser lido sem
+    conhecimento prévio do estudo.</p>
     <p class="meta">18 de setembro de 2026 · Cristian Ritter · 3 etapas concluídas · 104 testes estatísticos registrados</p>
   </header>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">01</span><h2>A pergunta</h2></div>
-    <p>Classes de produção que desenvolvedores profissionais percebem como tendo
-    <em>code smell</em> são testadas por código com mais <em>test smell</em>?</p>
-    <p>O estudo liga duas fontes independentes: as anotações humanas de code smell do
-    <strong>MLCQ</strong> (14.739 revisões de desenvolvedores profissionais sobre 4.770
-    amostras, com severidade) e os test smells detectados pelo <strong>JNose</strong> sobre
-    o código de teste dos mesmos repositórios, no mesmo commit.</p>
+    <div class="sec-head"><span class="num">01</span><h2>O vocabulário do estudo</h2></div>
+    <p>Quatro termos aparecem o tempo todo no restante do relatório.</p>
+    <dl>
+      <dt>Code smell</dt>
+      <dd>Sintoma de problema de design no código de produção — uma classe grande demais
+      (<em>blob</em>), uma classe que só guarda dados (<em>data class</em>), um método que usa
+      mais dados de outra classe que da própria (<em>feature envy</em>), um método longo
+      demais (<em>long method</em>). Não é erro de execução: o programa funciona, mas o
+      código é mais difícil de manter.</dd>
+
+      <dt>Test smell</dt>
+      <dd>O mesmo conceito, aplicado ao código de teste. Exemplos: um método de teste com
+      muitas verificações sem mensagem que as distinga (<em>assertion roulette</em>), um teste
+      que exercita várias funcionalidades de uma vez (<em>eager test</em>), um teste que
+      depende de arquivo externo (<em>mystery guest</em>). O estudo usa 13 tipos.</dd>
+
+      <dt>MLCQ</dt>
+      <dd>Conjunto de dados publicado em 2020 com anotações de code smell feitas por
+      <strong>desenvolvedores profissionais</strong>: 14.739 revisões sobre 4.770 trechos de
+      código Java, cada uma atribuindo uma severidade (<em>none</em>, <em>minor</em>,
+      <em>major</em>, <em>critical</em>). É a nossa fonte do lado da produção — e o diferencial
+      dela é ser percepção humana, não cálculo de métrica.</dd>
+
+      <dt>JNose</dt>
+      <dd>Ferramenta acadêmica que detecta test smells em código Java. É a nossa fonte do lado
+      do teste.</dd>
+    </dl>
   </section>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">02</span><h2>O que foi construído</h2></div>
+    <div class="sec-head"><span class="num">02</span><h2>A pergunta e o obstáculo</h2></div>
+    <p><strong>A pergunta:</strong> classes que desenvolvedores profissionais percebem como
+    tendo code smell são testadas por código com mais test smell? Em outras palavras: código
+    de produção ruim anda junto com código de teste ruim?</p>
+    <p><strong>O obstáculo</strong> é que as duas fontes não se falam. O MLCQ diz "este arquivo
+    de produção tem code smell"; o JNose diz "esta classe de teste tem test smell". Para
+    cruzar os dois é preciso saber <strong>qual teste testa qual classe</strong> — e essa
+    ligação não está escrita em lugar nenhum do código. Ela precisa ser inferida.</p>
+    <p>Chamamos essa inferência de <strong>binding</strong>. Ela é o centro técnico do
+    trabalho, porque todo o resultado depende de ela estar certa: se o teste ligado a uma
+    classe não é o teste dela, os test smells que atribuímos àquela classe são de outra.</p>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><span class="num">03</span><h2>O que foi construído</h2></div>
     <div class="pipe">
       <div class="step">
         <span class="step-k">Etapa 1</span>
-        <span class="step-t">Coleta de test smells</span>
-        <span class="step-d">JNose 2.5.0 sobre <strong>451 repositórios</strong> Java, ~35 h de
-        processamento. 107.535 classes de teste, 2.059.905 ocorrências de test smell.
-        Três defeitos da ferramenta documentados, incluindo um que corrompe o nome da classe
-        em 6,4% das linhas.</span>
+        <span class="step-t">Coleta dos test smells</span>
+        <span class="step-d">JNose executado sobre <strong>451 repositórios Java</strong> —
+        os mesmos projetos que o MLCQ anotou —, cerca de 35 horas de processamento. Resultado:
+        107.535 classes de teste e 2.059.905 ocorrências de test smell. Três defeitos da
+        ferramenta foram encontrados e documentados no caminho, um deles corrompendo o nome
+        da classe em 6,4% dos registros.</span>
       </div>
       <div class="step">
         <span class="step-k">Etapa 2</span>
-        <span class="step-t">Binding produção ↔ teste</span>
-        <span class="step-d">Liga cada arquivo de produção anotado às classes de teste que o
-        exercitam, por três estratégias. <strong>293 pares auditados</strong> em 6 estratos
-        para medir a precisão de cada uma. Duas tabelas de análise entregues, com
-        construtos diferentes.</span>
+        <span class="step-t">O binding, e a medição dele</span>
+        <span class="step-d">Três estratégias para ligar arquivo de produção à classe de teste.
+        Em vez de assumir que funcionam, <strong>sorteamos 293 pares e conferimos um a um</strong>,
+        abrindo os dois arquivos, para medir que fração das ligações é verdadeira.</span>
       </div>
       <div class="step">
         <span class="step-k">Etapa 3</span>
-        <span class="step-t">Análise</span>
-        <span class="step-d">Cinco análises com documento próprio: caracterização das
-        variáveis, correlação agregada, por test smell individual, extremos de evidência e
-        casos disputados. Tudo não-paramétrico, com correção para comparações múltiplas.</span>
+        <span class="step-t">A análise</span>
+        <span class="step-d">Cinco análises independentes sobre o dado resultante, cada uma
+        atacando a pergunta por um ângulo diferente. Todas com testes estatísticos que não
+        exigem distribuição normal, porque os dados são muito assimétricos.</span>
       </div>
     </div>
-    <p class="note">Cada etapa tem README próprio e um script de verificação que reapura
-    todos os números afirmados no texto e falha se algum divergir. Todo resultado citado
-    neste relatório sai de um comando.</p>
+    <p class="note">Cada etapa tem um script que <strong>reapura todos os números</strong>
+    escritos na sua documentação e falha se algum divergir. Nenhum valor citado neste
+    relatório foi digitado à mão.</p>
   </section>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">03</span><h2>Os quatro resultados</h2></div>
+    <div class="sec-head"><span class="num">04</span><h2>Os resultados</h2></div>
+    <p>Quatro resultados, cada um com o que foi encontrado, o que significa e o que implica.</p>
 
     <div class="findings">
+
       <div class="f">
-        <span class="f-n">01</span>
-        <span class="f-t">Não há associação detectável — e o limite está quantificado
-        <span class="tag t-nul">nulo informativo</span></span>
-        <span class="f-d">Em classes com teste dedicado, a densidade de test smell não
-        correlaciona com a severidade percebida de code smell. Três operacionalizações
-        independentes convergiram: correlação contínua, smells individuais com correção FDR,
-        e comparação de extremos.</span>
-        <span class="f-v">rho = 0,047 · IC95% [−0,026 , 0,120] · N = 730 · poder para detectar r ≥ 0,104</span>
+        <div class="f-head">
+          <span class="f-n">01</span>
+          <span class="f-t">Não existe associação detectável</span>
+          <span class="tag t-nul">resultado nulo</span>
+        </div>
+        <div class="f-v">rho = 0,047 · intervalo de confiança 95%: [−0,026 , 0,120] · 730 arquivos</div>
+        <div>
+          <div class="label">O que significa</div>
+          <p><em>Rho</em> é uma medida de correlação que varia de −1 a 1, onde 0 é ausência
+          total de relação. O valor encontrado, 0,047, é praticamente zero. O intervalo de
+          confiança diz onde o valor verdadeiro provavelmente está — e ele <strong>inclui o
+          zero</strong>, ou seja, é compatível com não haver relação nenhuma.</p>
+        </div>
+        <div>
+          <div class="label">O que implica</div>
+          <p>Três caminhos diferentes chegaram à mesma conclusão: correlação sobre a escala
+          contínua de severidade, análise de cada um dos 13 test smells separadamente, e
+          comparação entre os casos em que os revisores concordaram que há code smell contra
+          aqueles em que concordaram que não há. Um resultado nulo pode ser azar de
+          operacionalização; três por caminhos independentes apontam para o mesmo lugar.</p>
+        </div>
       </div>
 
       <div class="f">
-        <span class="f-n">02</span>
-        <span class="f-t">A associação aparente é tamanho do teste
-        <span class="tag t-med">mecanismo medido</span></span>
-        <span class="f-d">A contagem bruta de test smell dá correlação significativa — mas ela
-        some sob normalização por tamanho e sob controle explícito. As três pernas do
-        triângulo estão medidas: classe com mais code smell tende a ter teste maior, e teste
-        maior tem mais ocorrências de tudo.</span>
-        <span class="f-v">bruto 0,092 (p=0,012) · densidade 0,047 (n.s.) · rho com tamanho: 0,554</span>
+        <div class="f-head">
+          <span class="f-n">02</span>
+          <span class="f-t">A associação que aparece é tamanho do teste, não qualidade</span>
+          <span class="tag t-med">mecanismo medido</span>
+        </div>
+        <div class="f-v">contagem bruta: rho 0,092 (p = 0,012) · normalizada por tamanho: 0,047 (não significativo)<br>correlação da contagem com o tamanho do teste: <strong>0,554</strong></div>
+        <div>
+          <div class="label">O que significa</div>
+          <p>Se contarmos simplesmente <em>quantas</em> ocorrências de test smell existem, a
+          correlação aparece e é estatisticamente significativa. Mas um arquivo de teste com
+          4.668 linhas tem mais ocorrências de tudo que um de 50 linhas — independentemente de
+          qualidade. Quando dividimos a contagem pelo tamanho do teste, a correlação
+          desaparece.</p>
+          <p>O mecanismo foi medido, não suposto: classe de produção com mais code smell tende
+          a ter teste maior (correlação 0,079 a 0,091), e teste maior tem mais ocorrências de
+          test smell (0,554). O produto dessas duas relações produz uma correlação aparente
+          entre as pontas, sem que exista relação com a qualidade do teste.</p>
+        </div>
+        <div>
+          <div class="label">O que implica</div>
+          <p>Se a análise tivesse parado na contagem bruta — que é o mais natural de fazer —,
+          o artigo reportaria uma correlação positiva significativa que é <strong>artefato de
+          medição</strong>. Esse é um resultado com valor próprio: qualquer estudo que conte
+          ocorrências de test smell sem normalizar por tamanho corre esse risco.</p>
+        </div>
       </div>
 
       <div class="f">
-        <span class="f-n">03</span>
-        <span class="f-t">Binding por referência estática mede outro construto
-        <span class="tag t-med">achado de método</span></span>
-        <span class="f-d">A mesma ligação teste→classe tem precisão radicalmente diferente
-        conforme a frase que se escreve sobre ela. Os pares são os mesmos; o que muda é a
-        afirmação. Auditado par a par.</span>
-        <span class="f-v">94,8% para “o teste exercita a classe” · 10,1% para “o teste testa a classe”</span>
+        <div class="f-head">
+          <span class="f-n">03</span>
+          <span class="f-t">A mesma ligação teste→classe mede coisas diferentes conforme a frase que se escreve</span>
+          <span class="tag t-med">achado de método</span>
+        </div>
+        <div class="f-v">94,8% de acerto para “o teste <strong>exercita</strong> a classe”<br>10,1% de acerto para “o teste <strong>testa</strong> a classe”</div>
+        <div>
+          <div class="label">O que significa</div>
+          <p>Uma das estratégias de binding liga teste a classe quando o teste faz referência
+          àquela classe no código. Auditando os pares um a um, ela acerta 94,8% das vezes se a
+          afirmação for "este teste executa código desta classe" — mas apenas 10,1% se for
+          "esta classe é o alvo deste teste".</p>
+          <p>O caso mais comum ilustra bem: em projetos que usam o framework Camel, todo teste
+          de rota instancia um objeto <code>RouteBuilder</code> como andaime. O teste executa
+          o código dele, mas não o testa. Sozinho, esse arquivo aparece em 20 dos 50 pares que
+          sorteamos naquele estrato.</p>
+        </div>
+        <div>
+          <div class="label">O que implica</div>
+          <p>São os mesmos pares e o mesmo instrumento; 85 pontos percentuais separam as duas
+          frases que se pode escrever sobre eles. Isso é um alerta metodológico para toda a
+          linha de pesquisa que liga teste a produção por referência estática — e nenhum dos
+          trabalhos que encontramos reporta precisão dessa ligação.</p>
+        </div>
       </div>
 
       <div class="f">
-        <span class="f-n">04</span>
-        <span class="f-t">O rótulo do MLCQ é circular com o desenho amostral
-        <span class="tag t-med">achado de método</span></span>
-        <span class="f-d">Revisores extras foram alocados apenas para amostras já marcadas como
-        positivas. A regra usual “alguém marcou &gt; none” é, na prática, um detector de quais
-        amostras foram ao crosscheck — não evidência independente do rótulo.</span>
-        <span class="f-v">1.227 de 1.227 amostras do crosscheck já eram positivas · 19 positivos unânimes em 4.770</span>
+        <div class="f-head">
+          <span class="f-n">04</span>
+          <span class="f-t">O rótulo do MLCQ é circular com o desenho amostral</span>
+          <span class="tag t-med">achado de método</span>
+        </div>
+        <div class="f-v">1.227 de 1.227 amostras revisadas na segunda rodada já eram positivas antes<br>apenas 19 casos com positivo unânime em 4.770 amostras</div>
+        <div>
+          <div class="label">O que significa</div>
+          <p>Os autores do MLCQ alocaram revisores extras apenas para amostras que alguém já
+          havia marcado como tendo smell — está descrito no apêndice deles e confirmamos nos
+          dados. Consequência: o número de revisores é resultado do rótulo, não evidência
+          independente dele.</p>
+          <p>A regra que a literatura costuma usar — "se algum revisor marcou severidade acima
+          de <em>none</em>, a classe tem o smell" — vira, na prática, um detector de quais
+          amostras passaram pela segunda rodada de revisão. E ela descarta justamente o
+          veredito dessa segunda rodada, que em geral não confirmou o primeiro alerta.</p>
+        </div>
+        <div>
+          <div class="label">O que implica</div>
+          <p>Qualquer trabalho que use o MLCQ como verdade de referência — inclusive os de
+          detecção automática por aprendizado de máquina, que são a maioria — precisa saber
+          disso. Nosso estudo trata o problema classificando cada amostra pela força da
+          evidência, em vez de escolher um limiar.</p>
+        </div>
       </div>
+
     </div>
 
-    <div class="note warn">Uma análise ficou <strong>inconclusiva, não nula</strong>: a
-    comparação entre casos confirmados e disputados é a única que neutraliza a circularidade
-    do item 04 — os dois grupos passaram pelo mesmo funil de revisão — mas tem apenas 42
-    casos confirmados. Ela só detectaria um efeito grande (delta ≥ 0,28) e os observados vão
-    até 0,08. A comparação de melhor desenho é a de pior poder.</div>
+    <div class="note warn">Uma quinta análise ficou <strong>inconclusiva, e não nula</strong> —
+    distinção que o artigo precisa fazer. Ela compara os casos que a maioria dos revisores
+    confirmou contra os casos que ficaram em disputa, e é a única em que os dois grupos
+    passaram pelo mesmo processo de revisão, o que neutraliza o problema do item 04. Mas são
+    apenas 42 casos confirmados: o desenho só detectaria um efeito grande, e os observados são
+    pequenos. Não dá para concluir nada dela — nem a favor, nem contra.</div>
   </section>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">04</span><h2>Por que o nulo é interpretável</h2></div>
-    <p>Um resultado nulo costuma ser fraco porque não se distingue “não há relação” de “o
-    instrumento é ruidoso demais para vê-la”. Duas medições feitas antes da análise afastam
-    a segunda explicação:</p>
-    <ul>
-      <li><strong>A precisão do binding está medida em 94,2%</strong>, por auditoria
-      estratificada de 293 pares. Com 6% de pares falsos, a atenuação não explica um nulo.</li>
-      <li><strong>O poder foi calculado antes de olhar o resultado.</strong> O desenho detecta
-      r ≥ 0,104 com 80% de poder; o observado é 0,047, com teto de intervalo em 0,120.</li>
-    </ul>
-    <p>Daí a afirmação que o artigo pode fazer com número: <strong>qualquer associação entre
-    densidade de test smell e severidade percebida de code smell, em classes com teste
-    dedicado, é menor que r ≈ 0,12.</strong></p>
+    <div class="sec-head"><span class="num">05</span><h2>Por que este resultado nulo é utilizável</h2></div>
+    <p>Resultado nulo costuma ser fraco em publicação, porque não se distingue "não existe
+    relação" de "o instrumento era ruidoso demais para enxergá-la". Duas medições feitas
+    <em>antes</em> da análise afastam a segunda explicação.</p>
+    <dl>
+      <dt>A precisão do binding foi medida: 94,2%</dt>
+      <dd>Sorteamos 293 pares em 6 estratos e conferimos um a um. Com 6% de ligações
+      incorretas, o ruído é pequeno demais para apagar uma relação que existisse. Se a
+      precisão fosse 50%, o nulo não significaria nada.</dd>
+
+      <dt>O poder estatístico foi calculado antes</dt>
+      <dd><em>Poder</em> é a capacidade de detectar um efeito que existe. Calculamos que este
+      desenho detectaria uma correlação de 0,104 ou maior em 80% das vezes. O observado foi
+      0,047, com teto de intervalo em 0,120.</dd>
+    </dl>
+    <p>Somando as duas, o artigo pode afirmar com número: <strong>se existe alguma associação
+    entre densidade de test smell e severidade percebida de code smell em classes com teste
+    dedicado, ela é menor que 0,12</strong> — uma correlação tão fraca que não teria
+    consequência prática. Isso é diferente de "não encontramos nada".</p>
   </section>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">05</span><h2>Onde isso se encaixa na literatura</h2></div>
-    <p>Levantamento dirigido, feito depois dos experimentos para responder uma pergunta
-    específica: alguém já reportou essa associação, e com que operacionalização?</p>
+    <div class="sec-head"><span class="num">06</span><h2>Onde isso se encaixa na literatura</h2></div>
+    <p>Levantamento dirigido — não sistemático — feito depois dos experimentos, para saber se
+    alguém já havia reportado essa associação e com que método.</p>
 
     <div class="refs">
       <div class="ref">
         <span class="ref-t"><a href="https://arxiv.org/abs/2103.14781">Tahir, Counsell &amp; MacDonell — Class features and test smells</a></span>
-        <span class="ref-m">APSEC 2016 · CORE C · 20 citações, 0 influentes · 5 sistemas, 975 pares</span>
-        <span class="ref-d">O concorrente direto. Mesmo desfecho que o nosso
-        (<em>número de tipos de test smell</em>) e mesmo teste estatístico (Spearman), mas o
-        preditor é complexidade objetiva — CC, WMC, LCOM — em vez de percepção humana. Acharam
-        associação positiva nos cinco sistemas. <strong>Não normalizam por tamanho:</strong> as
-        palavras “confound” e “normaliz” não aparecem no texto, e eles descrevem a cadeia de
-        tamanho como explicação, não como ameaça.</span>
+        <span class="ref-m">APSEC 2016 · CORE C · 20 citações · 5 sistemas, 975 pares</span>
+        <span class="ref-d">O trabalho mais próximo do nosso. Usa a mesma variável de resultado
+        (número de tipos de test smell) e o mesmo teste estatístico, mas o preditor é
+        <strong>complexidade calculada por métrica</strong> — e não percepção humana. Acharam
+        associação positiva nos cinco sistemas. <strong>Não normalizam por tamanho de
+        teste</strong>: as palavras "confounder" e "normalize" não aparecem no texto, e eles
+        descrevem a cadeia de tamanho como explicação do achado, não como ameaça a ele.</span>
       </div>
       <div class="ref">
         <span class="ref-t"><a href="https://sback.it/publications/icsme2018a.pdf">Spadini et al. — On the Relation of Test Smells to Software Code Quality</a></span>
-        <span class="ref-m">ICSME 2018 · CORE A · 182 citações · 10 sistemas, &gt;1M casos de teste</span>
-        <span class="ref-d">A referência da área. Acharam que produção testada por testes
-        smelly é mais <em>defect-prone</em> — desfecho diferente do nosso.
-        <strong>Controlam por tamanho</strong> (LOC e mudanças anteriores), citando Kitchenham e
-        Zhou. Isso derruba uma pretensão que chegamos a considerar: não é verdade que a área
-        ignore o confundidor de tamanho — quem ignora é o trabalho de menor impacto, que é
-        justamente o mais próximo do nosso desenho.</span>
+        <span class="ref-m">ICSME 2018 · CORE A · 182 citações · 10 sistemas, &gt;1 milhão de casos de teste</span>
+        <span class="ref-d">A referência da área. Encontraram que código de produção testado por
+        testes com smell tem mais defeitos — <strong>desfecho diferente do nosso</strong>
+        (defeito, não percepção de design). E <strong>controlam por tamanho</strong>, citando
+        literatura sobre tamanho como confundidor. O achado deles sobrevive ao controle.</span>
       </div>
       <div class="ref">
-        <span class="ref-t"><a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/smr.2532">Martins et al. — Diffusion of test smells (dataset TSSM)</a></span>
+        <span class="ref-t"><a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/smr.2532">Martins et al. — Difusão de test smells (dataset TSSM)</a></span>
         <span class="ref-m">JSEP 2024 · JNose sobre 13.703 sistemas Java</span>
-        <span class="ref-d">Precedente do nosso instrumento: mostra que JNose em escala é aceito
-        na área. Correlaciona test smells com métricas do próprio código de teste, sem tocar em
-        code smell de produção.</span>
+        <span class="ref-d">Precedente do nosso instrumento: mostra que o JNose em larga escala
+        é aceito na área. Correlaciona test smells com métricas do próprio código de teste, sem
+        tocar em code smell de produção.</span>
       </div>
       <div class="ref">
         <span class="ref-t"><a href="https://dl.acm.org/doi/10.1145/3383219.3383264">Madeyski &amp; Lewowski — MLCQ</a></span>
-        <span class="ref-m">EASE 2020 · o dataset de rótulo que usamos</span>
-        <span class="ref-d">Na literatura o MLCQ é usado para <em>detecção</em> de code smell
-        (machine learning, LLM). Não encontramos uso dele em estudo de correlação com test
-        smell — o nosso pareamento parece inédito.</span>
+        <span class="ref-m">EASE 2020 · o conjunto de dados de rótulo que usamos</span>
+        <span class="ref-d">Na literatura, o MLCQ é usado para <strong>detecção</strong> de code
+        smell — aprendizado de máquina, redes neurais, modelos de linguagem. Não encontramos
+        uso dele em estudo de correlação com test smell.</span>
       </div>
     </div>
-  </section>
 
-  <section class="sec">
-    <div class="sec-head"><span class="num">06</span><h2>A tese sugerida</h2></div>
-    <p class="note"><strong>O que prediz test smell é tamanho e complexidade do código, não a
-    percepção de que o código está ruim.</strong></p>
-    <p>Ela encaixa os três resultados sem contradizer nenhum:</p>
+    <h3>A leitura que encaixa os três estudos</h3>
     <div class="scroll">
       <table>
         <thead>
-          <tr><th>Trabalho</th><th>Preditor</th><th>Achado</th></tr>
+          <tr><th>Trabalho</th><th>O que usa como preditor</th><th>O que encontra</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Tahir 2016</td>
-            <td>complexidade objetiva (CC, WMC)</td>
-            <td>associação positiva, sem normalizar por tamanho</td>
-          </tr>
-          <tr>
-            <td>Spadini 2018</td>
-            <td>presença de test smell</td>
-            <td>associação com defeitos, controlando tamanho</td>
-          </tr>
-          <tr>
-            <td><strong>este estudo</strong></td>
-            <td><strong>percepção humana de code smell</strong></td>
-            <td><strong>sem associação, r &lt; 0,12, binding auditado</strong></td>
-          </tr>
+          <tr><td>Tahir 2016</td><td>complexidade calculada por métrica</td><td>associação positiva, sem normalizar por tamanho</td></tr>
+          <tr><td>Spadini 2018</td><td>presença de test smell</td><td>associação com defeitos, controlando tamanho</td></tr>
+          <tr><td><strong>este estudo</strong></td><td><strong>percepção humana de code smell</strong></td><td><strong>sem associação, com limite medido</strong></td></tr>
         </tbody>
       </table>
     </div>
-    <p>Percepção humana de code smell e complexidade métrica não são a mesma coisa — e essa
-    distinção é justamente a <em>lacuna de concordância</em> entre ferramentas e
-    desenvolvedores que a área discute.</p>
-
-    <h3>Os diferenciais de método</h3>
-    <ul>
-      <li><strong>Precisão do binding medida e auditada</strong> — 293 pares, 6 estratos.
-      Nenhum dos trabalhos citados reporta precisão da ligação teste→produção.</li>
-      <li><strong>Poder calculado antes</strong>, o que torna o nulo interpretável.</li>
-      <li><strong>Ground truth de percepção profissional</strong> — 14.739 revisões, contra
-      métricas calculadas ou heurísticas de defeito.</li>
-      <li><strong>Diversidade</strong> — 451 repositórios, contra 5 e 10 dos trabalhos citados.</li>
-      <li><strong>Rastro completo</strong> — 104 testes registrados, inclusive os que não deram
-      em nada.</li>
-    </ul>
+    <p class="note"><strong>O que prediz test smell parece ser tamanho e complexidade do
+    código — não a percepção de que o código está ruim.</strong> Percepção humana e
+    complexidade métrica não são a mesma coisa, e a distância entre as duas é um problema
+    reconhecido na área.</p>
   </section>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">07</span><h2>Limitações, sem maquiagem</h2></div>
+    <div class="sec-head"><span class="num">07</span><h2>O que há de novo, e o que isso vale</h2></div>
+    <p>Considerando o alvo de veículo com classificação A ou B, vale separar o que é
+    contribuição real do que é apenas trabalho feito.</p>
+
+    <h3>Contribuições que nenhum dos trabalhos encontrados tem</h3>
     <ul>
-      <li><strong>O nulo é sobre percepção, não sobre defeito.</strong> Medimos a opinião de
-      desenvolvedores sobre design, não qualidade observada. Precisa estar no título ou no
-      resumo.</li>
-      <li><strong>Cobertura de 37,5%</strong> das amostras disponíveis. Os 62,5% restantes
-      misturam classe genuinamente sem teste e falha do método de ligação.</li>
-      <li><strong>Recall do binding não foi medido</strong> — só a precisão.</li>
-      <li><strong>A auditoria dos 293 pares é automatizada</strong>, não humana. Uma
-      conferência de ~30 pares (cerca de uma hora) produziria a taxa de concordância.</li>
-      <li><strong>104 testes num espaço de ~200 combinações.</strong> O artigo tem que declarar
-      regime exploratório.</li>
-      <li><strong>O concorrente direto é APSEC C com 20 citações.</strong> Confrontá-lo sozinho
-      não sustenta uma submissão forte — o que sustenta é o pacote.</li>
+      <li><strong>Precisão da ligação teste→produção medida e auditada.</strong> Os trabalhos
+      citados usam convenção de nome ou grafo de chamadas e não reportam quanto isso acerta.
+      Nós medimos: 94,2% no binding conservador, e mostramos que uma variante comum cai para
+      10,1% dependendo da afirmação que se faz.</li>
+      <li><strong>Percepção profissional como preditor</strong>, em vez de métrica calculada.
+      O pareamento MLCQ × test smells parece inédito.</li>
+      <li><strong>Poder calculado antes da análise</strong>, o que transforma um nulo em
+      limite quantificado.</li>
+      <li><strong>Escala de diversidade</strong> — 451 repositórios, contra 5 e 10 dos
+      trabalhos citados.</li>
     </ul>
-    <p class="note warn">Não recomendo rodar mais experimentos. As três operacionalizações já
-    convergiram, e cada teste adicional piora o problema de comparações múltiplas sem mudar a
-    conclusão. O que falta não é dado — é posicionamento.</p>
+
+    <h3>Avaliação honesta quanto ao alvo A/B</h3>
+    <p>Como <em>artigo de resultado nulo</em> sobre test smell e code smell, a barra A/B é
+    difícil: nulos são publicáveis, mas raramente sozinhos, e o trabalho que contradizemos
+    mais diretamente é de veículo C com baixa citação — derrubá-lo não é feito grande.</p>
+    <p>O que sustenta A/B é deslocar o eixo: <strong>o artigo é sobre validade de medição em
+    estudos de test smell</strong>, e o nulo é a demonstração. As três contribuições de método
+    acima — ligação auditada, construto que muda a precisão em 85 pontos, e rótulo circular no
+    conjunto de dados mais usado da área — são problemas que afetam trabalhos já publicados, e
+    é isso que um veículo A/B costuma valorizar mais que mais um resultado de correlação.</p>
+    <p>Nessa moldura, o nulo deixa de ser o produto e vira a evidência: mostramos que,
+    corrigindo o que os outros não corrigem, a associação some.</p>
   </section>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">08</span><h2>Perguntas para o senhor</h2></div>
-    <div class="q">
-      <ol>
-        <li>O conjunto — nulo limitado, confundidor medido, binding auditado, rótulo circular
-        documentado — sustenta um artigo, ou é material de seção de dataset para um trabalho
-        maior?</li>
-        <li>A tese sugerida (percepção ≠ complexidade) é o enquadramento certo, ou o senhor vê
-        ângulo melhor no material?</li>
-        <li>Qual veículo faz sentido mirar? Isso decide o nível de rigor exigido na revisão de
-        literatura, que hoje é um levantamento dirigido, não sistemático.</li>
-        <li>Vale investir nas duas medições que faltam — conferência humana da auditoria e
-        recall do binding — antes ou depois de decidir sobre a escrita?</li>
-      </ol>
-    </div>
+    <div class="sec-head"><span class="num">08</span><h2>Limitações</h2></div>
+    <ul>
+      <li><strong>O resultado é sobre percepção, não sobre defeito.</strong> O MLCQ registra o
+      que desenvolvedores acham do design, não falhas observadas. O artigo precisa dizer isso
+      no título ou no resumo.</li>
+      <li><strong>Cobertura de 37,5%.</strong> Conseguimos identificar teste para 1.611 das
+      4.300 amostras utilizáveis. As restantes misturam classes genuinamente sem teste e falhas
+      do método de ligação — o dado separa os dois casos até onde é possível separar.</li>
+      <li><strong>Mediu-se a precisão, não a cobertura real.</strong> Sabemos que fração das
+      ligações feitas está correta; não sabemos que fração das ligações verdadeiras
+      perdemos.</li>
+      <li><strong>A auditoria dos 293 pares foi automatizada</strong>, não feita por humano.
+      Uma conferência manual de cerca de 30 pares produziria uma taxa de concordância
+      reportável — é trabalho de aproximadamente uma hora.</li>
+      <li><strong>104 testes estatísticos foram executados</strong> num espaço de cerca de 200
+      combinações possíveis. Todos estão registrados, inclusive os que não deram em nada, e o
+      artigo precisa declarar regime exploratório.</li>
+      <li><strong>O levantamento de literatura é dirigido</strong>, não sistemático. Para
+      submissão A/B, uma revisão com protocolo é trabalho à parte.</li>
+    </ul>
+    <p class="note warn"><strong>Não recomendo rodar mais experimentos.</strong> As três
+    operacionalizações já convergiram, e cada teste adicional agrava o problema de comparações
+    múltiplas sem mudar a conclusão. O que falta não é dado — é posicionamento e revisão de
+    literatura.</p>
   </section>
 
   <section class="sec">
     <div class="sec-head"><span class="num">09</span><h2>Reprodutibilidade</h2></div>
-    <p>Todo o material está versionado em repositório público, com histórico por etapa.
-    Cada etapa tem um verificador que reapura os números do seu próprio README e falha se
-    algum divergir — incluindo as tabelas de poder estatístico e os resultados de precisão
-    da auditoria.</p>
-    <p>Dois documentos separados do estudo registram o levantamento de literatura e esta
-    proposta de rumo, para que a opinião não se misture com o que foi medido:
-    <code>artigo/trabalhos-relacionados.md</code> e <code>artigo/proposta-de-abordagem.md</code>.</p>
+    <p>Todo o material está versionado em repositório público, organizado por etapa. Cada
+    etapa traz um verificador que reapura os números da sua própria documentação e falha se
+    algum divergir — incluindo as tabelas de poder estatístico e os resultados da auditoria de
+    precisão.</p>
+    <p>As cinco análises da etapa 3 têm pasta própria, com o código que as produziu, os dados
+    de saída e um documento explicando a pergunta, o resultado e a interpretação de cada uma.
+    O levantamento de literatura e a proposta de enquadramento ficam em arquivos separados do
+    estudo, para que opinião não se misture com o que foi medido.</p>
   </section>
 
 </div>
