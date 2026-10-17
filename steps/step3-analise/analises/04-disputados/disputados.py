@@ -8,10 +8,15 @@ alguem ja havia marcado como positiva. Por isso "alguem marcou > none" e quase u
 de "esta amostra foi ao crosscheck", e o numero de revisores e consequencia do rotulo, nao
 evidencia independente dele.
 
-Os dois grupos aqui passaram pelo mesmo funil:
+Os dois grupos aqui passaram pelo mesmo funil (arquivo classificado pelo conjunto dos seus
+smells, variaveis.grupo_arquivo):
 
-  positivo_confiavel   alguem sinalizou E a maioria confirmou
-  disputado            alguem sinalizou E a maioria NAO confirmou
+  confirmado     algum smell do arquivo foi sinalizado E a maioria confirmou
+  so_disputado   algum smell foi sinalizado, e NENHUM a maioria confirmou
+
+Ate 17/10/2026 a analise exigia estrato unico por arquivo. Com a unidade de rotulo
+corrigida para (amostra, smell), quase todo arquivo reune estratos diferentes; a regra por
+conjunto foi fixada antes de rodar a analise com ela.
 
 Os dois foram sinalizados. Os dois foram ao crosscheck. O roteamento e o mesmo, entao a
 diferenca entre eles nao pode ser explicada por ele - e o que sobra e o veredito do
@@ -21,8 +26,8 @@ duvidosos.
 E a comparacao menos circular que este dataset permite. Se houver relacao entre qualidade
 do teste e code smell, e aqui que ela tem a melhor chance de aparecer limpa.
 
-Contrapartida: o N e pequeno (42 contra 160 no ramo deterministico), entao so um efeito
-grande seria detectavel. O script imprime o efeito minimo detectavel junto do resultado,
+Contrapartida: o grupo so_disputado e pequeno, entao so um efeito moderado seria
+detectavel. O script imprime o efeito minimo detectavel junto do resultado,
 para que um nulo nao seja lido como ausencia quando for falta de poder.
 
 Uso:
@@ -38,7 +43,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__)))), "tools"))
 import comum as c
 import estat
-from variaveis import desfechos, estrato_unico
+from variaveis import desfechos, grupo_arquivo
 
 
 def delta_detectavel(n1, n2, alfa=0.05, poder=0.80):
@@ -53,8 +58,8 @@ def delta_detectavel(n1, n2, alfa=0.05, poder=0.80):
 
 
 def rodar(ramo, linhas, saida):
-    conf = [r for r in linhas if estrato_unico(r) == "positivo_confiavel"]
-    disp = [r for r in linhas if estrato_unico(r) == "disputado"]
+    conf = [r for r in linhas if grupo_arquivo(r) == "confirmado"]
+    disp = [r for r in linhas if grupo_arquivo(r) == "so_disputado"]
 
     print("\n" + "=" * 88)
     print("RAMO %s" % ramo.upper())

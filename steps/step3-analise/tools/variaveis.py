@@ -67,6 +67,32 @@ def pares(linhas, chave_desfecho, rotulo):
     return x, y, tam
 
 
+def grupo_arquivo(linha):
+    """O grupo de evidencia do arquivo, pelo CONJUNTO dos estratos das suas unidades.
+
+    Cada amostra do MLCQ e julgada para os dois smells da sua granularidade (step 2,
+    secao 3), entao quase todo arquivo reune unidades de estratos diferentes - blob
+    negativo e data class confirmado, por exemplo. Exigir estrato unico deixava 14
+    confirmados e 2 negativos no ramo deterministico. A regra, fixada em 17/10/2026 antes
+    de rodar as analises 03 e 04 com ela:
+
+      confirmado     alguma unidade positivo_confiavel (a maioria marcou > none)
+      limpo          so unidades negativas (negativo_1_review ou negativo_confiavel)
+      so_disputado   alguma unidade disputada e nenhuma confirmada
+
+    O arquivo cujo unico positivo e de revisor solitario (positivo_1_review) fica fora: o
+    crosscheck nunca o confirmou nem desmentiu.
+    """
+    estratos = {e for e in (linha["estratos"] or "").split("|") if e}
+    if "positivo_confiavel" in estratos:
+        return "confirmado"
+    if estratos and estratos <= {"negativo_1_review", "negativo_confiavel"}:
+        return "limpo"
+    if "disputado" in estratos and "positivo_1_review" not in estratos:
+        return "so_disputado"
+    return None
+
+
 def estrato_unico(linha):
     """O estrato do arquivo, so quando ele e inequivoco.
 

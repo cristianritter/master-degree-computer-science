@@ -21,9 +21,9 @@ Ramo determinístico, 730 arquivos:
 
 | variável | zeros | mediana | p95 | máx | assimetria |
 |---|---:|---:|---:|---:|---:|
-| code smell agregado (`sev_media`) | 72,1% | 0,00 | 1,17 | 2,17 | 2,14 |
-| `blob` | 66,3% | 0,00 | 1,04 | 1,62 | 1,61 |
-| `feature envy` | 79,0% | 0,00 | 0,50 | 1,50 | 3,36 |
+| code smell agregado (`sev_media`) | 72,1% | 0,00 | 2,00 | 3,00 | 1,98 |
+| `blob` | 73,6% | 0,00 | 1,92 | 3,00 | 2,12 |
+| `feature envy` | 84,6% | 0,00 | 0,67 | 2,00 | 3,39 |
 | Assertion Roulette | 32,6% | 4 | 77 | 533 | 6,02 |
 | Lazy Test | 42,9% | 1 | 21 | **1.116** | **21,28** |
 | Exception Catching Throwing | 72,1% | 0 | 11 | 213 | 16,00 |
@@ -61,17 +61,36 @@ Três saídas, todas levadas adiante pela análise 01 em vez de escolhidas aqui:
 | | determinístico | ampliado |
 |---|---:|---:|
 | arquivos com teste `nome_divergente` | 53 (7,3%) | 254 (18,6%) |
-| `negativo_confiavel` | 72,6% | 72,4% |
-| `disputado` | 21,9% | 22,3% |
-| `positivo_confiavel` | 6,0% | 5,8% |
-| `negativo_1_review` | 0,4% | 0,7% |
+
+Cada arquivo reúne unidades (amostra, smell) de estratos diferentes, então a tabela abaixo
+conta **arquivos que contêm** cada estrato, e as porcentagens somam mais de 100%:
+
+| arquivos com ao menos uma unidade | determinístico | ampliado |
+|---|---:|---:|
+| `negativo_1_review` | 72,9% | 73,0% |
+| `negativo_confiavel` | 18,8% | 19,0% |
+| `positivo_confiavel` | 18,6% | 19,5% |
+| `disputado` | 15,1% | 14,4% |
+
+E os grupos de arquivo usados pelas análises 03 e 04 (`variaveis.grupo_arquivo`):
+
+| grupo | determinístico | ampliado |
+|---|---:|---:|
+| confirmado (algum smell com maioria > none) | 136 | 267 |
+| limpo (nenhum voto positivo) | 526 | 985 |
+| só disputado | 67 | 117 |
+| fora (único positivo de revisor solitário) | 1 | 0 |
 
 Análise com **Eager Test** ou **Lazy Test** tem que filtrar ou estratificar por
 `n_testes_nome_divergente`. General Fixture não é afetado e serve como controle (step 1,
 seção 5) — a análise 02 usa isso.
 
-A distribuição de estratos é praticamente idêntica nos dois ramos: mais uma evidência de
-que o binding não desloca o rótulo.
+A distribuição é praticamente idêntica nos dois ramos: mais uma evidência de que o binding
+não desloca o rótulo.
+
+> **Refeita em 17/10/2026** com a unidade de rótulo corrigida para (amostra, smell) (step 2,
+> seção 3). A versão anterior desta seção dava um estrato por arquivo, o que só era
+> possível porque a normalização misturava os dois smells de cada amostra.
 
 ## 4. Um defeito encontrado aqui e corrigido no step 2
 
@@ -93,4 +112,4 @@ Os máximos voltaram para dentro do possível — 12 e 13.
 | arquivo | conteúdo |
 |---|---|
 | `caracterizar.py` | a caracterização |
-| `dados/caracterizacao.csv` | 23 linhas: n, zeros, quartis, p95, máximo e assimetria por variável |
+| `dados/caracterizacao.csv` | 46 linhas, os dois ramos: n, zeros, quartis, p95, máximo e assimetria por variável |

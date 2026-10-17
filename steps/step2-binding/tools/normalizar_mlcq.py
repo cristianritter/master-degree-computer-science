@@ -1,7 +1,15 @@
-"""Normaliza a planilha do MLCQ em dois CSVs: uma revisao por linha, e uma amostra por linha.
+"""Normaliza a planilha do MLCQ em dois CSVs: uma revisao por linha, e uma unidade por linha.
 
     dados/mlcq_reviews.csv   14.739 linhas - 1 por revisao, nada agregado
-    dados/mlcq_samples.csv    4.770 linhas - 1 por amostra, com VARIAS colunas de rotulo
+    dados/mlcq_samples.csv    9.517 linhas - 1 por (amostra, smell), com VARIAS colunas de rotulo
+
+**A unidade de rotulo e (sample_id, smell), nao sample_id.** No MLCQ cada revisor julga a
+mesma amostra para dois smells de uma vez - blob e data class nas classes, feature envy e
+long method nas funcoes -, e cada julgamento vira uma linha, com milissegundos de diferenca.
+4.747 das 4.770 amostras tem os dois smells. Ate 17/10/2026 este script agrupava so por
+sample_id: misturava as severidades dos dois smells numa media so, pegava o smell da
+primeira linha como "o" smell da amostra e contava 1 revisor x 2 smells como "2
+revisores". O README do step 2 (secao 3) registra o defeito e os numeros corrigidos.
 
 A decisao central deste script e nao tomar uma decisao: o mlcq_samples.csv carrega
 sev_max, sev_media, sev_mediana e n_positivos lado a lado, e nenhuma delas e "o
@@ -10,16 +18,9 @@ soterrada dentro do dado.
 
 Isso importa porque a regra intuitiva - "se alguem marcou > none, a classe tem o smell" -
 e circular com o desenho amostral do MLCQ. O apendice (secao 2.2, fase 4) diz que as
-ultimas 5115 revisoes foram alocadas so para amostras ja marcadas > none. Logo o numero
-de revisores e consequencia do rotulo, e a regra do maximo recupera quase exatamente o
-critério de selecao do crosscheck:
-
-    2 revisores   3.511 amostras     0,0% positivas por "any > none"
-    6 revisores     702 amostras   100,0% positivas por "any > none"
-
-Pior: o crosscheck foi feito justamente para julgar aqueles flags, e a regra do maximo
-descarta o veredito dele. Com maioria, a prevalencia cai de 25,8% para 5,2%; em todo o
-MLCQ ha 19 amostras com positivo unanime. A coluna estrato torna isso explicito.
+ultimas revisoes foram alocadas so para amostras ja marcadas > none: o numero de
+revisores e consequencia do rotulo. A coluna estrato torna isso explicito, e
+conferir_dados.py --secao 3 mede o efeito.
 
 Uso:
     python normalizar_mlcq.py
@@ -81,20 +82,22 @@ def mediana(sevs):
 
 
 def estrato_de(n_reviews, n_positivos, maioria):
-    """Classifica a amostra pela forca da evidencia, nao por um limiar de severidade.
+    """Classifica a unidade (amostra, smell) pela forca da evidencia, nao por um limiar.
 
-    O desenho amostral do MLCQ produz tres populacoes bem diferentes, e trata-las como
-    uma so e o que faz a regra do maximo parecer defensavel:
+    O desenho amostral do MLCQ produz populacoes bem diferentes, e trata-las como uma so e
+    o que faz a regra do maximo parecer defensavel:
 
-      negativo_confiavel   2+ revisores, nenhum marcou > none. Sao 3.511 amostras, e o
-                           desenho as torna especialmente confiaveis: qualquer flag
-                           nelas teria escalado a amostra para o crosscheck. Negativo
-                           forte e raro em dataset de code smell - e um ativo.
+      negativo_confiavel   2+ revisores, nenhum marcou > none.
       positivo_confiavel   a maioria marcou > none.
-      disputado            alguem marcou > none, mas nao a maioria. Sao ~967 amostras, e
-                           e nelas que a regra do maximo e a da maioria discordam.
-                           Merecem estrato proprio: sao a "lacuna de concordancia".
-      negativo_1_review    unico revisor, negativo. 23 amostras, sem corroboracao.
+      disputado            alguem marcou > none, mas nao a maioria. E nelas que a regra
+                           do maximo e a da maioria discordam: a "lacuna de concordancia".
+      negativo_1_review    unico revisor, negativo. A maioria das unidades do MLCQ: pelo
+                           desenho amostral, um flag teria levado a unidade ao
+                           crosscheck, mas nenhum segundo revisor a corrobora.
+      positivo_1_review    unico revisor, positivo. Raro, pelo mesmo motivo.
+
+    Uma revisao conta uma vez por revisor: n_reviews e n_revisores coincidem na unidade
+    (conferir_dados.py exige), e por isso os limiares aqui podem usar n_reviews.
     """
     if n_reviews == 1:
         return "negativo_1_review" if n_positivos == 0 else "positivo_1_review"
@@ -107,11 +110,15 @@ def main():
     mapa = c.ler_mapa()
 
     reviews = []
+    # chave (sample_id, smell): cada revisor julga a amostra para dois smells, e misturar
+    # os dois numa unidade so foi o defeito corrigido em 17/10/2026 (docstring)
     por_amostra = collections.defaultdict(list)
     amostra_meta = {}
+    repetidas = []
 
     for r in carregar_planilha():
         sid = r["sample_id"]
+        unidade = (sid, r["smell"])
         sev = (r["severity"] or "").strip().lower()
         if sev not in c.RANK:
             sys.exit("severidade inesperada na planilha: %r (amostra %s)" % (sev, sid))
@@ -122,21 +129,30 @@ def main():
 
         reviews.append([r["id"], sid, r["reviewer_id"], r["smell"], sev, c.RANK[sev],
                         ts, int(cross)])
-        por_amostra[sid].append((c.RANK[sev], r["reviewer_id"], cross))
+        # Um julgamento por revisor por unidade. A planilha tem uma submissao em dobro
+        # (amostra 5715127, revisor 3, mesmas severidades, 16 ms de diferenca): contada
+        # duas vezes, viraria "2 revisores" concordando. mlcq_reviews.csv fica bruto.
+        if any(rid == r["reviewer_id"] for _, rid, _ in por_amostra[unidade]):
+            repetidas.append(str(r["id"]))
+        else:
+            por_amostra[unidade].append((c.RANK[sev], r["reviewer_id"], cross))
 
-        if sid not in amostra_meta:
-            amostra_meta[sid] = r
+        if unidade not in amostra_meta:
+            amostra_meta[unidade] = r
 
     n = c.escrever_csv(os.path.join(c.DADOS, "mlcq_reviews.csv"), CAB_REVIEWS,
                        sorted(reviews, key=lambda x: (x[1], x[0])))
     print("mlcq_reviews.csv        %6d linhas" % n)
+    print("  revisoes repetidas do mesmo revisor na mesma unidade, contadas uma vez: %d (%s)"
+          % (len(repetidas), ", ".join(repetidas)))
 
     linhas = []
     estratos = collections.Counter()
     status_repo = collections.Counter()
 
-    for sid, revs in por_amostra.items():
-        meta = amostra_meta[sid]
+    for unidade, revs in por_amostra.items():
+        sid = unidade[0]
+        meta = amostra_meta[unidade]
         sevs = [s for s, _, _ in revs]
         n_reviews = len(sevs)
         n_pos = sum(1 for s in sevs if s >= c.RANK["minor"])
@@ -178,7 +194,7 @@ def main():
         ])
 
     n = c.escrever_csv(os.path.join(c.DADOS, "mlcq_samples.csv"), CAB_SAMPLES,
-                       sorted(linhas, key=lambda x: x[0]))
+                       sorted(linhas, key=lambda x: (x[0], x[1])))
     print("mlcq_samples.csv        %6d linhas" % n)
 
     print("\nestratos (forca da evidencia dos revisores):")

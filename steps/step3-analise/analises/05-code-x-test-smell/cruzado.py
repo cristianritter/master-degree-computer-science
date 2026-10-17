@@ -16,8 +16,8 @@ Decisoes, todas fixadas antes de rodar esta versao:
 A previa nao filtrava nome_divergente. As 8 celulas de Eager/Lazy sem filtro rodam como
 sensibilidade, fora da familia: reproduzem a previa e mostram o quanto o filtro muda.
 
-Cada celula leva o r detectavel com 80% de poder para o seu N. Com N = 114, data class so
-enxerga r >= 0,26: um rho observado abaixo disso nao decide nada, e a tabela tem que dizer.
+Cada celula leva o r detectavel com 80% de poder para o seu N (0,134 a 0,163 no ramo
+deterministico): um rho observado abaixo disso nao decide nada, e a tabela tem que dizer.
 
 Uso:
     python cruzado.py

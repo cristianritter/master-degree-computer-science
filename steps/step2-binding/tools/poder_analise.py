@@ -113,7 +113,7 @@ def agregado(linhas, smells, alfa, poder):
     if not vals:
         return
     nz = sum(1 for v in vals if v > 0)
-    print("\n  agregado (severidade do smell avaliado, qualquer que seja):")
+    print("\n  agregado (maior severidade entre os smells avaliados no arquivo):")
     print("    N = %d | media %.3f | acima de zero %d (%.1f%%) | maximo %.2f"
           % (len(vals), sum(vals) / len(vals), nz, 100 * nz / len(vals), max(vals)))
     print("    r detectavel = %.3f" % r_detectavel(len(vals), alfa, poder))

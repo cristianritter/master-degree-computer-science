@@ -21,17 +21,19 @@ explica a pergunta, o resultado e a leitura. **Este arquivo é só o índice.**
 | # | pergunta | resposta | documento |
 |---|---|---|---|
 | **00** | que forma têm as variáveis, e que teste elas permitem? | paramétrico descartado; tamanho do teste é confundidor | [caracterização](analises/00-caracterizacao/) |
-| **01** | test smell correlaciona com code smell? | a associação aparente é **tamanho do teste**; isolando qualidade, r = 0,047 (IC até 0,120) | [correlação agregada](analises/01-correlacao-agregada/) |
+| **01** | test smell correlaciona com code smell? | a associação aparente é **tamanho do teste**; isolando qualidade, r = 0,050 (IC até 0,123) | [correlação agregada](analises/01-correlacao-agregada/) |
 | **02** | algum dos 13 smells se comporta diferente? | nenhum sobrevive ao FDR; Eager e Lazy, os melhores candidatos, são os mais próximos de zero | [por test smell](analises/02-por-test-smell/) |
-| **03** | classes com code smell confirmado têm testes piores? | não; o grupo negativo tem densidade ligeiramente maior | [extremos](analises/03-extremos/) |
+| **03** | classes com code smell confirmado têm testes piores? | em contagem sim, em densidade não: de novo o tamanho do teste | [extremos](analises/03-extremos/) |
 | **04** | entre as sinalizadas, o test smell prediz quais a maioria confirmou? | **inconclusiva** — poder insuficiente, não nulo | [disputados](analises/04-disputados/) |
-| **05** | algum code smell específico se associa a algum test smell específico? | nenhuma das 52 células sobrevive ao FDR nem alcança o r detectável | [code × test smell](analises/05-code-x-test-smell/) |
+| **05** | algum code smell específico se associa a algum test smell específico? | nenhuma das 52 células sobrevive ao FDR; duas candidatas acima do r detectável | [code × test smell](analises/05-code-x-test-smell/) |
 
 ### O que o conjunto diz
 
-Três operacionalizações independentes (01, 02, 03) deram nulo. A quarta (04) tem o melhor
-desenho e o pior poder, e não decide. A 05 subdivide a 02 por code smell e confirma que o
-nulo agregado não esconde um par forte.
+Três operacionalizações independentes (01, 02, 03) deram nulo no desfecho que isola
+qualidade de tamanho. Na 01 e na 03, os desfechos sensíveis a tamanho dão significância, e
+ela some com a normalização. A quarta (04) tem o melhor desenho e o pior poder, e não
+decide. A 05 subdivide a 02 por code smell: nenhuma célula sobrevive ao FDR, e as mais
+altas ficam em 0,12 a 0,16.
 
 O acúmulo importa: um nulo pode ser operacionalização infeliz; três nulos por caminhos
 diferentes apontam para o mesmo lugar. Com a precisão do binding medida (94,2%) e o poder
@@ -45,8 +47,10 @@ observado.
 ### O achado que não é nulo
 
 A análise 01 mediu um confundidor que vale por si: **contagem de test smell correlaciona
-0,554 com o tamanho do teste**, e code smell correlaciona 0,079–0,091 com o mesmo tamanho.
-Isso basta para produzir uma correlação espúria de 0,092 entre os dois.
+0,554 com o tamanho do teste**, e code smell correlaciona 0,078–0,090 com o mesmo tamanho.
+Isso basta para produzir uma correlação espúria de 0,094 entre os dois. A análise 03 mostra
+o mesmo mecanismo por outro caminho: confirmados e limpos se separam em contagem (delta
+0,138, p ajustado 0,020) e não em densidade.
 
 Estudos que contam ocorrências de test smell sem normalizar por tamanho estão medindo
 tamanho. É um resultado metodológico, e é reprodutível em qualquer dataset que use contagem
@@ -117,8 +121,20 @@ seção 12.0).
 | 99–104 | 18/09 | 04 — disputados | 6 | nenhum p < 0,05, e todos abaixo do detectável |
 | 105–156 | 04/10 | 05 — prévia, sem registro, sem filtro de `nome_divergente` | 52 | nenhum sobrevive ao FDR; levada à reunião de orientação |
 | 157–164 | 17/10 | 05 — versão registrada: as 8 células de Eager/Lazy com o filtro | 8 | nenhuma das 52 células da família sobrevive ao FDR (menor p ajustado 0,271) |
+| 165–204 | 17/10 | 01 — rodada 2, rótulo corrigido | 40 | 5 significâncias nominais, todas em desfecho sensível a tamanho; sem ajuste |
+| 205–256 | 17/10 | 02 — rodada 2 | 52 | nenhum sobrevive ao FDR (menor p ajustado 0,260) |
+| 257–262 | 17/10 | 03 — rodada 2, grupos por conjunto | 6 | bruto e distintos do determinístico sobrevivem ao FDR (0,020); densidade não |
+| 263–268 | 17/10 | 04 — rodada 2, grupos por conjunto | 6 | nenhum p < 0,05, todos abaixo do detectável |
+| 269–328 | 17/10 | 05 — rodada 2 (52 + 8 de sensibilidade) | 60 | nenhum sobrevive ao FDR (menor p ajustado 0,104); 2 células acima do r detectável |
 
-**164 testes rodados no total.** Os 40 da primeira análise saíram sem ajuste e estão
+**328 testes rodados no total**, 164 em cada rodada.
+
+> **Por que há duas rodadas.** Em 17/10/2026 encontramos um defeito na normalização do MLCQ
+> (step 2, seção 3): a unidade de rótulo era a amostra, e o certo é (amostra, smell). Todas
+> as análises foram refeitas sobre o rótulo corrigido, com as mesmas decisões, exceto o
+> agrupamento das análises 03 e 04, que a correção tornou impossível e foi redefinido antes
+> de rodar (`variaveis.grupo_arquivo`). Os READMEs das análises descrevem a rodada 2; os
+> testes da rodada 1 foram olhados e por isso continuam no total. Os 40 da primeira análise saíram sem ajuste e estão
 reportados assim; os seguintes já saem com p ajustado por Benjamini-Hochberg dentro de
 cada família. Quando a exploração fechar, o artigo reporta o total e declara o regime como
 exploratório — é o que o volume exige.
@@ -172,7 +188,10 @@ interpretação de qualquer resultado deste step:
 - **`sev_media` não é imune ao desenho amostral do MLCQ**: a média segue condicionada ao
   roteamento do crosscheck. A análise 04 é a única que neutraliza isso — e é a que não tem
   poder.
+- **O rótulo agregado é o maior `sev_media` entre os smells avaliados no arquivo.** Quase
+  todo arquivo tem dois smells julgados; o agregado é o percebido como mais grave.
 - **O MLCQ anota percepção de revisor**, não defeito observado. Um nulo aqui é sobre
   percepção de code smell, não sobre defeito.
 - **Recall do binding não foi medido.**
-- **A auditoria dos 293 pares é automatizada**, não humana.
+- **A auditoria dos 293 pares é automatizada**, não humana. O censo humano está em curso
+  (`steps/step2-binding/PROTOCOLO-AUDITORIA-HUMANA.md`).

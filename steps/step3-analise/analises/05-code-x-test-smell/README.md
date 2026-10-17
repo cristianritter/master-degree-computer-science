@@ -2,9 +2,9 @@
 
 **Pergunta.** Algum code smell específico se associa a algum test smell específico?
 
-**Resposta curta.** Não. Nenhuma das 52 células sobrevive ao FDR, e nenhuma alcança o
-efeito que o próprio N dela consegue detectar. Os dois pares mais altos, data class × Eager
-e Lazy Test, ficam em 0,20, abaixo dos 0,27 detectáveis com N = 105.
+**Resposta curta.** Nenhuma das 52 células sobrevive ao FDR (menor p ajustado 0,104).
+Duas passam do efeito que o próprio N detecta, feature envy × Verbose Test (0,149) e blob ×
+Duplicate Assert (0,162); ficam registradas como candidatas, não como achado.
 
 ```bash
 python cruzado.py --csv
@@ -44,57 +44,70 @@ rodam à parte, como sensibilidade, fora da família.
 
 ## Resultado
 
+> **Refeita em 17/10/2026** com a unidade de rótulo corrigida para (amostra, smell) (step 2,
+> seção 3). Na unidade antiga cada arquivo tinha, na prática, um smell avaliado, e o N de
+> data class era 114; agora blob e data class são julgados juntos em cada classe, e o N de
+> cada linha da grade subiu (306 a 429). O resultado mudou: a versão anterior dizia
+> "nenhuma célula alcança o r detectável", o que não vale mais.
+
 Ramo determinístico, 730 arquivos. **Nenhuma célula sobrevive ao FDR**; o menor p ajustado
-é 0,271. **Nenhum |rho| alcança o r detectável da sua célula.**
+é 0,104.
 
 As seis células com p nominal < 0,05:
 
 | code smell | test smell | N | rho | p | p ajustado | r detectável |
 |---|---|---:|---:|---:|---:|---:|
-| long method | Magic Number Test | 249 | 0,167 | 0,008 | 0,271 | 0,177 |
-| long method | Verbose Test | 249 | 0,162 | 0,010 | 0,271 | 0,177 |
-| data class | Lazy Test | 105 | 0,202 | 0,039 | 0,372 | 0,270 |
-| data class | Eager Test | 105 | 0,199 | 0,042 | 0,372 | 0,270 |
-| blob | Duplicate Assert | 195 | 0,153 | 0,032 | 0,372 | 0,199 |
-| long method | Assertion Roulette | 249 | 0,128 | 0,043 | 0,372 | 0,177 |
+| feature envy | Verbose Test | 426 | 0,149 | 0,002 | 0,104 | 0,135 |
+| blob | Duplicate Assert | 306 | 0,162 | 0,004 | 0,113 | 0,159 |
+| long method | Magic Number Test | 429 | 0,126 | 0,009 | 0,156 | 0,134 |
+| long method | Verbose Test | 429 | 0,121 | 0,012 | 0,160 | 0,134 |
+| data class | Eager Test | 291 | 0,131 | 0,025 | 0,262 | 0,163 |
+| data class | Lazy Test | 291 | 0,123 | 0,035 | 0,307 | 0,163 |
 
-Com 52 testes e α = 0,05, o acaso sozinho produziria ~2,6 significâncias nominais. Seis
-não é muito mais que isso, e nenhuma resiste ao ajuste.
+Com 52 testes e α = 0,05, o acaso sozinho produziria ~2,6 significâncias nominais. Seis é
+mais que isso, e nenhuma resiste ao ajuste.
 
 O N de cada code smell limita o que a linha enxerga:
 
 | code smell | N | r detectável |
 |---|---:|---:|
-| long method | 249 | 0,177 |
-| blob | 195 | 0,199 |
-| feature envy | 185 | 0,205 |
-| data class | 114 | 0,260 |
+| long method | 429 | 0,134 |
+| feature envy | 426 | 0,135 |
+| blob | 306 | 0,159 |
+| data class | 306 | 0,159 |
 
-Eager e Lazy Test perdem as linhas `nome_divergente` e ficam com N menor (data class: 105,
-r detectável 0,270).
+Eager e Lazy Test perdem as linhas `nome_divergente` e ficam com N menor (291 a 395, r
+detectável 0,140 a 0,163).
 
 ## O filtro quase não mudou nada
 
-| | sem filtro (prévia) | com filtro |
+| | sem filtro | com filtro |
 |---|---:|---:|
-| data class × Eager Test | 0,206 (N = 114) | 0,199 (N = 105) |
-| data class × Lazy Test | 0,209 (N = 114) | 0,202 (N = 105) |
+| data class × Eager Test | 0,127 (N = 306) | 0,131 (N = 291) |
+| data class × Lazy Test | 0,119 (N = 306) | 0,123 (N = 291) |
 
-Nas oito células a diferença fica abaixo de 0,02. A sensibilidade reproduz a prévia (0,21),
-o que confirma que a versão registrada é a mesma análise, com o filtro como única mudança.
+Nas oito células a diferença fica abaixo de 0,02.
+
+A prévia de 04/10 deu 0,21 nessas duas células, sem filtro. Ela foi rodada sobre o rótulo
+com defeito e não se reproduz mais: na unidade corrigida, as mesmas células sem filtro dão
+0,127 e 0,119.
 
 ## A leitura
 
-**Não dá para afirmar associação em nenhum par.** Os candidatos mais altos estão abaixo do
-efeito detectável, então a célula não distingue "não há relação" de "há uma relação menor
-que o desenho enxerga".
+**Não dá para afirmar associação em nenhum par.** Nenhuma célula sobrevive ao ajuste para
+52 comparações.
 
-**O que a grade acrescenta à análise 02:** o nulo agregado não esconde um par forte
-compensado por outros. Se existisse um code smell com relação clara com um test smell, ele
-apareceria aqui, e não aparece.
+**Duas células merecem registro, e só isso.** Feature envy × Verbose Test (0,149) e blob ×
+Duplicate Assert (0,162) passam do r detectável da sua linha, com p ajustado de 0,104 e
+0,113. Estar acima do detectável não é critério de significância: diz só que, se o efeito
+for desse tamanho, o desenho tem poder para vê-lo. Numa exploração com 52 células, são
+candidatas para um estudo confirmatório, não achados.
 
-**Para o artigo:** a grade só pode ser mostrada com o N e o r detectável ao lado, e sem
-destaque por p nominal. Sem isso, o 0,20 de data class lê como achado.
+**O que a grade acrescenta à análise 02:** o nulo agregado não esconde um par forte. As
+células mais altas ficam em 0,12 a 0,16, a mesma ordem do limite superior da análise 01.
+
+**Para o artigo:** a grade só pode ser mostrada com o N, o p ajustado e o r detectável ao
+lado, e sem destaque por p nominal.
 
 ---
 

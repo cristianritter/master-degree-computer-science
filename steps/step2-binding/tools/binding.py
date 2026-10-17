@@ -167,8 +167,10 @@ def main():
         motivos[motivo or "ligado"] += 1
 
         prod_linhas.append([
-            repo, prod, len(amostras),
-            "|".join(a["sample_id"] for a in amostras),
+            # uma amostra aparece uma vez por smell julgado (README, secao 3): contar amostras
+            # distintas, nao linhas do mlcq_samples.csv
+            repo, prod, len({a["sample_id"] for a in amostras}),
+            "|".join(sorted({a["sample_id"] for a in amostras})),
             "|".join(sorted({a["smell"] for a in amostras})),
             "|".join(sorted({a["estrato"] for a in amostras})),
             max(int(a["sev_max"]) for a in amostras),
@@ -189,17 +191,21 @@ def main():
 
     # Cadeia de atrito: o recorte que o artigo tem que declarar.
     ligados = {(r[0], r[1]) for r in pares}
-    print("\ncadeia de atrito (amostras do MLCQ):")
-    print("  %5d  no MLCQ" % len(samples))
+    print("\ncadeia de atrito:                     amostras   unidades (amostra, smell)")
     hash_ok = [s for s in samples if s["repo_status"] == "HASH_OK"]
-    print("  %5d  em repositorio disponivel (HASH_OK)" % len(hash_ok))
     com = [s for s in hash_ok if (s["github_repo"], s["path"]) in ligados]
-    print("  %5d  com classe de teste identificada  (%.1f%% dos disponiveis)"
-          % (len(com), 100 * len(com) / len(hash_ok)))
-    for estrato in ("positivo_confiavel", "disputado", "negativo_confiavel", "negativo_1_review"):
+    amostras = lambda linhas: len({s["sample_id"] for s in linhas})
+    for rotulo, sub in (("no MLCQ", samples), ("em repositorio disponivel (HASH_OK)", hash_ok),
+                        ("com classe de teste identificada", com)):
+        print("  %-36s %8d %10d" % (rotulo, amostras(sub), len(sub)))
+    print("  ligadas: %.1f%% das amostras e %.1f%% das unidades disponiveis"
+          % (100 * amostras(com) / amostras(hash_ok), 100 * len(com) / len(hash_ok)))
+    print("  unidades ligadas por estrato:")
+    for estrato in ("positivo_confiavel", "disputado", "negativo_confiavel",
+                    "negativo_1_review", "positivo_1_review"):
         a = sum(1 for s in com if s["estrato"] == estrato)
         b = sum(1 for s in hash_ok if s["estrato"] == estrato)
-        print("     %-20s %4d de %4d" % (estrato, a, b))
+        print("     %-20s %4d de %4d  (%.1f%%)" % (estrato, a, b, 100 * a / b if b else 0))
 
 
 if __name__ == "__main__":

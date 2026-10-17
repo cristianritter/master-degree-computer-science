@@ -117,26 +117,78 @@ def secao_3():
     samples = c.ler_csv(os.path.join(c.DADOS, "mlcq_samples.csv"))
     reviews = c.ler_csv(os.path.join(c.DADOS, "mlcq_reviews.csv"))
 
-    # 5. o corte de crosscheck do apendice separa exatamente as amostras ja positivas
-    pre = collections.defaultdict(list)
-    cross = collections.defaultdict(list)
-    for r in reviews:
-        (cross if r["is_crosscheck"] == "1" else pre)[r["sample_id"]].append(int(r["severidade_num"]))
-    com_cross = set(cross)
-    pre_pos = {s for s, v in pre.items() if max(v) >= c.RANK["minor"]}
-    exigir(com_cross <= pre_pos,
-           "toda amostra crosscheckada ja era positiva antes do corte",
+    # 6. a unidade de rotulo e (amostra, smell): cada revisor julga a amostra para dois
+    # smells, e agrupar so por sample_id misturava os dois (defeito corrigido em 17/10/2026)
+    unidades = collections.Counter((s["sample_id"], s["smell"]) for s in samples)
+    exigir(max(unidades.values()) == 1 and len(unidades) == len(samples),
+           "mlcq_samples.csv tem uma linha por (amostra, smell)",
+           "%d linhas, %d unidades" % (len(samples), len(unidades)))
+    exigir(all(s["n_reviews"] == s["n_revisores"] for s in samples),
+           "cada revisor conta uma vez por (amostra, smell)",
+           "%d unidades com n_reviews != n_revisores"
+           % sum(1 for s in samples if s["n_reviews"] != s["n_revisores"]))
+    # a planilha tem uma submissao em dobro (amostra 5715127, revisor 3, 2 smells); o
+    # normalizar_mlcq.py a conta uma vez. Qualquer outra repeticao e entrada nova.
+    por_revisor = collections.Counter((r["sample_id"], r["smell"], r["reviewer_id"])
+                                      for r in reviews)
+    repetidas = sum(v - 1 for v in por_revisor.values())
+    sem_unidade = sum(1 for r in reviews if (r["sample_id"], r["smell"]) not in unidades)
+    soma = sum(int(s["n_reviews"]) for s in samples)
+    exigir(sem_unidade == 0 and repetidas == 2 and soma == len(reviews) - repetidas,
+           "toda revisao cai numa unidade; so a submissao em dobro conhecida se repete",
+           "%d revisoes, %d repetidas, %d nas unidades, %d sem unidade"
+           % (len(reviews), repetidas, soma, sem_unidade))
+    print("       (%d amostras, %d com os dois smells da sua granularidade)"
+          % (len({s["sample_id"] for s in samples}),
+             sum(1 for v in collections.Counter(s["sample_id"] for s in samples).values()
+                 if v == 2)))
+
+    # 5. o corte de crosscheck do apendice separa exatamente as amostras ja positivas. A
+    # selecao do MLCQ foi por AMOSTRA: basta um dos dois smells sinalizado para a amostra
+    # inteira ir ao crosscheck, com os dois smells revisados de novo.
+    pre = collections.defaultdict(list)       # (amostra, smell) -> severidades antes do corte
+    cross = collections.defaultdict(list)     # (amostra, smell) -> severidades do crosscheck
+    vistos = set()
+    for r in sorted(reviews, key=lambda r: int(r["review_id"])):
+        k = (r["sample_id"], r["smell"], r["reviewer_id"])
+        if k in vistos:                        # a submissao em dobro, contada uma vez
+            continue
+        vistos.add(k)
+        (cross if r["is_crosscheck"] == "1" else pre)[k[:2]].append(int(r["severidade_num"]))
+    pos_pre = {u[0] for u, v in pre.items() if max(v) >= c.RANK["minor"]}
+    com_cross = {u[0] for u in cross}
+    exigir(com_cross <= pos_pre,
+           "toda amostra crosscheckada ja tinha algum smell positivo antes do corte",
            "%d crosscheckadas, %d delas ja positivas, %d nao"
-           % (len(com_cross), len(com_cross & pre_pos), len(com_cross - pre_pos)))
+           % (len(com_cross), len(com_cross & pos_pre), len(com_cross - pos_pre)))
     print("       (apendice do MLCQ, secao 2.2, fase 4 - corte em %s)" % c.CORTE_CROSSCHECK)
+    print("       amostras positivas antes do corte: %d, das quais %d foram ao crosscheck"
+          % (len(pos_pre), len(pos_pre & com_cross)))
+    um = sum(1 for v in pre.values() if len(v) == 1)
+    print("       unidades com um unico revisor antes do corte: %d de %d (%.1f%%)"
+          % (um, len(pre), 100 * um / len(pre)))
+
+    # Experimento natural: unidades com "none" no proprio smell que foram ao crosscheck so
+    # porque o OUTRO smell da amostra foi sinalizado. Mede quanto um "none" isolado se
+    # sustenta quando mais revisores olham - a confiabilidade do negativo_1_review.
+    carona = [u for u in cross if u in pre and max(pre[u]) == 0]
+    algum = sum(1 for u in carona if max(cross[u]) >= c.RANK["minor"])
+    vira = sum(1 for u in carona
+               if sum(1 for x in pre[u] + cross[u] if x > 0) > len(pre[u] + cross[u]) / 2)
+    print("\n  confiabilidade de um 'none' (unidades levadas ao crosscheck pelo outro smell):")
+    print("    unidades com 'none' antes do corte, revisadas de novo     %d" % len(carona))
+    print("      algum revisor novo sinalizou                            %d  (%.1f%%)"
+          % (algum, 100 * algum / len(carona)))
+    print("      a maioria final ficou positiva                          %d  (%.1f%%)"
+          % (vira, 100 * vira / len(carona)))
 
     # a tabela: positivos por regra, quebrados por numero de revisores
     print("\n  positivos por numero de revisores (a circularidade):")
     print("    %11s %9s %18s %13s %16s"
-          % ("revisores", "amostras", "positivas any>none", "por maioria", "severidade media"))
+          % ("revisores", "unidades", "positivas any>none", "por maioria", "severidade media"))
     por_n = collections.defaultdict(list)
     for s in samples:
-        por_n[int(s["n_reviews"])].append(s)
+        por_n[int(s["n_revisores"])].append(s)
     for n in sorted(por_n):
         g = por_n[n]
         if len(g) < 20:
@@ -171,7 +223,7 @@ def secao_3():
     anypos = [s for s in multi if s["pos_any"] == "1"]
     una = sum(1 for s in anypos if s["pos_unanime"] == "1")
     print("\n  concordancia entre revisores:")
-    print("    amostras com >=2 revisoes                          %d" % len(multi))
+    print("    unidades com >=2 revisores                         %d" % len(multi))
     print("    discordantes no binario                            %d  (%.1f%%)"
           % (disc, 100 * disc / len(multi)))
     print("    positivas por any>none                             %d" % len(anypos))
@@ -231,11 +283,11 @@ def secao_4():
     for m, v in collections.Counter(p["metodo"] for p in pares).most_common():
         so_este = {(p["github_repo"], p["production_path"]) for p in pares if p["metodo"] == m}
         amostras_m = sum(1 for s in hash_ok if (s["github_repo"], s["path"]) in so_este)
-        print("    %-22s %6d pares, %4d amostras alcancadas (%.1f%% dos HASH_OK)"
+        print("    %-22s %6d pares, %4d unidades alcancadas (%.1f%% dos HASH_OK)"
               % (m, v, amostras_m, 100 * amostras_m / len(hash_ok)))
 
     print("\n  cadeia de atrito (o recorte que o artigo declara):")
-    print("    %5d  amostras no MLCQ" % len(samples))
+    print("    %5d  unidades (amostra, smell) no MLCQ" % len(samples))
     print("    %5d  em repositorio disponivel (HASH_OK)" % len(hash_ok))
     print("    %5d  com classe de teste identificada  (%.1f%%)"
           % (len(com), 100 * len(com) / len(hash_ok)))
@@ -326,7 +378,7 @@ def tradeoff(pares, samples, hash_ok):
     ]
     print("\n  cobertura x concentracao (o trade-off da estrategia 3):")
     print("    %-30s %7s %8s %7s %7s %8s %7s"
-          % ("configuracao", "amostras", "% HASHOK", "pos_cf", "neg_cf", "pares", "t/prod"))
+          % ("configuracao", "unidades", "% HASHOK", "pos_cf", "neg_cf", "pares", "t/prod"))
     for nome, m, e, mx in cfgs:
         a, pc, nc, np_, razao = medir(m, e, mx)
         print("    %-30s %7d %7.1f%% %7d %7d %8d %7.1f"
@@ -470,15 +522,17 @@ def secao_12():
     esperado = {
         "analise_deterministico.csv": {
             "linhas": 730, "agregado": 730, "zeros": 72.1,
-            "por_smell": {"blob": 196, "data class": 114, "feature envy": 186,
-                          "long method": 251},
-            "positivos": {"any": 204, "any_major": 141, "maioria": 44, "unanime": 7},
+            "por_smell": {"blob": 307, "data class": 307, "feature envy": 429,
+                          "long method": 432},
+            "positivos": {"any": 204, "any_major": 141, "maioria": 137, "unanime": 91},
+            "um_so_smell": 3,
         },
         "analise_ampliado.csv": {
             "linhas": 1369, "agregado": 1369, "zeros": 72.0,
-            "por_smell": {"blob": 378, "data class": 277, "feature envy": 307,
-                          "long method": 443},
-            "positivos": {"any": 384, "any_major": 253, "maioria": 79, "unanime": 9},
+            "por_smell": {"blob": 648, "data class": 648, "feature envy": 729,
+                          "long method": 736},
+            "positivos": {"any": 384, "any_major": 253, "maioria": 267, "unanime": 167},
+            "um_so_smell": 9,
         },
     }
 
@@ -505,15 +559,16 @@ def secao_12():
         r_det = pa.r_detectavel(len(vals), 0.05, 0.80)
         print("    agregado N=%d  r detectavel=%.3f" % (len(vals), r_det))
 
-        # um arquivo tem quase sempre UM smell avaliado: e o que justifica a recomendacao 2
+        # Cada amostra do MLCQ e julgada para os dois smells da sua granularidade (secao
+        # 3), entao quase todo arquivo tem 2+ smells avaliados e o rotulo agregado e o
+        # MAIOR entre eles. Ate 17/10/2026 a normalizacao misturava os dois e este numero
+        # dizia o contrario (97,9% com um so smell).
         um_so = sum(1 for r in linhas_csv
                     if sum(1 for sm in smells
                            if (r[pa.coluna(sm, "sev_media")] or "").strip()) == 1)
-        print("    arquivos com exatamente 1 smell avaliado: %d de %d (%.1f%%)"
-              % (um_so, len(linhas_csv), 100 * um_so / len(linhas_csv)))
-        exigir(um_so / len(linhas_csv) > 0.95,
-               "quase todo arquivo de %s tem um unico smell avaliado" % arquivo,
-               "%.1f%%" % (100 * um_so / len(linhas_csv)))
+        exigir(um_so == esp["um_so_smell"],
+               "arquivos de %s com um unico smell avaliado" % arquivo,
+               "%d de %d (%.1f%%)" % (um_so, len(linhas_csv), 100 * um_so / len(linhas_csv)))
 
         for regra, pos_esp in esp["positivos"].items():
             pos = 0

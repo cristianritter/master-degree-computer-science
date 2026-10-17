@@ -195,26 +195,29 @@ code smell, pela regra de rótulo escolhida.
 
 A prevalência depende inteiramente da regra:
 
-| regra | positivos entre as 4.300 amostras disponíveis |
+| regra | positivos entre as 8.579 unidades (amostra, smell) disponíveis |
 |---|---|
-| `pos_any` (alguém marcou > none) | 26,0% |
-| `pos_any_major` (alguém marcou ≥ major) | 16,7% |
-| `pos_maioria` (a maioria marcou > none) | 5,2% |
-| `pos_unanime` (todos marcaram) | 0,4% |
+| `pos_any` (alguém marcou > none) | 17,4% |
+| `pos_any_major` (alguém marcou ≥ major) | 9,5% |
+| `pos_maioria` (a maioria marcou > none) | 9,5% |
+| `pos_unanime` (todos marcaram) | 5,7% |
+
+> Esta tabela foi refeita em 17/10/2026, com a unidade de rótulo corrigida para (amostra,
+> smell) (README, seção 3). A versão anterior misturava os dois smells de cada amostra.
 
 **Poder estatístico** é a capacidade de detectar um efeito que existe. Ele depende do N
 total *e* da prevalência: 1.000 casos com 2 positivos têm poder quase nulo, porque quase
-não há variação para explicar. É por isso que `pos_unanime` (17 positivos em todo o
-dataset) é inútil como variável principal — não por ser errada, mas por não ter poder.
+não há variação para explicar. Uma regra com poucos positivos é inútil como variável
+principal — não por ser errada, mas por não ter poder.
 
-Foi daí que veio o número que te chamou atenção: 759 amostras × 5,8% = **44 positivos**.
-Não é falha do binding. É a prevalência da regra da maioria (5,2% em todo o MLCQ) aplicada
-a um N de 759.
+Em 09/2026 este parágrafo explicava por que só havia 44 positivos por maioria no ramo
+determinístico. O número vinha da normalização com defeito (README, seção 3); na unidade
+correta são **137 arquivos positivos** por maioria, de 730.
 
 > **O número disso está medido.** No ramo determinístico (730 arquivos), dicotomizar por
-> maioria exige detectar d ≥ 0,44 — quase meio desvio-padrão — enquanto a severidade
-> contínua detecta r ≥ 0,104. A regra `unanime`, com 7 positivos, exigiria d ≥ 1,06.
-> A tabela completa está na seção 12 do `README.md`, e sai de `poder_analise.py`.
+> maioria exige detectar d ≥ 0,27, enquanto a severidade contínua detecta r ≥ 0,104. A
+> regra `unanime`, com 91 positivos, exige d ≥ 0,31. A tabela completa está na seção 12.7
+> do `README.md`, e sai de `poder_analise.py`.
 
 **A saída:** com `--rotulo sev_media` a questão não se coloca. Em vez de dicotomizar em
 positivo/negativo, cada arquivo entra com a severidade média das suas revisões (0 a 3),
@@ -233,14 +236,14 @@ teria mais smell que a população, e a relação medida seria artefato do bindi
 
 Os números dizem que isso não acontece:
 
-| | amostras | `pos_any` | `pos_maioria` |
+| | unidades (amostra, smell) | `pos_any` | `pos_maioria` |
 |---|---:|---:|---:|
-| todas as disponíveis (HASH_OK) | 4.300 | 26,0% | 5,2% |
-| só as ligadas pelas determinísticas | 759 | 27,1% | 5,8% |
-| ligadas com a estratégia 3 | 1.611 | 27,2% | 5,8% |
+| todas as disponíveis (HASH_OK) | 8.579 | 17,4% | 9,5% |
+| só as ligadas pelas determinísticas | 1.515 | 18,2% | 10,1% |
+| ligadas com a estratégia 3 | 3.213 | 18,1% | 10,2% |
 
 Ligar ou não ligar é praticamente independente do rótulo. A mesma verificação por estrato
-de evidência está no README (cobertura de 36,8% a 42,9% nos quatro estratos).
+de evidência está no README (cobertura de 36,8% a 40,3% nos estratos).
 
 **No artigo:** é uma tabela pequena que vale a pena incluir, porque antecipa a pergunta
 "sua amostra analisada é representativa das anotações do MLCQ?" com evidência em vez de
@@ -286,8 +289,9 @@ concordância, e sim o **kappa de Cohen**, que desconta a concordância que acon
 acaso. Interpretação convencional: κ > 0,80 quase perfeita, 0,60–0,80 substancial,
 0,40–0,60 moderada.
 
-Isso importa porque o próprio MLCQ vive esse problema: 97–99% dos positivos pela regra do
-máximo são *disputados* — outro revisor olhou a mesma classe e disse `none`. Julgar code
+Isso importa porque o próprio MLCQ vive esse problema: das unidades positivas pela regra do
+máximo com 2+ revisores, 67,3% são *disputadas* — outro revisor olhou o mesmo código para o
+mesmo smell e disse `none`. Julgar code
 smell é subjetivo, e o dataset registra isso.
 
 **Caminho barato aqui:** uma passada completa feita por mim, você confere todos os `?` e
@@ -313,11 +317,15 @@ Lista curta de afirmações tentadoras que este dataset não sustenta:
 3. **"X% das classes com code smell não têm teste."** O binding não distingue "sem teste"
    de "teste não encontrado" em todos os casos — só o `projeto_sem_classe_de_teste`
    (70 arquivos, 1,5%) é observação sobre o projeto.
-4. **"A classe tem o smell porque um revisor marcou."** Com 2 revisores, qualquer flag
-   escalava a amostra ao crosscheck; `any > none` é quase um marcador de crosscheck.
-5. **"Não anotado = negativo."** O MLCQ anotou amostras específicas para smells
-   específicos. Por isso as colunas `cs_*` têm três estados, e vazio nunca vira 0.
-6. **"Eager Test e Lazy Test nas linhas de classe aninhada."** Caem 28× e 23× por defeito
+4. **"A classe tem o smell porque um revisor marcou."** Com um único revisor, qualquer
+   flag escalava a amostra ao crosscheck; `any > none` é quase um marcador de crosscheck.
+5. **"Cada amostra do MLCQ tem 2 revisores."** Cada revisor julga a amostra para dois
+   smells; as duas linhas são do mesmo revisor. 74% das unidades (amostra, smell) têm um
+   revisor só (README, seção 3).
+6. **"Não anotado = negativo."** O MLCQ julga cada amostra só para os dois smells da sua
+   granularidade: uma classe não diz nada sobre feature envy. Por isso as colunas `cs_*`
+   têm três estados, e vazio nunca vira 0.
+7. **"Eager Test e Lazy Test nas linhas de classe aninhada."** Caem 28× e 23× por defeito
    do `jnose-core`. Filtrar ou estratificar por `n_testes_nome_divergente` é obrigatório.
 
 ---

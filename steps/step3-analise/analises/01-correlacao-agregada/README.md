@@ -4,13 +4,20 @@
 smell na classe de produção?
 
 **Resposta curta.** A associação aparente existe, mas é efeito do tamanho do teste. O
-desfecho que isola qualidade de tamanho dá nulo — e o nulo é informativo.
+desfecho que isola qualidade de tamanho dá nulo, e o nulo é informativo.
 
 ```bash
 python explorar.py --por-smell --csv
 ```
 
 Spearman sobre postos, IC95% por z de Fisher, rótulo `sev_media` contínuo.
+
+> **Refeita em 17/10/2026** com a unidade de rótulo corrigida para (amostra, smell) (step 2,
+> seção 3). O rótulo agregado do arquivo passou a ser **o maior `sev_media` entre os smells
+> avaliados nele**: quase todo arquivo tem dois smells julgados (blob e data class numa
+> classe, por exemplo), então o agregado é o smell percebido como mais grave. As conclusões
+> não mudaram; os números mudaram na terceira casa. A versão anterior está no histórico do
+> git.
 
 ---
 
@@ -20,17 +27,17 @@ Ramo determinístico, 730 arquivos, code smell agregado:
 
 | desfecho | N | rho | p | IC95% | rho com o tamanho do teste |
 |---|---:|---:|---:|---|---:|
-| `bruto` (soma das ocorrências) | 730 | 0,092 | 0,012 | [0,020, 0,164] | **0,554** |
-| `densidade` (soma / métodos) | 726 | 0,047 | 0,204 | [−0,026, 0,120] | −0,077 |
-| `distintos` (quantos dos 13) | 730 | 0,084 | 0,024 | [0,011, 0,155] | **0,433** |
+| `bruto` (soma das ocorrências) | 730 | 0,094 | 0,011 | [0,022, 0,166] | **0,554** |
+| `densidade` (soma / métodos) | 726 | 0,050 | 0,175 | [−0,022, 0,123] | −0,077 |
+| `distintos` (quantos dos 13) | 730 | 0,084 | 0,022 | [0,012, 0,156] | **0,433** |
 
 | controlando `n_metodos_teste` | N | rho parcial | p |
 |---|---:|---:|---:|
-| `bruto` | 730 | 0,058 | 0,115 |
-| `distintos` | 730 | 0,055 | 0,140 |
+| `bruto` | 730 | 0,062 | 0,096 |
+| `distintos` | 730 | 0,056 | 0,129 |
 
 Os dois desfechos que dependem de tamanho dão significância nominal; o normalizado não dá.
-Sob controle explícito de tamanho, os dois caem para ~0,056 e perdem a significância.
+Sob controle explícito de tamanho, os dois caem para ~0,06 e perdem a significância.
 
 ## O mecanismo, medido
 
@@ -39,11 +46,11 @@ A confusão não é hipótese — as três pernas do triângulo estão medidas:
 | par | rho |
 |---|---:|
 | test smell bruto × tamanho do teste | 0,554 |
-| code smell × tamanho do teste (`n_metodos_teste`) | 0,079 (p = 0,032) |
-| code smell × tamanho do teste (`loc_teste`) | 0,091 (p = 0,014) |
+| code smell × tamanho do teste (`n_metodos_teste`) | 0,078 (p = 0,035) |
+| code smell × tamanho do teste (`loc_teste`) | 0,090 (p = 0,015) |
 
 Classe com mais code smell tende a ter teste maior; teste maior tem mais ocorrências de
-tudo. O produto das duas relações gera a correlação bruta de 0,092 sem que exista relação
+tudo. O produto das duas relações gera a correlação bruta de 0,094 sem que exista relação
 com *qualidade* do teste.
 
 **Se a análise tivesse parado no desfecho bruto, o artigo reportaria uma correlação
@@ -53,9 +60,9 @@ positiva significativa que é artefato.**
 
 | desfecho | N | rho | p |
 |---|---:|---:|---:|
-| `bruto` | 1.369 | 0,015 | 0,568 |
-| `densidade` | 1.365 | 0,003 | 0,915 |
-| `distintos` | 1.369 | 0,001 | 0,973 |
+| `bruto` | 1.369 | 0,012 | 0,659 |
+| `densidade` | 1.365 | 0,001 | 0,959 |
+| `distintos` | 1.369 | −0,003 | 0,913 |
 
 Tudo em zero, como esperado: com 10,1% de precisão para o construto "o teste testa esta
 classe", a atenuação por erro de medida leva qualquer relação verdadeira para perto de
@@ -63,26 +70,26 @@ zero. Ele **não contradiz** o determinístico — não tem como discordar dele.
 
 ## Por code smell individual
 
-**Determinístico.** Só `blob`/`bruto` alcança p < 0,05, e a densidade do mesmo smell é
-−0,005:
+**Determinístico.** Três células alcançam p < 0,05, todas em desfecho sensível a tamanho,
+e a densidade do mesmo smell fica perto de zero:
 
 | smell | N | bruto | densidade | distintos |
 |---|---:|---:|---:|---:|
-| blob | 196 | **0,148 (p=0,038)** | −0,005 (p=0,948) | 0,100 (p=0,163) |
-| data class | 114 | 0,124 (p=0,189) | 0,096 (p=0,313) | 0,174 (p=0,063) |
-| feature envy | 186 | 0,069 (p=0,351) | 0,070 (p=0,343) | 0,094 (p=0,201) |
-| long method | 251 | 0,117 (p=0,063) | 0,082 (p=0,199) | 0,088 (p=0,167) |
+| blob | 307 | **0,140 (p=0,014)** | 0,019 (p=0,745) | **0,113 (p=0,047)** |
+| data class | 307 | 0,063 (p=0,273) | 0,012 (p=0,836) | 0,087 (p=0,129) |
+| feature envy | 429 | 0,028 (p=0,560) | 0,040 (p=0,408) | 0,062 (p=0,198) |
+| long method | 432 | **0,101 (p=0,035)** | 0,053 (p=0,273) | 0,078 (p=0,105) |
 
-**Ampliado.** `blob`/`distintos` dá rho 0,121 (p = 0,018) — mesmo padrão: rho com tamanho
-0,560, e a densidade do mesmo par dá −0,058 (p = 0,259).
+**Ampliado.** Nenhuma célula alcança p < 0,05; a maior é feature envy em densidade, 0,066
+(p = 0,074).
 
-**As quatro significâncias nominais desta análise estão em desfecho sensível a tamanho, e
-as quatro somem quando o tamanho é normalizado ou controlado.**
+**As cinco significâncias nominais desta análise estão em desfecho sensível a tamanho, e
+as cinco somem quando o tamanho é normalizado.**
 
 ## O que dá para afirmar
 
-**Não dá para afirmar que existe relação.** O desfecho que isola qualidade dá rho = 0,047
-com IC [−0,026, 0,120], que inclui o zero.
+**Não dá para afirmar que existe relação.** O desfecho que isola qualidade dá rho = 0,050
+com IC [−0,022, 0,123], que inclui o zero.
 
 **Dá para afirmar que, se existe, é pequena** — e isso vem do step 2:
 

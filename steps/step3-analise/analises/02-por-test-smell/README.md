@@ -31,17 +31,21 @@ determinístico, contra o code smell agregado. O ajuste para comparações múlt
 
 ## Resultado
 
-**Nenhum sobrevive à correção FDR.** O menor p ajustado é 0,283.
+> **Refeita em 17/10/2026** com a unidade de rótulo corrigida (step 2, seção 3). A
+> conclusão não mudou; a versão anterior está no histórico do git.
 
-Os cinco que alcançam significância nominal:
+**Nenhum sobrevive à correção FDR.** O menor p ajustado é 0,260.
 
-| test smell | desfecho | rho | p | p ajustado |
-|---|---|---:|---:|---:|
-| Magic Number Test | bruto | 0,087 | 0,019 | 0,283 |
-| Assertion Roulette | bruto | 0,078 | 0,035 | 0,283 |
-| Verbose Test | bruto | 0,077 | 0,037 | 0,283 |
-| Magic Number Test | densidade | 0,074 | 0,046 | 0,283 |
-| Magic Number Test | bruto, filtrado | 0,085 | 0,027 | 0,380 |
+Os seis que alcançam significância nominal:
+
+| test smell | desfecho | N | rho | p | p ajustado |
+|---|---|---:|---:|---:|---:|
+| Magic Number Test | bruto | 730 | 0,086 | 0,020 | 0,260 |
+| Assertion Roulette | bruto | 730 | 0,081 | 0,029 | 0,260 |
+| Verbose Test | bruto | 730 | 0,078 | 0,035 | 0,260 |
+| Magic Number Test | densidade | 726 | 0,073 | 0,049 | 0,260 |
+| Magic Number Test | bruto, filtrado | 677 | 0,084 | 0,029 | 0,391 |
+| Assertion Roulette | bruto, filtrado | 677 | 0,077 | 0,045 | 0,391 |
 
 ## O achado negativo com mais conteúdo
 
@@ -50,9 +54,9 @@ mais próximos de zero da tabela inteira:
 
 | smell | densidade, todas as linhas | sem `nome_divergente` |
 |---|---:|---:|
-| Eager Test | −0,020 (N=726) | −0,028 (N=677) |
+| Eager Test | −0,020 (N=726) | −0,027 (N=677) |
 | Lazy Test | 0,038 (N=726) | 0,031 (N=677) |
-| **General Fixture** (controle) | 0,008 (N=726) | 0,013 (N=677) |
+| **General Fixture** (controle) | 0,006 (N=726) | 0,012 (N=677) |
 
 Isso é mais informativo que um nulo genérico: se a hipótese fosse verdadeira, a relação
 teria de aparecer com mais força exatamente onde o instrumento enxerga a ligação
@@ -61,7 +65,7 @@ teste–produção. Aparece com menos.
 ## O controle do step 1 se comporta como previsto
 
 General Fixture não depende da classe de produção, então o filtro de `nome_divergente` não
-deveria mudá-lo — e não muda (0,008 → 0,013). É a validação de que o filtro faz o que o
+deveria mudá-lo — e não muda (0,006 → 0,012). É a validação de que o filtro faz o que o
 step 1 documentou, e não está removendo linhas por outro motivo.
 
 ---

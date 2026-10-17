@@ -49,7 +49,7 @@ import comum as c
 ROTULOS = {
     "any": ("pos_any", "alguem marcou > none (circular com o desenho amostral, ver README)"),
     "maioria": ("pos_maioria", "a maioria marcou > none"),
-    "unanime": ("pos_unanime", "todos marcaram > none (19 amostras em todo o MLCQ)"),
+    "unanime": ("pos_unanime", "todos marcaram > none (542 unidades em todo o MLCQ)"),
     "any_major": ("pos_any_major", "alguem marcou >= major"),
     "sev_media": ("sev_media", "severidade media como valor continuo (0-3), sem dicotomizar"),
 }
@@ -120,7 +120,7 @@ def main():
                          "do jnose-core; obrigatorio para analise com Eager/Lazy Test")
     ap.add_argument("--estratos", nargs="+",
                     default=["positivo_confiavel", "negativo_confiavel", "disputado",
-                             "negativo_1_review"],
+                             "negativo_1_review", "positivo_1_review"],
                     help="estratos de evidencia dos revisores a incluir")
     ap.add_argument("--saida", default="analise_classe.csv",
                     help="nome do CSV em dados/; gerar_analises.py usa os dois oficiais")
@@ -188,7 +188,7 @@ def main():
         n_metodos = sum(int(t["n_metodos"]) for t in ts)
 
         linha = [chave[0], chave[1], "|".join(sorted({a["estrato"] for a in amostras})),
-                 len(amostras)]
+                 len({a["sample_id"] for a in amostras})]
         for sm in smells_ordenados:
             dela = [a for a in amostras if a["smell"] == sm]
             if not dela:

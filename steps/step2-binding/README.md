@@ -16,6 +16,7 @@ Saída: `dados/`
 |---|---|
 | Revisões do MLCQ | 14.739 |
 | Amostras do MLCQ | 4.770 |
+| Unidades de rótulo (amostra, smell) | 9.517 |
 | Amostras em repositório disponível (`HASH_OK`) | 4.300 |
 | Arquivos de produção anotados distintos | 4.559 |
 | Classes de teste normalizadas | 107.535 |
@@ -51,7 +52,9 @@ exceção é `refs_producao.py`, que clona os espelhos e reusa duas funções do
 
 Nada agregado. Existe para que a agregação seja auditável e refazível.
 
-### `dados/mlcq_samples.csv` — 4.770 linhas, 1 por amostra
+### `dados/mlcq_samples.csv` — 9.517 linhas, 1 por (amostra, smell)
+
+Cada revisor do MLCQ julga a amostra para dois smells; a unidade de rótulo é o par (seção 3).
 
 Carrega **várias colunas de rótulo lado a lado** — `sev_max`, `sev_media`, `sev_mediana`,
 `pos_any`, `pos_maioria`, `pos_unanime`, `pos_any_major` — e nenhuma delas é "o" rótulo.
@@ -103,6 +106,30 @@ o step 1 continua sendo a fonte do código quando ele for necessário. 109 MB.
 
 ## 3. O rótulo do MLCQ é circular com o desenho amostral
 
+### A unidade de rótulo é (amostra, smell)
+
+No MLCQ, cada revisor julga a mesma amostra para **dois smells de uma vez**: blob e data
+class nas classes, feature envy e long method nas funções. Cada julgamento vira uma linha
+da planilha, as duas com milissegundos de diferença. 4.747 das 4.770 amostras têm os dois
+smells, e são **9.517 unidades (amostra, smell)**, sobre as quais as 14.739 revisões se
+distribuem.
+
+> **Esta seção foi refeita em 17/10/2026.** Até então o `normalizar_mlcq.py` agrupava só
+> por `sample_id`: misturava as severidades dos dois smells numa média só, pegava o smell
+> da primeira linha como "o" smell da amostra e contava 1 revisor × 2 smells como "2
+> revisores". Exemplo: a amostra 3715636 saiu como data class "disputada", com
+> severidades `critical|critical|none|none`; na verdade data class foi unânime em
+> `critical` e blob unânime em `none`. Os números antigos desta seção (3.511 amostras "com
+> 2 revisores", 247 positivos confiáveis, 19 unânimes, 3.515 negativos confiáveis) estavam
+> errados, e o relatório de 18/09 e o documento da reunião de 04/10 os repetem. O
+> `conferir_dados.py --secao 3` passou a exigir uma linha por unidade.
+>
+> A correção revelou também uma submissão em dobro na planilha: o revisor 3 julgou a
+> amostra 5715127 duas vezes, com 16 ms de diferença e as mesmas severidades (revisões 7912
+> e 7914). Cada revisor conta uma vez por unidade; o `mlcq_reviews.csv` fica bruto.
+
+### O roteamento do crosscheck
+
 A regra intuitiva é "se algum revisor marcou severidade > `none`, a classe tem o smell".
 Ela **não é defensável neste dataset**, e o motivo está no apêndice do próprio MLCQ
 (`enrollment/MadeyskiLewowskiMLCQAppendix.pdf`, seção 2.2, fase 4):
@@ -112,59 +139,85 @@ Ela **não é defensável neste dataset**, e o motivo está no apêndice do pró
 > Samples selected from crosscheck were those that had only 1 review or 2 reviews with
 > different severities.
 
-Revisores extras foram alocados **só para amostras que alguém já havia marcado como
-positiva**. O número de revisores é consequência do rótulo, não evidência independente
-dele. Conferido nos dados: das 1.227 amostras com revisão a partir de 26.07.2019,
-**1.227 (100%) já eram positivas antes dessa data, e nenhuma era negativa.** O apêndice
-descreve exatamente o que os dados fazem — por isso `foi_crosscheck` é derivado por
-`review_timestamp`, não por contagem de revisores.
+Conferido nos dados, no nível em que a seleção foi feita, a **amostra**:
 
-O efeito:
+- antes do corte de 26/07/2019, **98,8%** das unidades tinham um único revisor;
+- **1.227 amostras** foram ao crosscheck, e **todas** já tinham algum smell marcado > `none`;
+- das 1.232 amostras positivas antes do corte, **1.227** foram ao crosscheck.
 
-| revisores | amostras | positivas por `any > none` | por maioria | severidade média |
+Revisores extras foram alocados só para o que alguém já havia sinalizado. O número de
+revisores é consequência do rótulo, não evidência independente dele:
+
+| revisores na unidade | unidades | positivas por `any > none` | por maioria | severidade média |
 |---:|---:|---:|---:|---:|
-| 2 | 3.511 | **0,0%** (1 de 3.511) | 0,0% | 0,000 |
-| 4 | 209 | 97,6% | 4,8% | 0,764 |
-| 6 | 702 | **100,0%** | 21,2% | 0,593 |
-| 8 | 262 | **100,0%** | 25,2% | 0,756 |
-| 10 | 43 | **100,0%** | 18,6% | 0,798 |
+| 1 | 7.051 | **0,0%** (3) | 0,0% | 0,001 |
+| 2 | 425 | 51,3% | 50,8% | 0,766 |
+| 3 | 1.417 | 69,4% | 31,3% | 0,594 |
+| 4 | 535 | 71,8% | 34,4% | 0,760 |
+| 5 | 89 | 71,9% | 58,4% | 0,816 |
 
-`any > none` não é critério de rotulagem: é quase literalmente um detector de "esta
-amostra foi para o crosscheck". As amostras de 2 revisões têm 0% de positivos porque, por
-construção, qualquer flag ali escalava a amostra para mais revisores.
+`any > none` é quase um detector de "esta unidade foi ao crosscheck". As unidades com um
+revisor têm 0,0% de positivos porque, por construção, qualquer flag ali levaria a amostra a
+mais revisores.
 
-E o crosscheck foi feito **justamente para julgar aqueles flags** — a regra do máximo
-descarta o veredito dele, que em geral não confirmou:
+E o crosscheck foi feito **justamente para julgar aqueles flags**. A regra do máximo
+descarta o veredito dele:
 
 | regra | blob | data class | feature envy | long method | geral |
 |---|---:|---:|---:|---:|---:|
-| `any > none` | 27,8% | 40,3% | 20,0% | 18,4% | **25,8%** |
-| maioria > none | 2,9% | 7,8% | 2,9% | 7,0% | **5,2%** |
-| unânime > none | 0,2% | 0,3% | 0,5% | 0,5% | **0,4%** |
+| `any > none` | 21,7% | 20,7% | 13,3% | 14,0% | **17,4%** |
+| `any ≥ major` | 12,3% | 13,3% | 5,8% | 7,0% | **9,5%** |
+| maioria > none | 10,9% | 12,9% | 2,8% | 11,4% | **9,4%** |
+| unânime > none | 6,6% | 6,8% | 0,9% | 8,6% | **5,7%** |
 
-Em todo o MLCQ existem **19 amostras com positivo unânime**. Dos positivos pela regra do
-máximo, 97–99% são disputados — outro revisor olhou a mesma classe e disse `none`.
+Das 1.649 unidades com 2 ou mais revisores e algum positivo, **1.110 (67,3%) são
+disputadas** (outro revisor olhou o mesmo código para o mesmo smell e disse `none`) e 539
+(32,7%) são unânimes.
 
-O risco disso não é "positivos demais": 25,8% é prevalência boa para estatística. O risco
-é **precisão baixa no rótulo**, que causa atenuação — a correlação medida é enviesada na
-direção de zero. Num artigo cujo achado pode ser um nulo, isso torna o nulo
-não-interpretável: não se distingue "não há relação" de "há relação, mas o rótulo é
-ruidoso demais".
+O risco disso não é "positivos demais". É **precisão baixa no rótulo**, que causa atenuação:
+a correlação medida é enviesada na direção de zero. Num artigo cujo achado pode ser um
+nulo, isso tornaria o nulo não-interpretável.
+
+### Quanto vale um "none" isolado
+
+Três quartos das unidades têm um único revisor, e quase todas são negativas. A pergunta que
+importa para elas é se um `none` isolado se sustenta quando outros olham.
+
+O desenho do MLCQ responde de graça. Como a seleção do crosscheck foi por amostra, **1.037
+unidades com `none` no próprio smell** foram revisadas de novo só porque o **outro** smell
+da amostra tinha sido sinalizado. Nelas:
+
+| | unidades | |
+|---|---:|---:|
+| revisadas de novo com `none` antes do corte | 1.037 | |
+| algum revisor novo sinalizou | 238 | 23,0% |
+| a maioria final ficou positiva | 23 | **2,2%** |
+
+Um `none` isolado coincide com o veredito final da maioria em **97,8%** desses casos. É
+evidência medida de que o estrato `negativo_1_review` é negativo de verdade, e não um resto
+sem informação.
+
+A ressalva: essas 1.037 não são uma amostra aleatória dos negativos isolados. Vêm de
+amostras em que o outro smell foi sinalizado, o que pode torná-las mais ambíguas que a média.
+Se for viés, é na direção conservadora: nas amostras sem sinal nenhum, a taxa tende a ser
+menor.
 
 ### A coluna `estrato`
 
-Em vez de escolher um limiar, `mlcq_samples.csv` classifica cada amostra pela força da
+Em vez de escolher um limiar, `mlcq_samples.csv` classifica cada unidade pela força da
 evidência:
 
-| estrato | amostras | o que é |
+| estrato | unidades | o que é |
 |---|---:|---|
-| `negativo_confiavel` | 3.515 | 2+ revisores, nenhum marcou > `none`. O desenho amostral os torna especialmente fortes: qualquer flag teria escalado a amostra. Negativo confiável é raro em dataset de code smell — é um ativo, não um resto. |
-| `disputado` | 985 | alguém marcou > `none`, mas não a maioria. É aqui que as duas regras discordam, e é a "lacuna de concordância" da literatura. |
-| `positivo_confiavel` | 247 | a maioria marcou > `none`. |
-| `negativo_1_review` | 23 | revisor único, negativo. Sem corroboração. |
+| `negativo_1_review` | 7.048 | revisor único, `none`. A maior parte do MLCQ. Pelo desenho, nenhum flag em nenhum dos dois smells da amostra; o "none" isolado se sustenta em 97,8% das revisões posteriores (acima). |
+| `positivo_confiavel` | 896 | a maioria marcou > `none`. |
+| `negativo_confiavel` | 817 | 2+ revisores, nenhum marcou > `none`. Quase sempre unidades que foram ao crosscheck por causa do outro smell da amostra. |
+| `disputado` | 753 | alguém marcou > `none`, mas não a maioria. É aqui que as duas regras discordam, e é a "lacuna de concordância" da literatura. |
+| `positivo_1_review` | 3 | revisor único, positivo. Amostras sinalizadas que não foram ao crosscheck. |
 
-A análise principal compara os extremos; o estrato disputado é uma RQ secundária de graça
-(*densidade de test smell prediz quais casos disputados a maioria confirmou?*).
+A análise principal usa a severidade média contínua; as comparações por estrato ficam para
+o step 3, que precisa considerar que `negativo_confiavel` não é um negativo "típico": a
+amostra dele foi sinalizada no outro smell.
 
 ---
 
@@ -252,27 +305,32 @@ o que motivou a estratégia 3.
 
 O recorte que o artigo tem que declarar:
 
-Com as três estratégias:
+Com as três estratégias, em amostras do MLCQ e nas unidades de rótulo (amostra, smell) da
+seção 3:
 
 ```
-4.770  amostras no MLCQ
-4.300  em repositório disponível (HASH_OK)
-1.611  com classe de teste identificada       (37,5% dos disponíveis)
-         positivo_confiavel     93 de  225   (41,3%)
-         disputado             345 de  891   (38,7%)
-         negativo_confiavel  1.164 de 3163   (36,8%)
-         negativo_1_review       9 de   21   (42,9%)
+                                        amostras   unidades
+no MLCQ                                    4.770      9.517
+em repositório disponível (HASH_OK)        4.300      8.579
+com classe de teste identificada           1.611      3.213   (37,5% dos disponíveis)
+
+unidades ligadas por estrato:
+         positivo_confiavel    327 de   812   (40,3%)
+         disputado             252 de   677   (37,2%)
+         negativo_confiavel    298 de   746   (39,9%)
+         negativo_1_review   2.334 de 6.341   (36,8%)
+         positivo_1_review       2 de     3
 ```
 
-Só com `caminho_exato` + `convencao` eram 759 amostras (17,7%) e 44 positivos confiáveis —
-o que não sustentava análise por smell. **O gargalo do artigo era a cobertura do binding,
-não a regra de rótulo**, e é por isso que a estratégia 3 foi construída antes de fechar a
-agregação. Decidir o rótulo primeiro significaria escolhê-lo para caber num N
-artificialmente pequeno.
-
-Note que a cobertura é **praticamente igual nos quatro estratos** (36,8% a 42,9%). Isso é
+Note que a cobertura é **praticamente igual nos estratos** (36,8% a 40,3%). Isso é
 tranquilizador: se o binding tivesse mais facilidade em achar teste para classe suja, ele
 introduziria viés direto na RQ.
+
+> **Por que a estratégia 3 foi construída.** Em 09/2026, só com `caminho_exato` +
+> `convencao`, o step contava 44 positivos confiáveis e concluiu que **o gargalo era a
+> cobertura do binding, não a regra de rótulo**. Esse número vinha da normalização com
+> defeito (seção 3); na unidade correta são 151 unidades positivas confiáveis só com as
+> determinísticas. A decisão foi tomada com o número errado, e está registrada como foi.
 
 ### `dados/production_files.csv` — 1 linha por arquivo de produção anotado
 
@@ -356,19 +414,22 @@ teste por arquivo**, o que é implausível como "teste dedicado". A coluna `t/pr
 o indicador de risco: quanto mais alta, mais provável que a ligação seja referência
 incidental.
 
-| configuração | amostras | % HASH_OK | pos_cf | neg_cf | pares | t/prod |
-|---|---:|---:|---:|---:|---:|---:|
-| só `caminho_exato` + `convencao` | 759 | 17,7% | 44 | 550 | 768 | 1,1 |
-| + refs, todas as evidências | 1.611 | 37,5% | 93 | 1.164 | 16.869 | 10,9 |
-| + refs, só `import_fqn` | 1.382 | 32,1% | 81 | 997 | 14.860 | 11,2 |
-| **+ refs, máx. 10 testes** | **1.422** | **33,1%** | **79** | **1.027** | **3.335** | **2,4** |
-| + refs, máx. 5 testes | 1.264 | 29,4% | 67 | 914 | 2.164 | 1,8 |
-| + refs, máx. 3 testes | 1.135 | 26,4% | 61 | 820 | 1.629 | 1,5 |
-| + refs `import_fqn`, máx. 3 | 1.010 | 23,5% | 55 | 733 | 1.376 | 1,4 |
-| + refs, máx. 1 teste | 713 | 16,6% | 37 | 524 | 691 | 1,0 |
+Contagens em unidades (amostra, smell); `pos_cf` e `neg_cf` são os estratos
+`positivo_confiavel` e `negativo_confiavel`.
 
-**`--max-testes 10` é o melhor ponto de troca**: custa 4,4 pontos de cobertura (37,5% →
-33,1%) e reduz os pares a um quinto, derrubando a concentração de 10,9 para 2,4 testes por
+| configuração | unidades | % HASH_OK | pos_cf | neg_cf | pares | t/prod |
+|---|---:|---:|---:|---:|---:|---:|
+| só `caminho_exato` + `convencao` | 1.515 | 17,7% | 151 | 140 | 768 | 1,1 |
+| + refs, todas as evidências | 3.213 | 37,5% | 327 | 298 | 16.869 | 10,9 |
+| + refs, só `import_fqn` | 2.758 | 32,1% | 279 | 257 | 14.860 | 11,2 |
+| **+ refs, máx. 10 testes** | **2.835** | **33,0%** | **293** | **262** | **3.335** | **2,4** |
+| + refs, máx. 5 testes | 2.519 | 29,4% | 253 | 234 | 2.164 | 1,8 |
+| + refs, máx. 3 testes | 2.265 | 26,4% | 230 | 208 | 1.629 | 1,5 |
+| + refs `import_fqn`, máx. 3 | 2.016 | 23,5% | 200 | 185 | 1.376 | 1,4 |
+| + refs, máx. 1 teste | 1.422 | 16,6% | 139 | 127 | 691 | 1,0 |
+
+**`--max-testes 10` é o melhor ponto de troca**: custa 4,5 pontos de cobertura (37,5% →
+33,0%) e reduz os pares a um quinto, derrubando a concentração de 10,9 para 2,4 testes por
 arquivo. Filtrar por `import_fqn` sozinho não ajuda — a concentração *sobe* (11,2), porque
 o import exato é justamente o mecanismo pelo qual um DTO é referenciado por todo mundo.
 
@@ -547,16 +608,16 @@ convenção prevê, ou não está. A ampliada dobra a cobertura ao custo de um c
 frouxo.
 
 **O que as duas têm em comum importa tanto quanto o que as separa:** o binding não desloca
-a prevalência de code smell. Entre as amostras `HASH_OK`, as ligadas só pelas
+a prevalência de code smell. Entre as unidades `HASH_OK`, as ligadas só pelas
 determinísticas e as ligadas com a estratégia 3:
 
-| | amostras | `pos_any` | `pos_maioria` | `pos_any_major` | `pos_unanime` |
+| | unidades | `pos_any` | `pos_maioria` | `pos_any_major` | `pos_unanime` |
 |---|---:|---:|---:|---:|---:|
-| HASH_OK (todas) | 4.300 | 1.116 (26,0%) | 225 (5,2%) | 719 (16,7%) | 17 (0,4%) |
-| só determinísticas | 759 | 206 (27,1%) | 44 (5,8%) | 142 (18,7%) | 7 (0,9%) |
-| com estratégia 3 | 1.611 | 438 (27,2%) | 93 (5,8%) | 286 (17,8%) | 10 (0,6%) |
+| HASH_OK (todas) | 8.579 | 1.492 (17,4%) | 815 (9,5%) | 817 (9,5%) | 489 (5,7%) |
+| só determinísticas | 1.515 | 275 (18,2%) | 153 (10,1%) | 162 (10,7%) | 98 (6,5%) |
+| com estratégia 3 | 3.213 | 581 (18,1%) | 329 (10,2%) | 327 (10,2%) | 204 (6,3%) |
 
-Ligar ou não ligar é praticamente independente do rótulo (26,0% → 27,1% → 27,2%), o que
+Ligar ou não ligar é praticamente independente do rótulo (17,4% → 18,2% → 18,1%), o que
 afasta a suspeita de que o binding ache teste mais facilmente para classe suja.
 
 > **Prevalência igual não é resultado igual.** As duas diferem justamente no lado do
@@ -565,9 +626,9 @@ afasta a suspeita de que o binding ache teste mais facilmente para classe suja.
 > na etapa 3. É para isso que existem as duas — se o achado sobrevive às duas, é robusto à
 > definição de binding; se não sobrevive, a diferença é resultado, não acidente.
 
-E o "positivo confiável é escasso" não é limitação do binding: `maioria > none` rotula 5,2%
-de **todo** o MLCQ (247 de 4.770). 759 × 5,8% = 44. Com `--rotulo sev_media` a pergunta
-nem se coloca — todas as linhas ligadas entram, com severidade contínua.
+A prevalência por maioria é 9,5% em todo o MLCQ disponível, e o ramo determinístico tem
+137 arquivos positivos por essa regra. Com `--rotulo sev_media` a pergunta nem se coloca:
+todas as linhas ligadas entram, com severidade contínua.
 
 ### Nenhuma regra de rótulo fica congelada
 
@@ -645,12 +706,12 @@ MLCQ.
 | `review_timestamp` | data/hora da revisão |
 | `is_crosscheck` | 1 se a revisão é de 26.07.2019 em diante (fase 4 do MLCQ, seção 3) |
 
-### `mlcq_samples.csv` — 1 linha por amostra
+### `mlcq_samples.csv` — 1 linha por (amostra, smell)
 
 | coluna | conteúdo |
 |---|---|
-| `sample_id` | identidade da amostra |
-| `smell` | o code smell avaliado nesta amostra |
+| `sample_id` | a amostra do MLCQ; com `smell`, forma a chave da linha |
+| `smell` | o code smell julgado nesta unidade |
 | `granularidade` | `class` (blob, data class) ou `function` (feature envy, long method) |
 | `code_name` | nome qualificado do elemento, como o MLCQ traz |
 | `path` | arquivo de produção, relativo ao repositório |
@@ -660,8 +721,8 @@ MLCQ.
 | `repo_status` | `HASH_OK`, `NOME_HASH_DIVERGE` ou `SEM_REPO` (step 1) |
 | `commit_hash` | commit rotulado pelo MLCQ |
 | `is_industry_relevant` | flag do MLCQ |
-| `n_reviews` | quantas revisões esta amostra recebeu |
-| `n_revisores` | revisores distintos (difere de `n_reviews` se alguém revisou duas vezes) |
+| `n_reviews` | quantos julgamentos esta unidade recebeu, um por revisor |
+| `n_revisores` | revisores distintos; igual a `n_reviews` (a submissão em dobro da seção 3 conta uma vez) |
 | `severidades` | todas as severidades, decrescente, separadas por `\|` |
 | `n_positivos` | revisões com severidade > `none` |
 | `n_major_ou_mais` | revisões com severidade ≥ `major` |
@@ -671,10 +732,10 @@ MLCQ.
 | `sev_mediana` | mediana; com N par cai no meio ponto, e isso é informação |
 | `pos_any` | 1 se alguém marcou > `none` — **circular com o desenho amostral, ver seção 3** |
 | `pos_maioria` | 1 se a maioria marcou > `none` |
-| `pos_unanime` | 1 se todos marcaram > `none` (19 amostras em todo o MLCQ) |
+| `pos_unanime` | 1 se todos marcaram > `none` (542 unidades, 539 delas com 2+ revisores) |
 | `pos_any_major` | 1 se alguém marcou ≥ `major` |
 | `foi_crosscheck` | 1 se tem alguma revisão da fase 4 |
-| `estrato` | `negativo_confiavel`, `disputado`, `positivo_confiavel`, `negativo_1_review` |
+| `estrato` | `negativo_1_review`, `positivo_confiavel`, `negativo_confiavel`, `disputado`, `positivo_1_review` |
 
 > **Nenhuma coluna `pos_*` é "o" rótulo.** A escolha é parâmetro de `montar_analise.py`.
 
@@ -865,7 +926,7 @@ step2-binding/
 │   └── conferir_dados.py      reapura todo numero deste README
 └── dados/
     ├── mlcq_reviews.csv              14.739 linhas
-    ├── mlcq_samples.csv               4.770 linhas
+    ├── mlcq_samples.csv               9.517 linhas
     ├── test_classes.csv             107.535 linhas
     ├── test_smell_occurrences.csv.gz  2.059.905 linhas (versionado em 3 partes)
     ├── refs_producao.csv             pares da estrategia 3
@@ -943,8 +1004,8 @@ dois emite veredito; o julgamento é de quem audita.
 - **Cobertura de 37,5% com as três estratégias** (17,7% sem a estratégia 3). Os 62,5%
   restantes são, em parte, classes genuinamente sem teste e, em parte, falha do método —
   `production_files.csv` separa os dois casos até onde é possível separar.
-- **`positivo_confiavel` tem 93 amostras** (44 antes da estratégia 3). Dá para análise
-  agregada; para análise por smell individual, feature envy segue sendo o caso magro.
+- **`positivo_confiavel` tem 327 unidades ligadas** (151 só com as determinísticas). Dá para
+  análise agregada e por smell; feature envy é o smell com menos positivos (seção 3).
 - **`caminho_exato` tem ausência não-aleatória**, concentrada nas classes aninhadas
   (`nome_divergente`), que é onde o `jnose-core` falha ao resolver a produção.
 - **`caminho_exato` não é oráculo validado.** O `getFileProduction` do `jnose-core` é
@@ -996,6 +1057,11 @@ descrito. Todas as tabelas saem de `python tools/poder_analise.py`.
 
 O que segue é a leitura dos números *antes* de rodar qualquer análise, porque saber quanto
 poder cada opção tem muda por onde começar. Se o resultado mandar voltar, volta-se.
+
+> **As seções 12.0 a 12.6 são o registro de 18/09/2026 e ficam como foram escritas.** Os
+> números delas vieram da normalização com defeito (seção 3), que misturava os dois smells
+> de cada amostra. A seção 12.7 refaz as tabelas na unidade correta e diz o que muda em cada
+> recomendação. `conferir_dados.py --secao 12` confere os números da 12.7.
 
 ### 12.0 O tamanho do espaço, e por que isso importa na escrita
 
@@ -1182,3 +1248,49 @@ ela é de menor impacto, e o que produziu o achado de construto da seção 5.
 - **Atenuação residual.** Mesmo com 94,2% de precisão, 6% de pares falsos atenuam a
   correlação. Com a precisão medida, dá para estimar o quanto — e isso só vale a pena se o
   resultado for nulo (notas, seção 2).
+
+### 12.7 Recalculado em 17/10/2026, na unidade (amostra, smell)
+
+Com a unidade corrigida, o N de arquivos não muda (o binding depende só dos caminhos), mas
+quase todo arquivo passa a ter **dois ou mais smells avaliados**: 727 dos 730 no ramo
+determinístico. Por isso o N por smell sobe muito, e as regras dicotomizadas ganham
+positivos.
+
+**Ramo determinístico — 730 arquivos**
+
+| análise | N | prevalência | efeito mínimo detectável | em 18/09 |
+|---|---:|---:|---|---|
+| agregado, `sev_media` | 730 | — | **r ≥ 0,104** | r ≥ 0,104 |
+| agregado, `any > none` | 730 | 27,9% | d ≥ 0,23 | d ≥ 0,23 |
+| agregado, `any ≥ major` | 730 | 19,3% | d ≥ 0,26 | d ≥ 0,26 |
+| agregado, `maioria > none` | 730 | 18,8% | d ≥ 0,27 | d ≥ 0,44 |
+| agregado, `unânime` | 730 | 12,5% | d ≥ 0,31 | d ≥ 1,06 |
+| `long method`, `sev_media` | 432 | — | r ≥ 0,134 | r ≥ 0,176 |
+| `feature envy`, `sev_media` | 429 | — | r ≥ 0,135 | r ≥ 0,204 |
+| `blob`, `sev_media` | 307 | — | r ≥ 0,159 | r ≥ 0,199 |
+| `data class`, `sev_media` | 307 | — | r ≥ 0,159 | r ≥ 0,260 |
+
+**Ramo ampliado — 1.369 arquivos**
+
+| análise | N | prevalência | efeito mínimo detectável |
+|---|---:|---:|---|
+| agregado, `sev_media` | 1.369 | — | r ≥ 0,076 |
+| agregado, `any > none` | 1.369 | 28,0% | d ≥ 0,17 |
+| agregado, `maioria > none` | 1.369 | 19,5% | d ≥ 0,19 |
+| agregado, `unânime` | 1.369 | 12,2% | d ≥ 0,23 |
+| por smell, `sev_media` | 648–736 | — | r ≥ 0,103 a 0,110 |
+
+**O que muda nas recomendações:**
+
+- **12.2 (`sev_media` como rótulo) continua de pé, com um argumento a menos.** A
+  circularidade de `any > none` e a informação descartada pela dicotomização seguem valendo.
+  O argumento de poder enfraquece: a maioria agora exige d ≥ 0,27, e não 0,44. Dicotomizar
+  por maioria passou a ser uma análise de sensibilidade viável, não um desperdício.
+- **12.3 (agregado antes de por smell) muda de natureza.** O agregado já não é "o smell do
+  arquivo, qualquer que seja": é **o maior `sev_media` entre os smells avaliados no
+  arquivo**, ou seja, o smell percebido como mais grave. É uma definição defensável, mas é
+  uma definição, e o artigo tem que declará-la. A análise por smell ficou bem mais
+  informativa (r ≥ 0,13 a 0,16).
+- **12.5 (hierarquia das decisões):** a regra de rótulo continua sendo a alavanca mais
+  forte, mas a distância encolheu (d ≥ 0,27 contra r ≥ 0,10).
+

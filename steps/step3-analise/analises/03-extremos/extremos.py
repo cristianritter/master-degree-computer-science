@@ -4,14 +4,20 @@ A correlacao pressupoe relacao monotonica ao longo de toda a faixa de severidade
 desenho do MLCQ nao sustenta bem isso - a severidade media e continua, mas vem de um
 processo de rotulagem circular com o crosscheck (step 2, secao 3).
 
-O que o desenho sustenta melhor e a comparacao dos extremos que o proprio step 2 definiu:
+O que o desenho sustenta melhor e a comparacao dos extremos de evidencia, com o arquivo
+classificado pelo conjunto dos seus smells (variaveis.grupo_arquivo):
 
-  positivo_confiavel   a maioria dos revisores marcou > none
-  negativo_confiavel   2+ revisores, nenhum marcou > none
+  confirmado   algum smell do arquivo teve a maioria dos revisores marcando > none
+  limpo        nenhum revisor marcou > none em nenhum smell do arquivo
 
-O estrato negativo e especialmente forte neste dataset: pelo desenho amostral, qualquer
-flag teria escalado a amostra para mais revisores. Sao negativos com corroboracao, coisa
-rara em dataset de code smell.
+O grupo limpo e quase todo de negativos com um unico revisor. O step 2 (secao 3) mediu
+quanto vale um "none" isolado: revisado de novo, coincide com a maioria final em 97,8%
+dos casos.
+
+Ate 17/10/2026 esta analise exigia estrato unico por arquivo e comparava
+positivo_confiavel com negativo_confiavel. Com a unidade de rotulo corrigida para (amostra,
+smell), quase todo arquivo reune estratos diferentes e os grupos cairam para 14 e 2; a
+regra por conjunto foi fixada antes de rodar a analise com ela.
 
 A pergunta fica direta: **classes que os revisores concordaram ter code smell tem testes
 com mais test smell que classes que eles concordaram nao ter?** Mann-Whitney, que nao
@@ -33,15 +39,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__)))), "tools"))
 import comum as c
 import estat
-from variaveis import desfechos, estrato_unico
-
-EXTREMOS = ("positivo_confiavel", "negativo_confiavel")
+from variaveis import desfechos, grupo_arquivo
 
 
 def grupo_de(linha):
-    """O estrato do arquivo, so quando ele e inequivoco E e um dos extremos."""
-    unico = estrato_unico(linha)
-    return unico if unico in EXTREMOS else None
+    """confirmado ou limpo; so_disputado e o que fica fora ficam de fora."""
+    g = grupo_arquivo(linha)
+    return g if g in ("confirmado", "limpo") else None
 
 
 def desfecho_de(linha, chave):
@@ -52,15 +56,15 @@ def desfecho_de(linha, chave):
 
 
 def rodar(ramo, linhas, csv_saida):
-    pos = [r for r in linhas if grupo_de(r) == "positivo_confiavel"]
-    neg = [r for r in linhas if grupo_de(r) == "negativo_confiavel"]
+    pos = [r for r in linhas if grupo_de(r) == "confirmado"]
+    neg = [r for r in linhas if grupo_de(r) == "limpo"]
     ambiguos = sum(1 for r in linhas if grupo_de(r) is None)
 
     print("\n" + "=" * 88)
-    print("RAMO %s  -  positivo_confiavel: %d   negativo_confiavel: %d   fora: %d"
+    print("RAMO %s  -  confirmado: %d   limpo: %d   fora: %d"
           % (ramo.upper(), len(pos), len(neg), ambiguos))
     print("=" * 88)
-    print("  (fora = arquivo com amostras de mais de um estrato, ou de estrato intermediario)")
+    print("  (fora = arquivo so disputado, ou cujo unico positivo e de revisor solitario)")
 
     print("\n  %-12s %7s %7s %10s %10s %9s %9s"
           % ("desfecho", "N pos", "N neg", "mediana+", "mediana-", "delta", "p"))

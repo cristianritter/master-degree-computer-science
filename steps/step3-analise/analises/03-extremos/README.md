@@ -1,14 +1,22 @@
 # Análise 03 — Extremos de evidência
 
-**Pergunta.** Classes em que os revisores **concordaram** que há code smell têm testes com
-mais test smell que classes em que concordaram que não há?
+**Pergunta.** Classes em que os revisores **confirmaram** algum code smell têm testes com
+mais test smell que classes em que ninguém sinalizou nada?
 
-**Resposta curta.** Não. E nas duas medianas de densidade, o grupo negativo tem
-ligeiramente *mais* test smell.
+**Resposta curta.** Têm mais test smell em contagem, e isso sobrevive ao FDR. Em densidade,
+não: a diferença some quando o tamanho do teste é normalizado. É o padrão da análise 01,
+agora visto pela comparação de grupos.
 
 ```bash
 python extremos.py --csv
 ```
+
+> **Refeita em 17/10/2026.** Até então a análise exigia estrato único por arquivo e
+> comparava `positivo_confiavel` (42 arquivos) com `negativo_confiavel` (523). Com a
+> unidade de rótulo corrigida para (amostra, smell) (step 2, seção 3), quase todo arquivo
+> reúne estratos diferentes, os grupos caíram para 14 e 2, e o teste não rodava. A regra
+> abaixo foi fixada antes de rodar a análise com ela. A versão anterior, e o resultado
+> dela, estão no histórico do git e no caderno do README do step 3.
 
 ---
 
@@ -18,58 +26,64 @@ A correlação da análise 01 pressupõe relação monotônica ao longo de toda 
 severidade. O desenho do MLCQ não sustenta bem isso: a severidade média é contínua, mas vem
 de um processo de rotulagem circular com o crosscheck (step 2, seção 3).
 
-O que o desenho sustenta melhor é a comparação dos estratos que o step 2 definiu:
+O que o desenho sustenta melhor é comparar os extremos de evidência, com o arquivo
+classificado pelo conjunto dos seus smells (`variaveis.grupo_arquivo`):
 
 | grupo | definição |
 |---|---|
-| `positivo_confiavel` | a maioria dos revisores marcou > `none` |
-| `negativo_confiavel` | 2+ revisores, nenhum marcou > `none` |
+| confirmado | algum smell do arquivo teve a maioria dos revisores marcando > `none` |
+| limpo | nenhum revisor marcou > `none` em nenhum smell do arquivo |
 
-O estrato negativo é especialmente forte neste dataset: pelo desenho amostral, qualquer
-sinalização teria escalado a amostra para mais revisores. São negativos com corroboração —
-coisa rara em dataset de code smell.
+O grupo limpo é quase todo de negativos com um único revisor. O step 2 mediu quanto vale um
+`none` isolado: revisado de novo, coincide com a maioria final em 97,8% dos casos.
 
 Mann-Whitney, que não supõe distribuição e lida com os 72% de zeros. O tamanho de efeito é
-o r bisserial de postos (`delta`): a probabilidade de um arquivo do grupo positivo ter mais
-test smell que um do negativo, menos a probabilidade do contrário. Zero significa nenhuma
+o r bisserial de postos (`delta`): a probabilidade de um arquivo do grupo confirmado ter
+mais test smell que um do limpo, menos a probabilidade do contrário. Zero significa nenhuma
 separação.
 
 ---
 
 ## Resultado
 
-**Determinístico** — 42 positivos, 523 negativos, 165 fora (arquivo com amostras de mais de
-um estrato, ou de estrato intermediário):
+**Determinístico** — 136 confirmados, 526 limpos, 68 fora (67 só disputados e 1 cujo único
+positivo é de revisor solitário):
 
-| desfecho | mediana positivos | mediana negativos | delta | p | p ajustado |
+| desfecho | mediana confirmados | mediana limpos | delta | p | p ajustado |
 |---|---:|---:|---:|---:|---:|
-| bruto | 18,0 | 14,0 | 0,113 | 0,223 | 0,334 |
-| densidade | 1,552 | **1,609** | 0,032 | 0,736 | 0,736 |
-| distintos | 5,0 | 4,0 | 0,154 | 0,094 | 0,282 |
+| bruto | 21,0 | 14,0 | 0,138 | 0,013 | **0,020** |
+| densidade | 1,800 | 1,636 | 0,074 | 0,184 | 0,184 |
+| distintos | 5,0 | 4,0 | 0,138 | 0,012 | **0,020** |
 
-**Ampliado** — 76 positivos, 976 negativos:
+**Ampliado** — 267 confirmados, 985 limpos:
 
-| desfecho | mediana positivos | mediana negativos | delta | p | p ajustado |
+| desfecho | mediana confirmados | mediana limpos | delta | p | p ajustado |
 |---|---:|---:|---:|---:|---:|
-| bruto | 46,0 | 27,0 | 0,084 | 0,222 | 0,667 |
-| densidade | 1,506 | **1,543** | 0,029 | 0,673 | 0,673 |
-| distintos | 5,0 | 5,0 | 0,039 | 0,571 | 0,673 |
+| bruto | 32,0 | 27,0 | 0,031 | 0,438 | 0,831 |
+| densidade | 1,456 | 1,550 | −0,009 | 0,831 | 0,831 |
+| distintos | 5,0 | 5,0 | 0,009 | 0,827 | 0,831 |
 
 ## A leitura
 
-**Nenhum resultado significativo, nem antes nem depois do ajuste.**
+**No ramo determinístico, os desfechos sensíveis a tamanho separam os grupos, e a densidade
+não.** Bruto e distintos dão delta 0,138, significativos depois do FDR. A densidade dá
+0,074, com p = 0,184.
 
-O detalhe mais eloquente está nas medianas de densidade: 1,552 contra 1,609 no
-determinístico, 1,506 contra 1,543 no ampliado. **Nos dois ramos o grupo negativo tem
-densidade de test smell ligeiramente maior.** A diferença não é significativa, mas mostra
-ausência de separação — não uma tendência fraca na direção esperada, que é como um nulo às
-vezes é apresentado.
+É o mesmo mecanismo medido na análise 01: classes com code smell confirmado tendem a ter
+testes maiores, e teste maior acumula mais ocorrências de tudo. A mediana de métodos de
+teste não é controlada aqui; a análise 01 controla, e lá a associação cai a ~0,06 sem
+significância.
 
-## Ressalva de poder
+**A densidade aponta na direção esperada, mas sem decidir.** Com 136 contra 526, esta
+comparação detectaria delta ≥ 0,156 com 80% de poder; o 0,074 observado está abaixo disso.
+É compatível com o limite superior da análise 01 (r < 0,12), não o contradiz.
 
-Com 42 positivos, esta comparação só detectaria delta ≥ 0,29 com 80% de poder. Os
-observados vão até 0,154. O nulo aqui é mais fraco que o da análise 01, onde N = 730 e o
-detectável era r ≥ 0,104. A análise 04 leva essa questão adiante.
+**O ramo ampliado não separa em nada**, como na análise 01: com 10,1% de precisão para "o
+teste testa esta classe", a atenuação leva tudo para perto de zero.
+
+> A versão anterior desta análise dizia que "o grupo negativo tem densidade ligeiramente
+> maior". Na unidade corrigida isso não se sustenta: o confirmado tem mediana maior (1,800
+> contra 1,636). A frase foi retirada.
 
 ---
 

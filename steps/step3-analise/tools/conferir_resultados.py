@@ -59,12 +59,12 @@ def conferir_primeira_rodada():
 
     esperado = {
         # ramo, desfecho -> (rho, p)
-        ("deterministico", "bruto"): (0.092, 0.012),
-        ("deterministico", "densidade"): (0.047, 0.204),
-        ("deterministico", "distintos"): (0.084, 0.024),
-        ("ampliado", "bruto"): (0.015, 0.568),
-        ("ampliado", "densidade"): (0.003, 0.915),
-        ("ampliado", "distintos"): (0.001, 0.973),
+        ("deterministico", "bruto"): (0.094, 0.011),
+        ("deterministico", "densidade"): (0.050, 0.175),
+        ("deterministico", "distintos"): (0.084, 0.022),
+        ("ampliado", "bruto"): (0.012, 0.659),
+        ("ampliado", "densidade"): (0.001, 0.959),
+        ("ampliado", "distintos"): (-0.003, 0.913),
     }
     for (ramo, chave), (rho_esp, p_esp) in sorted(esperado.items()):
         linhas = c.ler_ramo(ramo)
@@ -75,7 +75,7 @@ def conferir_primeira_rodada():
                "rho=%.3f p=%.3f N=%d" % (rho, p, n))
 
     print("\n  correlacoes parciais, controlando n_metodos_teste:")
-    for chave, r_esp in (("bruto", 0.058), ("distintos", 0.055)):
+    for chave, r_esp in (("bruto", 0.062), ("distintos", 0.056)):
         linhas = c.ler_ramo("deterministico")
         x, y, tam = pares(linhas, chave, rotulo_agregado)
         r, p, n = estat.parcial(x, y, tam)
@@ -87,8 +87,8 @@ def conferir_primeira_rodada():
     validos = [r for r in linhas if rotulo_agregado(r) is not None
                and c.num(r["n_metodos_teste"]) is not None]
     rot = [rotulo_agregado(r) for r in validos]
-    for nome, col, esp in (("n_metodos_teste", "n_metodos_teste", 0.079),
-                           ("loc_teste", "loc_teste", 0.091)):
+    for nome, col, esp in (("n_metodos_teste", "n_metodos_teste", 0.078),
+                           ("loc_teste", "loc_teste", 0.090)):
         rho, p, _, _, n = estat.spearman(rot, [c.num(r[col]) for r in validos])
         exigir(perto(rho, esp), "code smell x %s: rho %.3f" % (nome, esp),
                "%.3f (p=%.3f)" % (rho, p))
@@ -121,7 +121,7 @@ def conferir_caderno():
     for r in nominais:
         print("    %-16s %-14s %-11s rho=%6.3f  p=%.3f"
               % (r["ramo"], r["code_smell"], r["desfecho"], float(r["rho"]), float(r["p"])))
-    exigir(len(nominais) == 4, "4 significancias nominais entre as simples", len(nominais))
+    exigir(len(nominais) == 5, "5 significancias nominais entre as simples", len(nominais))
     exigir(all(r["desfecho"] in ("bruto", "distintos") for r in nominais),
            "todas as significancias sao em desfecho sensivel a tamanho",
            ", ".join(sorted({r["desfecho"] for r in nominais})))
@@ -145,7 +145,7 @@ def conferir_segunda_rodada():
         exigir(len(sobrevivem) == 0,
                "nenhum test smell sobrevive ao ajuste FDR", len(sobrevivem))
         menor = min(float(r["p_ajustado"]) for r in L)
-        exigir(perto(menor, 0.283, 0.001), "menor p ajustado e 0,283", "%.3f" % menor)
+        exigir(perto(menor, 0.260, 0.001), "menor p ajustado e 0,260", "%.3f" % menor)
         # Eager e Lazy sao os que dependem da classe de producao: sao os mais proximos de
         # zero, que e o achado negativo com mais conteudo da secao
         for smell, esp in (("Eager Test", -0.020), ("Lazy Test", 0.038)):
@@ -161,18 +161,19 @@ def conferir_segunda_rodada():
     with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
         L = list(csv.DictReader(f))
     exigir(len(L) == 6, "analise 2 tem 6 testes", len(L))
-    nominais = [r for r in L if float(r["p"]) < 0.05]
-    exigir(len(nominais) == 0, "nenhum extremo alcanca p < 0,05", len(nominais))
     det = {r["desfecho"]: r for r in L if r["ramo"] == "deterministico"}
-    exigir(int(det["bruto"]["n_positivo"]) == 42 and int(det["bruto"]["n_negativo"]) == 523,
-           "deterministico: 42 positivos e 523 negativos confiaveis",
+    exigir(int(det["bruto"]["n_positivo"]) == 136 and int(det["bruto"]["n_negativo"]) == 526,
+           "deterministico: 136 confirmados e 526 limpos",
            "%s e %s" % (det["bruto"]["n_positivo"], det["bruto"]["n_negativo"]))
-    # o grupo negativo tem densidade LIGEIRAMENTE MAIOR: ausencia de separacao, nao
-    # tendencia fraca na direcao esperada
-    dens = det["densidade"]
-    exigir(float(dens["mediana_negativo"]) > float(dens["mediana_positivo"]),
-           "na densidade, a mediana do grupo negativo e maior que a do positivo",
-           "%s vs %s" % (dens["mediana_negativo"], dens["mediana_positivo"]))
+    # o padrao da analise 01 se repete: separa nos desfechos sensiveis a tamanho, nao na
+    # densidade
+    sig = sorted("%s/%s" % (r["ramo"], r["desfecho"]) for r in L
+                 if float(r["p_ajustado"]) < 0.05)
+    exigir(sig == ["deterministico/bruto", "deterministico/distintos"],
+           "so bruto e distintos do deterministico sobrevivem ao FDR", ", ".join(sig) or "nenhum")
+    exigir(float(det["densidade"]["p"]) > 0.05,
+           "na densidade, confirmado x limpo nao separa",
+           "p=%s delta=%s" % (det["densidade"]["p"][:5], det["densidade"]["delta"][:5]))
 
 
 def conferir_disputados():
@@ -189,8 +190,8 @@ def conferir_disputados():
         L = list(csv.DictReader(f))
     exigir(len(L) == 6, "analise 04 tem 6 testes", len(L))
     det = {r["desfecho"]: r for r in L if r["ramo"] == "deterministico"}
-    exigir(int(det["bruto"]["n_confirmado"]) == 42 and int(det["bruto"]["n_disputado"]) == 155,
-           "deterministico: 42 confirmados e 155 disputados",
+    exigir(int(det["bruto"]["n_confirmado"]) == 136 and int(det["bruto"]["n_disputado"]) == 67,
+           "deterministico: 136 confirmados e 67 so disputados",
            "%s e %s" % (det["bruto"]["n_confirmado"], det["bruto"]["n_disputado"]))
     nominais = [r for r in L if float(r["p"]) < 0.05]
     exigir(len(nominais) == 0, "nenhum resultado com p < 0,05", len(nominais))
@@ -220,15 +221,20 @@ def conferir_cruzado():
     sobrevivem = [r for r in principal if float(r["p_ajustado"]) < 0.05]
     exigir(len(sobrevivem) == 0, "nenhuma celula sobrevive ao ajuste FDR", len(sobrevivem))
     menor = min(float(r["p_ajustado"]) for r in principal)
-    exigir(perto(menor, 0.271, 0.001), "menor p ajustado e 0,271", "%.3f" % menor)
+    exigir(perto(menor, 0.104, 0.001), "menor p ajustado e 0,104", "%.3f" % menor)
     acima = [r for r in principal if abs(float(r["rho"])) >= float(r["r_detectavel"])]
-    exigir(len(acima) == 0, "nenhum |rho| alcanca o r detectavel da celula", len(acima))
+    exigir(sorted("%s x %s" % (r["code_smell"], r["test_smell"]) for r in acima)
+           == ["blob x Duplicate Assert", "feature envy x Verbose Test"],
+           "so 2 celulas alcancam o r detectavel, nenhuma sobrevive ao FDR",
+           ", ".join("%s x %s" % (r["code_smell"], r["test_smell"]) for r in acima))
     nominais = [r for r in principal if float(r["p"]) < 0.05]
     exigir(len(nominais) == 6, "6 significancias nominais, nenhuma ajustada", len(nominais))
-    # a previa de 04/10 nao filtrava nome_divergente: a sensibilidade a reproduz
+    # a sensibilidade sem filtro quase nao difere da familia filtrada. A previa de 04/10
+    # (0,21 em data class x Eager/Lazy) foi rodada sobre o rotulo com defeito e nao se
+    # reproduz mais: na unidade corrigida os valores sao 0,127 e 0,119.
     dc = {r["test_smell"]: float(r["rho"]) for r in sens if r["code_smell"] == "data class"}
-    exigir(perto(dc["Eager Test"], 0.206) and perto(dc["Lazy Test"], 0.209),
-           "sem filtro, data class x Eager/Lazy reproduz a previa (0,21)",
+    exigir(perto(dc["Eager Test"], 0.127) and perto(dc["Lazy Test"], 0.119),
+           "sem filtro, data class x Eager/Lazy: 0,127 e 0,119",
            "%.3f e %.3f" % (dc["Eager Test"], dc["Lazy Test"]))
 
 
