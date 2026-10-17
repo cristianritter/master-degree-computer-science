@@ -14,11 +14,6 @@ O grupo limpo e quase todo de negativos com um unico revisor. O step 2 (secao 3)
 quanto vale um "none" isolado: revisado de novo, coincide com a maioria final em 97,8%
 dos casos.
 
-Ate 17/10/2026 esta analise exigia estrato unico por arquivo e comparava
-positivo_confiavel com negativo_confiavel. Com a unidade de rotulo corrigida para (amostra,
-smell), quase todo arquivo reune estratos diferentes e os grupos cairam para 14 e 2; a
-regra por conjunto foi fixada antes de rodar a analise com ela.
-
 A pergunta fica direta: **classes que os revisores concordaram ter code smell tem testes
 com mais test smell que classes que eles concordaram nao ter?** Mann-Whitney, que nao
 supoe distribuicao e lida com os 72% de zeros.

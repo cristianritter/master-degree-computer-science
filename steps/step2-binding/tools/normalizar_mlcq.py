@@ -6,10 +6,8 @@
 **A unidade de rotulo e (sample_id, smell), nao sample_id.** No MLCQ cada revisor julga a
 mesma amostra para dois smells de uma vez - blob e data class nas classes, feature envy e
 long method nas funcoes -, e cada julgamento vira uma linha, com milissegundos de diferenca.
-4.747 das 4.770 amostras tem os dois smells. Ate 17/10/2026 este script agrupava so por
-sample_id: misturava as severidades dos dois smells numa media so, pegava o smell da
-primeira linha como "o" smell da amostra e contava 1 revisor x 2 smells como "2
-revisores". O README do step 2 (secao 3) registra o defeito e os numeros corrigidos.
+4.747 das 4.770 amostras tem os dois smells. Agrupar so por sample_id misturaria as
+severidades dos dois smells e contaria 1 revisor x 2 smells como "2 revisores".
 
 A decisao central deste script e nao tomar uma decisao: o mlcq_samples.csv carrega
 sev_max, sev_media, sev_mediana e n_positivos lado a lado, e nenhuma delas e "o
@@ -110,8 +108,7 @@ def main():
     mapa = c.ler_mapa()
 
     reviews = []
-    # chave (sample_id, smell): cada revisor julga a amostra para dois smells, e misturar
-    # os dois numa unidade so foi o defeito corrigido em 17/10/2026 (docstring)
+    # chave (sample_id, smell): cada revisor julga a amostra para dois smells (docstring)
     por_amostra = collections.defaultdict(list)
     amostra_meta = {}
     repetidas = []

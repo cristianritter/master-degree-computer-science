@@ -118,7 +118,7 @@ def secao_3():
     reviews = c.ler_csv(os.path.join(c.DADOS, "mlcq_reviews.csv"))
 
     # 6. a unidade de rotulo e (amostra, smell): cada revisor julga a amostra para dois
-    # smells, e agrupar so por sample_id misturava os dois (defeito corrigido em 17/10/2026)
+    # smells, e agrupar so por sample_id misturaria os dois
     unidades = collections.Counter((s["sample_id"], s["smell"]) for s in samples)
     exigir(max(unidades.values()) == 1 and len(unidades) == len(samples),
            "mlcq_samples.csv tem uma linha por (amostra, smell)",
@@ -561,8 +561,7 @@ def secao_12():
 
         # Cada amostra do MLCQ e julgada para os dois smells da sua granularidade (secao
         # 3), entao quase todo arquivo tem 2+ smells avaliados e o rotulo agregado e o
-        # MAIOR entre eles. Ate 17/10/2026 a normalizacao misturava os dois e este numero
-        # dizia o contrario (97,9% com um so smell).
+        # MAIOR entre eles.
         um_so = sum(1 for r in linhas_csv
                     if sum(1 for sm in smells
                            if (r[pa.coluna(sm, "sev_media")] or "").strip()) == 1)

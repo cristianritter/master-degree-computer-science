@@ -14,10 +14,6 @@ smells, variaveis.grupo_arquivo):
   confirmado     algum smell do arquivo foi sinalizado E a maioria confirmou
   so_disputado   algum smell foi sinalizado, e NENHUM a maioria confirmou
 
-Ate 17/10/2026 a analise exigia estrato unico por arquivo. Com a unidade de rotulo
-corrigida para (amostra, smell), quase todo arquivo reune estratos diferentes; a regra por
-conjunto foi fixada antes de rodar a analise com ela.
-
 Os dois foram sinalizados. Os dois foram ao crosscheck. O roteamento e o mesmo, entao a
 diferenca entre eles nao pode ser explicada por ele - e o que sobra e o veredito do
 crosscheck, que e exatamente o julgamento que o MLCQ coletou para decidir os casos

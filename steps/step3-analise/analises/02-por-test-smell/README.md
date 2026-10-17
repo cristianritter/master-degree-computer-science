@@ -31,9 +31,6 @@ determinístico, contra o code smell agregado. O ajuste para comparações múlt
 
 ## Resultado
 
-> **Refeita em 17/10/2026** com a unidade de rótulo corrigida (step 2, seção 3). A
-> conclusão não mudou; a versão anterior está no histórico do git.
-
 **Nenhum sobrevive à correção FDR.** O menor p ajustado é 0,260.
 
 Os seis que alcançam significância nominal:

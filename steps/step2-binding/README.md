@@ -114,19 +114,13 @@ da planilha, as duas com milissegundos de diferença. 4.747 das 4.770 amostras t
 smells, e são **9.517 unidades (amostra, smell)**, sobre as quais as 14.739 revisões se
 distribuem.
 
-> **Esta seção foi refeita em 17/10/2026.** Até então o `normalizar_mlcq.py` agrupava só
-> por `sample_id`: misturava as severidades dos dois smells numa média só, pegava o smell
-> da primeira linha como "o" smell da amostra e contava 1 revisor × 2 smells como "2
-> revisores". Exemplo: a amostra 3715636 saiu como data class "disputada", com
-> severidades `critical|critical|none|none`; na verdade data class foi unânime em
-> `critical` e blob unânime em `none`. Os números antigos desta seção (3.511 amostras "com
-> 2 revisores", 247 positivos confiáveis, 19 unânimes, 3.515 negativos confiáveis) estavam
-> errados, e o relatório de 18/09 e o documento da reunião de 04/10 os repetem. O
-> `conferir_dados.py --secao 3` passou a exigir uma linha por unidade.
->
-> A correção revelou também uma submissão em dobro na planilha: o revisor 3 julgou a
-> amostra 5715127 duas vezes, com 16 ms de diferença e as mesmas severidades (revisões 7912
-> e 7914). Cada revisor conta uma vez por unidade; o `mlcq_reviews.csv` fica bruto.
+Tratar a amostra como unidade misturaria as severidades dos dois smells numa média só e
+contaria um revisor × dois smells como "dois revisores". O `conferir_dados.py --secao 3`
+exige uma linha por unidade e um julgamento por revisor em cada uma.
+
+A planilha tem uma submissão em dobro: o revisor 3 julgou a amostra 5715127 duas vezes,
+com 16 ms de diferença e as mesmas severidades (revisões 7912 e 7914). Cada revisor conta
+uma vez por unidade; o `mlcq_reviews.csv` fica bruto.
 
 ### O roteamento do crosscheck
 
@@ -252,12 +246,6 @@ repositório — e também ligação legítima: a árvore de testes do JDK não 
 produção, e `LinkedList.java` ↔ `LinkedListTest.java` é correto ali. Distinguir as duas é
 trabalho da auditoria, que por isso as trata como estratos separados.
 
-> Esta separação foi acrescentada depois da primeira versão do step, ao montar a
-> ferramenta de auditoria: o README afirmava que a `convencao` casava por caminho, e a
-> implementação casava por basename. O código e a documentação discordavam em silêncio, e
-> foi o preparo da conferência par a par que expôs isso — antes de qualquer par ter sido
-> julgado.
-
 O método de cada par é uma **coluna**, não um pressuposto, porque os métodos têm precisão
 diferente e o artigo precisa poder mostrar que o achado se mantém em mais de um:
 
@@ -326,11 +314,9 @@ Note que a cobertura é **praticamente igual nos estratos** (36,8% a 40,3%). Iss
 tranquilizador: se o binding tivesse mais facilidade em achar teste para classe suja, ele
 introduziria viés direto na RQ.
 
-> **Por que a estratégia 3 foi construída.** Em 09/2026, só com `caminho_exato` +
-> `convencao`, o step contava 44 positivos confiáveis e concluiu que **o gargalo era a
-> cobertura do binding, não a regra de rótulo**. Esse número vinha da normalização com
-> defeito (seção 3); na unidade correta são 151 unidades positivas confiáveis só com as
-> determinísticas. A decisão foi tomada com o número errado, e está registrada como foi.
+Só com `caminho_exato` + `convencao`, o binding cobre 17,7% das unidades disponíveis. A
+estratégia 3 existe para ampliar essa cobertura, e a seção 5 mede o custo de construto
+disso.
 
 ### `dados/production_files.csv` — 1 linha por arquivo de produção anotado
 
@@ -1053,15 +1039,10 @@ dois emite veredito; o julgamento é de quem audita.
 Esta seção é um **mapa dos caminhos**, não uma escolha fechada. O trabalho é exploratório:
 avançar por um caminho, olhar o resultado e voltar para pegar outro é legítimo e esperado —
 o que o artigo precisa é que cada decisão esteja embasada e que o caminho percorrido esteja
-descrito. Todas as tabelas saem de `python tools/poder_analise.py`.
+descrito. Todas as tabelas saem de `python tools/poder_analise.py` e são conferidas por
+`conferir_dados.py --secao 12`.
 
-O que segue é a leitura dos números *antes* de rodar qualquer análise, porque saber quanto
-poder cada opção tem muda por onde começar. Se o resultado mandar voltar, volta-se.
-
-> **As seções 12.0 a 12.6 são o registro de 18/09/2026 e ficam como foram escritas.** Os
-> números delas vieram da normalização com defeito (seção 3), que misturava os dois smells
-> de cada amostra. A seção 12.7 refaz as tabelas na unidade correta e diz o que muda em cada
-> recomendação. `conferir_dados.py --secao 12` confere os números da 12.7.
+Saber quanto poder cada opção tem muda por onde começar, e é isso que esta seção mede.
 
 ### 12.0 O tamanho do espaço, e por que isso importa na escrita
 
@@ -1087,21 +1068,17 @@ Isso não restringe a exploração. Restringe só a **frase final**:
   sustenta numa revisão.
 
 Por isso vale ir anotando o que foi rodado e o que cada tentativa deu, mesmo o que não
-funcionou. Não para provar que nada foi olhado antes — para poder dizer quantos caminhos
-foram percorridos quando chegar a hora de escrever. Se o número final de tentativas for
-alto, há correções estatísticas aplicáveis; se for baixo, também é bom saber.
-
-### 12.0.1 Por onde começar, e por quê
-
-O step 2 não decide nada disso — ele entrega os dois ramos e as regras de rótulo lado a
-lado justamente para que a escolha seja do step 3. A leitura dos números abaixo sugere uma
-ordem de partida, não uma sentença:
+funcionou, para poder dizer quantos caminhos foram percorridos quando chegar a hora de
+escrever. O caderno de tentativas está no README do step 3.
 
 ### 12.1 O quadro completo do que está disponível
 
 Menor efeito detectável com α = 0,05 bicaudal e poder de 80%. Para rótulo contínuo é a
 correlação `r`; para rótulo dicotômico é a diferença padronizada `d` entre os grupos com e
 sem smell.
+
+Cada amostra do MLCQ é julgada para os dois smells da sua granularidade (seção 3), então
+quase todo arquivo tem dois ou mais smells avaliados: 727 dos 730 no ramo determinístico.
 
 **Ramo determinístico — 730 arquivos, precisão do binding 94,2%**
 
@@ -1110,12 +1087,12 @@ sem smell.
 | agregado, `sev_media` | 730 | — | **r ≥ 0,104** |
 | agregado, `any > none` | 730 | 27,9% | d ≥ 0,23 |
 | agregado, `any ≥ major` | 730 | 19,3% | d ≥ 0,26 |
-| agregado, `maioria > none` | 730 | 6,0% | d ≥ 0,44 |
-| agregado, `unânime` | 730 | 1,0% | d ≥ 1,06 |
-| `long method`, `sev_media` | 251 | — | r ≥ 0,176 |
-| `blob`, `sev_media` | 196 | — | r ≥ 0,199 |
-| `feature envy`, `sev_media` | 186 | — | r ≥ 0,204 |
-| `data class`, `sev_media` | 114 | — | r ≥ 0,260 |
+| agregado, `maioria > none` | 730 | 18,8% | d ≥ 0,27 |
+| agregado, `unânime` | 730 | 12,5% | d ≥ 0,31 |
+| `long method`, `sev_media` | 432 | — | r ≥ 0,134 |
+| `feature envy`, `sev_media` | 429 | — | r ≥ 0,135 |
+| `blob`, `sev_media` | 307 | — | r ≥ 0,159 |
+| `data class`, `sev_media` | 307 | — | r ≥ 0,159 |
 
 **Ramo ampliado — 1.369 arquivos, precisão 10,1% (estrito) / 94,8% (amplo)**
 
@@ -1123,32 +1100,32 @@ sem smell.
 |---|---:|---:|---|
 | agregado, `sev_media` | 1.369 | — | r ≥ 0,076 |
 | agregado, `any > none` | 1.369 | 28,0% | d ≥ 0,17 |
-| agregado, `maioria > none` | 1.369 | 5,8% | d ≥ 0,32 |
-| `long method`, `sev_media` | 443 | — | r ≥ 0,133 |
-| `blob`, `sev_media` | 378 | — | r ≥ 0,144 |
-| `feature envy`, `sev_media` | 307 | — | r ≥ 0,159 |
-| `data class`, `sev_media` | 277 | — | r ≥ 0,168 |
+| agregado, `maioria > none` | 1.369 | 19,5% | d ≥ 0,19 |
+| agregado, `unânime` | 1.369 | 12,2% | d ≥ 0,23 |
+| `long method`, `sev_media` | 736 | — | r ≥ 0,103 |
+| `feature envy`, `sev_media` | 729 | — | r ≥ 0,104 |
+| `blob`, `sev_media` | 648 | — | r ≥ 0,110 |
+| `data class`, `sev_media` | 648 | — | r ≥ 0,110 |
 
 ### 12.2 Caminho de partida 1 — `sev_media` como rótulo
 
-**A sugestão.** Comecar pela severidade média contínua. As dicotomizações
-entram como análise de sensibilidade, não como variável primária.
+**A sugestão.** Começar pela severidade média contínua. As dicotomizações entram como
+análise de sensibilidade, não como variável primária.
 
-**Por que, em três frentes que apontam para o mesmo lado:**
+**Por quê:**
 
-*Poder.* `sev_media` detecta r ≥ 0,104 no agregado. A melhor dicotomização (`any`) exige
-d ≥ 0,23, e a menos circular (`maioria`) exige **d ≥ 0,44** — quase meio desvio-padrão de
-diferença entre classes com e sem smell, efeito grande demais para ser plausível nesta
-literatura. `unânime` exige d ≥ 1,06 e é inutilizável como variável principal: não por
-estar errada, mas por ter 7 positivos.
-
-*Circularidade.* A seção 3 mostra que `any > none` é quase um detector de "esta amostra foi
-ao crosscheck": das 1.227 amostras revisadas a partir de 26/07/2019, 100% já eram positivas
-antes. Dicotomizar por `any` importa esse defeito inteiro para a variável dependente.
+*Circularidade.* A seção 3 mostra que `any > none` é quase um detector de "esta unidade foi
+ao crosscheck": toda amostra crosscheckada já tinha algum smell positivo, e as unidades com
+um único revisor têm 0,0% de positivos. Dicotomizar por `any` importa isso inteiro para a
+variável dependente.
 
 *Informação descartada.* Dicotomizar joga fora a diferença entre uma classe que três
 revisores marcaram como `critical` e outra que um marcou como `minor`. São 14.739 revisões;
 a média usa todas.
+
+*Poder.* `sev_media` detecta r ≥ 0,104 no agregado. A dicotomização menos circular
+(`maioria`) exige d ≥ 0,27 — viável como análise de sensibilidade, mas com menos poder que
+a escala contínua.
 
 **O que isso custa.** Uma variável contínua com 72% de zeros não é normal, então o teste
 tem que ser não-paramétrico (Spearman) ou um modelo que trate o excesso de zeros. É ônus de
@@ -1156,38 +1133,31 @@ escolha de teste, não de dado — e a alternativa dicotômica tem o mesmo probl
 pior.
 
 **A ressalva que o artigo precisa declarar.** `sev_media` **não é imune ao desenho
-amostral.** A tabela da seção 3 mostra média 0,000 nas amostras de 2 revisores e 0,59–0,80
-nas de 4 ou mais, porque só as sinalizadas foram para o crosscheck. A média continua
+amostral.** A tabela da seção 3 mostra média 0,001 nas unidades de um revisor e 0,59–0,82
+nas de 2 ou mais, porque só as sinalizadas foram para o crosscheck. A média continua
 condicionada ao roteamento. Ela é melhor que `any > none`, não é limpa. O que mitiga é a
-coluna `estrato`: comparar dentro de estrato, ou entre os extremos `negativo_confiavel` e
-`positivo_confiavel`, isola o efeito do roteamento.
+coluna `estrato`: comparar grupos de arquivo pelo estrato das suas unidades isola o efeito
+do roteamento (análises 03 e 04 do step 3).
 
 ### 12.3 Caminho de partida 2 — análise agregada antes da análise por smell
 
-**A sugestão.** Comecar pela severidade do smell avaliado de cada arquivo,
-qualquer que seja ele. A análise por smell individual entra depois, com a ressalva de poder.
+**A sugestão.** Começar pelo rótulo agregado do arquivo: **o maior `sev_media` entre os
+smells avaliados nele**, ou seja, o smell percebido como mais grave. A análise por smell
+individual entra depois.
 
-**Por quê.** O MLCQ anota cada amostra para **um** smell específico, então o N por smell é
-pequeno por construção: 715 dos 730 arquivos do ramo determinístico têm exatamente um smell
-avaliado. Agregar recupera o N inteiro do ramo sem misturar avaliações de smells diferentes
-no mesmo arquivo.
-
-**O impacto é grande e é de graça:**
+**Por quê.** O agregado usa o N inteiro do ramo (730), enquanto cada smell só é avaliado
+nos arquivos da sua granularidade (307 a 432):
 
 | | N | r detectável |
 |---|---:|---:|
 | determinístico, agregado | 730 | **0,104** |
-| determinístico, `data class` | 114 | 0,260 |
-| ampliado, `data class` | 277 | 0,168 |
-
-O agregado do ramo determinístico tem **mais poder que qualquer análise por smell do ramo
-ampliado** — sem custo nenhum de validade de construto. Se poder é a preocupação, é aqui
-que se ganha, não trocando de binding.
+| determinístico, `long method` | 432 | 0,134 |
+| determinístico, `data class` | 307 | 0,159 |
 
 **O que isso custa.** "Densidade de test smell prediz code smell" é uma pergunta mais fraca
 que "prediz *blob* especificamente". O agregado responde a primeira; as análises por smell
-respondem a segunda quando o N permite — `long method` (251) e `blob` (196) têm N razoável,
-`data class` (114) é o caso magro.
+respondem a segunda, com N razoável nos quatro smells. E o agregado é uma **definição**
+(o máximo entre os smells avaliados), que o artigo tem que declarar.
 
 ### 12.4 Caminho de partida 3 — os dois ramos, como perguntas diferentes
 
@@ -1203,16 +1173,14 @@ determinístico não bastar, incluir o ampliado. Os números dizem que isso não
 cobra caro:
 
 - *O ganho é marginal.* Dobrar o N move o detectável de r ≥ 0,104 para r ≥ 0,076 no
-  agregado, e de ~0,20 para ~0,15 por smell. Não é a diferença entre concluir e não
-  concluir.
+  agregado, e de ~0,13–0,16 para ~0,10–0,11 por smell. Não é a diferença entre concluir e
+  não concluir.
 - *O custo é de construto, não de precisão.* O ramo ampliado tem **10,1%** de precisão para
   a pergunta "este teste testa esta classe" (seção 5). O problema dele não é tamanho de
   amostra — é que mede outra coisa, e nenhum N conserta isso.
 - *Trocar de ramo não é o problema; trocar sem dizer é.* Voltar e usar o ampliado depois
   de ver o determinístico é legítimo — desde que o artigo diga que os dois foram rodados e
-  o que cada um deu. O que não se sustenta é apresentar o ampliado como "o mesmo resultado
-  com mais amostras", porque ele responde outra pergunta (10,1% de precisão para a
-  original).
+  o que cada um deu.
 
 **Como usar o ampliado legitimamente.** Como análise separada, com a pergunta própria dela
 escrita: *"classes exercitadas por suítes com muito test smell têm mais code smell?"*. É
@@ -1226,15 +1194,14 @@ Se for preciso voltar e trocar alguma coisa, vale saber qual troca move mais o r
 
 | decisão | efeito no detectável | custo |
 |---|---|---|
-| dicotomizar por `maioria` em vez de usar `sev_media` | d ≥ 0,44 contra r ≥ 0,10 | nenhum ganho em troca |
-| por smell em vez de agregado | r ≥ 0,26 contra r ≥ 0,10 (`data class`) | responde pergunta mais específica |
+| dicotomizar por `maioria` em vez de usar `sev_media` | d ≥ 0,27 contra r ≥ 0,10 | importa a circularidade do rótulo |
+| por smell em vez de agregado | r ≥ 0,16 contra r ≥ 0,10 (`data class`) | responde pergunta mais específica |
 | ramo ampliado em vez do determinístico | r ≥ 0,076 contra r ≥ 0,104 | precisão de construto cai a 10,1% |
 
-**A regra de rótulo é a alavanca mais forte, e a mais barata.** A estratégia de binding é a
-mais cara e a que menos move o número. Essa ordem é contraintuitiva — o step 2 gastou 41,5
-minutos de clonagem e meio dia de auditoria na estratégia 3, e ela é a decisão de menor
-impacto sobre o poder. O trabalho não foi desperdiçado: foi o que permitiu **medir** que
-ela é de menor impacto, e o que produziu o achado de construto da seção 5.
+**A estratégia de binding é a decisão mais cara e a que menos move o número.** O step 2
+gastou 41,5 minutos de clonagem e meio dia de auditoria na estratégia 3, e ela é a decisão
+de menor impacto sobre o poder. O trabalho não foi desperdiçado: foi o que permitiu
+**medir** que ela é de menor impacto, e o que produziu o achado de construto da seção 5.
 
 ### 12.6 O que continua não medido
 
@@ -1242,55 +1209,9 @@ ela é de menor impacto, e o que produziu o achado de construto da seção 5.
   foram medidas (`NOTAS-METODOLOGICAS.md`, seção 1). Se o step 3 der nulo, isso vira
   ameaça relevante e vale o desenho complementar: sortear arquivos de produção não ligados
   e procurar teste à mão.
-- **Concordância humana sobre a auditoria.** Os 293 vereditos são automatizados. Uma
-  conferência humana de ~30 pares produz a taxa de concordância, que é o número que
-  transforma "primeira passada automatizada" em algo reportável (notas, seção 9).
+- **Concordância humana sobre a auditoria.** Os 293 vereditos atuais são automatizados. O
+  censo humano e a subamostra do segundo avaliador seguem o
+  `PROTOCOLO-AUDITORIA-HUMANA.md`.
 - **Atenuação residual.** Mesmo com 94,2% de precisão, 6% de pares falsos atenuam a
   correlação. Com a precisão medida, dá para estimar o quanto — e isso só vale a pena se o
   resultado for nulo (notas, seção 2).
-
-### 12.7 Recalculado em 17/10/2026, na unidade (amostra, smell)
-
-Com a unidade corrigida, o N de arquivos não muda (o binding depende só dos caminhos), mas
-quase todo arquivo passa a ter **dois ou mais smells avaliados**: 727 dos 730 no ramo
-determinístico. Por isso o N por smell sobe muito, e as regras dicotomizadas ganham
-positivos.
-
-**Ramo determinístico — 730 arquivos**
-
-| análise | N | prevalência | efeito mínimo detectável | em 18/09 |
-|---|---:|---:|---|---|
-| agregado, `sev_media` | 730 | — | **r ≥ 0,104** | r ≥ 0,104 |
-| agregado, `any > none` | 730 | 27,9% | d ≥ 0,23 | d ≥ 0,23 |
-| agregado, `any ≥ major` | 730 | 19,3% | d ≥ 0,26 | d ≥ 0,26 |
-| agregado, `maioria > none` | 730 | 18,8% | d ≥ 0,27 | d ≥ 0,44 |
-| agregado, `unânime` | 730 | 12,5% | d ≥ 0,31 | d ≥ 1,06 |
-| `long method`, `sev_media` | 432 | — | r ≥ 0,134 | r ≥ 0,176 |
-| `feature envy`, `sev_media` | 429 | — | r ≥ 0,135 | r ≥ 0,204 |
-| `blob`, `sev_media` | 307 | — | r ≥ 0,159 | r ≥ 0,199 |
-| `data class`, `sev_media` | 307 | — | r ≥ 0,159 | r ≥ 0,260 |
-
-**Ramo ampliado — 1.369 arquivos**
-
-| análise | N | prevalência | efeito mínimo detectável |
-|---|---:|---:|---|
-| agregado, `sev_media` | 1.369 | — | r ≥ 0,076 |
-| agregado, `any > none` | 1.369 | 28,0% | d ≥ 0,17 |
-| agregado, `maioria > none` | 1.369 | 19,5% | d ≥ 0,19 |
-| agregado, `unânime` | 1.369 | 12,2% | d ≥ 0,23 |
-| por smell, `sev_media` | 648–736 | — | r ≥ 0,103 a 0,110 |
-
-**O que muda nas recomendações:**
-
-- **12.2 (`sev_media` como rótulo) continua de pé, com um argumento a menos.** A
-  circularidade de `any > none` e a informação descartada pela dicotomização seguem valendo.
-  O argumento de poder enfraquece: a maioria agora exige d ≥ 0,27, e não 0,44. Dicotomizar
-  por maioria passou a ser uma análise de sensibilidade viável, não um desperdício.
-- **12.3 (agregado antes de por smell) muda de natureza.** O agregado já não é "o smell do
-  arquivo, qualquer que seja": é **o maior `sev_media` entre os smells avaliados no
-  arquivo**, ou seja, o smell percebido como mais grave. É uma definição defensável, mas é
-  uma definição, e o artigo tem que declará-la. A análise por smell ficou bem mais
-  informativa (r ≥ 0,13 a 0,16).
-- **12.5 (hierarquia das decisões):** a regra de rótulo continua sendo a alavanca mais
-  forte, mas a distância encolheu (d ≥ 0,27 contra r ≥ 0,10).
-

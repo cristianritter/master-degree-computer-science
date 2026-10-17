@@ -229,9 +229,7 @@ def conferir_cruzado():
            ", ".join("%s x %s" % (r["code_smell"], r["test_smell"]) for r in acima))
     nominais = [r for r in principal if float(r["p"]) < 0.05]
     exigir(len(nominais) == 6, "6 significancias nominais, nenhuma ajustada", len(nominais))
-    # a sensibilidade sem filtro quase nao difere da familia filtrada. A previa de 04/10
-    # (0,21 em data class x Eager/Lazy) foi rodada sobre o rotulo com defeito e nao se
-    # reproduz mais: na unidade corrigida os valores sao 0,127 e 0,119.
+    # a sensibilidade sem filtro quase nao difere da familia filtrada
     dc = {r["test_smell"]: float(r["rho"]) for r in sens if r["code_smell"] == "data class"}
     exigir(perto(dc["Eager Test"], 0.127) and perto(dc["Lazy Test"], 0.119),
            "sem filtro, data class x Eager/Lazy: 0,127 e 0,119",

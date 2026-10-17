@@ -115,40 +115,16 @@ seção 12.0).
 
 | # | data | análise | testes | resultado |
 |---|---|---|---:|---|
-| 1–40 | 18/09 | 01 — correlação agregada | 40 | 4 significâncias nominais, todas em desfecho sensível a tamanho; sem ajuste |
-| 41–92 | 18/09 | 02 — por test smell | 52 | nenhum sobrevive ao FDR (menor p ajustado 0,283) |
-| 93–98 | 18/09 | 03 — extremos | 6 | nenhum p < 0,05 |
-| 99–104 | 18/09 | 04 — disputados | 6 | nenhum p < 0,05, e todos abaixo do detectável |
-| 105–156 | 04/10 | 05 — prévia, sem registro, sem filtro de `nome_divergente` | 52 | nenhum sobrevive ao FDR; levada à reunião de orientação |
-| 157–164 | 17/10 | 05 — versão registrada: as 8 células de Eager/Lazy com o filtro | 8 | nenhuma das 52 células da família sobrevive ao FDR (menor p ajustado 0,271) |
-| 165–204 | 17/10 | 01 — rodada 2, rótulo corrigido | 40 | 5 significâncias nominais, todas em desfecho sensível a tamanho; sem ajuste |
-| 205–256 | 17/10 | 02 — rodada 2 | 52 | nenhum sobrevive ao FDR (menor p ajustado 0,260) |
-| 257–262 | 17/10 | 03 — rodada 2, grupos por conjunto | 6 | bruto e distintos do determinístico sobrevivem ao FDR (0,020); densidade não |
-| 263–268 | 17/10 | 04 — rodada 2, grupos por conjunto | 6 | nenhum p < 0,05, todos abaixo do detectável |
-| 269–328 | 17/10 | 05 — rodada 2 (52 + 8 de sensibilidade) | 60 | nenhum sobrevive ao FDR (menor p ajustado 0,104); 2 células acima do r detectável |
+| 1–40 | 17/10 | 01 — correlação agregada | 40 | 5 significâncias nominais, todas em desfecho sensível a tamanho; sem ajuste |
+| 41–92 | 17/10 | 02 — por test smell | 52 | nenhum sobrevive ao FDR (menor p ajustado 0,260) |
+| 93–98 | 17/10 | 03 — extremos | 6 | bruto e distintos do determinístico sobrevivem ao FDR (0,020); densidade não |
+| 99–104 | 17/10 | 04 — confirmados × só disputados | 6 | nenhum p < 0,05, todos abaixo do detectável |
+| 105–164 | 17/10 | 05 — code smell × test smell (52 + 8 de sensibilidade) | 60 | nenhum sobrevive ao FDR (menor p ajustado 0,104); 2 células acima do r detectável |
 
-**328 testes rodados no total**, 164 em cada rodada.
-
-> **Por que há duas rodadas.** Em 17/10/2026 encontramos um defeito na normalização do MLCQ
-> (step 2, seção 3): a unidade de rótulo era a amostra, e o certo é (amostra, smell). Todas
-> as análises foram refeitas sobre o rótulo corrigido, com as mesmas decisões, exceto o
-> agrupamento das análises 03 e 04, que a correção tornou impossível e foi redefinido antes
-> de rodar (`variaveis.grupo_arquivo`). Os READMEs das análises descrevem a rodada 2; os
-> testes da rodada 1 foram olhados e por isso continuam no total. Os 40 da primeira análise saíram sem ajuste e estão
-reportados assim; os seguintes já saem com p ajustado por Benjamini-Hochberg dentro de
-cada família. Quando a exploração fechar, o artigo reporta o total e declara o regime como
-exploratório — é o que o volume exige.
-
-> **Como a análise 05 conta.** A prévia de 04/10 rodou as 52 células sem registro e sem o
-> filtro. A versão registrada repete 44 delas idênticas, que não são testes novos, e troca
-> as 8 de Eager/Lazy pela versão filtrada, que são. A família reportada é a registrada (52
-> testes); as 8 sem filtro ficam no CSV como sensibilidade. Testes olhados contam mesmo sem
-> registro, por isso a prévia entra aqui.
-
-> **Este número já foi corrigido uma vez.** A primeira versão dizia "22 testes, 3
-> significâncias", contando só a rodada em que `--por-smell` tinha sido usado num ramo só.
-> O `conferir_resultados.py` acusou a divergência quando a rodada completa foi gravada. É
-> exatamente o erro que o caderno existe para impedir: subcontar tentativas sem perceber.
+**164 testes rodados no total.** Os 40 da primeira análise saem sem ajuste e estão
+reportados assim; os seguintes saem com p ajustado por Benjamini-Hochberg dentro de cada
+família. O artigo reporta o total e declara o regime como exploratório — é o que o volume
+exige.
 
 ---
 

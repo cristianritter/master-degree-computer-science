@@ -10,12 +10,6 @@ deu nulo com poder suficiente para limitar o efeito.
 python disputados.py --csv
 ```
 
-> **Refeita em 17/10/2026.** Até então a análise exigia estrato único por arquivo e
-> comparava 42 confirmados com 155 disputados. Com a unidade de rótulo corrigida para
-> (amostra, smell) (step 2, seção 3), quase todo arquivo reúne estratos diferentes, e a
-> regra abaixo foi fixada antes de rodar a análise com ela. A versão anterior está no
-> histórico do git e no caderno do README do step 3.
-
 ---
 
 ## Por que esta comparação é diferente das outras

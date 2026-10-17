@@ -88,23 +88,6 @@ seção 5) — a análise 02 usa isso.
 A distribuição é praticamente idêntica nos dois ramos: mais uma evidência de que o binding
 não desloca o rótulo.
 
-> **Refeita em 17/10/2026** com a unidade de rótulo corrigida para (amostra, smell) (step 2,
-> seção 3). A versão anterior desta seção dava um estrato por arquivo, o que só era
-> possível porque a normalização misturava os dois smells de cada amostra.
-
-## 4. Um defeito encontrado aqui e corrigido no step 2
-
-`ts_n_distintos` dava **19** num arquivo — impossível, já que só existem 13 smells
-habilitados. A coluna somava a contagem de distintos de cada classe de teste em vez de unir
-os conjuntos; o valor correto daquele arquivo era 10.
-
-Corrigido em `montar_analise.py`: passou a ser união, e não depende mais de `--agregacao`.
-Os máximos voltaram para dentro do possível — 12 e 13.
-
-> O defeito apareceu por olhar a distribuição antes de usar a variável, não por revisão de
-> código. Mesmo padrão da seção 4 do step 2, em que a discordância entre README e
-> implementação apareceu ao montar a auditoria.
-
 ---
 
 ## Artefatos

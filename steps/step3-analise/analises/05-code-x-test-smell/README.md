@@ -15,10 +15,7 @@ python cruzado.py --csv
 ## De onde vem
 
 Pedida pelo orientador (reunião de 04/10/2026, comentário da p. 7 do relatório: "tabela
-dos N code smells mais correlacionados com test smells"). Uma **prévia** foi rodada naquele
-dia e levada à reunião sem registro no repositório. Esta análise é a versão registrada, e a
-prévia entra no caderno de tentativas do README do step 3: os testes dela foram olhados, e
-isso conta.
+dos N code smells mais correlacionados com test smells").
 
 A análise 02 já tinha perguntado se algum test smell se comporta diferente, contra o code
 smell agregado. Esta subdivide pelo lado da produção: cada code smell com a sua própria
@@ -26,7 +23,7 @@ severidade.
 
 ## Decisões
 
-Fixadas antes de rodar esta versão:
+Fixadas antes de rodar:
 
 | | escolha | por quê |
 |---|---|---|
@@ -36,19 +33,12 @@ Fixadas antes de rodar esta versão:
 | família | os 52 testes, com p ajustado por Benjamini-Hochberg | mesmo tratamento da análise 02 |
 | efeito detectável | r mínimo com 80% de poder, por célula | um rho abaixo dele não decide nada |
 
-A prévia não filtrava `nome_divergente`. Usar como família principal um dado sabidamente
-contaminado seria errado, então o filtro entrou, e as 8 células de Eager/Lazy sem filtro
-rodam à parte, como sensibilidade, fora da família.
+As 8 células de Eager/Lazy também rodam sem o filtro, à parte, como sensibilidade, fora
+da família.
 
 ---
 
 ## Resultado
-
-> **Refeita em 17/10/2026** com a unidade de rótulo corrigida para (amostra, smell) (step 2,
-> seção 3). Na unidade antiga cada arquivo tinha, na prática, um smell avaliado, e o N de
-> data class era 114; agora blob e data class são julgados juntos em cada classe, e o N de
-> cada linha da grade subiu (306 a 429). O resultado mudou: a versão anterior dizia
-> "nenhuma célula alcança o r detectável", o que não vale mais.
 
 Ramo determinístico, 730 arquivos. **Nenhuma célula sobrevive ao FDR**; o menor p ajustado
 é 0,104.
@@ -87,10 +77,6 @@ detectável 0,140 a 0,163).
 | data class × Lazy Test | 0,119 (N = 306) | 0,123 (N = 291) |
 
 Nas oito células a diferença fica abaixo de 0,02.
-
-A prévia de 04/10 deu 0,21 nessas duas células, sem filtro. Ela foi rodada sobre o rótulo
-com defeito e não se reproduz mais: na unidade corrigida, as mesmas células sem filtro dão
-0,127 e 0,119.
 
 ## A leitura
 

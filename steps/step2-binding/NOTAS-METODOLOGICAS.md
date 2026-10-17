@@ -98,9 +98,8 @@ da classe e varre a árvore do projeto atrás de um `.java` com o nome restante.
 fechada, 100% reprodutível — e capaz de casar o arquivo errado sempre que dois módulos do
 mesmo repositório têm classes de mesmo nome.
 
-O caso concreto encontrado aqui: a estratégia `convencao` do `binding.py` indexava os
-testes por **basename no repositório inteiro**, apesar de o README afirmar que o binding é
-por caminho. Resultado, no mesmo repositório:
+O caso concreto aqui: a estratégia `convencao` do `binding.py` procura `XTest` por
+**basename no repositório inteiro**. Resultado, no mesmo repositório:
 
 ```
 prod : .../reil/translators/mips/NorTranslator.java
@@ -108,8 +107,9 @@ teste: .../reil/translators/mips/NorTranslatorTest.java     correto
 teste: .../reil/translators/ppc/NorTranslatorTest.java      outra classe, outro pacote
 ```
 
-A regra é determinística e errou em silêncio. Ela só apareceu porque a auditoria obrigou a
-olhar par a par — antes mesmo de qualquer par ser julgado.
+A regra é determinística e erra em silêncio. É por isso que o par carrega a evidência
+(`caminho_espelhado` ou `so_basename`) e que a auditoria trata as duas como estratos
+separados: `so_basename` acerta 46,5%.
 
 Cuidado com a leitura ingênua da coluna `ambiguo`: ela marca **arquivo de produção com mais
 de uma classe de teste ligada pelo mesmo método** (42 pares em `caminho_exato`, 26 em
@@ -202,21 +202,16 @@ A prevalência depende inteiramente da regra:
 | `pos_maioria` (a maioria marcou > none) | 9,5% |
 | `pos_unanime` (todos marcaram) | 5,7% |
 
-> Esta tabela foi refeita em 17/10/2026, com a unidade de rótulo corrigida para (amostra,
-> smell) (README, seção 3). A versão anterior misturava os dois smells de cada amostra.
-
 **Poder estatístico** é a capacidade de detectar um efeito que existe. Ele depende do N
 total *e* da prevalência: 1.000 casos com 2 positivos têm poder quase nulo, porque quase
 não há variação para explicar. Uma regra com poucos positivos é inútil como variável
 principal — não por ser errada, mas por não ter poder.
 
-Em 09/2026 este parágrafo explicava por que só havia 44 positivos por maioria no ramo
-determinístico. O número vinha da normalização com defeito (README, seção 3); na unidade
-correta são **137 arquivos positivos** por maioria, de 730.
+No ramo determinístico, a regra da maioria marca **137 arquivos positivos** de 730.
 
 > **O número disso está medido.** No ramo determinístico (730 arquivos), dicotomizar por
 > maioria exige detectar d ≥ 0,27, enquanto a severidade contínua detecta r ≥ 0,104. A
-> regra `unanime`, com 91 positivos, exige d ≥ 0,31. A tabela completa está na seção 12.7
+> regra `unanime`, com 91 positivos, exige d ≥ 0,31. A tabela completa está na seção 12.1
 > do `README.md`, e sai de `poder_analise.py`.
 
 **A saída:** com `--rotulo sev_media` a questão não se coloca. Em vez de dicotomizar em

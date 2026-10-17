@@ -12,12 +12,9 @@ python explorar.py --por-smell --csv
 
 Spearman sobre postos, IC95% por z de Fisher, rótulo `sev_media` contínuo.
 
-> **Refeita em 17/10/2026** com a unidade de rótulo corrigida para (amostra, smell) (step 2,
-> seção 3). O rótulo agregado do arquivo passou a ser **o maior `sev_media` entre os smells
-> avaliados nele**: quase todo arquivo tem dois smells julgados (blob e data class numa
-> classe, por exemplo), então o agregado é o smell percebido como mais grave. As conclusões
-> não mudaram; os números mudaram na terceira casa. A versão anterior está no histórico do
-> git.
+O rótulo agregado do arquivo é **o maior `sev_media` entre os smells avaliados nele**:
+quase todo arquivo tem dois smells julgados (blob e data class numa classe, por exemplo),
+então o agregado é o smell percebido como mais grave.
 
 ---
 

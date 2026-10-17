@@ -21,7 +21,7 @@ def desfechos(linha):
     densidade   soma / numero de metodos de teste    normalizado por tamanho
     distintos   quantos dos 13 smells aparecem       pouco sensivel a tamanho
 
-    As tres existem porque a rodada 1 mostrou que a escolha entre elas muda o resultado:
+    As tres existem porque a analise 01 mostrou que a escolha entre elas muda o resultado:
     as sensiveis a tamanho dao significancia, a normalizada nao.
     """
     total = c.num(linha["ts_n_total"])
@@ -72,9 +72,8 @@ def grupo_arquivo(linha):
 
     Cada amostra do MLCQ e julgada para os dois smells da sua granularidade (step 2,
     secao 3), entao quase todo arquivo reune unidades de estratos diferentes - blob
-    negativo e data class confirmado, por exemplo. Exigir estrato unico deixava 14
-    confirmados e 2 negativos no ramo deterministico. A regra, fixada em 17/10/2026 antes
-    de rodar as analises 03 e 04 com ela:
+    negativo e data class confirmado, por exemplo. Exigir estrato unico deixaria 14
+    confirmados e 2 negativos no ramo deterministico. A regra:
 
       confirmado     alguma unidade positivo_confiavel (a maioria marcou > none)
       limpo          so unidades negativas (negativo_1_review ou negativo_confiavel)

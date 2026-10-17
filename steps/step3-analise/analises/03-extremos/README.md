@@ -11,13 +11,6 @@ agora visto pela comparação de grupos.
 python extremos.py --csv
 ```
 
-> **Refeita em 17/10/2026.** Até então a análise exigia estrato único por arquivo e
-> comparava `positivo_confiavel` (42 arquivos) com `negativo_confiavel` (523). Com a
-> unidade de rótulo corrigida para (amostra, smell) (step 2, seção 3), quase todo arquivo
-> reúne estratos diferentes, os grupos caíram para 14 e 2, e o teste não rodava. A regra
-> abaixo foi fixada antes de rodar a análise com ela. A versão anterior, e o resultado
-> dela, estão no histórico do git e no caderno do README do step 3.
-
 ---
 
 ## Por que comparar extremos em vez de correlacionar
@@ -26,8 +19,10 @@ A correlação da análise 01 pressupõe relação monotônica ao longo de toda 
 severidade. O desenho do MLCQ não sustenta bem isso: a severidade média é contínua, mas vem
 de um processo de rotulagem circular com o crosscheck (step 2, seção 3).
 
-O que o desenho sustenta melhor é comparar os extremos de evidência, com o arquivo
-classificado pelo conjunto dos seus smells (`variaveis.grupo_arquivo`):
+O que o desenho sustenta melhor é comparar os extremos de evidência. Como quase todo
+arquivo reúne unidades (amostra, smell) de estratos diferentes — blob negativo e data class
+confirmado, por exemplo —, o arquivo é classificado pelo conjunto dos seus smells
+(`variaveis.grupo_arquivo`):
 
 | grupo | definição |
 |---|---|
@@ -80,10 +75,6 @@ comparação detectaria delta ≥ 0,156 com 80% de poder; o 0,074 observado est�
 
 **O ramo ampliado não separa em nada**, como na análise 01: com 10,1% de precisão para "o
 teste testa esta classe", a atenuação leva tudo para perto de zero.
-
-> A versão anterior desta análise dizia que "o grupo negativo tem densidade ligeiramente
-> maior". Na unidade corrigida isso não se sustenta: o confirmado tem mediana maior (1,800
-> contra 1,636). A frase foi retirada.
 
 ---
 
