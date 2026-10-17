@@ -25,11 +25,13 @@ explica a pergunta, o resultado e a leitura. **Este arquivo é só o índice.**
 | **02** | algum dos 13 smells se comporta diferente? | nenhum sobrevive ao FDR; Eager e Lazy, os melhores candidatos, são os mais próximos de zero | [por test smell](analises/02-por-test-smell/) |
 | **03** | classes com code smell confirmado têm testes piores? | não; o grupo negativo tem densidade ligeiramente maior | [extremos](analises/03-extremos/) |
 | **04** | entre as sinalizadas, o test smell prediz quais a maioria confirmou? | **inconclusiva** — poder insuficiente, não nulo | [disputados](analises/04-disputados/) |
+| **05** | algum code smell específico se associa a algum test smell específico? | nenhuma das 52 células sobrevive ao FDR nem alcança o r detectável | [code × test smell](analises/05-code-x-test-smell/) |
 
 ### O que o conjunto diz
 
 Três operacionalizações independentes (01, 02, 03) deram nulo. A quarta (04) tem o melhor
-desenho e o pior poder, e não decide.
+desenho e o pior poder, e não decide. A 05 subdivide a 02 por code smell e confirma que o
+nulo agregado não esconde um par forte.
 
 O acúmulo importa: um nulo pode ser operacionalização infeliz; três nulos por caminhos
 diferentes apontam para o mesmo lugar. Com a precisão do binding medida (94,2%) e o poder
@@ -67,7 +69,8 @@ step3-analise/
     ├── 01-correlacao-agregada/ README.md + explorar.py + dados/
     ├── 02-por-test-smell/      README.md + por_test_smell.py + dados/
     ├── 03-extremos/            README.md + extremos.py + dados/
-    └── 04-disputados/          README.md + disputados.py + dados/
+    ├── 04-disputados/          README.md + disputados.py + dados/
+    └── 05-code-x-test-smell/   README.md + cruzado.py + dados/
 ```
 
 **Por que `variaveis.py` mora em `tools/` e não dentro de uma análise.** As definições de
@@ -112,11 +115,19 @@ seção 12.0).
 | 41–92 | 18/09 | 02 — por test smell | 52 | nenhum sobrevive ao FDR (menor p ajustado 0,283) |
 | 93–98 | 18/09 | 03 — extremos | 6 | nenhum p < 0,05 |
 | 99–104 | 18/09 | 04 — disputados | 6 | nenhum p < 0,05, e todos abaixo do detectável |
+| 105–156 | 04/10 | 05 — prévia, sem registro, sem filtro de `nome_divergente` | 52 | nenhum sobrevive ao FDR; levada à reunião de orientação |
+| 157–164 | 17/10 | 05 — versão registrada: as 8 células de Eager/Lazy com o filtro | 8 | nenhuma das 52 células da família sobrevive ao FDR (menor p ajustado 0,271) |
 
-**104 testes rodados no total.** Os 40 da primeira análise saíram sem ajuste e estão
-reportados assim; os 64 seguintes já saem com p ajustado por Benjamini-Hochberg dentro de
+**164 testes rodados no total.** Os 40 da primeira análise saíram sem ajuste e estão
+reportados assim; os seguintes já saem com p ajustado por Benjamini-Hochberg dentro de
 cada família. Quando a exploração fechar, o artigo reporta o total e declara o regime como
 exploratório — é o que o volume exige.
+
+> **Como a análise 05 conta.** A prévia de 04/10 rodou as 52 células sem registro e sem o
+> filtro. A versão registrada repete 44 delas idênticas, que não são testes novos, e troca
+> as 8 de Eager/Lazy pela versão filtrada, que são. A família reportada é a registrada (52
+> testes); as 8 sem filtro ficam no CSV como sensibilidade. Testes olhados contam mesmo sem
+> registro, por isso a prévia entra aqui.
 
 > **Este número já foi corrigido uma vez.** A primeira versão dizia "22 testes, 3
 > significâncias", contando só a rodada em que `--por-smell` tinha sido usado num ramo só.
@@ -138,6 +149,7 @@ cd steps/step3-analise
 (cd analises/02-por-test-smell      && python por_test_smell.py --csv)
 (cd analises/03-extremos            && python extremos.py --csv)
 (cd analises/04-disputados          && python disputados.py --csv)
+(cd analises/05-code-x-test-smell   && python cruzado.py --csv)
 
 python tools/conferir_resultados.py
 ```

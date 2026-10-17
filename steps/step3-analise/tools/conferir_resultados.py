@@ -201,6 +201,37 @@ def conferir_disputados():
            "%d de 6" % len(abaixo))
 
 
+def conferir_cruzado():
+    """A analise 05: a grade 4 x 13. Nenhuma celula sobrevive, nenhuma passa do detectavel."""
+    import csv
+    print("")
+    print("ANALISE 05 - code smell x test smell")
+    print("-" * 36)
+    caminho = os.path.join(c.STEP, "analises", "05-code-x-test-smell", "dados", "cruzado.csv")
+    if not os.path.exists(caminho):
+        exigir(False, "cruzado.csv existe", "ausente - rode cruzado.py --csv")
+        return
+    with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+        L = list(csv.DictReader(f))
+    principal = [r for r in L if r["recorte"] == "principal"]
+    sens = [r for r in L if r["recorte"] == "sensibilidade_sem_filtro"]
+    exigir(len(principal) == 52, "analise 05 tem 52 testes na familia", len(principal))
+    exigir(len(sens) == 8, "8 celulas de sensibilidade (Eager/Lazy sem filtro)", len(sens))
+    sobrevivem = [r for r in principal if float(r["p_ajustado"]) < 0.05]
+    exigir(len(sobrevivem) == 0, "nenhuma celula sobrevive ao ajuste FDR", len(sobrevivem))
+    menor = min(float(r["p_ajustado"]) for r in principal)
+    exigir(perto(menor, 0.271, 0.001), "menor p ajustado e 0,271", "%.3f" % menor)
+    acima = [r for r in principal if abs(float(r["rho"])) >= float(r["r_detectavel"])]
+    exigir(len(acima) == 0, "nenhum |rho| alcanca o r detectavel da celula", len(acima))
+    nominais = [r for r in principal if float(r["p"]) < 0.05]
+    exigir(len(nominais) == 6, "6 significancias nominais, nenhuma ajustada", len(nominais))
+    # a previa de 04/10 nao filtrava nome_divergente: a sensibilidade a reproduz
+    dc = {r["test_smell"]: float(r["rho"]) for r in sens if r["code_smell"] == "data class"}
+    exigir(perto(dc["Eager Test"], 0.206) and perto(dc["Lazy Test"], 0.209),
+           "sem filtro, data class x Eager/Lazy reproduz a previa (0,21)",
+           "%.3f e %.3f" % (dc["Eager Test"], dc["Lazy Test"]))
+
+
 def main():
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -211,6 +242,7 @@ def main():
     conferir_primeira_rodada()
     conferir_segunda_rodada()
     conferir_disputados()
+    conferir_cruzado()
     conferir_caderno()
 
     print()
