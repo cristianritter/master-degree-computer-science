@@ -118,7 +118,11 @@ def main():
     p.add_argument("--ate", type=int, default=10 ** 9)
     p.add_argument("--indices", help="lista separada por virgula, no lugar de --de/--ate")
     p.add_argument("--estrato", help="so os pares deste estrato de auditoria")
+    # para a auditoria humana: o estrato sugere a resposta, entao o avaliador nao o ve
+    p.add_argument("--cego", action="store_true", help="omite o estrato do cabecalho")
     args = p.parse_args()
+    if args.cego and args.estrato:
+        sys.exit("--cego e --estrato juntos revelariam o estrato")
     escolhidos = set(int(x) for x in args.indices.split(",")) if args.indices else None
 
     linhas = list(c.ler_csv(os.path.join(c.DADOS, "auditoria_binding.csv")))
@@ -134,7 +138,10 @@ def main():
         nome_prod = os.path.basename(r["production_path"])[:-5]
 
         print("=" * 78)
-        print("PAR %03d  [%s]  repo=%s" % (i, r["estrato_auditoria"], r["github_repo"]))
+        if args.cego:
+            print("PAR %03d  repo=%s" % (i, r["github_repo"]))
+        else:
+            print("PAR %03d  [%s]  repo=%s" % (i, r["estrato_auditoria"], r["github_repo"]))
         print("  producao: %s" % r["production_path"])
         print("  teste   : %s" % r["test_path"])
         if prod is None or teste is None:
