@@ -1,7 +1,7 @@
-ramo,desfecho,n_positivo,n_negativo,mediana_positivo,mediana_negativo,delta,p,p_ajustado
-ampliado,bruto,267,985,32.0,27.0,0.030879,0.43832,0.831102
-ampliado,densidade,266,984,1.4561,1.55,-0.008512,0.831102,0.831102
-ampliado,distintos,267,985,5.0,5.0,0.008677,0.826874,0.831102
-deterministico,bruto,136,526,21.0,14.0,0.137637,0.013224,0.019835
-deterministico,densidade,135,524,1.8,1.6364,0.074032,0.184194,0.184194
-deterministico,distintos,136,526,5.0,4.0,0.138448,0.012176,0.019835
+ramo,desfecho,n_positivo,n_negativo,mediana_positivo,mediana_negativo,delta,p,p_ajustado,delta_detectavel
+ampliado,bruto,267,985,32.0,27.0,0.030879,0.43832,0.831102,0.111646
+ampliado,densidade,266,984,1.4561,1.55,-0.008512,0.831102,0.831102,0.111824
+ampliado,distintos,267,985,5.0,5.0,0.008677,0.826874,0.831102,0.111646
+deterministico,bruto,136,526,21.0,14.0,0.137637,0.013224,0.019835,0.155718
+deterministico,densidade,135,524,1.8,1.6364,0.074032,0.184194,0.184194,0.156237
+deterministico,distintos,136,526,5.0,4.0,0.138448,0.012176,0.019835,0.155718

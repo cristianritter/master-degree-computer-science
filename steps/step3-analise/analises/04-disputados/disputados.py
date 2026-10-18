@@ -42,18 +42,28 @@ import estat
 from variaveis import desfechos, grupo_arquivo
 
 
-def delta_detectavel(n1, n2, alfa=0.05, poder=0.80):
-    """Menor r bisserial de postos detectavel, via aproximacao normal do Mann-Whitney."""
-    if n1 < 5 or n2 < 5:
-        return float("nan")
-    za = 1.959964
-    zb = 0.841621
-    # var(U) ~ n1*n2*(n+1)/12; delta = (U1-U2)/(n1*n2) -> ep(delta) = sqrt((n+1)/(3*n1*n2))
-    ep = math.sqrt((n1 + n2 + 1.0) / (3.0 * n1 * n2))
-    return (za + zb) * ep
+# Cenarios do "o que seria preciso para responder" do README: o grupo so_disputado cresce
+# e o confirmado fica como esta; INFINITO da o piso imposto pelos confirmados.
+CENARIOS_DISPUTADOS = (200, 500)
+INFINITO = 10 ** 9
+ALVO = 0.15
 
 
-def rodar(ramo, linhas, saida):
+def necessario(ramo, n_conf, n_disp, saida):
+    """O que este desenho precisaria para decidir. Imprime e grava em poder_necessario.csv."""
+    print("\n  o que seria preciso (delta detectavel com 80% de poder):")
+    linhas = [("observado", n_conf, n_disp)]
+    linhas += [("mais_disputados", n_conf, d) for d in CENARIOS_DISPUTADOS]
+    linhas += [("piso", n_conf, INFINITO)]
+    linhas += [("para_delta_%.2f" % ALVO,) + estat.n_para_delta(n_conf, n_disp, ALVO)]
+    for cenario, a, b in linhas:
+        det = estat.delta_detectavel(a, b)
+        print("    %-18s confirmados=%5d  so disputados=%10s  detectavel=%.3f"
+              % (cenario, a, "infinito" if b == INFINITO else b, det))
+        saida.append([ramo, cenario, a, "" if b == INFINITO else b, round(det, 6)])
+
+
+def rodar(ramo, linhas, saida, saida_necessario):
     conf = [r for r in linhas if grupo_arquivo(r) == "confirmado"]
     disp = [r for r in linhas if grupo_arquivo(r) == "so_disputado"]
 
@@ -79,7 +89,7 @@ def rodar(ramo, linhas, saida):
         u, p, delta, n1, n2 = estat.mannwhitney(a, b)
         med_a = sorted(a)[len(a) // 2]
         med_b = sorted(b)[len(b) // 2]
-        det = delta_detectavel(n1, n2)
+        det = estat.delta_detectavel(n1, n2)
         print("  %-12s %7d %7d %10.3f %10.3f %9.3f %9s %12.3f"
               % (chave, n1, n2, med_a, med_b, delta, estat.formatar_p(p), det))
         resultados.append({"desfecho": chave, "n1": n1, "n2": n2, "med_conf": med_a,
@@ -94,6 +104,8 @@ def rodar(ramo, linhas, saida):
                           for r in resultados))
         print("  'detectavel' e o menor delta que este N acharia com 80% de poder:")
         print("  delta observado abaixo dele significa que o teste nao tinha como decidir.")
+
+    necessario(ramo, len(conf), len(disp), saida_necessario)
 
     for r in resultados:
         saida.append([ramo, r["desfecho"], r["n1"], r["n2"], round(r["med_conf"], 4),
@@ -117,9 +129,9 @@ def main():
     print("A comparacao menos circular deste dataset: o roteamento do crosscheck e o mesmo")
     print("nos dois grupos, entao ele nao pode explicar a diferenca.")
 
-    saida = []
+    saida, saida_necessario = [], []
     for ramo in (args.ramo or sorted(c.RAMOS)):
-        rodar(ramo, c.ler_ramo(ramo), saida)
+        rodar(ramo, c.ler_ramo(ramo), saida, saida_necessario)
 
     if args.csv:
         destino = os.path.join(c.dados_de(__file__), "disputados.csv")
@@ -128,6 +140,10 @@ def main():
                             "mediana_confirmado", "mediana_disputado", "delta", "p",
                             "p_ajustado", "delta_detectavel"], saida)
         print("\ndisputados.csv  %d linhas" % n)
+        destino = os.path.join(c.dados_de(__file__), "poder_necessario.csv")
+        n = c.escrever_csv(destino, ["ramo", "cenario", "n_confirmado", "n_disputado",
+                                     "delta_detectavel"], saida_necessario)
+        print("poder_necessario.csv  %d linhas" % n)
 
 
 if __name__ == "__main__":

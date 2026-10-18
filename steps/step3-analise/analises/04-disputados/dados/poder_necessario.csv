@@ -1,0 +1,11 @@
+ramo,cenario,n_confirmado,n_disputado,delta_detectavel
+ampliado,observado,267,117,0.179566
+ampliado,mais_disputados,267,200,0.151424
+ampliado,mais_disputados,267,500,0.122683
+ampliado,piso,267,,0.098989
+ampliado,para_delta_0.15,384,168,0.149756
+deterministico,observado,136,67,0.24202
+deterministico,mais_disputados,136,200,0.180042
+deterministico,mais_disputados,136,500,0.156552
+deterministico,piso,136,,0.138699
+deterministico,para_delta_0.15,354,174,0.149898

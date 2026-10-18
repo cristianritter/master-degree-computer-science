@@ -155,3 +155,29 @@ def benjamini_hochberg(ps):
         ajustados[i] = valor
         anterior = valor
     return ajustados
+
+
+Z_ALFA, Z_PODER = 1.959964, 0.841621   # bicaudal 0,05 e poder 80%
+
+
+def delta_detectavel(n1, n2):
+    """Menor r bisserial de postos detectavel com 80% de poder, alfa 0,05 bicaudal.
+
+    Aproximacao normal do Mann-Whitney: var(U) ~ n1*n2*(n+1)/12, e delta = (U1-U2)/(n1*n2),
+    entao ep(delta) = sqrt((n+1)/(3*n1*n2)). Usada pelas analises 03 e 04 e pelo conferidor.
+    """
+    if n1 < 5 or n2 < 5:
+        return float("nan")
+    return (Z_ALFA + Z_PODER) * math.sqrt((n1 + n2 + 1.0) / (3.0 * n1 * n2))
+
+
+def n_para_delta(n1, n2, alvo):
+    """Menor escala dos dois grupos, na proporcao n1:n2, que detecta delta <= alvo.
+
+    Devolve (n1, n2) arredondados. Sobe a escala em passos de 0,01 - fino o bastante para
+    que o N devolvido seja o minimo inteiro, e nao uma aproximacao de passo grosso.
+    """
+    f = 1.0
+    while delta_detectavel(round(n1 * f), round(n2 * f)) > alvo:
+        f += 0.01
+    return round(n1 * f), round(n2 * f)

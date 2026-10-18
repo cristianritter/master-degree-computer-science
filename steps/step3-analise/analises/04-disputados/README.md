@@ -73,7 +73,7 @@ precisa ser escrita diferente:
 | análise | N | efeito detectável | efeito observado | leitura |
 |---|---:|---|---|---|
 | 01 — correlação | 730 | r ≥ 0,104 | r = 0,050 | nulo **informativo**: limita o efeito a < 0,12 |
-| 03 — extremos, densidade | 136 vs 526 | delta ≥ 0,156 | delta = 0,074 | nulo fraco |
+| 03 — extremos, densidade | 135 vs 524 | delta ≥ 0,156 | delta = 0,074 | nulo fraco |
 | **04 — esta** | 136 vs 67 | delta ≥ 0,24 | delta ≤ 0,12 | **inconclusiva** |
 
 A ironia metodológica vale registrar no artigo: **a comparação com o melhor desenho é a que
@@ -109,3 +109,4 @@ Caminhos possíveis, nenhum barato:
 |---|---|
 | `disputados.py` | a análise |
 | `dados/disputados.csv` | 6 resultados: 2 ramos × 3 desfechos, com delta, p, p ajustado e delta detectável |
+| `dados/poder_necessario.csv` | os cenários de "o que seria preciso para responder", por ramo |

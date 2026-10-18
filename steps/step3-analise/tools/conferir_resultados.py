@@ -191,10 +191,10 @@ def conferir_segunda_rodada():
     exigir(float(det["densidade"]["p"]) > 0.05,
            "na densidade, confirmado x limpo nao separa",
            "p=%s delta=%s" % (det["densidade"]["p"][:5], det["densidade"]["delta"][:5]))
-    # o efeito detectavel citado no README, pela mesma formula da analise 04
-    n1, n2 = 136, 526
-    det_delta = (1.959964 + 0.841621) * math.sqrt((n1 + n2 + 1.0) / (3.0 * n1 * n2))
-    exigir(perto(det_delta, 0.156), "delta detectavel de 136 x 526 e 0,156", "%.3f" % det_delta)
+    # o efeito detectavel citado no README sai do proprio extremos.csv
+    exigir(perto(float(det["densidade"]["delta_detectavel"]), 0.156),
+           "delta detectavel da densidade (135 x 524) e 0,156",
+           det["densidade"]["delta_detectavel"][:6])
 
     # os grupos de arquivo citados no README da analise 00
     from variaveis import grupo_arquivo
@@ -237,13 +237,20 @@ def conferir_disputados():
     exigir(len(abaixo) == 6,
            "todos os 6 deltas ficam abaixo do detectavel (inconclusiva, nao nula)",
            "%d de 6" % len(abaixo))
-    # o que seria preciso para responder (README da analise 04)
-    dd = lambda n1, n2: (1.959964 + 0.841621) * math.sqrt((n1 + n2 + 1.0) / (3.0 * n1 * n2))
-    exigir(perto(dd(136, 10 ** 9), 0.139), "piso do detectavel com 136 confirmados e 0,139",
-           "%.3f" % dd(136, 10 ** 9))
-    exigir(dd(354, 174) <= 0.15 < dd(352, 173),
-           "delta 0,15 pede 354 confirmados e 174 so disputados",
-           "%.4f com 354 x 174" % dd(354, 174))
+    # o que seria preciso para responder: sai do poder_necessario.csv do disputados.py
+    caminho = os.path.join(c.STEP, "analises", "04-disputados", "dados", "poder_necessario.csv")
+    if not os.path.exists(caminho):
+        exigir(False, "poder_necessario.csv existe", "ausente - rode disputados.py --csv")
+        return
+    with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+        nec = [r for r in csv.DictReader(f) if r["ramo"] == "deterministico"]
+    obtido = [(r["cenario"], r["n_confirmado"], r["n_disputado"], round(float(r["delta_detectavel"]), 3))
+              for r in nec]
+    exigir(obtido == [("observado", "136", "67", 0.242), ("mais_disputados", "136", "200", 0.18),
+                      ("mais_disputados", "136", "500", 0.157), ("piso", "136", "", 0.139),
+                      ("para_delta_0.15", "354", "174", 0.15)],
+           "cenarios de poder da analise 04 (67, 200, 500, infinito, 354 x 174)",
+           "; ".join("%s %s/%s %.3f" % x for x in obtido))
 
 
 def conferir_cruzado():

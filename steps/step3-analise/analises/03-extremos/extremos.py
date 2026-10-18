@@ -61,8 +61,9 @@ def rodar(ramo, linhas, csv_saida):
     print("=" * 88)
     print("  (fora = arquivo so disputado, ou cujo unico positivo e de revisor solitario)")
 
-    print("\n  %-12s %7s %7s %10s %10s %9s %9s"
-          % ("desfecho", "N pos", "N neg", "mediana+", "mediana-", "delta", "p"))
+    print("\n  %-12s %7s %7s %10s %10s %9s %9s %12s"
+          % ("desfecho", "N pos", "N neg", "mediana+", "mediana-", "delta", "p",
+             "detectavel"))
     resultados = []
     for chave in ("bruto", "densidade", "distintos"):
         a = [desfecho_de(r, chave) for r in pos]
@@ -75,10 +76,11 @@ def rodar(ramo, linhas, csv_saida):
         u, p, delta, n1, n2 = estat.mannwhitney(a, b)
         med_a = sorted(a)[len(a) // 2]
         med_b = sorted(b)[len(b) // 2]
+        det = estat.delta_detectavel(n1, n2)
         resultados.append({"desfecho": chave, "n1": n1, "n2": n2, "med_pos": med_a,
-                           "med_neg": med_b, "delta": delta, "p": p})
-        print("  %-12s %7d %7d %10.3f %10.3f %9.3f %9s"
-              % (chave, n1, n2, med_a, med_b, delta, estat.formatar_p(p)))
+                           "med_neg": med_b, "delta": delta, "p": p, "detectavel": det})
+        print("  %-12s %7d %7d %10.3f %10.3f %9.3f %9s %12.3f"
+              % (chave, n1, n2, med_a, med_b, delta, estat.formatar_p(p), det))
 
     if resultados:
         ajustados = estat.benjamini_hochberg([r["p"] for r in resultados])
@@ -91,7 +93,7 @@ def rodar(ramo, linhas, csv_saida):
     for r in resultados:
         csv_saida.append([ramo, r["desfecho"], r["n1"], r["n2"], round(r["med_pos"], 4),
                           round(r["med_neg"], 4), round(r["delta"], 6), round(r["p"], 6),
-                          round(r["p_ajustado"], 6)])
+                          round(r["p_ajustado"], 6), round(r["detectavel"], 6)])
     return resultados
 
 
@@ -118,7 +120,7 @@ def main():
         n = c.escrever_csv(destino,
                            ["ramo", "desfecho", "n_positivo", "n_negativo",
                             "mediana_positivo", "mediana_negativo", "delta", "p",
-                            "p_ajustado"], saida)
+                            "p_ajustado", "delta_detectavel"], saida)
         print("\nextremos.csv  %d linhas" % n)
 
 
