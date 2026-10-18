@@ -21,7 +21,7 @@ explica a pergunta, o resultado e a leitura. **Este arquivo é só o índice.**
 | # | pergunta | resposta | documento |
 |---|---|---|---|
 | **00** | que forma têm as variáveis, e que teste elas permitem? | paramétrico descartado; tamanho do teste é confundidor | [caracterização](analises/00-caracterizacao/) |
-| **01** | test smell correlaciona com code smell? | a associação aparente é **tamanho do teste**; isolando qualidade, r = 0,050 (IC até 0,123) | [correlação agregada](analises/01-correlacao-agregada/) |
+| **01** | test smell correlaciona com code smell? | a associação aparente é **tamanho do teste**; isolando qualidade, r = 0,050 (IC até 0,123), e nulo em cada um dos quatro smells | [correlação agregada](analises/01-correlacao-agregada/) |
 | **02** | algum dos 13 smells se comporta diferente? | nenhum sobrevive ao FDR; Eager e Lazy, os melhores candidatos, são os mais próximos de zero | [por test smell](analises/02-por-test-smell/) |
 | **03** | classes com code smell confirmado têm testes piores? | em contagem sim, em densidade não: de novo o tamanho do teste | [extremos](analises/03-extremos/) |
 | **04** | entre as sinalizadas, o test smell prediz quais a maioria confirmou? | **inconclusiva** — poder insuficiente, não nulo | [disputados](analises/04-disputados/) |

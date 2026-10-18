@@ -67,6 +67,21 @@ zero. Ele **não contradiz** o determinístico — não tem como discordar dele.
 
 ## Por code smell individual
 
+A RQ1 também é respondida para cada smell, em densidade. Um nulo agregado poderia esconder
+smells com efeitos opostos que se cancelam; a tabela mostra que não é o caso. Os quatro
+testes formam uma família, com p ajustado por Benjamini-Hochberg:
+
+| smell | N | rho (densidade) | IC95% | p | p ajustado |
+|---|---:|---:|---|---:|---:|
+| blob | 306 | 0,019 | [−0,094, 0,131] | 0,745 | 0,836 |
+| data class | 306 | 0,012 | [−0,100, 0,124] | 0,836 | 0,836 |
+| feature envy | 426 | 0,040 | [−0,055, 0,135] | 0,408 | 0,816 |
+| long method | 429 | 0,053 | [−0,042, 0,147] | 0,273 | 0,816 |
+
+Nenhum smell se associa à densidade de test smell, e o teto do IC fica entre 0,12 e 0,15.
+
+Nos três desfechos, o quadro completo:
+
 **Determinístico.** Três células alcançam p < 0,05, todas em desfecho sensível a tamanho,
 e a densidade do mesmo smell fica perto de zero:
 
@@ -95,7 +110,8 @@ com IC [−0,022, 0,123], que inclui o zero.
 - o poder está calculado: este desenho detecta r ≥ 0,104 com 80% de poder.
 
 Juntando: **qualquer associação entre densidade de test smell e severidade de code smell,
-em classes com teste dedicado, é menor que r ≈ 0,12.**
+em classes com teste dedicado, é menor que r ≈ 0,12 no agregado, e menor que 0,13 a 0,15
+em cada smell.**
 
 ---
 
@@ -104,4 +120,4 @@ em classes com teste dedicado, é menor que r ≈ 0,12.**
 | arquivo | conteúdo |
 |---|---|
 | `explorar.py` | a análise |
-| `dados/exploracao.csv` | 40 resultados: 30 correlações simples, 6 parciais, 4 do confundidor |
+| `dados/exploracao.csv` | 40 resultados: 30 correlações simples, 6 parciais, 4 do confundidor; `p_ajustado` preenchido só na família da RQ1 por smell |

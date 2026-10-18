@@ -97,6 +97,23 @@ def conferir_primeira_rodada():
     rho, _, _, _, _ = estat.spearman(x, tam)
     exigir(perto(rho, 0.554), "test smell bruto x tamanho: rho 0,554", "%.3f" % rho)
 
+    # a RQ1 tambem e respondida por smell, em densidade, com BH entre os quatro
+    import csv
+    caminho = os.path.join(c.STEP, "analises", "01-correlacao-agregada", "dados",
+                           "exploracao.csv")
+    if os.path.exists(caminho):
+        with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+            fam = [r for r in csv.DictReader(f) if r["p_ajustado"]
+                   and r["ramo"] == "deterministico"]
+        print("\n  RQ1 por smell, densidade, deterministico:")
+        exigir(len(fam) == 4, "4 smells na familia da RQ1", len(fam))
+        exigir(all(float(r["p_ajustado"]) > 0.05 for r in fam),
+               "nenhum smell sobrevive ao FDR em densidade",
+               ", ".join("%s %s" % (r["code_smell"], r["p_ajustado"][:5]) for r in fam))
+        exigir(max(float(r["ic_alto"]) for r in fam) < 0.15,
+               "teto do IC95% por smell abaixo de 0,15",
+               "%.3f" % max(float(r["ic_alto"]) for r in fam))
+
 
 def conferir_caderno():
     """O caderno da secao 4 declara um total de testes; o CSV tem que conter todos eles."""

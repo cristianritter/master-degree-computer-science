@@ -113,14 +113,28 @@ def main():
                 for l in bloco("code smell: %s" % sm, linhas, rot):
                     tudo.append([ramo, sm] + l)
 
+            # A RQ1 e respondida pelo agregado E pelos quatro smells em densidade, o desfecho
+            # que isola qualidade de tamanho. Os quatro formam uma familia: p ajustado por
+            # Benjamini-Hochberg entre eles. Bruto e distintos ficam sem ajuste, como o resto
+            # desta analise: servem para mostrar o efeito de tamanho, nao para testar a RQ.
+            fam = [l for l in tudo if l[0] == ramo and l[1] in c.CODE_SMELLS
+                   and l[2] == "simples" and l[3] == "densidade"]
+            print("\n  RQ1 por smell (densidade), p ajustado por FDR entre os %d:" % len(fam))
+            for l, pa in zip(fam, estat.benjamini_hochberg([l[6] for l in fam])):
+                l.append(pa)
+                print("    %-14s N=%4d  rho=%6.3f  IC95%% [%6.3f, %6.3f]  p=%s  p ajust.=%s"
+                      % (l[1], l[4], l[5], l[7], l[8], estat.formatar_p(l[6]),
+                         estat.formatar_p(pa)))
+
     if args.csv:
         destino = os.path.join(c.dados_de(__file__), "exploracao.csv")
+        # p_ajustado so existe na familia da RQ1 por smell; vazio no resto
         arredondado = [[x if isinstance(x, str) or isinstance(x, int)
-                        else ("" if x == "" else round(x, 6)) for x in linha]
+                        else ("" if x == "" else round(x, 6)) for x in linha + [""] * (11 - len(linha))]
                        for linha in tudo]
         n = c.escrever_csv(destino,
                            ["ramo", "code_smell", "analise", "desfecho", "n", "rho", "p",
-                            "ic_baixo", "ic_alto", "rho_com_tamanho"], arredondado)
+                            "ic_baixo", "ic_alto", "rho_com_tamanho", "p_ajustado"], arredondado)
         print("\nexploracao.csv  %d linhas" % n)
 
 
