@@ -241,9 +241,9 @@ def conferir_disputados():
     dd = lambda n1, n2: (1.959964 + 0.841621) * math.sqrt((n1 + n2 + 1.0) / (3.0 * n1 * n2))
     exigir(perto(dd(136, 10 ** 9), 0.139), "piso do detectavel com 136 confirmados e 0,139",
            "%.3f" % dd(136, 10 ** 9))
-    exigir(dd(408, 201) <= 0.15 < dd(340, 167),
-           "delta 0,15 pede ~408 confirmados e ~201 so disputados",
-           "%.3f com 408 x 201" % dd(408, 201))
+    exigir(dd(354, 174) <= 0.15 < dd(352, 173),
+           "delta 0,15 pede 354 confirmados e 174 so disputados",
+           "%.4f com 354 x 174" % dd(354, 174))
 
 
 def conferir_cruzado():

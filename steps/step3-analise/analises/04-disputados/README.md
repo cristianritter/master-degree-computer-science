@@ -92,8 +92,8 @@ outro grupo:
 | 500 | 0,157 |
 | infinito | **0,139** (piso com 136 confirmados) |
 
-Para delta de 0,15, mantendo a proporção observada, seriam precisos cerca de **408
-confirmados e 201 só disputados** — três vezes o que temos.
+Para delta de 0,15, mantendo a proporção observada, seriam precisos **354 confirmados e
+174 só disputados** — 2,6 vezes o que temos.
 
 Caminhos possíveis, nenhum barato:
 - ampliar a cobertura do binding, que o step 2 já explorou até 37,5% e cujo custo de
