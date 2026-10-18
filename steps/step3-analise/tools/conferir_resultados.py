@@ -52,6 +52,16 @@ def conferir_caracterizacao():
     lazy = max(c.num(r[c.coluna_ts("Lazy Test")]) for r in linhas)
     exigir(perto(lazy, 1116, 0.5), "maximo de Lazy Test e 1.116", lazy)
 
+    # concentracao por repositorio: ameaca declarada (arquivos do mesmo repo nao sao
+    # independentes)
+    import collections
+    por_repo = collections.Counter(r["github_repo"] for r in linhas)
+    dez = 100.0 * sum(v for _, v in por_repo.most_common(10)) / len(linhas)
+    um = sum(1 for v in por_repo.values() if v == 1)
+    exigir((len(por_repo), um) == (246, 113) and perto(dez, 20.5, 0.05),
+           "246 repositorios, 113 com um unico arquivo, top 10 com 20,5%",
+           "%d, %d, %.1f%%" % (len(por_repo), um, dez))
+
 
 def conferir_primeira_rodada():
     print("\nPRIMEIRA RODADA (secao 4)")

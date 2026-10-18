@@ -228,11 +228,15 @@ python tools/validar_filtro.py            # os 12 repositórios que precisaram d
 python tools/validar_filtro.py --todos    # todos os 451 (lento: ~450 clones)
 ```
 
-Resultado nos 12: **filtro e oráculo coincidem em todos**. Além disso, a contagem
-fecha exatamente — para cada repositório, `oráculo + sem_junit = arquivos realmente
-removidos`. Ou seja, dos 46 arquivos removidos, 25 causavam mesmo o NPE e 21 não
-tinham import de JUnit (o `isTestFile` os rejeitaria de qualquer forma, então removê-los
-foi desnecessário porém comprovadamente inócuo).
+Resultado nos 12: **filtro e oráculo coincidem em todos**. Dos 46 arquivos que o lote
+removeu (`run_log.csv`), 25 causavam mesmo o NPE e 21 não tinham import de JUnit. Esses 21
+o `isTestFile` rejeitaria de qualquer forma, então removê-los foi desnecessário, porém
+inócuo.
+
+Em 11 dos 12 repositórios os arquivos removidos são exatamente os do oráculo mais os sem
+JUnit. No `spring-projects/spring-boot` o lote removeu só os 13 do oráculo, e 11 arquivos
+sem JUnit ficaram no clone. Também são inócuos, pelo mesmo motivo: sem import de JUnit, o
+JNose não os trata como teste.
 
 ### Terceiro defeito: o JNose tranca os próprios clones
 
@@ -295,6 +299,7 @@ step1-coleta-jnose/
 │   ├── jnose_batch.py        orquestra a coleta
 │   ├── mapear_repos.py       gera dados/repos_map.csv (--conferir para validar)
 │   ├── validar_filtro.py     compara o filtro com o oráculo
+│   ├── conferir_coleta.py    reapura todo número deste README
 │   └── AchaNulos.java        oráculo: JavaParser + travessia do flowClass
 ├── dados/
 │   ├── repos_map.csv         522 repos do MLCQ e seus espelhos
@@ -308,7 +313,7 @@ step1-coleta-jnose/
     └── console-jnose/        stdout/stderr do JNose .gz (evidência do NPE)
 ```
 
-`reports/bytestsmells/` está comprimido (1,4 GB → 160 MB). Para ler:
+`reports/bytestsmells/` está comprimido (1,4 GB → 167 MB). Para ler:
 
 ```bash
 gunzip -k reports/bytestsmells/apache__hadoop.csv.gz
@@ -351,12 +356,19 @@ python tools/mapear_repos.py --conferir     # deve imprimir "REPRODUZ o CSV em d
 # 3. subir o JNose (o script sobe sozinho se estiver fora do ar)
 java -Xmx2g -Djavax.net.ssl.trustStoreType=WINDOWS-ROOT -jar jnose-2.5.0.jar
 
-# 4. coletar (~35 h; retomável — pula o que já está OK no run_log)
+# 4. coletar (34,7 h; retomável — pula o que já está OK no run_log)
 python tools/jnose_batch.py
 
-# 5. conferir o filtro contra o oráculo
-python tools/validar_filtro.py
+# 5. conferir o filtro contra o oráculo (clona os 12 repositórios que precisaram do filtro)
+python tools/validar_filtro.py > reports/logs/validar_filtro.txt
+
+# 6. conferir que todo número deste README ainda vale
+python tools/conferir_coleta.py
 ```
+
+O `conferir_coleta.py` lê só o que a coleta deixou em disco (`repos_map.csv`, `run_log.csv`,
+`byclasstest/`, `bytestsmells/` e o log do passo 5) e falha com código 1 se algum número
+deste README divergir.
 
 A coleta é retomável: o `run_log.csv` é lido no início e repositórios já `OK` são
 pulados. Interromper e reexecutar é seguro.

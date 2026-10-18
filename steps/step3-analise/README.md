@@ -147,8 +147,8 @@ python tools/conferir_resultados.py
 ```
 
 Todos levam segundos, nenhum depende de rede. `conferir_resultados.py` reapura cada número
-afirmado nos READMEs e falha com código 1 se algum divergir — rodá-lo sem ter rodado as
-análises acusa divergência, que foi o que aconteceu ao montar o caderno.
+afirmado nos READMEs e falha com código 1 se algum divergir; ele lê os CSVs das análises,
+então elas têm que ter rodado antes.
 
 ---
 

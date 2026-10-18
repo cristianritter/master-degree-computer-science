@@ -17,6 +17,7 @@ Uso:
     python caracterizar.py --csv        # grava dados/caracterizacao.csv
 """
 import argparse
+import collections
 import math
 import os
 import sys
@@ -143,6 +144,15 @@ def caracterizar(ramo, linhas_csv):
     print("       filtrar ou estratificar por n_testes_nome_divergente e obrigatorio")
 
     # ---- estratos do MLCQ ----
+    # Arquivos do mesmo repositorio nao sao independentes: a concentracao e ameaca
+    # declarada no artigo, entao o numero sai daqui
+    por_repo = collections.Counter(r["github_repo"] for r in linhas_csv)
+    dez = sum(v for _, v in por_repo.most_common(10))
+    print("\n  CONCENTRACAO POR REPOSITORIO:")
+    print("    repositorios: %d   com um unico arquivo: %d   os 10 maiores: %.1f%% dos arquivos"
+          % (len(por_repo), sum(1 for v in por_repo.values() if v == 1),
+             100 * dez / len(linhas_csv)))
+
     print("\n  ESTRATOS DE EVIDENCIA DOS REVISORES:")
     conta = {}
     for r in linhas_csv:

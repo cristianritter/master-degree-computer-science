@@ -79,7 +79,7 @@ O `byclasstest` do step 1 com três mudanças:
 > linhas, derrubando Eager Test 28× e Lazy Test 23×. Qualquer análise que envolva
 > Eager/Lazy Test tem que filtrar ou estratificar por `nome_divergente` — é para isso que
 > `montar_analise.py --excluir-nome-divergente` existe. Corrigir de verdade exigiria
-> consertar o `jnose-core` e repetir as ~35 h de coleta.
+> consertar o `jnose-core` e repetir as 34,7 h de coleta.
 
 ### `dados/test_smell_occurrences.csv.gz` — 2.059.905 linhas, 1 por ocorrência
 
@@ -450,9 +450,9 @@ Com o binding completo são **6 estratos e 293 pares** no padrão:
 São **293 pares**. Os dois estratos de `convencao` são censo — todos os pares são
 conferidos, então ali não há erro de amostragem e a precisão sai exata, sem intervalo.
 
-293 pares a ~1 min cada é meio dia de trabalho. `--por-estrato 30` reduz para ~183 ao custo
-de alargar o intervalo de confiança dos estratos amostrados de ~±14 pp para ~±18 pp no pior
-caso (p≈0,5); os dois de `convencao` seguem sendo censo.
+293 pares a ~1 min cada é meio dia de trabalho. `--por-estrato 30` reduz para 213 ao custo
+de alargar o intervalo de confiança dos estratos amostrados de ±13,9 pp para ±17,9 pp no
+pior caso (p = 0,5); os dois de `convencao` seguem sendo censo.
 
 A amostragem é deliberadamente **não proporcional**: as estratégias raras precisam de N
 próprio para ter precisão estimável — proporcional daria 2 pares de `convencao`. O peso de
@@ -952,8 +952,8 @@ python tools/refs_producao.py
 python tools/binding.py
 
 # 5. auditar a precisao (trabalho manual)
-python tools/auditar_binding.py           # sorteia 250 pares estratificados
-python tools/baixar_auditoria.py          # baixa os 420 arquivos para cache local
+python tools/auditar_binding.py           # sorteia 293 pares estratificados
+python tools/baixar_auditoria.py          # baixa os 501 arquivos para cache local
 python tools/dossie_auditoria.py --de 1 --ate 25   # evidencia de cada par
 #    preencher a coluna correto em dados/auditoria_binding.csv
 python tools/auditar_binding.py --apurar

@@ -184,7 +184,7 @@ estratégias. Reporte a tabela por estrato; o global é resumo, não substituto.
 
 **No artigo:** descreva o desenho ("amostra estratificada não-proporcional, 50 pares por
 estrato, ponderada pelo peso do estrato no universo"). É desenho padrão e defensável, mas
-precisa ser declarado — senão parece que você sorteou 250 pares ao acaso.
+precisa ser declarado — senão parece que você sorteou 293 pares ao acaso.
 
 ---
 
@@ -275,7 +275,7 @@ não mitigada" é aceitável; ameaça não mencionada é o que derruba submissã
 
 ## 9. Concordância entre avaliadores
 
-Se **uma** pessoa (ou um modelo) julga os 250 pares, o resultado é "precisão segundo aquele
+Se **uma** pessoa (ou um modelo) julga os 293 pares, o resultado é "precisão segundo aquele
 julgamento". Isso é legítimo, mas é um julgamento só, e julgamento tem erro.
 
 **Concordância entre avaliadores** (*inter-rater agreement*) mede o quanto dois avaliadores
@@ -337,7 +337,7 @@ A mesma estratégia de binding (`referencia_estatica`) foi auditada sob duas def
 | "este teste **tem como alvo** esta classe" | **10,1%** |
 
 Os pares são os mesmos. O instrumento é o mesmo. O que muda é a frase que se escreve sobre
-ele — e a diferença entre as duas frases é de 85 pontos percentuais de precisão.
+ele — e a diferença entre as duas frases é de 84,7 pontos percentuais de precisão.
 
 É isso que "validade de construto" quer dizer na prática: **o número não é bom ou ruim em
 si, ele é bom ou ruim para uma afirmação específica.** Um revisor não ataca a medição; ele

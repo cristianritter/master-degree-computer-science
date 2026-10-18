@@ -27,7 +27,7 @@ Ramo determinístico, 730 arquivos:
 | Assertion Roulette | 32,6% | 4 | 77 | 533 | 6,02 |
 | Lazy Test | 42,9% | 1 | 21 | **1.116** | **21,28** |
 | Exception Catching Throwing | 72,1% | 0 | 11 | 213 | 16,00 |
-| `ts_n_total` | 8,5% | 15 | 209 | 1.552 | 6,62 |
+| `ts_n_total` | 8,5% | 15 | 208,65 | 1.552 | 6,62 |
 
 **Consequência: teste paramétrico está descartado.** Com 72% de zeros no rótulo e
 assimetria de 21 numa das variáveis de desfecho, média e desvio-padrão não descrevem esses
@@ -41,8 +41,8 @@ correlação não-robusta. Postos resolvem isso; média não.
 
 | | mediana | p95 | máx |
 |---|---:|---:|---:|
-| LOC de teste (determinístico) | 181 | 1.323 | 4.668 |
-| LOC de teste (ampliado) | 426 | 4.969 | **39.546** |
+| LOC de teste (determinístico) | 181 | 1.322,8 | 4.668 |
+| LOC de teste (ampliado) | 426 | 4.968,8 | **39.546** |
 | métodos de teste (determinístico) | 9 | 61 | 297 |
 
 As tabelas do step 2 saíram com `--agregacao soma`. Um arquivo de teste com 4.668 linhas

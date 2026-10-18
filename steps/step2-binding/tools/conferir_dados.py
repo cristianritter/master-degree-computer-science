@@ -132,6 +132,12 @@ def secao_3():
     por_revisor = collections.Counter((r["sample_id"], r["smell"], r["reviewer_id"])
                                       for r in reviews)
     repetidas = sum(v - 1 for v in por_revisor.values())
+    for (sid, smell, rid), v in sorted(por_revisor.items()):
+        if v > 1:
+            ids = sorted(int(r["review_id"]) for r in reviews
+                         if (r["sample_id"], r["smell"], r["reviewer_id"]) == (sid, smell, rid))
+            print("       submissao em dobro: amostra %s, %s, revisor %s, revisoes %s"
+                  % (sid, smell, rid, ", ".join(map(str, ids))))
     sem_unidade = sum(1 for r in reviews if (r["sample_id"], r["smell"]) not in unidades)
     soma = sum(int(s["n_reviews"]) for s in samples)
     exigir(sem_unidade == 0 and repetidas == 2 and soma == len(reviews) - repetidas,
@@ -181,6 +187,14 @@ def secao_3():
           % (algum, 100 * algum / len(carona)))
     print("      a maioria final ficou positiva                          %d  (%.1f%%)"
           % (vira, 100 * vira / len(carona)))
+    print("      o 'none' original coincidiu com a maioria final         %d  (%.1f%%)"
+          % (len(carona) - vira, 100 * (len(carona) - vira) / len(carona)))
+    exigir(round(100 * (len(carona) - vira) / len(carona), 1) == 97.8,
+           "um 'none' isolado coincide com a maioria final em 97,8%",
+           "%d de %d" % (len(carona) - vira, len(carona)))
+    unan = sum(1 for s in samples if s["pos_unanime"] == "1")
+    unan_multi = sum(1 for s in samples if s["pos_unanime"] == "1" and int(s["n_revisores"]) >= 2)
+    print("    positivos unanimes: %d unidades, %d delas com 2+ revisores" % (unan, unan_multi))
 
     # a tabela: positivos por regra, quebrados por numero de revisores
     print("\n  positivos por numero de revisores (a circularidade):")
@@ -289,8 +303,17 @@ def secao_4():
     print("\n  cadeia de atrito (o recorte que o artigo declara):")
     print("    %5d  unidades (amostra, smell) no MLCQ" % len(samples))
     print("    %5d  em repositorio disponivel (HASH_OK)" % len(hash_ok))
-    print("    %5d  com classe de teste identificada  (%.1f%%)"
-          % (len(com), 100 * len(com) / len(hash_ok)))
+    print("    %5d  com classe de teste identificada  (%.1f%%; sem teste identificado: %.1f%%)"
+          % (len(com), 100 * len(com) / len(hash_ok), 100 - 100 * len(com) / len(hash_ok)))
+    amostras = lambda linhas: len({s["sample_id"] for s in linhas})
+    ligados_det = {(p["github_repo"], p["production_path"]) for p in pares
+                   if p["metodo"] != "referencia_estatica"}
+    com_det = [s for s in hash_ok if (s["github_repo"], s["path"]) in ligados_det]
+    print("    em amostras: %d no MLCQ -> %d HASH_OK -> %d com teste (%.1f%%);"
+          " so deterministicas: %d (%.1f%%)"
+          % (amostras(samples), amostras(hash_ok), amostras(com),
+             100 * amostras(com) / amostras(hash_ok), amostras(com_det),
+             100 * amostras(com_det) / amostras(hash_ok)))
     for e in ("positivo_confiavel", "disputado", "negativo_confiavel", "negativo_1_review"):
         a = sum(1 for s in com if s["estrato"] == e)
         b = sum(1 for s in hash_ok if s["estrato"] == e)
@@ -298,6 +321,7 @@ def secao_4():
 
     print("\n  motivo_sem_ligacao (production_files.csv):")
     pf = c.ler_csv(os.path.join(c.DADOS, "production_files.csv"))
+    print("    arquivos de producao anotados distintos: %d" % len(pf))
     for k, v in collections.Counter(r["motivo_sem_ligacao"] or "(ligado)"
                                     for r in pf).most_common():
         print("    %-32s %5d  %5.1f%%" % (k, v, 100 * v / len(pf)))
@@ -318,6 +342,14 @@ def secao_4():
                 print("      %-44s %d" % (st, n))
         print("    tempo total / medio                             %ds / %.1fs por repo"
               % (seg, seg / len(ok) if ok else 0))
+        primeiro = {}
+        for r in log:
+            primeiro.setdefault(r["github_repo"], r["status"])
+        print("    OK de primeira / recuperados                    %d / %d"
+              % (sum(1 for s in primeiro.values() if s == "OK"),
+                 sum(1 for s in primeiro.values() if s != "OK")))
+        print("    tempo total em minutos / maximo por repositorio %.1f min / %ds"
+              % (seg / 60, max(float(r["segundos"] or 0) for r in ok)))
         if len(log) < len(glob.glob(os.path.join(c.BYCLASSTEST, "*.csv"))):
             print("    ATENCAO: lote incompleto - os numeros acima sao parciais")
     else:
@@ -449,6 +481,41 @@ def secao_5():
         exigir(abs(pe - alvo[0]) < 0.15 and abs(pa - alvo[1]) < 0.15,
                "precisao ponderada do ramo %s bate com o README" % nome,
                "%.1f%% / %.1f%%" % (pe, pa))
+        if nome == "ampliado":
+            print("    distancia entre 'exercita' e 'testa': %.1f pp" % (pa - pe))
+
+    binding = c.ler_csv(os.path.join(c.DADOS, "binding.csv"))
+    print("\n  universo de cada estrato (peso x %d pares do binding):" % len(binding))
+    universo = {}
+    for e in TODOS:
+        universo[e] = round(peso[e] * len(binding))
+        print("    %-34s %6d pares  (%.1f%% do binding)" % (e, universo[e], 100 * peso[e]))
+    print("  auditados nos estratos deterministicos: %d de %d pares"
+          % (sum(1 for r in aud if r["estrato_auditoria"] in DET),
+             sum(universo[e] for e in DET)))
+    sem_basename = ["caminho_exato", "convencao/caminho_espelhado"]
+    p_sb = (sum(obtido[e][0] * universo[e] for e in sem_basename)
+            / sum(universo[e] for e in sem_basename))
+    print("  sem convencao/so_basename: %.1f%% sobre %d pares"
+          % (p_sb, sum(universo[e] for e in sem_basename)))
+    arquivos = ({(r["github_repo"], r["production_path"]) for r in aud}
+                | {(r["github_repo"], r["test_path"]) for r in aud})
+    print("  arquivos distintos nos %d pares auditados: %d" % (len(aud), len(arquivos)))
+    censo = [e for e in TODOS if universo[e] <= 50]
+    com30 = sum(universo[e] if e in censo else 30 for e in TODOS)
+    meia = lambda n: 100 * 1.96 * (0.25 / n) ** 0.5
+    print("  planejamento: --por-estrato 30 daria %d pares; meia largura do IC95%% no pior"
+          " caso (p=0,5): %.1f pp com n=50, %.1f pp com n=30" % (com30, meia(50), meia(30)))
+    print("  meia largura do IC95%% com n=50 por precisao observada:")
+    for p_ in (95, 90, 80, 50):
+        print("    %d%%: +-%.1f pp" % (p_, 100 * 1.96 * (p_ / 100 * (1 - p_ / 100) / 50) ** 0.5))
+
+    classes = {(r["github_repo"], r["path"]): r
+               for r in c.ler_csv(os.path.join(c.DADOS, "test_classes.csv"))}
+    conv = [p for p in binding if p["metodo"] == "convencao"]
+    div = sum(1 for p in conv if classes[(p["github_repo"], p["test_path"])]["nome_divergente"] == "1")
+    print("  pares de convencao com classe de teste de nome divergente: %d de %d (%.1f%%)"
+          % (div, len(conv), 100 * div / len(conv)))
 
 
 def secao_6():

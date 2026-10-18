@@ -1,0 +1,48 @@
+# Numeros dos documentos que NAO sao dado do estudo, e por isso nao precisam sair de um
+# comando. Lido por conferir_cobertura.py. Formato: documento: numero  # motivo
+# "documento" e o nome do arquivo, ou o caminho a partir da raiz quando o nome se repete
+# (README.md); "*" vale para todos. Cada entrada e uma afirmacao de
+# que aquele numero nao e resultado nosso - por isso a lista e curta e cada uma tem motivo.
+
+# --- referencias bibliograficas e numeros de trabalhos de terceiros (fonte: a citacao) ---
+proposta-de-abordagem.md: 2018      # ano de Spadini et al.
+relatorio-orientador.html: 2018     # ano de Spadini et al.
+relatorio-orientador.html: 2020     # ano do MLCQ
+relatorio-orientador.html: 2024     # ano de Martins et al.
+relatorio-orientador.html: 975      # escala do estudo de Tahir et al.
+relatorio-orientador.html: 182      # citacoes de Spadini et al. (Semantic Scholar, 09/2026)
+relatorio-orientador.html: 13.703   # sistemas do dataset TSSM de Martins et al.
+trabalhos-relacionados.md: 2018     # ano de Spadini et al.
+trabalhos-relacionados.md: 2020     # ano do MLCQ
+trabalhos-relacionados.md: 2024     # ano de Martins et al.
+trabalhos-relacionados.md: 144      # pagina final de Tahir et al.
+trabalhos-relacionados.md: 975      # escala do estudo de Tahir et al.
+trabalhos-relacionados.md: 182      # citacoes de Spadini et al.
+trabalhos-relacionados.md: 13.703   # sistemas do dataset TSSM de Martins et al.
+steps/step2-binding/README.md: 5115                     # citacao literal do apendice do MLCQ
+
+# --- eventos-alvo do artigo ---
+proposta-de-abordagem.md: 2027      # ICSME 2027
+proposta-de-abordagem.md: 2028      # SANER 2028
+relatorio-orientador.html: 2027     # ICSME 2027
+
+# --- ambiente e configuracao (step 1, secao 1) ---
+steps/step1-coleta-jnose/README.md: 19045                    # build do Windows 10 usado na coleta
+steps/step1-coleta-jnose/README.md: 8080                     # porta do JNose
+steps/step1-coleta-jnose/README.md: 1200                     # timeout configurado por analise, em segundos
+steps/step1-coleta-jnose/README.md: 600                      # timeout testado durante o diagnostico do NPE
+steps/step1-coleta-jnose/README.md: 5400                     # timeout testado durante o diagnostico do NPE
+
+# --- trecho de codigo citado (step 1, secao 5) ---
+steps/step1-coleta-jnose/README.md: 44                       # numero de linha no arquivo GemfireRepositoriesRegistrarIntegrationTest.java
+steps/step1-coleta-jnose/README.md: 71                       # LOC que o JNose reportou para a classe Config, citado do CSV
+
+# --- exemplos didaticos (notas, secoes 2, 4 e 6): hipoteticos por construcao ---
+NOTAS-METODOLOGICAS.md: 55          # "com precisao medida em 55%", exemplo
+NOTAS-METODOLOGICAS.md: 82          # "IC95%: 82%-98%", exemplo de leitura de intervalo
+NOTAS-METODOLOGICAS.md: 1.000       # "1.000 casos com 2 positivos", exemplo
+
+# --- numeracao do caderno de tentativas (step 3, secao 4) ---
+steps/step3-analise/README.md: 41                       # testes 41-92
+steps/step3-analise/README.md: 92                       # testes 41-92
+steps/step3-analise/README.md: 99                       # testes 99-104

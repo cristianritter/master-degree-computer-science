@@ -1,0 +1,15 @@
+repo                                  oraculo  filtro  sem_junit  veredito
+apache/bahir-flink                          2       2          0  identicos
+apache/openejb                              1       1          3  identicos
+apache/sis                                  1       1          1  identicos
+apache/storm                                2       2          0  identicos
+apache/tomee                                1       1          3  identicos
+eclipse/xtext-core                          1       1          2  identicos
+facebook/buck                               0       0          4  identicos
+oracle/visualvm                             1       1          0  identicos
+spring-projects/spring-boot                13      13         11  identicos
+spring-projects/spring-data-gemfire         1       1          0  identicos
+spring-projects/spring-framework            1       1          7  identicos
+spring-projects/spring-integration          1       1          1  identicos
+
+Filtro e oraculo coincidem em todos os repositorios verificados.

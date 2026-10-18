@@ -70,6 +70,7 @@ def rodar(ramo, linhas, saida, saida_necessario):
     print("\n" + "=" * 88)
     print("RAMO %s" % ramo.upper())
     print("=" * 88)
+    print("  arquivos sinalizados: %d de %d" % (len(conf) + len(disp), len(linhas)))
     print("  confirmados pela maioria : %d" % len(conf))
     print("  sinalizados e NAO confirmados : %d" % len(disp))
     print("  os dois grupos passaram pelo mesmo roteamento de crosscheck")
