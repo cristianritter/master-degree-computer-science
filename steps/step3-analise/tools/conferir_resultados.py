@@ -191,6 +191,26 @@ def conferir_segunda_rodada():
     exigir(float(det["densidade"]["p"]) > 0.05,
            "na densidade, confirmado x limpo nao separa",
            "p=%s delta=%s" % (det["densidade"]["p"][:5], det["densidade"]["delta"][:5]))
+    # o efeito detectavel citado no README, pela mesma formula da analise 04
+    n1, n2 = 136, 526
+    det_delta = (1.959964 + 0.841621) * math.sqrt((n1 + n2 + 1.0) / (3.0 * n1 * n2))
+    exigir(perto(det_delta, 0.156), "delta detectavel de 136 x 526 e 0,156", "%.3f" % det_delta)
+
+    # os grupos de arquivo citados no README da analise 00
+    from variaveis import grupo_arquivo
+    import collections
+    for ramo, esp in (("deterministico", {"confirmado": 136, "limpo": 526, "so_disputado": 67,
+                                          None: 1}),
+                      ("ampliado", {"confirmado": 267, "limpo": 985, "so_disputado": 117})):
+        cont = dict(collections.Counter(grupo_arquivo(r) for r in c.ler_ramo(ramo)))
+        exigir(cont == esp, "grupos de arquivo do ramo %s" % ramo,
+               ", ".join("%s=%d" % (k, v) for k, v in sorted(cont.items(), key=str)))
+    linhas = c.ler_ramo("deterministico")
+    for estrato, pct in (("negativo_1_review", 72.9), ("negativo_confiavel", 18.8),
+                         ("positivo_confiavel", 18.6), ("disputado", 15.1)):
+        tem = 100.0 * sum(1 for r in linhas if estrato in r["estratos"].split("|")) / len(linhas)
+        exigir(perto(tem, pct, 0.05), "%.1f%% dos arquivos tem %s" % (pct, estrato),
+               "%.1f%%" % tem)
 
 
 def conferir_disputados():
@@ -217,6 +237,13 @@ def conferir_disputados():
     exigir(len(abaixo) == 6,
            "todos os 6 deltas ficam abaixo do detectavel (inconclusiva, nao nula)",
            "%d de 6" % len(abaixo))
+    # o que seria preciso para responder (README da analise 04)
+    dd = lambda n1, n2: (1.959964 + 0.841621) * math.sqrt((n1 + n2 + 1.0) / (3.0 * n1 * n2))
+    exigir(perto(dd(136, 10 ** 9), 0.139), "piso do detectavel com 136 confirmados e 0,139",
+           "%.3f" % dd(136, 10 ** 9))
+    exigir(dd(408, 201) <= 0.15 < dd(340, 167),
+           "delta 0,15 pede ~408 confirmados e ~201 so disputados",
+           "%.3f com 408 x 201" % dd(408, 201))
 
 
 def conferir_cruzado():

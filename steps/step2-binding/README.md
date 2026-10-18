@@ -1012,15 +1012,14 @@ dois emite veredito; o julgamento é de quem audita.
 - **`analise_ampliado.csv` não sustenta a RQ original.** Com 10,1% de precisão estrita, ela
   não mede "o teste desta classe"; mede "as classes que esta suíte exercita". É um ramo
   válido, para outra pergunta, e o artigo tem que rotulá-lo assim.
-- **O julgamento dos 143 foi automatizado, não humano.** Feito a partir do dossiê de cada
-  par (pacote dos dois lados, imports, e as linhas do teste que citam o tipo), gravado em
-  `auditoria_binding_auto.csv`, que é arquivo separado da planilha humana justamente para a
-  distinção não se perder. O artigo deve descrevê-lo como primeira passada automatizada,
-  conferida por amostragem — não como auditoria independente. Ver
-  `NOTAS-METODOLOGICAS.md`, seção 9.
-- **Em `referencia_estatica` o critério ainda não está fechado.** Nas determinísticas a
-  pergunta é "a regra casou o arquivo certo?", que é objetiva. Ali é "referenciar conta
-  como testar?", que exige arbitrar e precisa ser declarado no artigo antes de julgar.
+- **A primeira passada da auditoria foi automatizada.** Feita a partir do dossiê de cada
+  par (pacote dos dois lados, imports, e as linhas do teste que citam o tipo), gravada em
+  `auditoria_binding_auto.csv`, separada da planilha humana para a distinção não se perder.
+  O censo humano dos 293 pares e o segundo avaliador seguem o
+  `PROTOCOLO-AUDITORIA-HUMANA.md`.
+- **Em `referencia_estatica` a pergunta exige arbitrar.** Nas determinísticas ela é "a
+  regra casou o arquivo certo?", que é objetiva. Ali é "referenciar conta como testar?", e
+  por isso cada par é julgado nos dois critérios, estrito e amplo, definidos no protocolo.
 - **Eager Test e Lazy Test não são confiáveis nas linhas `nome_divergente`** (queda de 28×
   e 23× no step 1). General Fixture fica estável e serve como controle.
 - **O padrão `^.*test\d*$` do JNose** casa palavras que terminam em "test" sem serem testes

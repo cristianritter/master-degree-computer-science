@@ -478,7 +478,7 @@ def secao_6():
 
     regras = ["pos_any", "pos_maioria", "pos_any_major", "pos_unanime"]
     print("  prevalencia do rotulo por cobertura do binding:")
-    print("    %-22s %8s %s" % ("", "amostras", " ".join("%14s" % r for r in regras)))
+    print("    %-22s %8s %s" % ("", "unidades", " ".join("%14s" % r for r in regras)))
     taxas = {}
     for nome, grupo in (("HASH_OK (todas)", hash_ok), ("so deterministicas", det),
                         ("com estrategia 3", tudo)):

@@ -97,12 +97,11 @@ def por_smell(linhas, smells, alfa, poder):
 
 
 def agregado(linhas, smells, alfa, poder):
-    """O smell avaliado de cada arquivo, qualquer que seja ele.
+    """O maior sev_media entre os smells avaliados em cada arquivo.
 
-    O MLCQ anota cada amostra para UM smell, entao o N por smell e pequeno por construcao.
-    Quase todo arquivo tem exatamente um smell avaliado, e a analise agregada recupera o N
-    inteiro do ramo sem misturar avaliacoes: e a alavanca de poder mais barata que existe
-    aqui, e nao custa nada em construto.
+    Cada smell so e avaliado nos arquivos da sua granularidade, entao o agregado e o unico
+    recorte que usa o N inteiro do ramo. O custo e de definicao: o agregado e o smell
+    percebido como mais grave no arquivo, nao "o" smell dele.
     """
     vals = []
     for r in linhas:

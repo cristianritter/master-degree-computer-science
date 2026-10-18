@@ -188,7 +188,7 @@ precisa ser declarado — senão parece que você sorteou 250 pares ao acaso.
 
 ---
 
-## 6. Prevalência, poder estatístico e o "44 positivos"
+## 6. Prevalência e poder estatístico
 
 **Prevalência** é a proporção de casos positivos. Aqui: quantos arquivos de produção têm o
 code smell, pela regra de rótulo escolhida.
@@ -286,13 +286,12 @@ acaso. Interpretação convencional: κ > 0,80 quase perfeita, 0,60–0,80 subst
 
 Isso importa porque o próprio MLCQ vive esse problema: das unidades positivas pela regra do
 máximo com 2+ revisores, 67,3% são *disputadas* — outro revisor olhou o mesmo código para o
-mesmo smell e disse `none`. Julgar code
-smell é subjetivo, e o dataset registra isso.
+mesmo smell e disse `none`. Julgar code smell é subjetivo, e o dataset registra isso.
 
-**Caminho barato aqui:** uma passada completa feita por mim, você confere todos os `?` e
-uma amostra dos `s`. A taxa de discordância vira número reportável, e o artigo descreve o
-procedimento honestamente ("primeira passada automatizada, conferida por amostragem pelo
-autor") em vez de chamar de auditoria independente.
+**O que se faz aqui:** a primeira passada da auditoria foi automatizada. O primeiro autor
+julga os 293 pares num censo humano, cego ao estrato, e um segundo avaliador julga uma
+subamostra de 48 pares para o kappa entre humanos. O procedimento está em
+`PROTOCOLO-AUDITORIA-HUMANA.md`, registrado antes do julgamento.
 
 **No artigo:** descreva quem julgou e como. Não chame de auditoria manual o que foi
 automatizado — é exatamente o tipo de detalhe que, descoberto pelo revisor, custa a

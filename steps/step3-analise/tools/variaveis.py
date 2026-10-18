@@ -37,11 +37,11 @@ def desfechos(linha):
 
 
 def rotulo_agregado(linha):
-    """Severidade do smell avaliado no arquivo, qualquer que seja ele.
+    """O maior sev_media entre os smells avaliados no arquivo: o percebido como mais grave.
 
-    O MLCQ anota cada amostra para UM smell, e 715 dos 730 arquivos do ramo
-    deterministico tem exatamente um avaliado - agregar assim recupera o N inteiro sem
-    misturar avaliacoes de smells diferentes (step 2, secao 12.3).
+    Cada amostra do MLCQ e julgada para os dois smells da sua granularidade (step 2, secao
+    3), entao quase todo arquivo tem dois ou mais smells avaliados. O agregado usa o N
+    inteiro do ramo; e uma definicao, e o artigo a declara (step 2, secao 12.3).
     """
     v = [c.num(linha[c.coluna_cs(sm, "sev_media")]) for sm in c.CODE_SMELLS]
     v = [x for x in v if x is not None]
