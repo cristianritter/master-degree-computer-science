@@ -51,3 +51,6 @@ deterministico,sem_nome_divergente,Resource Optimism,bruto,677,0.050012,0.193782
 deterministico,sem_nome_divergente,Resource Optimism,densidade,677,0.051763,0.178613,0.419862,-0.023683,0.126622,93.8
 deterministico,sem_nome_divergente,Verbose Test,bruto,677,0.072063,0.060915,0.390618,-0.003308,0.14662,61.74
 deterministico,sem_nome_divergente,Verbose Test,densidade,677,0.056525,0.14182,0.390618,-0.018908,0.131319,61.74
+deterministico,sensibilidade_caminho_exato,Eager Test,densidade,649,-0.032094,0.414506,,-0.108788,0.04498,40.37
+deterministico,sensibilidade_caminho_exato,Lazy Test,densidade,649,0.023588,0.548754,,-0.053472,0.100368,37.9
+deterministico,sensibilidade_caminho_exato,General Fixture,densidade,649,0.015717,0.689518,,-0.06132,0.092568,83.82

@@ -78,6 +78,16 @@ detectável 0,140 a 0,163).
 
 Nas oito células a diferença fica abaixo de 0,02.
 
+Uma segunda sensibilidade restringe Eager e Lazy aos arquivos ligados só por
+`caminho_exato`, onde a classe que o JNose usa para medi-los é a mesma que o MLCQ rotulou
+(`comum.so_caminho_exato`; ver a análise 02). Nas oito células, a diferença para a família
+fica abaixo de 0,01:
+
+| | família | só `caminho_exato` |
+|---|---:|---:|
+| data class × Eager Test | 0,131 (N = 291) | 0,138 (N = 280) |
+| data class × Lazy Test | 0,123 (N = 291) | 0,119 (N = 280) |
+
 ## A leitura
 
 **Não dá para afirmar associação em nenhum par.** Nenhuma célula sobrevive ao ajuste para
@@ -102,4 +112,4 @@ lado, e sem destaque por p nominal.
 | arquivo | conteúdo |
 |---|---|
 | `cruzado.py` | a análise |
-| `dados/cruzado.csv` | 60 linhas: 52 da família (`recorte = principal`) e 8 de sensibilidade (`sensibilidade_sem_filtro`), com rho, p, p ajustado, IC e r detectável |
+| `dados/cruzado.csv` | 68 linhas: 52 da família (`recorte = principal`), 8 sem o filtro (`sensibilidade_sem_filtro`) e 8 só `caminho_exato` (`sensibilidade_caminho_exato`), com rho, p, p ajustado, IC e r detectável |

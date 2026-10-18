@@ -129,6 +129,29 @@ def conferir_caderno():
     """O caderno da secao 4 declara um total de testes; o CSV tem que conter todos eles."""
     print("\nCADERNO DE TENTATIVAS (secao 4)")
     print("-" * 31)
+    # o total do caderno e a soma das linhas de resultado de cada analise
+    import csv
+    por = []
+    for pasta, nome in (("01-correlacao-agregada", "exploracao.csv"),
+                        ("02-por-test-smell", "por_test_smell.csv"),
+                        ("03-extremos", "extremos.csv"), ("04-disputados", "disputados.csv"),
+                        ("05-code-x-test-smell", "cruzado.csv")):
+        with open(os.path.join(c.STEP, "analises", pasta, "dados", nome), "r",
+                  encoding="utf-8-sig", newline="") as f:
+            por.append(len(list(csv.DictReader(f))))
+    print("  testes registrados nos CSVs das analises: %s = %d"
+          % (" + ".join(map(str, por)), sum(por)))
+    # as linhas do caderno separam a rodada original das sensibilidades de caminho_exato
+    for pasta, nome in (("02-por-test-smell", "por_test_smell.csv"),
+                        ("05-code-x-test-smell", "cruzado.csv")):
+        with open(os.path.join(c.STEP, "analises", pasta, "dados", nome), "r",
+                  encoding="utf-8-sig", newline="") as f:
+            rec = [r["recorte"] for r in csv.DictReader(f)]
+        exato = rec.count("sensibilidade_caminho_exato")
+        print("    %s: %d sem a sensibilidade caminho_exato, %d com ela"
+              % (pasta, len(rec) - exato, exato))
+    exigir(sum(por) == 175, "175 testes no caderno", sum(por))
+
     caminho = os.path.join(c.STEP, "analises", "01-correlacao-agregada", "dados", "exploracao.csv")
     if not os.path.exists(caminho):
         exigir(False, "exploracao.csv existe", "ausente - rode explorar.py --por-smell --csv")
@@ -166,8 +189,9 @@ def conferir_segunda_rodada():
         exigir(False, "por_test_smell.csv existe", "ausente - rode por_test_smell.py --csv")
     else:
         with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
-            L = list(csv.DictReader(f))
-        exigir(len(L) == 52, "analise 1 tem 52 testes", len(L))
+            todas = list(csv.DictReader(f))
+        L = [r for r in todas if r["recorte"] != "sensibilidade_caminho_exato"]
+        exigir(len(L) == 52, "analise 02 tem 52 testes na familia", len(L))
         sobrevivem = [r for r in L if float(r["p_ajustado"]) < 0.05]
         exigir(len(sobrevivem) == 0,
                "nenhum test smell sobrevive ao ajuste FDR", len(sobrevivem))
@@ -180,6 +204,16 @@ def conferir_segunda_rodada():
                  and x["recorte"] == "todas"][0]
             exigir(perto(float(r["rho"]), esp), "%s em densidade: rho %.3f" % (smell, esp),
                    r["rho"][:6])
+        # sensibilidade: so onde a classe do JNose e a do binding (caminho_exato). Eager e
+        # Lazy continuam perto de zero, entao o "perto de zero" nao e artefato da convencao
+        sens = {r["test_smell"]: r for r in todas if r["recorte"] == "sensibilidade_caminho_exato"}
+        exigir(len(sens) == 3 and all(int(r["n"]) == 649 for r in sens.values()),
+               "sensibilidade caminho_exato: 3 smells, N = 649",
+               ", ".join("%s N=%s" % (k, r["n"]) for k, r in sens.items()))
+        for smell, esp in (("Eager Test", -0.032), ("Lazy Test", 0.024), ("General Fixture", 0.016)):
+            exigir(perto(float(sens[smell]["rho"]), esp) and float(sens[smell]["p"]) > 0.05,
+                   "%s so caminho_exato: rho %.3f, sem significancia" % (smell, esp),
+                   "%s (p=%s)" % (sens[smell]["rho"][:6], sens[smell]["p"][:5]))
 
     caminho = os.path.join(c.STEP, "analises", "03-extremos", "dados", "extremos.csv")
     if not os.path.exists(caminho):
@@ -279,6 +313,12 @@ def conferir_cruzado():
     sens = [r for r in L if r["recorte"] == "sensibilidade_sem_filtro"]
     exigir(len(principal) == 52, "analise 05 tem 52 testes na familia", len(principal))
     exigir(len(sens) == 8, "8 celulas de sensibilidade (Eager/Lazy sem filtro)", len(sens))
+    exato = [r for r in L if r["recorte"] == "sensibilidade_caminho_exato"]
+    exigir(len(exato) == 8, "8 celulas de sensibilidade (Eager/Lazy so caminho_exato)", len(exato))
+    fam = {(r["code_smell"], r["test_smell"]): float(r["rho"]) for r in principal}
+    dif = max(abs(float(r["rho"]) - fam[(r["code_smell"], r["test_smell"])]) for r in exato)
+    exigir(dif < 0.01, "caminho_exato muda Eager/Lazy em menos de 0,01 na grade",
+           "maior diferenca %.3f" % dif)
     sobrevivem = [r for r in principal if float(r["p_ajustado"]) < 0.05]
     exigir(len(sobrevivem) == 0, "nenhuma celula sobrevive ao ajuste FDR", len(sobrevivem))
     menor = min(float(r["p_ajustado"]) for r in principal)

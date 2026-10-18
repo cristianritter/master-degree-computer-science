@@ -117,6 +117,25 @@ def main():
     print("    General Fixture e o controle: nao depende da classe de producao,")
     print("    entao nao deveria mudar com o filtro (step 1, secao 5).")
 
+    # Sensibilidade, fora da familia: Eager e Lazy medidos so onde a classe que o JNose
+    # resolveu e a mesma que o binding ligou (comum.so_caminho_exato). Em convencao o JNose
+    # pode nao ter resolvido classe nenhuma, e ai Eager/Lazy ficam perto de zero por
+    # construcao - o que favoreceria o nulo justamente nos dois smells que o sustentam.
+    exatos = [r for r in c.so_caminho_exato(linhas)
+              if not c.num(r["n_testes_nome_divergente"])]
+    print("\n  sensibilidade, fora da familia: so arquivos ligados por caminho_exato,")
+    print("  sem nome_divergente (%d de %d arquivos)" % (len(exatos), len(linhas)))
+    sensibilidade = []
+    for smell in ("Eager Test", "Lazy Test", "General Fixture"):
+        x, y, _ = series(exatos, smell, True)
+        rho, p, lo, hi, n = estat.spearman(x, y)
+        a = [r for r in filtrados if r["smell"] == smell and r["desfecho"] == "densidade"][0]
+        zeros = 100.0 * sum(1 for v in x if v == 0) / len(x)
+        sensibilidade.append({"smell": smell, "desfecho": "densidade", "n": n, "rho": rho,
+                              "p": p, "lo": lo, "hi": hi, "zeros": zeros})
+        print("    %-18s densidade: %.3f (N=%d, p=%s, IC [%.3f, %.3f])  filtrado: %.3f (N=%d)"
+              % (smell, rho, n, estat.formatar_p(p), lo, hi, a["rho"], a["n"]))
+
     if args.csv:
         linhas_csv = []
         for conjunto, nome in ((todos, "todas"), (filtrados, "sem_nome_divergente")):
@@ -125,6 +144,11 @@ def main():
                                    round(r["rho"], 6), round(r["p"], 6),
                                    round(r["p_ajustado"], 6), round(r["lo"], 6),
                                    round(r["hi"], 6), round(r["zeros"], 2)])
+        for r in sensibilidade:
+            linhas_csv.append([args.ramo, "sensibilidade_caminho_exato", r["smell"],
+                               r["desfecho"], r["n"], round(r["rho"], 6), round(r["p"], 6),
+                               "", round(r["lo"], 6), round(r["hi"], 6),
+                               round(r["zeros"], 2)])
         destino = os.path.join(c.dados_de(__file__), "por_test_smell.csv")
         n = c.escrever_csv(destino,
                            ["ramo", "recorte", "test_smell", "desfecho", "n", "rho", "p",

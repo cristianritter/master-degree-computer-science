@@ -46,3 +46,6 @@ NOTAS-METODOLOGICAS.md: 1.000       # "1.000 casos com 2 positivos", exemplo
 steps/step3-analise/README.md: 41                       # testes 41-92
 steps/step3-analise/README.md: 92                       # testes 41-92
 steps/step3-analise/README.md: 99                       # testes 99-104
+steps/step3-analise/README.md: 165                      # testes 165-167
+steps/step3-analise/README.md: 167                      # testes 165-167
+steps/step3-analise/README.md: 168                      # testes 168-175

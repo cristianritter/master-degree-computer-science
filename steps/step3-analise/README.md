@@ -120,8 +120,10 @@ seção 12.0).
 | 93–98 | 17/10 | 03 — extremos | 6 | bruto e distintos do determinístico sobrevivem ao FDR (0,020); densidade não |
 | 99–104 | 17/10 | 04 — confirmados × só disputados | 6 | nenhum p < 0,05, todos abaixo do detectável |
 | 105–164 | 17/10 | 05 — code smell × test smell (52 + 8 de sensibilidade) | 60 | nenhum sobrevive ao FDR (menor p ajustado 0,104); 2 células acima do r detectável |
+| 165–167 | 18/10 | 02 — sensibilidade: Eager, Lazy e General Fixture só em `caminho_exato` | 3 | os três seguem perto de zero (−0,032 a 0,024) |
+| 168–175 | 18/10 | 05 — sensibilidade: Eager e Lazy só em `caminho_exato` | 8 | diferença para a família abaixo de 0,01 |
 
-**164 testes rodados no total.** Os 40 da primeira análise saem sem ajuste e estão
+**175 testes rodados no total.** Os 40 da primeira análise saem sem ajuste e estão
 reportados assim; os seguintes saem com p ajustado por Benjamini-Hochberg dentro de cada
 família. O artigo reporta o total e declara o regime como exploratório — é o que o volume
 exige.

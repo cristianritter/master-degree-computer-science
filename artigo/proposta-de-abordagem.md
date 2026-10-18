@@ -54,7 +54,7 @@ O que temos e os trabalhos relacionados não têm:
    unidades (amostra, smell), contra métricas calculadas ou heurísticas de defeito.
 4. **Escala** — a análise principal cobre 730 arquivos de 246 repositórios, contra 5 e 10
    sistemas dos trabalhos citados.
-5. **Rastro completo** — 164 testes registrados, incluindo os que não deram em nada.
+5. **Rastro completo** — 175 testes registrados, incluindo os que não deram em nada.
 
 ## Destino
 
@@ -71,7 +71,7 @@ Detalhes no documento de eventos-alvo.
 - **Recall do binding não medido.**
 - **Arquivos do mesmo repositório não são independentes.** 113 dos 246 repositórios
   contribuem com um único arquivo, e os 10 maiores somam 20,5% dos arquivos.
-- **164 testes num espaço de ~200 combinações** — o artigo tem que declarar regime
+- **175 testes num espaço de ~200 combinações** — o artigo tem que declarar regime
   exploratório.
 
 ## O que não fazer

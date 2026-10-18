@@ -59,3 +59,11 @@ deterministico,sensibilidade_sem_filtro,feature envy,Eager Test,0,426,-0.063827,
 deterministico,sensibilidade_sem_filtro,feature envy,Lazy Test,0,426,0.004449,0.927087,,-0.0906,0.099418,0.135381
 deterministico,sensibilidade_sem_filtro,long method,Eager Test,0,429,-0.048518,0.316251,,-0.142541,0.046373,0.13491
 deterministico,sensibilidade_sem_filtro,long method,Lazy Test,0,429,0.001115,0.981641,,-0.093573,0.095783,0.13491
+deterministico,sensibilidade_caminho_exato,blob,Eager Test,1,280,-0.045621,0.447363,,-0.161979,0.071987,0.166759
+deterministico,sensibilidade_caminho_exato,blob,Lazy Test,1,280,0.012131,0.839981,,-0.105242,0.129171,0.166759
+deterministico,sensibilidade_caminho_exato,data class,Eager Test,1,280,0.137606,0.021176,,0.020716,0.250784,0.166759
+deterministico,sensibilidade_caminho_exato,data class,Lazy Test,1,280,0.119362,0.045923,,0.002169,0.233321,0.166759
+deterministico,sensibilidade_caminho_exato,feature envy,Eager Test,1,377,-0.081887,0.112474,,-0.18139,0.019276,0.143862
+deterministico,sensibilidade_caminho_exato,feature envy,Lazy Test,1,377,-0.006437,0.900924,,-0.107371,0.094628,0.143862
+deterministico,sensibilidade_caminho_exato,long method,Eager Test,1,378,-0.069919,0.175041,,-0.169592,0.031171,0.143672
+deterministico,sensibilidade_caminho_exato,long method,Lazy Test,1,378,-0.02087,0.68606,,-0.121484,0.080168,0.143672

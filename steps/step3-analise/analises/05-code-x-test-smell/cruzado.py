@@ -58,6 +58,8 @@ def series(linhas, code_smell, test_smell, filtrar):
 
 def celula(linhas, cs, ts, filtrar):
     x, y = series(linhas, cs, ts, filtrar)
+    if len(x) < 10:
+        return None
     rho, p, lo, hi, n = estat.spearman(x, y)
     return {"code_smell": cs, "test_smell": ts, "filtrado": filtrar, "n": n, "rho": rho,
             "p": p, "lo": lo, "hi": hi, "detectavel": r_detectavel(n)}
@@ -115,6 +117,20 @@ def main():
               % (s["code_smell"], s["test_smell"], s["rho"], s["n"],
                  estat.formatar_p(s["p"]), p_["rho"], p_["n"]))
 
+    # Sensibilidade, fora da familia: Eager/Lazy so onde a classe resolvida pelo JNose e a
+    # mesma do binding (comum.so_caminho_exato), sem nome_divergente
+    exatos = c.so_caminho_exato(linhas)
+    print("\n  sensibilidade, fora da familia: Eager/Lazy so em arquivos ligados por"
+          " caminho_exato (%d de %d)" % (len(exatos), len(linhas)))
+    exato = [celula(exatos, cs, ts, True)
+             for cs in c.CODE_SMELLS for ts in DEPENDEM_DA_PRODUCAO]
+    for s in exato:
+        p_ = [r for r in principal
+              if r["code_smell"] == s["code_smell"] and r["test_smell"] == s["test_smell"]][0]
+        print("    %-14s %-11s caminho_exato %6.3f (N=%3d, p=%s)  <-  familia %6.3f (N=%3d)"
+              % (s["code_smell"], s["test_smell"], s["rho"], s["n"],
+                 estat.formatar_p(s["p"]), p_["rho"], p_["n"]))
+
     if args.csv:
         saida = []
         for r in principal:
@@ -125,6 +141,10 @@ def main():
         for r in sensibilidade:
             saida.append([args.ramo, "sensibilidade_sem_filtro", r["code_smell"],
                           r["test_smell"], 0, r["n"], round(r["rho"], 6), round(r["p"], 6),
+                          "", round(r["lo"], 6), round(r["hi"], 6), round(r["detectavel"], 6)])
+        for r in exato:
+            saida.append([args.ramo, "sensibilidade_caminho_exato", r["code_smell"],
+                          r["test_smell"], 1, r["n"], round(r["rho"], 6), round(r["p"], 6),
                           "", round(r["lo"], 6), round(r["hi"], 6), round(r["detectavel"], 6)])
         destino = os.path.join(c.dados_de(__file__), "cruzado.csv")
         n = c.escrever_csv(destino,

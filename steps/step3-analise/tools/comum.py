@@ -88,6 +88,30 @@ def num(valor):
     return float(v)
 
 
+def so_caminho_exato(linhas):
+    """As linhas cujos testes foram TODOS ligados por caminho_exato.
+
+    O JNose mede Eager Test e Lazy Test contra a classe de producao que ELE resolve, nao
+    contra a que o binding ligou. Em caminho_exato as duas coincidem por construcao (o par
+    e o proprio ProductionFileName do JNose); em convencao o JNose pode nao ter resolvido
+    classe nenhuma ou ter resolvido outra. Este recorte e o unico em que Eager e Lazy medem
+    o teste em relacao a classe rotulada pelo MLCQ.
+    """
+    caminho = os.path.join(STEP2, "dados", "binding.csv")
+    with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+        metodos = {}
+        for r in csv.DictReader(f):
+            metodos.setdefault((r["github_repo"], r["production_path"], r["test_path"]),
+                               set()).add(r["metodo"])
+    fica = []
+    for r in linhas:
+        testes = [t for t in (r["test_paths"] or "").split("|") if t]
+        if testes and all("caminho_exato" in metodos.get(
+                (r["github_repo"], r["production_path"], t), ()) for t in testes):
+            fica.append(r)
+    return fica
+
+
 def dados_de(arquivo_do_script):
     """A pasta dados/ ao lado do script que chamou.
 

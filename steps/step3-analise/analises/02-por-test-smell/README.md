@@ -65,6 +65,26 @@ General Fixture não depende da classe de produção, então o filtro de `nome_d
 deveria mudá-lo — e não muda (0,006 → 0,012). É a validação de que o filtro faz o que o
 step 1 documentou, e não está removendo linhas por outro motivo.
 
+## O "perto de zero" de Eager e Lazy não é artefato do instrumento
+
+O JNose mede Eager Test e Lazy Test contra a classe de produção que **ele** resolve, não
+contra a que o binding ligou. Nos pares de `convencao`, o JNose pode não ter resolvido
+classe nenhuma — e aí Eager e Lazy ficam perto de zero por construção — ou ter resolvido
+outra. Se isso explicasse o resultado, o argumento acima estaria apoiado num defeito.
+
+A sensibilidade restringe aos arquivos cujos testes foram todos ligados por
+`caminho_exato`, onde as duas classes coincidem por construção (`comum.so_caminho_exato`),
+sem `nome_divergente`. São 3 testes fora da família:
+
+| smell | densidade, sem `nome_divergente` | só `caminho_exato` |
+|---|---:|---:|
+| Eager Test | −0,027 (N=677) | −0,032 (N=649), IC [−0,109, 0,045] |
+| Lazy Test | 0,031 (N=677) | 0,024 (N=649), IC [−0,053, 0,100] |
+| General Fixture (controle) | 0,012 (N=677) | 0,016 (N=649) |
+
+Eager e Lazy continuam perto de zero onde o instrumento mede a classe certa. O argumento se
+sustenta.
+
 ---
 
 ## Artefatos
@@ -72,4 +92,4 @@ step 1 documentou, e não está removendo linhas por outro motivo.
 | arquivo | conteúdo |
 |---|---|
 | `por_test_smell.py` | a análise |
-| `dados/por_test_smell.csv` | 52 resultados com rho, p, p ajustado, IC e proporção de zeros |
+| `dados/por_test_smell.csv` | 55 linhas: 52 da família e 3 da sensibilidade (`recorte = sensibilidade_caminho_exato`), com rho, p, p ajustado, IC e proporção de zeros |
