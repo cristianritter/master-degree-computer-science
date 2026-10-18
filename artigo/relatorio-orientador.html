@@ -296,7 +296,7 @@
     <p class="sub">Relatório do que foi construído, dos resultados obtidos, do que cada um
     significa e do que implicam para um possível artigo. Escrito para ser lido sem
     conhecimento prévio do estudo.</p>
-    <p class="meta">18 de setembro de 2026 · Cristian Ritter · 3 etapas concluídas · 104 testes estatísticos registrados</p>
+    <p class="meta">17 de outubro de 2026 · Cristian Ritter · 3 etapas concluídas · 164 testes estatísticos registrados</p>
   </header>
 
   <section class="sec">
@@ -320,8 +320,10 @@
       <dd>Conjunto de dados publicado em 2020 com anotações de code smell feitas por
       <strong>desenvolvedores profissionais</strong>: 14.739 revisões sobre 4.770 trechos de
       código Java, cada uma atribuindo uma severidade (<em>none</em>, <em>minor</em>,
-      <em>major</em>, <em>critical</em>). É a nossa fonte do lado da produção — e o diferencial
-      dela é ser percepção humana, não cálculo de métrica.</dd>
+      <em>major</em>, <em>critical</em>). Cada revisor julga o trecho para dois smells de uma
+      vez — blob e data class nas classes, feature envy e long method nos métodos —, o que dá
+      9.517 pares trecho-smell. É a nossa fonte do lado da produção — e o diferencial dela é
+      ser percepção humana, não cálculo de métrica.</dd>
 
       <dt>JNose</dt>
       <dd>Ferramenta acadêmica que detecta test smells em código Java. É a nossa fonte do lado
@@ -359,14 +361,16 @@
         <span class="step-k">Etapa 2</span>
         <span class="step-t">O binding, e a medição dele</span>
         <span class="step-d">Três estratégias para ligar arquivo de produção à classe de teste.
-        Em vez de assumir que funcionam, <strong>sorteamos 293 pares e conferimos um a um</strong>,
-        abrindo os dois arquivos, para medir que fração das ligações é verdadeira.</span>
+        Em vez de assumir que funcionam, <strong>sorteamos 293 pares em 6 estratos e julgamos
+        cada um</strong>, para medir que fração das ligações é verdadeira. A primeira passada
+        foi automatizada; o censo humano, com um segundo avaliador, segue um protocolo
+        registrado antes do julgamento.</span>
       </div>
       <div class="step">
         <span class="step-k">Etapa 3</span>
         <span class="step-t">A análise</span>
-        <span class="step-d">Cinco análises independentes sobre o dado resultante, cada uma
-        atacando a pergunta por um ângulo diferente. Todas com testes estatísticos que não
+        <span class="step-d">Seis análises sobre o dado resultante, cada uma atacando a
+        pergunta por um ângulo diferente. Todas com testes estatísticos que não
         exigem distribuição normal, porque os dados são muito assimétricos.</span>
       </div>
     </div>
@@ -387,11 +391,11 @@
           <span class="f-t">Não existe associação detectável</span>
           <span class="tag t-nul">resultado nulo</span>
         </div>
-        <div class="f-v">rho = 0,047 · intervalo de confiança 95%: [−0,026 , 0,120] · 730 arquivos</div>
+        <div class="f-v">rho = 0,050 · intervalo de confiança 95%: [−0,022 , 0,123] · 730 arquivos</div>
         <div>
           <div class="label">O que significa</div>
           <p><em>Rho</em> é uma medida de correlação que varia de −1 a 1, onde 0 é ausência
-          total de relação. O valor encontrado, 0,047, é praticamente zero. O intervalo de
+          total de relação. O valor encontrado, 0,050, é praticamente zero. O intervalo de
           confiança diz onde o valor verdadeiro provavelmente está — e ele <strong>inclui o
           zero</strong>, ou seja, é compatível com não haver relação nenhuma.</p>
         </div>
@@ -399,8 +403,10 @@
           <div class="label">O que implica</div>
           <p>Três caminhos diferentes chegaram à mesma conclusão: correlação sobre a escala
           contínua de severidade, análise de cada um dos 13 test smells separadamente, e
-          comparação entre os casos em que os revisores concordaram que há code smell contra
-          aqueles em que concordaram que não há. Um resultado nulo pode ser azar de
+          comparação entre classes em que os revisores confirmaram code smell e classes em
+          que ninguém sinalizou nada. O nulo também vale para cada um dos quatro code smells
+          isoladamente (teto do intervalo entre 0,12 e 0,15), então ele não é a média de
+          efeitos opostos que se cancelam. Um resultado nulo pode ser azar de
           operacionalização; três por caminhos independentes apontam para o mesmo lugar.</p>
         </div>
       </div>
@@ -411,7 +417,7 @@
           <span class="f-t">A associação que aparece é tamanho do teste, não qualidade</span>
           <span class="tag t-med">mecanismo medido</span>
         </div>
-        <div class="f-v">contagem bruta: rho 0,092 (p = 0,012) · normalizada por tamanho: 0,047 (não significativo)<br>correlação da contagem com o tamanho do teste: <strong>0,554</strong></div>
+        <div class="f-v">contagem bruta: rho 0,094 (p = 0,011) · normalizada por tamanho: 0,050 (não significativo)<br>correlação da contagem com o tamanho do teste: <strong>0,554</strong></div>
         <div>
           <div class="label">O que significa</div>
           <p>Se contarmos simplesmente <em>quantas</em> ocorrências de test smell existem, a
@@ -420,9 +426,13 @@
           qualidade. Quando dividimos a contagem pelo tamanho do teste, a correlação
           desaparece.</p>
           <p>O mecanismo foi medido, não suposto: classe de produção com mais code smell tende
-          a ter teste maior (correlação 0,079 a 0,091), e teste maior tem mais ocorrências de
+          a ter teste maior (correlação 0,078 a 0,090), e teste maior tem mais ocorrências de
           test smell (0,554). O produto dessas duas relações produz uma correlação aparente
           entre as pontas, sem que exista relação com a qualidade do teste.</p>
+          <p>A comparação de grupos mostra o mesmo: classes com code smell confirmado têm
+          testes com mais ocorrências que classes sem sinalização (diferença significativa
+          mesmo após correção para comparações múltiplas), mas não mais ocorrências <em>por
+          método de teste</em>.</p>
         </div>
         <div>
           <div class="label">O que implica</div>
@@ -443,7 +453,7 @@
         <div>
           <div class="label">O que significa</div>
           <p>Uma das estratégias de binding liga teste a classe quando o teste faz referência
-          àquela classe no código. Auditando os pares um a um, ela acerta 94,8% das vezes se a
+          àquela classe no código. Na auditoria, ela acerta 94,8% das vezes se a
           afirmação for "este teste executa código desta classe" — mas apenas 10,1% se for
           "esta classe é o alvo deste teste".</p>
           <p>O caso mais comum ilustra bem: em projetos que usam o framework Camel, todo teste
@@ -455,63 +465,70 @@
           <div class="label">O que implica</div>
           <p>São os mesmos pares e o mesmo instrumento; 85 pontos percentuais separam as duas
           frases que se pode escrever sobre eles. Isso é um alerta metodológico para toda a
-          linha de pesquisa que liga teste a produção por referência estática — e nenhum dos
-          trabalhos que encontramos reporta precisão dessa ligação.</p>
+          linha de pesquisa que liga teste a produção por referência estática. A literatura
+          de rastreabilidade teste–código já mediu a precisão dessas estratégias, mas nenhum
+          dos estudos de test smell que encontramos reporta a precisão da ligação que usa.</p>
         </div>
       </div>
 
       <div class="f">
         <div class="f-head">
           <span class="f-n">04</span>
-          <span class="f-t">O rótulo do MLCQ é circular com o desenho amostral</span>
+          <span class="f-t">A regra de rótulo mais usada do MLCQ é circular com o desenho amostral</span>
           <span class="tag t-med">achado de método</span>
         </div>
-        <div class="f-v">1.227 de 1.227 amostras revisadas na segunda rodada já eram positivas antes<br>apenas 19 casos com positivo unânime em 4.770 amostras</div>
+        <div class="f-v">1.227 de 1.227 trechos revisados na segunda rodada já tinham algum smell marcado<br>trechos com um único revisor: 0,0% positivos · confiabilidade de um "none" isolado: 97,8%</div>
         <div>
           <div class="label">O que significa</div>
-          <p>Os autores do MLCQ alocaram revisores extras apenas para amostras que alguém já
+          <p>Os autores do MLCQ alocaram revisores extras apenas para trechos que alguém já
           havia marcado como tendo smell — está descrito no apêndice deles e confirmamos nos
           dados. Consequência: o número de revisores é resultado do rótulo, não evidência
           independente dele.</p>
-          <p>A regra que a literatura costuma usar — "se algum revisor marcou severidade acima
-          de <em>none</em>, a classe tem o smell" — vira, na prática, um detector de quais
-          amostras passaram pela segunda rodada de revisão. E ela descarta justamente o
-          veredito dessa segunda rodada, que em geral não confirmou o primeiro alerta.</p>
+          <p>A regra "se algum revisor marcou severidade acima de <em>none</em>, a classe tem o
+          smell" vira, na prática, um detector de quais trechos passaram pela segunda rodada de
+          revisão. E ela descarta justamente o veredito dessa segunda rodada: dos positivos com
+          mais de um revisor, 67% foram contestados por outro revisor.</p>
+          <p>O mesmo desenho permite medir a qualidade dos negativos. Como a segunda rodada
+          revisava o trecho inteiro, 1.037 pares trecho-smell marcados como <em>none</em> foram
+          revisados de novo só porque o outro smell do trecho tinha sido sinalizado. Em 97,8%
+          deles, o <em>none</em> original coincidiu com o veredito final da maioria.</p>
         </div>
         <div>
           <div class="label">O que implica</div>
-          <p>Qualquer trabalho que use o MLCQ como verdade de referência — inclusive os de
-          detecção automática por aprendizado de máquina, que são a maioria — precisa saber
-          disso. Nosso estudo trata o problema classificando cada amostra pela força da
-          evidência, em vez de escolher um limiar.</p>
+          <p>Quem usa o MLCQ como verdade de referência — inclusive os trabalhos de detecção
+          automática por aprendizado de máquina, que são a maioria — deveria evitar a regra do
+          "algum revisor marcou". Nosso estudo usa a severidade média contínua e classifica
+          cada par trecho-smell pela força da evidência. E os negativos de um único revisor,
+          que são três quartos do dataset, têm confiabilidade medida.</p>
         </div>
       </div>
 
     </div>
 
-    <div class="note warn">Uma quinta análise ficou <strong>inconclusiva, e não nula</strong> —
-    distinção que o artigo precisa fazer. Ela compara os casos que a maioria dos revisores
-    confirmou contra os casos que ficaram em disputa, e é a única em que os dois grupos
-    passaram pelo mesmo processo de revisão, o que neutraliza o problema do item 04. Mas são
-    apenas 42 casos confirmados: o desenho só detectaria um efeito grande, e os observados são
-    pequenos. Não dá para concluir nada dela — nem a favor, nem contra.</div>
+    <div class="note warn">Uma das análises ficou <strong>inconclusiva, e não nula</strong> —
+    distinção que o artigo precisa fazer. Ela compara as classes que a maioria dos revisores
+    confirmou contra as que ficaram só em disputa, e é a única em que os dois grupos passaram
+    pelo mesmo processo de revisão, o que neutraliza o problema do item 04. Mas são 136
+    confirmadas contra 67 em disputa: o desenho só detectaria um efeito grande (0,24), e os
+    observados ficam abaixo de 0,12. Não dá para concluir nada dela — nem a favor, nem
+    contra.</div>
   </section>
 
   <section class="sec">
     <div class="sec-head"><span class="num">05</span><h2>Por que este resultado nulo é utilizável</h2></div>
     <p>Resultado nulo costuma ser fraco em publicação, porque não se distingue "não existe
-    relação" de "o instrumento era ruidoso demais para enxergá-la". Duas medições feitas
-    <em>antes</em> da análise afastam a segunda explicação.</p>
+    relação" de "o instrumento era ruidoso demais para enxergá-la". Duas medições afastam a
+    segunda explicação.</p>
     <dl>
       <dt>A precisão do binding foi medida: 94,2%</dt>
-      <dd>Sorteamos 293 pares em 6 estratos e conferimos um a um. Com 6% de ligações
+      <dd>Sorteamos 293 pares em 6 estratos e julgamos cada um. Com 6% de ligações
       incorretas, o ruído é pequeno demais para apagar uma relação que existisse. Se a
       precisão fosse 50%, o nulo não significaria nada.</dd>
 
-      <dt>O poder estatístico foi calculado antes</dt>
+      <dt>O poder estatístico foi calculado</dt>
       <dd><em>Poder</em> é a capacidade de detectar um efeito que existe. Calculamos que este
       desenho detectaria uma correlação de 0,104 ou maior em 80% das vezes. O observado foi
-      0,047, com teto de intervalo em 0,120.</dd>
+      0,050, com teto de intervalo em 0,123.</dd>
     </dl>
     <p>Somando as duas, o artigo pode afirmar com número: <strong>se existe alguma associação
     entre densidade de test smell e severidade percebida de code smell em classes com teste
@@ -579,35 +596,33 @@
   </section>
 
   <section class="sec">
-    <div class="sec-head"><span class="num">07</span><h2>O que há de novo, e o que isso vale</h2></div>
-    <p>Considerando o alvo de veículo com classificação A ou B, vale separar o que é
-    contribuição real do que é apenas trabalho feito.</p>
+    <div class="sec-head"><span class="num">07</span><h2>O que há de novo, e como o artigo se apresenta</h2></div>
+    <p>O alvo é um evento A1 (ICSME 2027), com eventos A2 aceitos como destino. Vale separar o
+    que é contribuição real do que é apenas trabalho feito.</p>
 
     <h3>Contribuições que nenhum dos trabalhos encontrados tem</h3>
     <ul>
-      <li><strong>Precisão da ligação teste→produção medida e auditada.</strong> Os trabalhos
-      citados usam convenção de nome ou grafo de chamadas e não reportam quanto isso acerta.
-      Nós medimos: 94,2% no binding conservador, e mostramos que uma variante comum cai para
-      10,1% dependendo da afirmação que se faz.</li>
+      <li><strong>Precisão da ligação teste→produção medida e auditada.</strong> Os estudos de
+      test smell citados usam convenção de nome ou grafo de chamadas e não reportam quanto
+      isso acerta. Nós medimos: 94,2% no binding conservador, e mostramos que uma variante
+      comum cai para 10,1% dependendo da afirmação que se faz.</li>
       <li><strong>Percepção profissional como preditor</strong>, em vez de métrica calculada.
       O pareamento MLCQ × test smells parece inédito.</li>
-      <li><strong>Poder calculado antes da análise</strong>, o que transforma um nulo em
-      limite quantificado.</li>
-      <li><strong>Escala de diversidade</strong> — 451 repositórios, contra 5 e 10 dos
-      trabalhos citados.</li>
+      <li><strong>Poder calculado</strong>, o que transforma um nulo em limite
+      quantificado.</li>
+      <li><strong>Escala</strong> — a análise principal cobre 730 classes de 246 repositórios,
+      contra 5 e 10 sistemas dos trabalhos citados.</li>
     </ul>
 
-    <h3>Avaliação honesta quanto ao alvo A/B</h3>
-    <p>Como <em>artigo de resultado nulo</em> sobre test smell e code smell, a barra A/B é
-    difícil: nulos são publicáveis, mas raramente sozinhos, e o trabalho que contradizemos
-    mais diretamente é de veículo C com baixa citação — derrubá-lo não é feito grande.</p>
-    <p>O que sustenta A/B é deslocar o eixo: <strong>o artigo é sobre validade de medição em
-    estudos de test smell</strong>, e o nulo é a demonstração. As três contribuições de método
-    acima — ligação auditada, construto que muda a precisão em 85 pontos, e rótulo circular no
-    conjunto de dados mais usado da área — são problemas que afetam trabalhos já publicados, e
-    é isso que um veículo A/B costuma valorizar mais que mais um resultado de correlação.</p>
-    <p>Nessa moldura, o nulo deixa de ser o produto e vira a evidência: mostramos que,
-    corrigindo o que os outros não corrigem, a associação some.</p>
+    <h3>O enquadramento</h3>
+    <p>O artigo responde uma pergunta: <strong>a percepção profissional de code smell se
+    associa a test smell?</strong> O nulo com limite medido é a resposta, e é a espinha do
+    texto.</p>
+    <p>Três lições de medição, aprendidas ao responder, entram como contribuições
+    metodológicas declaradas: a ligação por referência estática mede outro construto, a
+    contagem bruta de test smell mede tamanho do teste, e a regra mais usada de rótulo do MLCQ
+    é circular com o desenho do próprio dataset. São elas que tornam o nulo crível, e são
+    úteis para quem trabalha com os mesmos instrumentos.</p>
   </section>
 
   <section class="sec">
@@ -622,16 +637,19 @@
       <li><strong>Mediu-se a precisão, não a cobertura real.</strong> Sabemos que fração das
       ligações feitas está correta; não sabemos que fração das ligações verdadeiras
       perdemos.</li>
-      <li><strong>A auditoria dos 293 pares foi automatizada</strong>, não feita por humano.
-      Uma conferência manual de cerca de 30 pares produziria uma taxa de concordância
-      reportável — é trabalho de aproximadamente uma hora.</li>
-      <li><strong>104 testes estatísticos foram executados</strong> num espaço de cerca de 200
+      <li><strong>A primeira passada da auditoria foi automatizada.</strong> O censo humano
+      dos 293 pares e a subamostra de 48 pares do segundo avaliador seguem um protocolo
+      registrado antes do julgamento.</li>
+      <li><strong>Arquivos do mesmo repositório não são independentes.</strong> 113 dos 246
+      repositórios contribuem com uma única classe, e os 10 maiores somam 20,5% das
+      classes.</li>
+      <li><strong>164 testes estatísticos foram executados</strong> num espaço de cerca de 200
       combinações possíveis. Todos estão registrados, inclusive os que não deram em nada, e o
       artigo precisa declarar regime exploratório.</li>
       <li><strong>O levantamento de literatura é dirigido</strong>, não sistemático. Para
       submissão A/B, uma revisão com protocolo é trabalho à parte.</li>
     </ul>
-    <p class="note warn"><strong>Não recomendo rodar mais experimentos.</strong> As três
+    <p class="note warn"><strong>Não recomendo rodar mais experimentos.</strong> As
     operacionalizações já convergiram, e cada teste adicional agrava o problema de comparações
     múltiplas sem mudar a conclusão. O que falta não é dado — é posicionamento e revisão de
     literatura.</p>
@@ -643,7 +661,7 @@
     etapa traz um verificador que reapura os números da sua própria documentação e falha se
     algum divergir — incluindo as tabelas de poder estatístico e os resultados da auditoria de
     precisão.</p>
-    <p>As cinco análises da etapa 3 têm pasta própria, com o código que as produziu, os dados
+    <p>As seis análises da etapa 3 têm pasta própria, com o código que as produziu, os dados
     de saída e um documento explicando a pergunta, o resultado e a interpretação de cada uma.
     O levantamento de literatura e a proposta de enquadramento ficam em arquivos separados do
     estudo, para que opinião não se misture com o que foi medido.</p>

@@ -1,17 +1,20 @@
-# Proposta de abordagem para o artigo — 18/09/2026
+# Abordagem do artigo
 
-Sugestão de enquadramento, feita **depois** dos experimentos e do levantamento de
-literatura, para submeter à avaliação do orientador. Não é decisão tomada.
+Enquadramento do artigo, decidido depois dos experimentos e do levantamento de literatura.
 
-Mantida separada da documentação dos steps de propósito: os steps registram o que foi
-feito e o que foi medido; este arquivo registra uma opinião sobre o que fazer com isso.
+Mantido separado da documentação dos steps de propósito: os steps registram o que foi
+feito e o que foi medido; este arquivo registra o que fazer com isso.
 
 ---
 
-## A tese sugerida
+## A tese
 
-> **O que prediz test smell é tamanho e complexidade do código, não a percepção de que o
-> código está ruim.**
+> **Severidade de code smell percebida por desenvolvedores profissionais não se associa à
+> densidade de test smell nos testes dedicados à classe. A associação que aparece em
+> contagem bruta é efeito do tamanho do teste.**
+
+O nulo é a espinha do artigo. Três lições de medição, aprendidas ao responder a pergunta,
+entram como contribuições metodológicas.
 
 Ela encaixa os dois trabalhos relacionados e o nosso resultado sem contradizer nenhum:
 
@@ -25,33 +28,40 @@ Ela encaixa os dois trabalhos relacionados e o nosso resultado sem contradizer n
 Percepção humana de code smell e complexidade métrica não são a mesma coisa — e essa
 distinção é o que a área chama de *lacuna de concordância*.
 
-## Os quatro resultados que sustentam
+## Os resultados que sustentam
 
 | # | resultado | evidência |
 |---|---|---|
-| 1 | nulo com limite superior quantificado | rho 0,047, IC [−0,026, 0,120], poder para detectar r ≥ 0,104 |
-| 2 | a associação bruta é tamanho do teste | rho 0,554 test smell × tamanho; 0,079–0,091 code smell × tamanho; parcial cai a 0,058 (n.s.) |
+| 1 | nulo com limite superior quantificado | densidade: rho 0,050, IC [−0,022, 0,123], poder para detectar r ≥ 0,104; nulo também em cada um dos quatro smells (teto do IC 0,13 a 0,15) |
+| 2 | a associação bruta é tamanho do teste | rho 0,554 test smell × tamanho; 0,078–0,090 code smell × tamanho; parcial cai a 0,062 (n.s.); confirmados × limpos separam em contagem (delta 0,138) e não em densidade |
 | 3 | binding por referência estática mede outro construto | 94,8% de precisão para "exercita", 10,1% para "testa" |
-| 4 | o rótulo do MLCQ é circular com o desenho amostral | `any > none` é quase detector de crosscheck; 19 positivos unânimes em 4.770 |
+| 4 | o rótulo `any > none` do MLCQ é circular com o desenho amostral | unidades com um único revisor têm 0,0% de positivos; toda amostra do crosscheck já era positiva. O próprio desenho permite medir a confiabilidade de um "none" isolado: 97,8% |
 
 Três operacionalizações independentes convergiram para o nulo (correlação contínua, smells
-individuais com FDR, comparação de extremos). A quarta, com melhor desenho, ficou
-inconclusiva por poder.
+individuais com FDR, comparação de extremos em densidade). A quarta, com melhor desenho
+(confirmados × só disputados), ficou inconclusiva por poder.
 
-## Os diferenciais de método
+## As contribuições
 
 O que temos e os trabalhos relacionados não têm:
 
-1. **Precisão do binding medida e auditada** — 293 pares, 6 estratos, 94,2% ponderado.
-   Tahir usa naming convention e call graph sem reportar precisão; Spadini não reporta.
-2. **Poder estatístico calculado antes** — o nulo é interpretável porque sabemos o que o
-   desenho detectaria.
-3. **Ground truth de percepção profissional** — 14.739 revisões, 328 desenvolvedores,
-   contra métricas calculadas ou heurísticas de defeito.
-4. **Escala de diversidade** — 451 repositórios contra 5 e 10 dos trabalhos citados.
-5. **Rastro completo** — 104 testes registrados, incluindo os que não deram em nada.
+1. **Precisão do binding medida e auditada** — 293 pares, 6 estratos, 94,2% ponderado no
+   ramo determinístico, com censo humano e segundo avaliador
+   (`steps/step2-binding/PROTOCOLO-AUDITORIA-HUMANA.md`).
+2. **Poder estatístico calculado** — o nulo é interpretável porque sabemos o que o desenho
+   detectaria.
+3. **Ground truth de percepção profissional** — 14.739 revisões do MLCQ, sobre 9.517
+   unidades (amostra, smell), contra métricas calculadas ou heurísticas de defeito.
+4. **Escala** — a análise principal cobre 730 arquivos de 246 repositórios, contra 5 e 10
+   sistemas dos trabalhos citados.
+5. **Rastro completo** — 164 testes registrados, incluindo os que não deram em nada.
 
-## Riscos, honestamente
+## Destino
+
+ICSME 2027 (A1), com SANER 2028 como plano B e ESEM como alternativa A2. Texto em inglês.
+Detalhes no documento de eventos-alvo.
+
+## Riscos
 
 - **O nulo é sobre percepção, não sobre defeito.** Um revisor pode dizer que medimos a
   opinião de desenvolvedores sobre design, não qualidade. É verdade, e precisa estar no
@@ -59,29 +69,25 @@ O que temos e os trabalhos relacionados não têm:
 - **Cobertura de 37,5%** do binding. Os 62,5% restantes misturam classe sem teste e falha
   do método.
 - **Recall do binding não medido.**
-- **A auditoria dos 293 pares é automatizada**, não humana.
-- **APSEC C com 20 citações não é alvo de peso.** Confrontar só o Tahir não sustenta
-  submissão forte; o que sustenta é o pacote.
-- **104 testes num espaço de ~200 combinações** — o artigo tem que declarar regime
+- **Arquivos do mesmo repositório não são independentes.** 113 dos 246 repositórios
+  contribuem com um único arquivo, e os 10 maiores somam 20,5% dos arquivos.
+- **164 testes num espaço de ~200 combinações** — o artigo tem que declarar regime
   exploratório.
 
-## O que NÃO recomendo
+## O que não fazer
 
-**Rodar mais experimentos.** As três operacionalizações já convergiram, e cada teste novo
-piora o problema de comparações múltiplas sem mudar a conclusão.
+**Rodar mais experimentos.** As operacionalizações já convergiram, e cada teste novo piora
+o problema de comparações múltiplas sem mudar a conclusão. As duas células da grade 4 × 13
+acima do r detectável (feature envy × Verbose Test, blob × Duplicate Assert) são hipóteses
+para um estudo confirmatório, não achados.
 
-**Apresentar como artigo metodológico sobre normalização.** Foi minha sugestão inicial, e o
-levantamento a derrubou: o trabalho mais citado da área já controla por tamanho. O achado 2
-é confirmação com mecanismo medido, não descoberta.
+**Apresentar como artigo metodológico sobre normalização.** O trabalho mais citado da área
+já controla por tamanho. O resultado 2 é confirmação com mecanismo medido, não descoberta.
 
-## O que recomendo antes de escrever
+## O que falta antes de escrever
 
-1. **Revisão sistemática de verdade**, com protocolo — o levantamento atual é dirigido e
-   não serve como seção de trabalhos relacionados.
-2. **Conferência humana de ~30 pares da auditoria** (uma hora) — vira taxa de concordância
-   reportável e fecha a ameaça de a auditoria ser automatizada.
-3. **Medição de recall do binding** (meia tarde) — sortear arquivos não ligados e procurar
+1. **Censo humano da auditoria e segundo avaliador**, conforme o protocolo.
+2. **Revisão de literatura com protocolo**, ao menos snowballing a partir de Tahir e
+   Spadini, para sustentar que o pareamento percepção × test smell não foi estudado.
+3. **Medição de recall do binding** (meia tarde): sortear arquivos não ligados e procurar
    teste à mão.
-
-Nenhuma das três é bloqueante para decidir se o artigo existe. As duas últimas são baratas
-e fecham ameaças que um revisor levanta.

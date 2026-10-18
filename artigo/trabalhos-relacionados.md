@@ -49,8 +49,8 @@ ameaça:
 > faults... The same would likely be true for the presence of different test smells."
 
 É interpretação defensável — mas deixa aberta exatamente a pergunta que medimos: **quando o
-tamanho sai, sobra alguma coisa?** No nosso dado, não sobra (0,084 bruto contra 0,047 em
-densidade).
+tamanho sai, sobra alguma coisa?** No nosso dado, não sobra: 0,084 no número de tipos de
+test smell, a medida deles, contra 0,050 em densidade, sem significância.
 
 ---
 
@@ -122,7 +122,7 @@ profissional* × test smell. A literatura usa proxies métricos (Tahir) ou defei
 |---|---|---|
 | Tahir 2016 | complexidade objetiva (CC, WMC) | associação positiva, sem normalizar por tamanho |
 | Spadini 2018 | presença de test smell | associação com defeitos, controlando tamanho |
-| **nosso** | **percepção humana de code smell** | **sem associação, r < 0,12, binding auditado** |
+| **nosso** | **percepção humana de code smell** | **sem associação, r < 0,12 no agregado e em cada smell até 0,15, binding auditado** |
 
 A leitura que encaixa os três: **o que prediz test smell é tamanho e complexidade, não a
 percepção de que o código está ruim.**
