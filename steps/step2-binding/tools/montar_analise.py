@@ -222,9 +222,9 @@ def main():
 
         # ts_n_distintos e UNIAO, nunca a agregacao escolhida: somar "quantos smells
         # distintos cada classe de teste tem" nao da "quantos smells distintos existem".
-        # Dava 19 num arquivo com 3 testes, sendo que so existem 13 smells habilitados -
-        # contagem de distintos nao pode passar do proprio maximo. A uniao e o numero de
-        # colunas ts_* com valor acima de zero, e nao depende de --agregacao.
+        # A soma passaria do numero de smells existentes num arquivo com varios testes.
+        # A uniao e o numero de colunas ts_* com valor acima de zero, e nao depende de
+        # --agregacao.
         distintos = sum(1 for s in c.SMELLS
                         if any(int(t[c.coluna(s)]) > 0 for t in ts))
         linha += [distintos,

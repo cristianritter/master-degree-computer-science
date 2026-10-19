@@ -29,20 +29,17 @@ BYTESTSMELLS = os.path.join(STEP1, "reports", "bytestsmells")
 
 DADOS = os.path.join(STEP, "dados")
 
-# Os 13 smells habilitados na coleta. Os CSVs do JNose trazem 21 colunas de smell; as 8
-# restantes nao foram habilitadas e estao zeradas em todas as 107.535 linhas - conferido,
-# nao assumido (ver README, secao 2). Sao descartadas na normalizacao para que ninguem
-# leia um zero estrutural como ausencia observada de smell.
+# Os 20 smells habilitados na coleta: a configuracao padrao do JNose menos o Unknown Test,
+# cujo detector descarta a analise da classe inteira em metodos sem corpo (step 1, secao 4).
+# Os nomes sao os cabecalhos dos CSVs do JNose, como ele os escreve (EmptyTest, IgnoredTest).
 SMELLS = [
-    "Assertion Roulette", "Conditional Test Logic", "Dependent Test", "Duplicate Assert",
-    "Eager Test", "Exception Catching Throwing", "General Fixture", "Lazy Test",
-    "Magic Number Test", "Mystery Guest", "Redundant Assertion", "Resource Optimism",
-    "Verbose Test",
+    "Assertion Roulette", "Conditional Test Logic", "Constructor Initialization",
+    "Default Test", "Dependent Test", "Duplicate Assert", "Eager Test", "EmptyTest",
+    "Exception Catching Throwing", "General Fixture", "IgnoredTest", "Lazy Test",
+    "Magic Number Test", "Mystery Guest", "Print Statement", "Redundant Assertion",
+    "Resource Optimism", "Sensitive Equality", "Sleepy Test", "Verbose Test",
 ]
-SMELLS_DESABILITADOS = [
-    "Sleepy Test", "Unknown Test", "EmptyTest", "IgnoredTest", "Sensitive Equality",
-    "Default Test", "Constructor Initialization", "Print Statement",
-]
+SMELLS_DESABILITADOS = ["Unknown Test"]
 
 # Os 4 code smells do MLCQ, com a granularidade em que cada um foi anotado.
 CODE_SMELLS = {
@@ -66,6 +63,34 @@ RANK = {s: i for i, s in enumerate(SEVERIDADES)}
 CORTE_CROSSCHECK = "2019-07-26"
 
 MARCA_CLONES = ".jnose_projects/"
+
+
+def sem_comentarios(texto):
+    """Remove comentarios e literais, preservando as chaves que delimitam escopo."""
+    saida, i, n = [], 0, len(texto)
+    while i < n:
+        par = texto[i:i + 2]
+        if par == "//":
+            j = texto.find("\n", i)
+            i = n if j < 0 else j
+        elif par == "/*":
+            j = texto.find("*/", i + 2)
+            i = n if j < 0 else j + 2
+        elif texto[i] in "\"'":
+            # literal de Java nao atravessa quebra de linha; se atravessar, nao era
+            # literal (arquivo de template, por exemplo) e a aspa vale como texto
+            aspa, j = texto[i], i + 1
+            while j < n and texto[j] != aspa and texto[j] != "\n":
+                j += 2 if texto[j] == "\\" else 1
+            if j < n and texto[j] == aspa:
+                i = j + 1
+            else:
+                saida.append(texto[i])
+                i += 1
+        else:
+            saida.append(texto[i])
+            i += 1
+    return "".join(saida)
 
 
 def coluna(smell):

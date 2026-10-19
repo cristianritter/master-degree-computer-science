@@ -23,10 +23,10 @@ import comum as c
 import baixar_auditoria as b
 import refs_producao as rp
 
-# mesma funcao de remocao de comentarios/literais que a estrategia 3 usou, carregada do
-# step 1: auditar com uma limpeza diferente da que gerou o par inventaria discordancia.
+# mesma funcao de remocao de comentarios/literais que a estrategia 3 usou: auditar com
+# uma limpeza diferente da que gerou o par inventaria discordancia.
 rp.carregar_step1()
-sem_comentarios = rp.jb._sem_comentarios
+sem_comentarios = c.sem_comentarios
 
 RE_PACOTE = re.compile(r"^\s*package\s+([\w.]+)\s*;", re.M)
 RE_IMPORT = re.compile(r"^\s*import\s+(?:static\s+)?([\w.*]+)\s*;", re.M)
@@ -39,11 +39,11 @@ NL = chr(10)
 def limpar_preservando_linhas(fonte):
     """Apaga comentarios e literais trocando-os por espaco, mantendo TODAS as quebras.
 
-    O _sem_comentarios do step 1 nao preserva a contagem de linhas (colapsa 17 linhas num
+    O comum.sem_comentarios nao preserva a contagem de linhas (colapsa 17 linhas num
     arquivo de 346), entao o numero de linha do texto limpo nao serve para citar o arquivo
     original - e citar a linha errada num dossie de auditoria e pior que nao citar nada.
     Esta versao existe so para o dossie: quem decide se ha mencao continua sendo a funcao
-    do step 1, a mesma que gerou os pares.
+    do comum.py, a mesma que gerou os pares.
     """
     saida = []
     i, n = 0, len(fonte)
@@ -171,8 +171,8 @@ def main():
         todas = teste.split(NL)
         limpas = limpar_preservando_linhas(teste).split(NL)
         hits = [n for n, l in enumerate(limpas) if pad.search(l)]
-        n_step1 = len(pad.findall(sem_comentarios(teste)))
-        aviso = "" if n_step1 else "  !! a funcao do step 1 nao ve mencao alguma"
+        n_limpo = len(pad.findall(sem_comentarios(teste)))
+        aviso = "" if n_limpo else "  !! a funcao da estrategia 3 nao ve mencao alguma"
         print("  mencoes de '%s' no teste (fora de comentario/literal): %d linhas%s"
               % (nome_prod, len(hits), aviso))
         for n in hits[:14]:

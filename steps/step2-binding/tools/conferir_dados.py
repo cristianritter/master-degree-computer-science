@@ -1,8 +1,7 @@
 """Reapura todos os numeros afirmados no README do step 2, direto das fontes.
 
-Todo numero que aparece no README sai daqui. A razao de existir e a mesma do
-validar_filtro.py no step 1: afirmacao empirica em texto de artigo precisa de um comando
-que a regenere, senao ninguem - inclusive o autor seis meses depois - sabe se ela ainda
+Todo numero que aparece no README sai daqui. Afirmacao empirica em texto de artigo
+precisa de um comando que a regenere, senao ninguem - inclusive o autor seis meses depois - sabe se ela ainda
 vale depois de uma recoleta.
 
 As checagens 1 a 4 sao PRESSUPOSTOS: se uma delas falhar, algum script do step 2 esta
@@ -45,19 +44,31 @@ def exigir(condicao, descricao, observado):
 def secao_2():
     titulo("SECAO 2 - pressupostos da normalizacao")
 
-    # 1. as 8 colunas de smell nao habilitadas estao zeradas em todas as linhas
+    # 1. os CSVs trazem as 21 colunas de smell do JNose: as 20 habilitadas e a do Unknown
+    # Test, que tem que estar zerada em todas as linhas (desabilitada na coleta)
+    faltando, sobrando = set(), set()
     naozero = collections.Counter()
     linhas = 0
     chaves = collections.Counter()
+    nao_smell = {"App", "TestFileName", "PathFile", "ProductionFileName", "LOC", "numberMethods"}
+    todos = set(c.SMELLS) | set(c.SMELLS_DESABILITADOS)
     for p in sorted(glob.glob(os.path.join(c.BYCLASSTEST, "*.csv"))):
         with open(p, encoding="utf-8", errors="replace") as fh:
-            for r in csv.DictReader(fh, delimiter=";"):
+            leitor = csv.DictReader(fh, delimiter=";")
+            if leitor.fieldnames:
+                cols = set(leitor.fieldnames) - nao_smell
+                faltando |= todos - cols
+                sobrando |= cols - todos
+            for r in leitor:
                 linhas += 1
                 chaves[(r["App"], (r.get("PathFile") or "").lower())] += 1
                 for s in c.SMELLS_DESABILITADOS:
                     if (r.get(s) or "0").strip() not in ("0", ""):
                         naozero[s] += 1
-    exigir(not naozero, "as 8 colunas de smell desabilitadas estao todas zeradas",
+    exigir(not faltando and not sobrando,
+           "o byclasstest tem as %d colunas de smell do JNose" % len(todos),
+           "ok" if not (faltando or sobrando) else "faltando %s, sobrando %s" % (faltando, sobrando))
+    exigir(not naozero, "a coluna do Unknown Test (desabilitado) esta zerada",
            "nenhuma diferente de zero" if not naozero else dict(naozero))
 
     # 2. o byclasstest nao tem linhas duplicadas

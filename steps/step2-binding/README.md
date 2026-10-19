@@ -20,7 +20,7 @@ Saída: `dados/`
 | Amostras em repositório disponível (`HASH_OK`) | 4.300 |
 | Arquivos de produção anotados distintos | 4.559 |
 | Classes de teste normalizadas | 107.535 |
-| Ocorrências de test smell normalizadas | 2.059.905 |
+| Ocorrências de test smell normalizadas | 2.150.044 |
 | Amostras com classe de teste identificada | **1.611 (37,5% das disponíveis)** |
 | Pares (produção, teste) no binding | 16.869 |
 | Pares auditados | 293 (6 estratos) |
@@ -37,8 +37,8 @@ Saída: `dados/`
 | git | para a estratégia 3, que clona os espelhos |
 
 Nenhuma dependência do JNose: o step 2 lê os CSVs que o step 1 já exportou. A única
-exceção é `refs_producao.py`, que clona os espelhos e reusa duas funções do
-`jnose_batch.py` do step 1 (`_sem_comentarios` e `rmtree`).
+exceção é `refs_producao.py`, que clona os espelhos e reusa o `rmtree` do
+`jnose_batch.py` do step 1.
 
 | Variável | Padrão |
 |---|---|
@@ -70,25 +70,26 @@ O `byclasstest` do step 1 com três mudanças:
    `flowClass` documentado no step 1 (seção 5) — em arquivo com classe aninhada o JNose
    reporta o nome do *helper*. São 6.842 linhas (6,4%). O nome original fica em
    `nome_jnose` e a flag `nome_divergente` marca as linhas afetadas.
-3. **As 8 colunas de smell não habilitadas são descartadas.** Estão zeradas em todas as
-   107.535 linhas — conferido, não assumido. Um zero estrutural lido como "smell ausente"
-   seria erro silencioso.
+3. **A coluna do Unknown Test é descartada.** O detector ficou desligado na coleta (step 1,
+   seção 4.2), e a coluna está zerada em todas as 107.535 linhas — conferido, não assumido.
+   Um zero estrutural lido como "smell ausente" seria erro silencioso. Ficam os 20 smells
+   habilitados.
 
 > **A correção do nome recupera a identidade da classe, não os valores de smell.** O
 > `ProductionFileName` foi resolvido a partir do nome errado e fica vazio em 93,8% dessas
 > linhas, derrubando Eager Test 28× e Lazy Test 23×. Qualquer análise que envolva
 > Eager/Lazy Test tem que filtrar ou estratificar por `nome_divergente` — é para isso que
 > `montar_analise.py --excluir-nome-divergente` existe. Corrigir de verdade exigiria
-> consertar o `jnose-core` e repetir as 34,7 h de coleta.
+> consertar o `jnose-core` e repetir a coleta.
 
-### `dados/test_smell_occurrences.csv.gz` — 2.059.905 linhas, 1 por ocorrência
+### `dados/test_smell_occurrences.csv.gz` — 2.150.044 linhas, 1 por ocorrência
 
 Nível de método (`testSmellMethod`, faixa de linhas, hashes), para drill-down posterior. O
-campo `methodCode` — quase todo o 1,4 GB do step 1 — **não** é copiado; os hashes ficam, e
-o step 1 continua sendo a fonte do código quando ele for necessário. 109 MB.
+campo `methodCode` — quase todo o 1,5 GB do step 1 — **não** é copiado; os hashes ficam, e
+o step 1 continua sendo a fonte do código quando ele for necessário. 113 MB.
 
-> **Este é o único arquivo não versionado inteiro.** 104 MB passam do limite de 100 MB por
-> blob do GitHub, então o repositório guarda três partes de 45 MB
+> **Este é o único arquivo não versionado inteiro.** 113 MB passam do limite de 100 MB por
+> blob do GitHub, então o repositório guarda três partes de até 45 MiB
 > (`test_smell_occurrences.csv.gz.part00`, `.part01`, `.part02`) e o SHA-256 do arquivo
 > montado em `test_smell_occurrences.csv.gz.sha256`. Reconstituir é uma concatenação:
 >
@@ -98,9 +99,9 @@ o step 1 continua sendo a fonte do código quando ele for necessário. 109 MB.
 > sha256sum -c test_smell_occurrences.csv.gz.sha256
 > ```
 >
-> A ordem é a do glob e a divisão é por byte — as partes não são gzip válido isoladamente.
-> Nenhum script do step 2 lê esse arquivo; ele existe para o drill-down posterior. Quem
-> preferir regerá-lo roda `normalizar_jnose.py` (~1,5 min).
+> As partes e o SHA-256 saem do próprio `normalizar_jnose.py` (~1,5 min); a divisão é por
+> byte, então as partes não são gzip válido isoladamente. Nenhum script do step 2 lê esse
+> arquivo; ele existe para o drill-down posterior.
 
 ---
 
@@ -351,9 +352,9 @@ Três evidências, da mais forte para a mais fraca, gravadas em `refs_producao.c
 | `wildcard` | o teste tem `import <pacote>.*;` e menciona o identificador `<Tipo>`. |
 | `mesmo_pacote` | teste e produção declaram o mesmo `package` e o teste menciona `<Tipo>`. Java não exige import nesse caso, então é ligação legítima — mas é a única das três que casa identificador solto, e a mais sujeita a falso positivo. |
 
-A menção ao identificador é buscada no código **sem comentários nem literais**, reusando o
-`_sem_comentarios()` do step 1 — a mesma função já validada lá contra o oráculo de
-JavaParser. Reusar evita ter duas heurísticas de texto diferentes no mesmo experimento.
+A menção ao identificador é buscada no código **sem comentários nem literais**
+(`comum.sem_comentarios()`). O dossiê da auditoria usa a mesma função, para que o auditor
+confira a menção com a mesma limpeza que gerou o par.
 
 #### Clone esparso
 
@@ -738,9 +739,9 @@ MLCQ.
 | `tem_production` | 1 se `production_path` está preenchido |
 | `loc` | linhas da classe de teste |
 | `n_metodos` | métodos da classe de teste |
-| `ts_assertion_roulette` … `ts_verbose_test` | **13 colunas**, contagem de cada test smell habilitado |
-| `n_smells_distintos` | quantos dos 13 têm contagem > 0 |
-| `n_smells_total` | soma das 13 contagens |
+| `ts_assertion_roulette` … `ts_verbose_test` | **20 colunas**, contagem de cada test smell habilitado |
+| `n_smells_distintos` | quantos dos 20 têm contagem > 0 |
+| `n_smells_total` | soma das 20 contagens |
 
 ### `test_smell_occurrences.csv.gz` — 1 linha por ocorrência
 
@@ -749,12 +750,12 @@ MLCQ.
 | `github_repo`, `path`, `nome_arquivo`, `production_path` | como em `test_classes.csv` |
 | `junit` | `JUnit3`, `JUnit4` ou `JUnit5`, detectado pelo JNose |
 | `loc`, `n_metodos` | da classe de teste |
-| `smell` | qual dos 13 |
+| `smell` | qual dos 20 |
 | `metodo` | método de teste onde o smell ocorre (`testSmellMethod`) |
 | `linha_inicio`, `linha_fim` | faixa de linhas da ocorrência |
 | `method_name_hash`, `method_name_full_hash`, `method_code_hash`, `full_hash` | hashes do JNose, para deduplicar |
 
-> O campo `methodCode` do step 1 **não** é copiado (é quase todo o 1,4 GB). Os hashes ficam
+> O campo `methodCode` do step 1 **não** é copiado (é quase todo o 1,5 GB). Os hashes ficam
 > e o step 1 continua sendo a fonte do código.
 
 ### `binding.csv` — 1 linha por par (produção, teste)
@@ -846,8 +847,8 @@ Mesmas colunas nos dois; muda só qual binding alimentou as linhas (seção 6).
 | `n_testes`, `test_paths` | classes de teste agregadas |
 | `n_testes_nome_divergente` | quantas delas têm o nome corrompido pelo defeito de classe aninhada. **Filtrar ou estratificar por esta coluna é obrigatório em análise com Eager/Lazy Test** |
 | `loc_teste`, `n_metodos_teste` | totais do lado do teste; `n_metodos_teste` é o denominador de `--agregacao densidade` |
-| `ts_*` (13), `ts_n_total` | test smells agregados pela regra de `--agregacao` |
-| `ts_n_distintos` | quantos dos 13 smells aparecem em ao menos uma classe de teste ligada. É **união**, não a agregação escolhida — somar "quantos smells distintos cada classe tem" não dá "quantos smells distintos existem", e produzia 19 num arquivo com 3 testes |
+| `ts_*` (20), `ts_n_total` | test smells agregados pela regra de `--agregacao` |
+| `ts_n_distintos` | quantos dos 20 smells aparecem em ao menos uma classe de teste ligada. É **união**, não a agregação escolhida — somar "quantos smells distintos cada classe tem" não dá "quantos smells distintos existem" |
 
 O `.params.txt` ao lado traz comando, commit, versão do Python, sha256 das entradas,
 cobertura e descartes.
@@ -869,16 +870,15 @@ código 1:
 
 | pressuposto | estado |
 |---|---|
-| as 8 colunas de smell desabilitadas estão todas zeradas | ok |
+| o `byclasstest` tem as 21 colunas de smell, e a do Unknown Test está zerada | ok |
 | `byclasstest` sem `(repo, caminho)` duplicado | ok — 107.535 linhas, 107.535 chaves |
-| todo `productionFile` reduz a caminho relativo | ok — 49.903 preenchidos, 0 irreconhecíveis |
+| todo `productionFile` reduz a caminho relativo | ok — 49.905 preenchidos, 0 irreconhecíveis |
 | todo `App` do `byclasstest` está no `repos_map` do step 1 | ok — 430 Apps, 0 fora |
 | toda amostra crosscheckada já era positiva antes do corte | ok — 1.227 de 1.227 |
 
-O resto são as tabelas das seções 2, 3, 4, 5 e 6. Três números conferem contra o README do
-step 1 de forma independente — `nome_divergente` (6.842), `production` preenchido (49.903)
-e as taxas por mil de Eager/Lazy/General Fixture nos dois grupos de nome — o que valida a
-normalização.
+O resto são as tabelas das seções 2, 3, 4, 5 e 6. Dois números conferem contra o README do
+step 1 de forma independente — `nome_divergente` (6.842) e as taxas por mil de
+Eager/Lazy/General Fixture nos dois grupos de nome — o que valida a normalização.
 
 A `--secao 5` reapura a auditoria: exige os 293 pares preenchidos, confere a precisão de
 cada estrato nos dois critérios e as duas precisões ponderadas (94,2% e 10,1%/94,8%), e
@@ -914,7 +914,7 @@ step2-binding/
     ├── mlcq_reviews.csv              14.739 linhas
     ├── mlcq_samples.csv               9.517 linhas
     ├── test_classes.csv             107.535 linhas
-    ├── test_smell_occurrences.csv.gz  2.059.905 linhas (versionado em 3 partes)
+    ├── test_smell_occurrences.csv.gz  2.150.044 linhas (versionado em 3 partes)
     ├── refs_producao.csv             pares da estrategia 3
     ├── refs_log.csv                  1 linha por repositorio (retomavel)
     ├── binding.csv                   pares (producao, teste) com metodo

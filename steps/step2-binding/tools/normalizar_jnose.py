@@ -1,7 +1,7 @@
 """Normaliza a saida do JNose (step 1) em CSVs com caminho relativo e nome de classe corrigido.
 
     dados/test_classes.csv                107.535 linhas - 1 por classe de teste
-    dados/test_smell_occurrences.csv.gz 2.059.905 linhas - 1 por ocorrencia de smell
+    dados/test_smell_occurrences.csv.gz 2.150.044 linhas - 1 por ocorrencia de smell
 
 Tres coisas acontecem aqui, e a segunda e a que muda numeros.
 
@@ -40,6 +40,7 @@ import collections
 import csv
 import glob
 import gzip
+import hashlib
 import os
 import sys
 import time
@@ -176,6 +177,32 @@ def normalizar_ocorrencias():
           % (n, time.time() - t0, os.path.getsize(destino) / 1e6))
     for k, v in fora.items():
         print("  descartado %-30s %d" % (k, v))
+    dividir_em_partes(destino)
+
+
+# O GitHub recusa blob acima de 100 MB: o arquivo e versionado em partes de 45 MiB, mais o
+# SHA-256 do arquivo inteiro no formato do sha256sum. As partes sao corte por byte, nao
+# gzip valido isoladamente; reconstituir e concatena-las em ordem.
+TAMANHO_PARTE = 45 * 1024 * 1024
+
+
+def dividir_em_partes(destino):
+    for velha in glob.glob(destino + ".part*"):
+        os.remove(velha)
+    h = hashlib.sha256()
+    n = 0
+    with open(destino, "rb") as fh:
+        while True:
+            bloco = fh.read(TAMANHO_PARTE)
+            if not bloco:
+                break
+            h.update(bloco)
+            with open("%s.part%02d" % (destino, n), "wb") as parte:
+                parte.write(bloco)
+            n += 1
+    with open(destino + ".sha256", "w", newline="\n", encoding="utf-8") as fh:
+        fh.write("%s  %s\n" % (h.hexdigest(), os.path.basename(destino)))
+    print("  versionado em %d partes de ate 45 MiB, sha256 %s..." % (n, h.hexdigest()[:12]))
 
 
 def main():

@@ -160,34 +160,6 @@ ORACULO_DIR = os.path.join(STEP, ".oraculo")
 _classpath_oraculo = None
 
 
-def _sem_comentarios(texto):
-    """Remove comentarios e literais, preservando as chaves que delimitam escopo."""
-    saida, i, n = [], 0, len(texto)
-    while i < n:
-        par = texto[i:i + 2]
-        if par == "//":
-            j = texto.find("\n", i)
-            i = n if j < 0 else j
-        elif par == "/*":
-            j = texto.find("*/", i + 2)
-            i = n if j < 0 else j + 2
-        elif texto[i] in "\"'":
-            # literal de Java nao atravessa quebra de linha; se atravessar, nao era
-            # literal (arquivo de template, por exemplo) e a aspa vale como texto
-            aspa, j = texto[i], i + 1
-            while j < n and texto[j] != aspa and texto[j] != "\n":
-                j += 2 if texto[j] == "\\" else 1
-            if j < n and texto[j] == aspa:
-                i = j + 1
-            else:
-                saida.append(texto[i])
-                i += 1
-        else:
-            saida.append(texto[i])
-            i += 1
-    return "".join(saida)
-
-
 def classpath_oraculo():
     """Extrai o javaparser do jar do JNose e compila o AchaNulos.java, uma vez por execucao."""
     global _classpath_oraculo

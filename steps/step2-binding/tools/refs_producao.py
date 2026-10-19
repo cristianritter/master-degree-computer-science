@@ -22,10 +22,9 @@ Tres evidencias, gravadas na coluna evidencia, da mais forte para a mais fraca:
                  mais sujeita a falso positivo (um <Tipo> homonimo importado de outro
                  pacote, por exemplo).
 
-A mencao ao identificador e buscada no codigo SEM comentarios nem literais de string,
-reusando o _sem_comentarios() do jnose_batch.py do step 1 - a mesma funcao que ja foi
-validada la contra o oraculo de JavaParser. Reusar em vez de reescrever evita ter duas
-heuristicas de texto diferentes no mesmo experimento.
+A mencao ao identificador e buscada no codigo SEM comentarios nem literais de string
+(comum.sem_comentarios). O dossie da auditoria usa a mesma funcao, para que o auditor
+confira a mencao com a mesma limpeza que gerou o par.
 
 O que esta estrategia NAO afirma: que o teste testa aquela classe. Referenciar e condicao
 necessaria, nao suficiente - um teste pode instanciar uma classe so como fixture. E por
@@ -72,10 +71,9 @@ jb = None   # jnose_batch do step 1, carregado em carregar_step1()
 
 
 def carregar_step1():
-    """Importa o jnose_batch.py do step 1 para reusar _sem_comentarios, clone e rmtree.
+    """Importa o jnose_batch.py do step 1 para reusar clone e rmtree.
 
-    Mesmo padrao que o validar_filtro.py do step 1 usa: o script e carregado por caminho
-    porque os steps nao sao um pacote Python instalavel.
+    O script e carregado por caminho porque os steps nao sao um pacote Python instalavel.
     """
     global jb
     caminho = os.path.join(c.STEP1, "tools", "jnose_batch.py")
@@ -102,7 +100,7 @@ def analisar_teste(caminho):
     """Devolve (pacote, imports_exatos, pacotes_wildcard, identificadores) de um arquivo de teste."""
     fonte = ler_fonte(caminho)
     # package e import sao lidos do fonte cru: eles nunca aparecem dentro de comentario de
-    # forma que importe, e _sem_comentarios pode reescrever espacos.
+    # forma que importe, e sem_comentarios pode reescrever espacos.
     pacote_m = PACOTE.search(fonte)
     pacote = pacote_m.group(1) if pacote_m else ""
 
@@ -115,7 +113,7 @@ def analisar_teste(caminho):
 
     # Para a mencao de identificador, comentarios e literais precisam sair: um nome de
     # classe citado no javadoc nao e referencia.
-    limpo = jb._sem_comentarios(fonte)
+    limpo = c.sem_comentarios(fonte)
     identificadores = set(re.findall(r"[A-Za-z_$][\w$]*", limpo))
     return pacote, exatos, wildcards, identificadores
 
