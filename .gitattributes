@@ -1,2 +1,3 @@
 *.gz binary
 *.gz.part* binary
+*.sha256 text eol=lf
