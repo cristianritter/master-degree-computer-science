@@ -32,8 +32,8 @@ distinção é o que a área chama de *lacuna de concordância*.
 
 | # | resultado | evidência |
 |---|---|---|
-| 1 | nulo com limite superior quantificado | densidade: rho 0,050, IC [−0,022, 0,123], poder para detectar r ≥ 0,104; nulo também em cada um dos quatro smells (teto do IC 0,13 a 0,15) |
-| 2 | a associação bruta é tamanho do teste | rho 0,554 test smell × tamanho; 0,078–0,090 code smell × tamanho; parcial cai a 0,062 (n.s.); confirmados × limpos separam em contagem (delta 0,138) e não em densidade |
+| 1 | nulo com limite superior quantificado | densidade: rho 0,044, IC [−0,029, 0,116], poder para detectar r ≥ 0,104; nulo também em cada um dos quatro smells (teto do IC 0,11 a 0,15) |
+| 2 | a associação bruta é tamanho do teste | rho 0,560 test smell × tamanho; 0,078–0,090 code smell × tamanho; parcial cai a 0,052 (n.s.); confirmados × limpos separam em contagem (delta 0,127) e não em densidade |
 | 3 | binding por referência estática mede outro construto | 94,8% de precisão para "exercita", 10,1% para "testa" |
 | 4 | o rótulo `any > none` do MLCQ é circular com o desenho amostral | unidades com um único revisor têm 0,0% de positivos; toda amostra do crosscheck já era positiva. O próprio desenho permite medir a confiabilidade de um "none" isolado: 97,8% |
 
@@ -54,7 +54,7 @@ O que temos e os trabalhos relacionados não têm:
    unidades (amostra, smell), contra métricas calculadas ou heurísticas de defeito.
 4. **Escala** — a análise principal cobre 730 arquivos de 246 repositórios, contra 5 e 10
    sistemas dos trabalhos citados.
-5. **Rastro completo** — 175 testes registrados, incluindo os que não deram em nada.
+5. **Rastro completo** — 223 testes registrados, incluindo os que não deram em nada.
 
 ## Destino
 
@@ -71,13 +71,12 @@ Detalhes no documento de eventos-alvo.
 - **Recall do binding não medido.**
 - **Arquivos do mesmo repositório não são independentes.** 113 dos 246 repositórios
   contribuem com um único arquivo, e os 10 maiores somam 20,5% dos arquivos.
-- **175 testes num espaço de ~200 combinações** — o artigo tem que declarar regime
-  exploratório.
+- **223 testes registrados** — o artigo tem que declarar regime exploratório.
 
 ## O que não fazer
 
 **Rodar mais experimentos.** As operacionalizações já convergiram, e cada teste novo piora
-o problema de comparações múltiplas sem mudar a conclusão. As duas células da grade 4 × 13
+o problema de comparações múltiplas sem mudar a conclusão. As duas células da grade 4 × 20
 acima do r detectável (feature envy × Verbose Test, blob × Duplicate Assert) são hipóteses
 para um estudo confirmatório, não achados.
 

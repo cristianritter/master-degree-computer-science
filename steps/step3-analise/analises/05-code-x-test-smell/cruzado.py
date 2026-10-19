@@ -1,8 +1,8 @@
-"""Analise 05: cada code smell contra cada test smell, a grade 4 x 13.
+"""Analise 05: cada code smell contra cada test smell, a grade 4 x 20.
 
 A analise 02 perguntou se algum test smell se comporta diferente, sempre contra o code
 smell agregado. Esta subdivide pelo lado da producao: blob, data class, feature envy e long
-method, cada um com a propria severidade media, contra a densidade de cada um dos 13 test
+method, cada um com a propria severidade media, contra a densidade de cada um dos 20 test
 smells. Foi pedida pelo orientador.
 
 Decisoes, todas fixadas antes de rodar:
@@ -10,12 +10,13 @@ Decisoes, todas fixadas antes de rodar:
   rotulo      cs_<smell>_sev_media do proprio code smell; vazio = nao avaliado, fica fora
   desfecho    densidade (ocorrencias / n_metodos_teste); o bruto ja se mostrou tamanho
   Eager/Lazy  so linhas sem teste nome_divergente (step 1, secao 5: caem 28x e 23x ali)
-  familia     os 52 testes principais, com p ajustado por Benjamini-Hochberg
+  familia     as 80 celulas principais, com p ajustado por Benjamini-Hochberg; celula de
+              smell constante no ramo nao e teste e fica fora (estat.calculaveis)
 
 As 8 celulas de Eager/Lazy sem filtro rodam como sensibilidade, fora da familia: mostram
 o quanto o filtro muda.
 
-Cada celula leva o r detectavel com 80% de poder para o seu N (0,134 a 0,163 no ramo
+Cada celula leva o r detectavel com 80% de poder para o seu N (0,135 a 0,164 no ramo
 deterministico): um rho observado abaixo disso nao decide nada, e a tabela tem que dizer.
 
 Uso:
@@ -99,11 +100,15 @@ def main():
                   % (r["test_smell"], r["n"], r["rho"], estat.formatar_p(r["p"]),
                      estat.formatar_p(r["p_ajustado"]), r["detectavel"], nota))
 
-    sobrevivem = [r for r in principal if r["p_ajustado"] < 0.05]
-    menor = min(principal, key=lambda r: r["p_ajustado"])
-    acima = [r for r in principal if abs(r["rho"]) >= r["detectavel"]]
-    print("\n  %d testes na familia; %d sobrevivem ao FDR; menor p ajustado %.3f (%s x %s)"
-          % (len(principal), len(sobrevivem), menor["p_ajustado"], menor["code_smell"],
+    familia = estat.calculaveis(principal)
+    sobrevivem = [r for r in familia if r["p_ajustado"] < 0.05]
+    menor = min(familia, key=lambda r: r["p_ajustado"])
+    acima = [r for r in familia if abs(r["rho"]) >= r["detectavel"]]
+    sem_teste = sorted({r["test_smell"] for r in principal if r not in familia})
+    print("\n  %d celulas; %d sem teste (smell constante no ramo: %s)"
+          % (len(principal), len(principal) - len(familia), ", ".join(sem_teste) or "nenhum"))
+    print("  %d testes na familia; %d sobrevivem ao FDR; menor p ajustado %.3f (%s x %s)"
+          % (len(familia), len(sobrevivem), menor["p_ajustado"], menor["code_smell"],
              menor["test_smell"]))
     print("  celulas com |rho| >= r detectavel: %d" % len(acima))
 

@@ -2,9 +2,9 @@
 
 **Pergunta.** Algum code smell específico se associa a algum test smell específico?
 
-**Resposta curta.** Nenhuma das 52 células sobrevive ao FDR (menor p ajustado 0,104).
-Duas passam do efeito que o próprio N detecta, feature envy × Verbose Test (0,149) e blob ×
-Duplicate Assert (0,162); ficam registradas como candidatas, não como achado.
+**Resposta curta.** Nenhum dos 76 testes sobrevive ao FDR (menor p ajustado 0,153). Duas
+células passam do efeito que o próprio N detecta, feature envy × Verbose Test (0,149) e
+blob × Duplicate Assert (0,162); ficam registradas como candidatas, não como achado.
 
 ```bash
 python cruzado.py --csv
@@ -30,7 +30,7 @@ Fixadas antes de rodar:
 | rótulo | `cs_<smell>_sev_media` do próprio code smell | vazio = não avaliado, fica fora; nunca vira 0 |
 | desfecho | densidade (ocorrências / métodos de teste) | o bruto já se mostrou efeito de tamanho (análise 01) |
 | Eager e Lazy Test | só linhas sem teste `nome_divergente` | caem 28× e 23× nessas linhas (step 1, seção 5) |
-| família | os 52 testes, com p ajustado por Benjamini-Hochberg | mesmo tratamento da análise 02 |
+| família | as 4 × 20 células, com p ajustado por Benjamini-Hochberg; célula de smell constante no ramo não é teste e fica fora | mesmo tratamento da análise 02 |
 | efeito detectável | r mínimo com 80% de poder, por célula | um rho abaixo dele não decide nada |
 
 As 8 células de Eager/Lazy também rodam sem o filtro, à parte, como sensibilidade, fora
@@ -40,34 +40,35 @@ da família.
 
 ## Resultado
 
-Ramo determinístico, 730 arquivos. **Nenhuma célula sobrevive ao FDR**; o menor p ajustado
-é 0,104.
+Ramo determinístico, 730 arquivos. O Default Test não ocorre em nenhum arquivo (análise
+00), então suas 4 células não têm correlação calculável: a família tem **76 testes**.
+**Nenhum sobrevive ao FDR**; o menor p ajustado é 0,153.
 
 As seis células com p nominal < 0,05:
 
 | code smell | test smell | N | rho | p | p ajustado | r detectável |
 |---|---|---:|---:|---:|---:|---:|
-| feature envy | Verbose Test | 426 | 0,149 | 0,002 | 0,104 | 0,135 |
-| blob | Duplicate Assert | 306 | 0,162 | 0,004 | 0,113 | 0,159 |
-| long method | Magic Number Test | 429 | 0,126 | 0,009 | 0,156 | 0,134 |
-| long method | Verbose Test | 429 | 0,121 | 0,012 | 0,160 | 0,134 |
-| data class | Eager Test | 291 | 0,131 | 0,025 | 0,262 | 0,163 |
-| data class | Lazy Test | 291 | 0,123 | 0,035 | 0,307 | 0,163 |
+| feature envy | Verbose Test | 426 | 0,149 | 0,002 | 0,153 | 0,135 |
+| blob | Duplicate Assert | 306 | 0,162 | 0,004 | 0,165 | 0,160 |
+| long method | Magic Number Test | 429 | 0,126 | 0,009 | 0,228 | 0,135 |
+| long method | Verbose Test | 429 | 0,121 | 0,012 | 0,233 | 0,135 |
+| data class | Eager Test | 291 | 0,131 | 0,025 | 0,383 | 0,164 |
+| data class | Lazy Test | 291 | 0,123 | 0,035 | 0,449 | 0,164 |
 
-Com 52 testes e α = 0,05, o acaso sozinho produziria ~2,6 significâncias nominais. Seis é
+Com 76 testes e α = 0,05, o acaso sozinho produziria ~3,8 significâncias nominais. Seis é
 mais que isso, e nenhuma resiste ao ajuste.
 
 O N de cada code smell limita o que a linha enxerga:
 
 | code smell | N | r detectável |
 |---|---:|---:|
-| long method | 429 | 0,134 |
+| long method | 429 | 0,135 |
 | feature envy | 426 | 0,135 |
-| blob | 306 | 0,159 |
-| data class | 306 | 0,159 |
+| blob | 306 | 0,160 |
+| data class | 306 | 0,160 |
 
 Eager e Lazy Test perdem as linhas `nome_divergente` e ficam com N menor (291 a 395, r
-detectável 0,140 a 0,163).
+detectável 0,141 a 0,164).
 
 ## O filtro quase não mudou nada
 
@@ -91,12 +92,12 @@ fica abaixo de 0,01:
 ## A leitura
 
 **Não dá para afirmar associação em nenhum par.** Nenhuma célula sobrevive ao ajuste para
-52 comparações.
+76 comparações.
 
 **Duas células merecem registro, e só isso.** Feature envy × Verbose Test (0,149) e blob ×
-Duplicate Assert (0,162) passam do r detectável da sua linha, com p ajustado de 0,104 e
-0,113. Estar acima do detectável não é critério de significância: diz só que, se o efeito
-for desse tamanho, o desenho tem poder para vê-lo. Numa exploração com 52 células, são
+Duplicate Assert (0,162) passam do r detectável da sua linha, com p ajustado de 0,153 e
+0,165. Estar acima do detectável não é critério de significância: diz só que, se o efeito
+for desse tamanho, o desenho tem poder para vê-lo. Numa exploração com 76 testes, são
 candidatas para um estudo confirmatório, não achados.
 
 **O que a grade acrescenta à análise 02:** o nulo agregado não esconde um par forte. As
@@ -112,4 +113,4 @@ lado, e sem destaque por p nominal.
 | arquivo | conteúdo |
 |---|---|
 | `cruzado.py` | a análise |
-| `dados/cruzado.csv` | 68 linhas: 52 da família (`recorte = principal`), 8 sem o filtro (`sensibilidade_sem_filtro`) e 8 só `caminho_exato` (`sensibilidade_caminho_exato`), com rho, p, p ajustado, IC e r detectável |
+| `dados/cruzado.csv` | 96 linhas: as 80 células da grade (`recorte = principal`; as 4 do Default Test com p = nan), 8 sem o filtro (`sensibilidade_sem_filtro`) e 8 só `caminho_exato` (`sensibilidade_caminho_exato`), com rho, p, p ajustado, IC e r detectável |

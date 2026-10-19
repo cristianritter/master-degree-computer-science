@@ -21,11 +21,11 @@ explica a pergunta, o resultado e a leitura. **Este arquivo é só o índice.**
 | # | pergunta | resposta | documento |
 |---|---|---|---|
 | **00** | que forma têm as variáveis, e que teste elas permitem? | paramétrico descartado; tamanho do teste é confundidor | [caracterização](analises/00-caracterizacao/) |
-| **01** | test smell correlaciona com code smell? | a associação aparente é **tamanho do teste**; isolando qualidade, r = 0,050 (IC até 0,123), e nulo em cada um dos quatro smells | [correlação agregada](analises/01-correlacao-agregada/) |
-| **02** | algum dos 13 smells se comporta diferente? | nenhum sobrevive ao FDR; Eager e Lazy, os melhores candidatos, são os mais próximos de zero | [por test smell](analises/02-por-test-smell/) |
+| **01** | test smell correlaciona com code smell? | a associação aparente é **tamanho do teste**; isolando qualidade, r = 0,044 (IC até 0,116), e nulo em cada um dos quatro smells | [correlação agregada](analises/01-correlacao-agregada/) |
+| **02** | algum dos 20 smells se comporta diferente? | nenhum sobrevive ao FDR; Eager e Lazy, os melhores candidatos, não se destacam | [por test smell](analises/02-por-test-smell/) |
 | **03** | classes com code smell confirmado têm testes piores? | em contagem sim, em densidade não: de novo o tamanho do teste | [extremos](analises/03-extremos/) |
 | **04** | entre as sinalizadas, o test smell prediz quais a maioria confirmou? | **inconclusiva** — poder insuficiente, não nulo | [disputados](analises/04-disputados/) |
-| **05** | algum code smell específico se associa a algum test smell específico? | nenhuma das 52 células sobrevive ao FDR; duas candidatas acima do r detectável | [code × test smell](analises/05-code-x-test-smell/) |
+| **05** | algum code smell específico se associa a algum test smell específico? | nenhum dos 76 testes sobrevive ao FDR; duas candidatas acima do r detectável | [code × test smell](analises/05-code-x-test-smell/) |
 
 ### O que o conjunto diz
 
@@ -47,10 +47,10 @@ observado.
 ### O achado que não é nulo
 
 A análise 01 mediu um confundidor que vale por si: **contagem de test smell correlaciona
-0,554 com o tamanho do teste**, e code smell correlaciona 0,078–0,090 com o mesmo tamanho.
-Isso basta para produzir uma correlação espúria de 0,094 entre os dois. A análise 03 mostra
+0,560 com o tamanho do teste**, e code smell correlaciona 0,078–0,090 com o mesmo tamanho.
+Isso basta para produzir uma correlação espúria de 0,087 entre os dois. A análise 03 mostra
 o mesmo mecanismo por outro caminho: confirmados e limpos se separam em contagem (delta
-0,138, p ajustado 0,020) e não em densidade.
+0,127, p ajustado 0,039) e não em densidade.
 
 Estudos que contam ocorrências de test smell sem normalizar por tamanho estão medindo
 tamanho. É um resultado metodológico, e é reprodutível em qualquer dataset que use contagem
@@ -83,7 +83,7 @@ definisse a sua, os resultados não seriam comparáveis entre si — e comparar
 operacionalizações é justamente o ponto deste step. Mudar algo ali muda todas as análises,
 de propósito.
 
-`comum.py` carrega o `comum.py` do step 2 por caminho para reusar a lista dos 13 smells,
+`comum.py` carrega o `comum.py` do step 2 por caminho para reusar a lista dos 20 smells,
 em vez de manter uma cópia que pode divergir — mesmo padrão que o step 2 usa com o step 1.
 
 ---
@@ -113,17 +113,20 @@ Uma linha por análise rodada, **incluindo as que não deram em nada**. Serve pa
 poder dizer quantos caminhos foram percorridos, com número em vez de estimativa (step 2,
 seção 12.0).
 
-| # | data | análise | testes | resultado |
-|---|---|---|---:|---|
-| 1–40 | 17/10 | 01 — correlação agregada | 40 | 5 significâncias nominais, todas em desfecho sensível a tamanho; sem ajuste |
-| 41–92 | 17/10 | 02 — por test smell | 52 | nenhum sobrevive ao FDR (menor p ajustado 0,260) |
-| 93–98 | 17/10 | 03 — extremos | 6 | bruto e distintos do determinístico sobrevivem ao FDR (0,020); densidade não |
-| 99–104 | 17/10 | 04 — confirmados × só disputados | 6 | nenhum p < 0,05, todos abaixo do detectável |
-| 105–164 | 17/10 | 05 — code smell × test smell (52 + 8 de sensibilidade) | 60 | nenhum sobrevive ao FDR (menor p ajustado 0,104); 2 células acima do r detectável |
-| 165–167 | 18/10 | 02 — sensibilidade: Eager, Lazy e General Fixture só em `caminho_exato` | 3 | os três seguem perto de zero (−0,032 a 0,024) |
-| 168–175 | 18/10 | 05 — sensibilidade: Eager e Lazy só em `caminho_exato` | 8 | diferença para a família abaixo de 0,01 |
+Conta só teste de fato: célula com variável constante (o Default Test, que não ocorre em
+nenhum arquivo) não tem p calculável e não entra (`estat.calculaveis`).
 
-**175 testes rodados no total.** Os 40 da primeira análise saem sem ajuste e estão
+| # | análise | testes | resultado |
+|---|---|---:|---|
+| 1–40 | 01 — correlação agregada | 40 | 3 significâncias nominais, todas no desfecho bruto; sem ajuste |
+| 41–116 | 02 — por test smell | 76 | nenhum sobrevive ao FDR (menor p ajustado 0,379) |
+| 117–122 | 03 — extremos | 6 | bruto e distintos do determinístico sobrevivem ao FDR (0,039); densidade não |
+| 123–128 | 04 — confirmados × só disputados | 6 | nenhum p < 0,05, todos abaixo do detectável |
+| 129–212 | 05 — code smell × test smell (76 + 8 de sensibilidade) | 84 | nenhum sobrevive ao FDR (menor p ajustado 0,153); 2 células acima do r detectável |
+| 213–215 | 02 — sensibilidade: Eager, Lazy e General Fixture só em `caminho_exato` | 3 | os três seguem perto de zero (−0,032 a 0,024) |
+| 216–223 | 05 — sensibilidade: Eager e Lazy só em `caminho_exato` | 8 | diferença para a família abaixo de 0,01 |
+
+**223 testes rodados no total.** Os 40 da primeira análise saem sem ajuste e estão
 reportados assim; os seguintes saem com p ajustado por Benjamini-Hochberg dentro de cada
 família. O artigo reporta o total e declara o regime como exploratório — é o que o volume
 exige.

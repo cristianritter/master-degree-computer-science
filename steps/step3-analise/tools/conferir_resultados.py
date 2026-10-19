@@ -69,12 +69,12 @@ def conferir_primeira_rodada():
 
     esperado = {
         # ramo, desfecho -> (rho, p)
-        ("deterministico", "bruto"): (0.094, 0.011),
-        ("deterministico", "densidade"): (0.050, 0.175),
-        ("deterministico", "distintos"): (0.084, 0.022),
-        ("ampliado", "bruto"): (0.012, 0.659),
-        ("ampliado", "densidade"): (0.001, 0.959),
-        ("ampliado", "distintos"): (-0.003, 0.913),
+        ("deterministico", "bruto"): (0.087, 0.019),
+        ("deterministico", "densidade"): (0.044, 0.238),
+        ("deterministico", "distintos"): (0.072, 0.051),
+        ("ampliado", "bruto"): (0.008, 0.775),
+        ("ampliado", "densidade"): (-0.004, 0.888),
+        ("ampliado", "distintos"): (-0.013, 0.641),
     }
     for (ramo, chave), (rho_esp, p_esp) in sorted(esperado.items()):
         linhas = c.ler_ramo(ramo)
@@ -85,7 +85,7 @@ def conferir_primeira_rodada():
                "rho=%.3f p=%.3f N=%d" % (rho, p, n))
 
     print("\n  correlacoes parciais, controlando n_metodos_teste:")
-    for chave, r_esp in (("bruto", 0.062), ("distintos", 0.056)):
+    for chave, r_esp in (("bruto", 0.052), ("distintos", 0.042)):
         linhas = c.ler_ramo("deterministico")
         x, y, tam = pares(linhas, chave, rotulo_agregado)
         r, p, n = estat.parcial(x, y, tam)
@@ -105,7 +105,7 @@ def conferir_primeira_rodada():
 
     x, y, tam = pares(linhas, "bruto", rotulo_agregado)
     rho, _, _, _, _ = estat.spearman(x, tam)
-    exigir(perto(rho, 0.554), "test smell bruto x tamanho: rho 0,554", "%.3f" % rho)
+    exigir(perto(rho, 0.560), "test smell bruto x tamanho: rho 0,560", "%.3f" % rho)
 
     # a RQ1 tambem e respondida por smell, em densidade, com BH entre os quatro
     import csv
@@ -138,7 +138,8 @@ def conferir_caderno():
                         ("05-code-x-test-smell", "cruzado.csv")):
         with open(os.path.join(c.STEP, "analises", pasta, "dados", nome), "r",
                   encoding="utf-8-sig", newline="") as f:
-            por.append(len(list(csv.DictReader(f))))
+            # linha com p nan nao e teste: a variavel e constante no ramo (estat.calculaveis)
+            por.append(sum(1 for r in csv.DictReader(f) if r["p"] not in ("", "nan")))
     print("  testes registrados nos CSVs das analises: %s = %d"
           % (" + ".join(map(str, por)), sum(por)))
     # as linhas do caderno separam a rodada original das sensibilidades de caminho_exato
@@ -150,7 +151,30 @@ def conferir_caderno():
         exato = rec.count("sensibilidade_caminho_exato")
         print("    %s: %d sem a sensibilidade caminho_exato, %d com ela"
               % (pasta, len(rec) - exato, exato))
-    exigir(sum(por) == 175, "175 testes no caderno", sum(por))
+    exigir(sum(por) == 223, "223 testes no caderno", sum(por))
+
+    # as faixas numeradas da tabela do caderno, na ordem das linhas dela
+    def contar(pasta, nome, recortes):
+        with open(os.path.join(c.STEP, "analises", pasta, "dados", nome), "r",
+                  encoding="utf-8-sig", newline="") as f:
+            return sum(1 for r in csv.DictReader(f) if r["p"] not in ("", "nan")
+                       and (recortes is None or r["recorte"] in recortes))
+    exato = {"sensibilidade_caminho_exato"}
+    linhas = [
+        ("01", contar("01-correlacao-agregada", "exploracao.csv", None)),
+        ("02", contar("02-por-test-smell", "por_test_smell.csv", {"todas", "sem_nome_divergente"})),
+        ("03", contar("03-extremos", "extremos.csv", None)),
+        ("04", contar("04-disputados", "disputados.csv", None)),
+        ("05", contar("05-code-x-test-smell", "cruzado.csv", {"principal", "sensibilidade_sem_filtro"})),
+        ("02 caminho_exato", contar("02-por-test-smell", "por_test_smell.csv", exato)),
+        ("05 caminho_exato", contar("05-code-x-test-smell", "cruzado.csv", exato)),
+    ]
+    inicio, faixas = 1, []
+    for nome, n in linhas:
+        faixas.append("%s: %d a %d (%d)" % (nome, inicio, inicio + n - 1, n))
+        inicio += n
+    print("  faixas do caderno: " + "; ".join(faixas))
+    exigir(inicio - 1 == sum(por), "as faixas do caderno cobrem os %d testes" % sum(por), inicio - 1)
 
     caminho = os.path.join(c.STEP, "analises", "01-correlacao-agregada", "dados", "exploracao.csv")
     if not os.path.exists(caminho):
@@ -171,7 +195,7 @@ def conferir_caderno():
     for r in nominais:
         print("    %-16s %-14s %-11s rho=%6.3f  p=%.3f"
               % (r["ramo"], r["code_smell"], r["desfecho"], float(r["rho"]), float(r["p"])))
-    exigir(len(nominais) == 5, "5 significancias nominais entre as simples", len(nominais))
+    exigir(len(nominais) == 3, "3 significancias nominais entre as simples", len(nominais))
     exigir(all(r["desfecho"] in ("bruto", "distintos") for r in nominais),
            "todas as significancias sao em desfecho sensivel a tamanho",
            ", ".join(sorted({r["desfecho"] for r in nominais})))
@@ -190,20 +214,35 @@ def conferir_segunda_rodada():
     else:
         with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
             todas = list(csv.DictReader(f))
-        L = [r for r in todas if r["recorte"] != "sensibilidade_caminho_exato"]
-        exigir(len(L) == 52, "analise 02 tem 52 testes na familia", len(L))
+        # na familia entra so o que e teste de fato: p nan e smell constante no ramo
+        L = [r for r in todas if r["recorte"] != "sensibilidade_caminho_exato"
+             and r["p"] != "nan"]
+        sem_teste = sorted({r["test_smell"] for r in todas if r["p"] == "nan"})
+        exigir(sem_teste == ["Default Test"], "so o Default Test fica sem teste (constante)",
+               ", ".join(sem_teste) or "nenhum")
+        exigir(len(L) == 76, "analise 02 tem 76 testes na familia", len(L))
         sobrevivem = [r for r in L if float(r["p_ajustado"]) < 0.05]
         exigir(len(sobrevivem) == 0,
                "nenhum test smell sobrevive ao ajuste FDR", len(sobrevivem))
         menor = min(float(r["p_ajustado"]) for r in L)
-        exigir(perto(menor, 0.260, 0.001), "menor p ajustado e 0,260", "%.3f" % menor)
-        # Eager e Lazy sao os que dependem da classe de producao: sao os mais proximos de
-        # zero, que e o achado negativo com mais conteudo da secao
+        exigir(perto(menor, 0.379, 0.001), "menor p ajustado e 0,379", "%.3f" % menor)
+        # Eager e Lazy sao os que dependem da classe de producao: nao se destacam, ficam na
+        # metade de baixo das celulas de densidade; as maiores sao de smells internos ao teste
         for smell, esp in (("Eager Test", -0.020), ("Lazy Test", 0.038)):
             r = [x for x in L if x["test_smell"] == smell and x["desfecho"] == "densidade"
                  and x["recorte"] == "todas"][0]
             exigir(perto(float(r["rho"]), esp), "%s em densidade: rho %.3f" % (smell, esp),
                    r["rho"][:6])
+        dens = sorted((abs(float(x["rho"])), x["test_smell"]) for x in L
+                      if x["desfecho"] == "densidade" and x["recorte"] == "todas")
+        posto = {s: i + 1 for i, (_, s) in enumerate(dens)}
+        print("  densidade, todas as linhas, posto de |rho| entre %d: Eager %d, Lazy %d; maiores %s"
+              % (len(dens), posto["Eager Test"], posto["Lazy Test"],
+                 ", ".join("%s %.3f" % (s, v) for v, s in dens[-2:][::-1])))
+        exigir(len(dens) == 19 and max(posto["Eager Test"], posto["Lazy Test"]) <= 10
+               and [s for _, s in dens[-2:]] == ["Exception Catching Throwing", "Magic Number Test"],
+               "Eager e Lazy na metade de baixo; as maiores sao Magic Number e ECT",
+               "Eager %d, Lazy %d de %d" % (posto["Eager Test"], posto["Lazy Test"], len(dens)))
         # sensibilidade: so onde a classe do JNose e a do binding (caminho_exato). Eager e
         # Lazy continuam perto de zero, entao o "perto de zero" nao e artefato da convencao
         sens = {r["test_smell"]: r for r in todas if r["recorte"] == "sensibilidade_caminho_exato"}
@@ -298,7 +337,7 @@ def conferir_disputados():
 
 
 def conferir_cruzado():
-    """A analise 05: a grade 4 x 13. Nenhuma celula sobrevive, nenhuma passa do detectavel."""
+    """A analise 05: a grade 4 x 20. Nenhuma celula sobrevive ao FDR."""
     import csv
     print("")
     print("ANALISE 05 - code smell x test smell")
@@ -309,9 +348,10 @@ def conferir_cruzado():
         return
     with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
         L = list(csv.DictReader(f))
-    principal = [r for r in L if r["recorte"] == "principal"]
+    principal = [r for r in L if r["recorte"] == "principal" and r["p"] != "nan"]
     sens = [r for r in L if r["recorte"] == "sensibilidade_sem_filtro"]
-    exigir(len(principal) == 52, "analise 05 tem 52 testes na familia", len(principal))
+    exigir(len(principal) == 76, "analise 05 tem 76 testes na familia (4 celulas do Default Test sem teste)",
+           len(principal))
     exigir(len(sens) == 8, "8 celulas de sensibilidade (Eager/Lazy sem filtro)", len(sens))
     exato = [r for r in L if r["recorte"] == "sensibilidade_caminho_exato"]
     exigir(len(exato) == 8, "8 celulas de sensibilidade (Eager/Lazy so caminho_exato)", len(exato))
@@ -322,7 +362,7 @@ def conferir_cruzado():
     sobrevivem = [r for r in principal if float(r["p_ajustado"]) < 0.05]
     exigir(len(sobrevivem) == 0, "nenhuma celula sobrevive ao ajuste FDR", len(sobrevivem))
     menor = min(float(r["p_ajustado"]) for r in principal)
-    exigir(perto(menor, 0.104, 0.001), "menor p ajustado e 0,104", "%.3f" % menor)
+    exigir(perto(menor, 0.153, 0.001), "menor p ajustado e 0,153", "%.3f" % menor)
     acima = [r for r in principal if abs(float(r["rho"])) >= float(r["r_detectavel"])]
     exigir(sorted("%s x %s" % (r["code_smell"], r["test_smell"]) for r in acima)
            == ["blob x Duplicate Assert", "feature envy x Verbose Test"],

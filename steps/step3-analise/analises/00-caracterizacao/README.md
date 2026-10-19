@@ -3,7 +3,7 @@
 **Pergunta.** Que forma têm as variáveis, e que teste estatístico elas permitem?
 
 **Resposta curta.** Teste paramétrico está descartado, o tamanho do teste é confundidor não
-controlado, e uma coluna do step 2 estava errada.
+controlado, e um dos 20 test smells (Default Test) não ocorre em nenhum arquivo.
 
 ```bash
 python caracterizar.py --csv
@@ -27,7 +27,7 @@ Ramo determinístico, 730 arquivos:
 | Assertion Roulette | 32,6% | 4 | 77 | 533 | 6,02 |
 | Lazy Test | 42,9% | 1 | 21 | **1.116** | **21,28** |
 | Exception Catching Throwing | 72,1% | 0 | 11 | 213 | 16,00 |
-| `ts_n_total` | 8,5% | 15 | 208,65 | 1.552 | 6,62 |
+| `ts_n_total` | 7,4% | 15 | 211,65 | 1.595 | 6,74 |
 
 **Consequência: teste paramétrico está descartado.** Com 72% de zeros no rótulo e
 assimetria de 21 numa das variáveis de desfecho, média e desvio-padrão não descrevem esses
@@ -36,6 +36,10 @@ o que a distribuição permite.
 
 O Lazy Test com máximo 1.116 merece atenção própria: um único arquivo pode dominar qualquer
 correlação não-robusta. Postos resolvem isso; média não.
+
+O **Default Test** está zerado nos 730 arquivos do determinístico e nos 1.369 do ampliado: é
+constante, então nenhuma correlação com ele é calculável. As análises o mantêm na tabela e o
+deixam fora das famílias de teste (`estat.calculaveis`).
 
 ## 2. O tamanho do teste é confundidor óbvio
 
@@ -54,7 +58,7 @@ Três saídas, todas levadas adiante pela análise 01 em vez de escolhidas aqui:
 1. `--agregacao densidade` no step 2, que divide pelo número de métodos;
 2. manter a soma e usar `n_metodos_teste` como covariável;
 3. usar `ts_n_distintos`, menos sensível a tamanho — e a única variável de desfecho **não
-   patológica**, com assimetria 0,90 contra 6 a 21 das contagens.
+   patológica**, com assimetria 0,51 contra 4,71 a 25,24 das contagens.
 
 ## 3. Contaminação e estratos
 
@@ -95,4 +99,4 @@ não desloca o rótulo.
 | arquivo | conteúdo |
 |---|---|
 | `caracterizar.py` | a caracterização |
-| `dados/caracterizacao.csv` | 46 linhas, os dois ramos: n, zeros, quartis, p95, máximo e assimetria por variável |
+| `dados/caracterizacao.csv` | 60 linhas, os dois ramos: n, zeros, quartis, p95, máximo e assimetria por variável |

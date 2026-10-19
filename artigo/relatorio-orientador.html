@@ -296,7 +296,7 @@
     <p class="sub">Relatório do que foi construído, dos resultados obtidos, do que cada um
     significa e do que implicam para um possível artigo. Escrito para ser lido sem
     conhecimento prévio do estudo.</p>
-    <p class="meta">18 de outubro de 2026 · Cristian Ritter · 3 etapas concluídas · 175 testes estatísticos registrados</p>
+    <p class="meta">19 de outubro de 2026 · Cristian Ritter · 3 etapas concluídas · 223 testes estatísticos registrados</p>
   </header>
 
   <section class="sec">
@@ -314,7 +314,8 @@
       <dd>O mesmo conceito, aplicado ao código de teste. Exemplos: um método de teste com
       muitas verificações sem mensagem que as distinga (<em>assertion roulette</em>), um teste
       que exercita várias funcionalidades de uma vez (<em>eager test</em>), um teste que
-      depende de arquivo externo (<em>mystery guest</em>). O estudo usa 13 tipos.</dd>
+      depende de arquivo externo (<em>mystery guest</em>). O estudo usa 20 tipos: a
+      configuração padrão do JNose menos um detector defeituoso.</dd>
 
       <dt>MLCQ</dt>
       <dd>Conjunto de dados publicado em 2020 com anotações de code smell feitas por
@@ -352,10 +353,11 @@
         <span class="step-k">Etapa 1</span>
         <span class="step-t">Coleta dos test smells</span>
         <span class="step-d">JNose executado sobre <strong>451 repositórios Java</strong> —
-        os mesmos projetos que o MLCQ anotou —, 34,7 horas de processamento. Resultado:
-        107.535 classes de teste e 2.059.905 ocorrências de test smell. Três defeitos da
-        ferramenta foram encontrados e documentados no caminho, um deles corrompendo o nome
-        da classe em 6,4% dos registros.</span>
+        os mesmos projetos que o MLCQ anotou —, 4,4 horas de processamento. Resultado:
+        107.535 classes de teste e 2.150.044 ocorrências de test smell. Defeitos da
+        ferramenta foram encontrados e documentados no caminho: um corrompe o nome da classe
+        em 6,4% dos registros, e o detector de <em>unknown test</em> apaga a análise de
+        classes inteiras, por isso ficou desligado.</span>
       </div>
       <div class="step">
         <span class="step-k">Etapa 2</span>
@@ -392,21 +394,21 @@
           <span class="f-t">Não existe associação detectável</span>
           <span class="tag t-nul">resultado nulo</span>
         </div>
-        <div class="f-v">rho = 0,050 · intervalo de confiança 95%: [−0,022 , 0,123] · 730 arquivos</div>
+        <div class="f-v">rho = 0,044 · intervalo de confiança 95%: [−0,029 , 0,116] · 730 arquivos</div>
         <div>
           <div class="label">O que significa</div>
           <p><em>Rho</em> é uma medida de correlação que varia de −1 a 1, onde 0 é ausência
-          total de relação. O valor encontrado, 0,050, é praticamente zero. O intervalo de
+          total de relação. O valor encontrado, 0,044, é praticamente zero. O intervalo de
           confiança diz onde o valor verdadeiro provavelmente está — e ele <strong>inclui o
           zero</strong>, ou seja, é compatível com não haver relação nenhuma.</p>
         </div>
         <div>
           <div class="label">O que implica</div>
           <p>Três caminhos diferentes chegaram à mesma conclusão: correlação sobre a escala
-          contínua de severidade, análise de cada um dos 13 test smells separadamente, e
+          contínua de severidade, análise de cada um dos 20 test smells separadamente, e
           comparação entre classes em que os revisores confirmaram code smell e classes em
           que ninguém sinalizou nada. O nulo também vale para cada um dos quatro code smells
-          isoladamente (teto do intervalo entre 0,12 e 0,15), então ele não é a média de
+          isoladamente (teto do intervalo entre 0,11 e 0,15), então ele não é a média de
           efeitos opostos que se cancelam. Um resultado nulo pode ser azar de
           operacionalização; três por caminhos independentes apontam para o mesmo lugar.</p>
         </div>
@@ -418,7 +420,7 @@
           <span class="f-t">A associação que aparece é tamanho do teste, não qualidade</span>
           <span class="tag t-med">mecanismo medido</span>
         </div>
-        <div class="f-v">contagem bruta: rho 0,094 (p = 0,011) · normalizada por tamanho: 0,050 (não significativo)<br>correlação da contagem com o tamanho do teste: <strong>0,554</strong></div>
+        <div class="f-v">contagem bruta: rho 0,087 (p = 0,019) · normalizada por tamanho: 0,044 (não significativo)<br>correlação da contagem com o tamanho do teste: <strong>0,560</strong></div>
         <div>
           <div class="label">O que significa</div>
           <p>Se contarmos simplesmente <em>quantas</em> ocorrências de test smell existem, a
@@ -428,7 +430,7 @@
           desaparece.</p>
           <p>O mecanismo foi medido, não suposto: classe de produção com mais code smell tende
           a ter teste maior (correlação 0,078 a 0,090), e teste maior tem mais ocorrências de
-          test smell (0,554). O produto dessas duas relações produz uma correlação aparente
+          test smell (0,560). O produto dessas duas relações produz uma correlação aparente
           entre as pontas, sem que exista relação com a qualidade do teste.</p>
           <p>A comparação de grupos mostra o mesmo: classes com code smell confirmado têm
           testes com mais ocorrências que classes sem sinalização (diferença significativa
@@ -511,7 +513,7 @@
     confirmou contra as que ficaram só em disputa, e é a única em que os dois grupos passaram
     pelo mesmo processo de revisão, o que neutraliza o problema do item 04. Mas são 136
     confirmadas contra 67 em disputa: o desenho só detectaria um efeito grande (0,24), e os
-    observados ficam abaixo de 0,12. Não dá para concluir nada dela — nem a favor, nem
+    observados ficam abaixo de 0,13. Não dá para concluir nada dela — nem a favor, nem
     contra.</div>
   </section>
 
@@ -529,7 +531,7 @@
       <dt>O poder estatístico foi calculado</dt>
       <dd><em>Poder</em> é a capacidade de detectar um efeito que existe. Calculamos que este
       desenho detectaria uma correlação de 0,104 ou maior em 80% das vezes. O observado foi
-      0,050, com teto de intervalo em 0,123.</dd>
+      0,044, com teto de intervalo em 0,116.</dd>
     </dl>
     <p>Somando as duas, o artigo pode afirmar com número: <strong>se existe alguma associação
     entre densidade de test smell e severidade percebida de code smell em classes com teste
@@ -644,8 +646,7 @@
       <li><strong>Arquivos do mesmo repositório não são independentes.</strong> 113 dos 246
       repositórios contribuem com uma única classe, e os 10 maiores somam 20,5% das
       classes.</li>
-      <li><strong>175 testes estatísticos foram executados</strong> num espaço de cerca de 200
-      combinações possíveis. Todos estão registrados, inclusive os que não deram em nada, e o
+      <li><strong>223 testes estatísticos foram executados.</strong> Todos estão registrados, inclusive os que não deram em nada, e o
       artigo precisa declarar regime exploratório.</li>
       <li><strong>O levantamento de literatura é dirigido</strong>, não sistemático. Para
       submissão A/B, uma revisão com protocolo é trabalho à parte.</li>

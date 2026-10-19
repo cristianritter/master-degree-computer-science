@@ -108,7 +108,7 @@ def main():
     except Exception:
         pass
 
-    print("ANALISE 2 - extremos de evidencia dos revisores, por Mann-Whitney")
+    print("ANALISE 03 - extremos de evidencia dos revisores, por Mann-Whitney")
     print("delta = r bisserial de postos; 0 significa nenhuma separacao entre os grupos")
 
     saida = []

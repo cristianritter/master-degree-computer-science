@@ -1,4 +1,4 @@
-"""Analise 1: cada um dos 13 test smells isoladamente, contra o code smell da classe.
+"""Analise 02: cada um dos 20 test smells isoladamente, contra o code smell da classe.
 
 Ate aqui o desfecho foi sempre agregado - ts_n_total e ts_n_distintos. A pergunta desta
 rodada e outra: **algum smell especifico se comporta diferente do conjunto?** E plausivel
@@ -96,7 +96,7 @@ def main():
 
     linhas = c.ler_ramo(args.ramo)
     print("=" * 92)
-    print("ANALISE 1 - cada test smell isolado  |  ramo %s, %d arquivos"
+    print("ANALISE 02 - cada test smell isolado  |  ramo %s, %d arquivos"
           % (args.ramo, len(linhas)))
     print("Spearman contra code smell agregado (sev_media). p ajustado por FDR.")
     print("=" * 92)

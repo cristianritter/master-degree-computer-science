@@ -126,7 +126,7 @@ def main():
     except Exception:
         pass
 
-    print("ANALISE 3 - confirmados x disputados, ambos sinalizados")
+    print("ANALISE 04 - confirmados x disputados, ambos sinalizados")
     print("A comparacao menos circular deste dataset: o roteamento do crosscheck e o mesmo")
     print("nos dois grupos, entao ele nao pode explicar a diferenca.")
 

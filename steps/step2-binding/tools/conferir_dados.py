@@ -248,6 +248,8 @@ def secao_3():
     anypos = [s for s in multi if s["pos_any"] == "1"]
     una = sum(1 for s in anypos if s["pos_unanime"] == "1")
     print("\n  concordancia entre revisores:")
+    print("    unidades com um revisor so                         %d de %d  (%.1f%%)"
+          % (len(samples) - len(multi), len(samples), 100 * (len(samples) - len(multi)) / len(samples)))
     print("    unidades com >=2 revisores                         %d" % len(multi))
     print("    discordantes no binario                            %d  (%.1f%%)"
           % (disc, 100 * disc / len(multi)))

@@ -47,24 +47,24 @@ decidir os casos duvidosos, e que a regra `any > none` descarta.
 
 | desfecho | mediana confirmados | mediana disputados | delta | p | p ajustado | delta detectável |
 |---|---:|---:|---:|---:|---:|---:|
-| bruto | 21,0 | 14,0 | 0,074 | 0,390 | 0,585 | 0,242 |
-| densidade | 1,800 | 1,833 | 0,007 | 0,934 | 0,934 | 0,244 |
-| distintos | 5,0 | 4,0 | 0,116 | 0,175 | 0,525 | 0,242 |
+| bruto | 21,0 | 14,0 | 0,076 | 0,376 | 0,564 | 0,242 |
+| densidade | 1,875 | 1,833 | 0,017 | 0,842 | 0,842 | 0,244 |
+| distintos | 5,0 | 4,0 | 0,125 | 0,145 | 0,435 | 0,242 |
 
 ### Ramo ampliado — 267 confirmados, 117 só disputados
 
 | desfecho | mediana confirmados | mediana disputados | delta | p | p ajustado | delta detectável |
 |---|---:|---:|---:|---:|---:|---:|
-| bruto | 32,0 | 27,0 | 0,077 | 0,229 | 0,493 | 0,180 |
-| densidade | 1,456 | 1,600 | −0,037 | 0,562 | 0,562 | 0,181 |
-| distintos | 5,0 | 5,0 | 0,062 | 0,329 | 0,493 | 0,180 |
+| bruto | 35,0 | 30,0 | 0,078 | 0,223 | 0,530 | 0,180 |
+| densidade | 1,550 | 1,600 | −0,040 | 0,530 | 0,530 | 0,181 |
+| distintos | 5,0 | 5,0 | 0,054 | 0,396 | 0,530 | 0,180 |
 
 ---
 
 ## A leitura, e por que ela não é "mais um nulo"
 
 **Os deltas observados estão todos abaixo do detectável.** No ramo determinístico, este N
-só encontraria um efeito de delta ≥ 0,242 com 80% de poder; o maior observado é 0,116. O
+só encontraria um efeito de delta ≥ 0,242 com 80% de poder; o maior observado é 0,125. O
 teste não tinha como decidir.
 
 Isso **não é evidência de ausência** — é ausência de evidência, que é coisa diferente e
@@ -72,9 +72,9 @@ precisa ser escrita diferente:
 
 | análise | N | efeito detectável | efeito observado | leitura |
 |---|---:|---|---|---|
-| 01 — correlação | 730 | r ≥ 0,104 | r = 0,050 | nulo **informativo**: limita o efeito a < 0,12 |
-| 03 — extremos, densidade | 135 vs 524 | delta ≥ 0,156 | delta = 0,074 | nulo fraco |
-| **04 — esta** | 136 vs 67 | delta ≥ 0,24 | delta ≤ 0,12 | **inconclusiva** |
+| 01 — correlação | 730 | r ≥ 0,104 | r = 0,044 | nulo **informativo**: limita o efeito a < 0,12 |
+| 03 — extremos, densidade | 135 vs 524 | delta ≥ 0,156 | delta = 0,069 | nulo fraco |
+| **04 — esta** | 136 vs 67 | delta ≥ 0,24 | delta ≤ 0,125 | **inconclusiva** |
 
 A ironia metodológica vale registrar no artigo: **a comparação com o melhor desenho é a que
 tem o pior poder.** Isolar a circularidade custou condicionar a amostra aos arquivos

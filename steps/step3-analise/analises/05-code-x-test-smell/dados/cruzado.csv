@@ -1,56 +1,84 @@
 ramo,recorte,code_smell,test_smell,filtro_nome_divergente,n,rho,p,p_ajustado,ic_baixo,ic_alto,r_detectavel
-deterministico,principal,blob,Assertion Roulette,0,306,0.017918,0.755088,0.886766,-0.094397,0.129783,0.159571
-deterministico,principal,blob,Conditional Test Logic,0,306,0.022423,0.696251,0.88305,-0.089928,0.134212,0.159571
-deterministico,principal,blob,Dependent Test,0,306,0.037333,0.51559,0.78855,-0.075107,0.148836,0.159571
-deterministico,principal,blob,Duplicate Assert,0,306,0.162448,0.004331,0.112606,0.051256,0.269662,0.159571
-deterministico,principal,blob,Eager Test,1,291,-0.047278,0.42201,0.750624,-0.161384,0.068075,0.163601
-deterministico,principal,blob,Exception Catching Throwing,0,306,0.093379,0.103062,0.446601,-0.018945,0.203375,0.159571
-deterministico,principal,blob,General Fixture,0,306,0.105405,0.065532,0.35831,-0.006801,0.21499,0.159571
-deterministico,principal,blob,Lazy Test,1,291,0.019458,0.741205,0.886766,-0.095739,0.134141,0.163601
-deterministico,principal,blob,Magic Number Test,0,306,0.084132,0.14212,0.502329,-0.02826,0.194423,0.159571
-deterministico,principal,blob,Mystery Guest,0,306,0.00229,0.968208,0.987193,-0.109864,0.114386,0.159571
-deterministico,principal,blob,Redundant Assertion,0,306,-0.083552,0.144903,0.502329,-0.193861,0.028844,0.159571
-deterministico,principal,blob,Resource Optimism,0,306,0.014113,0.805929,0.911051,-0.098168,0.126039,0.159571
-deterministico,principal,blob,Verbose Test,0,306,0.04978,0.385813,0.750624,-0.062695,0.161007,0.159571
-deterministico,principal,data class,Assertion Roulette,0,306,-0.032095,0.576254,0.80987,-0.143703,0.08032,0.159571
-deterministico,principal,data class,Conditional Test Logic,0,306,-0.078749,0.169562,0.528932,-0.189204,0.033674,0.159571
-deterministico,principal,data class,Dependent Test,0,306,0.038516,0.50236,0.78855,-0.073929,0.149994,0.159571
-deterministico,principal,data class,Duplicate Assert,0,306,0.027189,0.635937,0.833653,-0.085197,0.138891,0.159571
-deterministico,principal,data class,Eager Test,1,291,0.13113,0.025206,0.262139,0.016394,0.242457,0.163601
-deterministico,principal,data class,Exception Catching Throwing,0,306,0.061466,0.284041,0.691862,-0.051011,0.172404,0.159571
-deterministico,principal,data class,General Fixture,0,306,0.068155,0.234751,0.610352,-0.044309,0.178913,0.159571
-deterministico,principal,data class,Lazy Test,1,291,0.123305,0.035443,0.307171,0.008442,0.234957,0.163601
-deterministico,principal,data class,Magic Number Test,0,306,0.032699,0.56909,0.80987,-0.079719,0.144296,0.159571
-deterministico,principal,data class,Mystery Guest,0,306,-0.028568,0.618895,0.833653,-0.140244,0.083826,0.159571
-deterministico,principal,data class,Redundant Assertion,0,306,-0.004298,0.940355,0.979921,-0.116368,0.107879,0.159571
-deterministico,principal,data class,Resource Optimism,0,306,0.05711,0.319643,0.72267,-0.05537,0.168159,0.159571
-deterministico,principal,data class,Verbose Test,0,306,-0.060373,0.292711,0.691862,-0.171339,0.052105,0.159571
-deterministico,principal,feature envy,Assertion Roulette,0,426,0.066169,0.17292,0.528932,-0.029025,0.160173,0.135381
+deterministico,principal,blob,Assertion Roulette,0,306,0.017918,0.755088,0.882872,-0.094397,0.129783,0.159571
+deterministico,principal,blob,Conditional Test Logic,0,306,0.022423,0.696251,0.882872,-0.089928,0.134212,0.159571
+deterministico,principal,blob,Constructor Initialization,0,306,0.048465,0.398507,0.830701,-0.064008,0.159723,0.159571
+deterministico,principal,blob,Default Test,0,306,nan,nan,nan,nan,nan,0.159571
+deterministico,principal,blob,Dependent Test,0,306,0.037333,0.51559,0.83372,-0.075107,0.148836,0.159571
+deterministico,principal,blob,Duplicate Assert,0,306,0.162448,0.004331,0.164578,0.051256,0.269662,0.159571
+deterministico,principal,blob,Eager Test,1,291,-0.047278,0.42201,0.830701,-0.161384,0.068075,0.163601
+deterministico,principal,blob,EmptyTest,0,306,-0.019366,0.736012,0.882872,-0.131206,0.092962,0.159571
+deterministico,principal,blob,Exception Catching Throwing,0,306,0.093379,0.103062,0.559478,-0.018945,0.203375,0.159571
+deterministico,principal,blob,General Fixture,0,306,0.105405,0.065532,0.480044,-0.006801,0.21499,0.159571
+deterministico,principal,blob,IgnoredTest,0,306,0.023161,0.686781,0.882872,-0.089197,0.134936,0.159571
+deterministico,principal,blob,Lazy Test,1,291,0.019458,0.741205,0.882872,-0.095739,0.134141,0.163601
+deterministico,principal,blob,Magic Number Test,0,306,0.084132,0.14212,0.57961,-0.02826,0.194423,0.159571
+deterministico,principal,blob,Mystery Guest,0,306,0.00229,0.968208,0.993989,-0.109864,0.114386,0.159571
+deterministico,principal,blob,Print Statement,0,306,-0.096795,0.09099,0.53194,-0.206678,0.015498,0.159571
+deterministico,principal,blob,Redundant Assertion,0,306,-0.083552,0.144903,0.57961,-0.193861,0.028844,0.159571
+deterministico,principal,blob,Resource Optimism,0,306,0.014113,0.805929,0.914189,-0.098168,0.126039,0.159571
+deterministico,principal,blob,Sensitive Equality,0,306,-0.047967,0.403383,0.830701,-0.159236,0.064506,0.159571
+deterministico,principal,blob,Sleepy Test,0,306,0.106751,0.062138,0.480044,-0.00544,0.216288,0.159571
+deterministico,principal,blob,Verbose Test,0,306,0.04978,0.385813,0.830701,-0.062695,0.161007,0.159571
+deterministico,principal,data class,Assertion Roulette,0,306,-0.032095,0.576254,0.858731,-0.143703,0.08032,0.159571
+deterministico,principal,data class,Conditional Test Logic,0,306,-0.078749,0.169562,0.625806,-0.189204,0.033674,0.159571
+deterministico,principal,data class,Constructor Initialization,0,306,0.03815,0.506434,0.83372,-0.074293,0.149636,0.159571
+deterministico,principal,data class,Default Test,0,306,nan,nan,nan,nan,nan,0.159571
+deterministico,principal,data class,Dependent Test,0,306,0.038516,0.50236,0.83372,-0.073929,0.149994,0.159571
+deterministico,principal,data class,Duplicate Assert,0,306,0.027189,0.635937,0.870297,-0.085197,0.138891,0.159571
+deterministico,principal,data class,Eager Test,1,291,0.13113,0.025206,0.383126,0.016394,0.242457,0.163601
+deterministico,principal,data class,EmptyTest,0,306,0.000622,0.991362,0.993989,-0.111511,0.11274,0.159571
+deterministico,principal,data class,Exception Catching Throwing,0,306,0.061466,0.284041,0.823927,-0.051011,0.172404,0.159571
+deterministico,principal,data class,General Fixture,0,306,0.068155,0.234751,0.713643,-0.044309,0.178913,0.159571
+deterministico,principal,data class,IgnoredTest,0,306,0.076479,0.182249,0.629586,-0.035955,0.187001,0.159571
+deterministico,principal,data class,Lazy Test,1,291,0.123305,0.035443,0.448943,0.008442,0.234957,0.163601
+deterministico,principal,data class,Magic Number Test,0,306,0.032699,0.56909,0.858731,-0.079719,0.144296,0.159571
+deterministico,principal,data class,Mystery Guest,0,306,-0.028568,0.618895,0.870297,-0.140244,0.083826,0.159571
+deterministico,principal,data class,Print Statement,0,306,-0.029409,0.608609,0.870297,-0.141069,0.082991,0.159571
+deterministico,principal,data class,Redundant Assertion,0,306,-0.004298,0.940355,0.980953,-0.116368,0.107879,0.159571
+deterministico,principal,data class,Resource Optimism,0,306,0.05711,0.319643,0.830701,-0.05537,0.168159,0.159571
+deterministico,principal,data class,Sensitive Equality,0,306,0.010014,0.861612,0.949022,-0.102226,0.122003,0.159571
+deterministico,principal,data class,Sleepy Test,0,306,-0.030219,0.598763,0.870297,-0.141864,0.082185,0.159571
+deterministico,principal,data class,Verbose Test,0,306,-0.060373,0.292711,0.823927,-0.171339,0.052105,0.159571
+deterministico,principal,feature envy,Assertion Roulette,0,426,0.066169,0.17292,0.625806,-0.029025,0.160173,0.135381
 deterministico,principal,feature envy,Conditional Test Logic,0,426,0.000366,0.993989,0.993989,-0.094648,0.095374,0.135381
-deterministico,principal,feature envy,Dependent Test,0,426,0.02265,0.641272,0.833653,-0.072517,0.117408,0.135381
-deterministico,principal,feature envy,Duplicate Assert,0,426,0.028096,0.563261,0.80987,-0.067094,0.122779,0.135381
-deterministico,principal,feature envy,Eager Test,1,392,-0.078749,0.119613,0.478451,-0.176423,0.02046,0.141098
-deterministico,principal,feature envy,Exception Catching Throwing,0,426,0.08626,0.075318,0.35831,-0.008824,0.179797,0.135381
-deterministico,principal,feature envy,General Fixture,0,426,-0.003523,0.942231,0.979921,-0.098501,0.091518,0.135381
-deterministico,principal,feature envy,Lazy Test,1,392,-0.004662,0.926733,0.979921,-0.103665,0.094431,0.141098
-deterministico,principal,feature envy,Magic Number Test,0,426,0.037516,0.440138,0.750624,-0.0577,0.132057,0.135381
-deterministico,principal,feature envy,Mystery Guest,0,426,0.086119,0.075796,0.35831,-0.008965,0.17966,0.135381
-deterministico,principal,feature envy,Redundant Assertion,0,426,-0.044405,0.360777,0.750417,-0.138831,0.05082,0.135381
-deterministico,principal,feature envy,Resource Optimism,0,426,0.092524,0.05634,0.35831,-0.002509,0.185901,0.135381
-deterministico,principal,feature envy,Verbose Test,0,426,0.149071,0.002009,0.104451,0.054836,0.240673,0.135381
-deterministico,principal,long method,Assertion Roulette,0,429,0.087319,0.070786,0.35831,-0.00742,0.180505,0.13491
-deterministico,principal,long method,Conditional Test Logic,0,429,-0.01433,0.767393,0.886766,-0.10886,0.080457,0.13491
-deterministico,principal,long method,Dependent Test,0,429,0.06212,0.199217,0.545224,-0.032751,0.155881,0.13491
-deterministico,principal,long method,Duplicate Assert,0,429,0.036251,0.454129,0.750624,-0.058628,0.130481,0.13491
-deterministico,principal,long method,Eager Test,1,395,-0.065233,0.195876,0.545224,-0.162858,0.033656,0.140565
-deterministico,principal,long method,Exception Catching Throwing,0,429,0.038275,0.429308,0.750624,-0.056608,0.132473,0.13491
-deterministico,principal,long method,General Fixture,0,429,-0.035629,0.461923,0.750624,-0.129869,0.059249,0.13491
-deterministico,principal,long method,Lazy Test,1,395,-0.017076,0.735278,0.886766,-0.115554,0.081735,0.140565
-deterministico,principal,long method,Magic Number Test,0,429,0.125883,0.009,0.155997,0.031582,0.217963,0.13491
-deterministico,principal,long method,Mystery Guest,0,429,0.036956,0.4454,0.750624,-0.057925,0.131175,0.13491
-deterministico,principal,long method,Redundant Assertion,0,429,0.00563,0.907496,0.979921,-0.089096,0.100254,0.13491
-deterministico,principal,long method,Resource Optimism,0,429,0.045266,0.349827,0.750417,-0.049624,0.139347,0.13491
-deterministico,principal,long method,Verbose Test,0,429,0.120733,0.012276,0.159589,0.026356,0.212976,0.13491
+deterministico,principal,feature envy,Constructor Initialization,0,426,0.033454,0.491265,0.83372,-0.061754,0.128058,0.135381
+deterministico,principal,feature envy,Default Test,0,426,nan,nan,nan,nan,nan,0.135381
+deterministico,principal,feature envy,Dependent Test,0,426,0.02265,0.641272,0.870297,-0.072517,0.117408,0.135381
+deterministico,principal,feature envy,Duplicate Assert,0,426,0.028096,0.563261,0.858731,-0.067094,0.122779,0.135381
+deterministico,principal,feature envy,Eager Test,1,392,-0.078749,0.119613,0.562553,-0.176423,0.02046,0.141098
+deterministico,principal,feature envy,EmptyTest,0,426,-0.035588,0.46402,0.830701,-0.130159,0.059625,0.135381
+deterministico,principal,feature envy,Exception Catching Throwing,0,426,0.08626,0.075318,0.480044,-0.008824,0.179797,0.135381
+deterministico,principal,feature envy,General Fixture,0,426,-0.003523,0.942231,0.980953,-0.098501,0.091518,0.135381
+deterministico,principal,feature envy,IgnoredTest,0,426,0.017653,0.716519,0.882872,-0.077488,0.112476,0.135381
+deterministico,principal,feature envy,Lazy Test,1,392,-0.004662,0.926733,0.980953,-0.103665,0.094431,0.141098
+deterministico,principal,feature envy,Magic Number Test,0,426,0.037516,0.440138,0.830701,-0.0577,0.132057,0.135381
+deterministico,principal,feature envy,Mystery Guest,0,426,0.086119,0.075796,0.480044,-0.008965,0.17966,0.135381
+deterministico,principal,feature envy,Print Statement,0,426,-0.02862,0.555999,0.858731,-0.123296,0.066572,0.135381
+deterministico,principal,feature envy,Redundant Assertion,0,426,-0.044405,0.360777,0.830701,-0.138831,0.05082,0.135381
+deterministico,principal,feature envy,Resource Optimism,0,426,0.092524,0.05634,0.480044,-0.002509,0.185901,0.135381
+deterministico,principal,feature envy,Sensitive Equality,0,426,-0.07429,0.125834,0.562553,-0.168114,0.020868,0.135381
+deterministico,principal,feature envy,Sleepy Test,0,426,-0.074962,0.122433,0.562553,-0.168771,0.020193,0.135381
+deterministico,principal,feature envy,Verbose Test,0,426,0.149071,0.002009,0.152659,0.054836,0.240673,0.135381
+deterministico,principal,long method,Assertion Roulette,0,429,0.087319,0.070786,0.480044,-0.00742,0.180505,0.13491
+deterministico,principal,long method,Conditional Test Logic,0,429,-0.01433,0.767393,0.883665,-0.10886,0.080457,0.13491
+deterministico,principal,long method,Constructor Initialization,0,429,-0.017641,0.715756,0.882872,-0.112131,0.077166,0.13491
+deterministico,principal,long method,Default Test,0,429,nan,nan,nan,nan,nan,0.13491
+deterministico,principal,long method,Dependent Test,0,429,0.06212,0.199217,0.630853,-0.032751,0.155881,0.13491
+deterministico,principal,long method,Duplicate Assert,0,429,0.036251,0.454129,0.830701,-0.058628,0.130481,0.13491
+deterministico,principal,long method,Eager Test,1,395,-0.065233,0.195876,0.630853,-0.162858,0.033656,0.140565
+deterministico,principal,long method,EmptyTest,0,429,-0.03499,0.470002,0.830701,-0.12924,0.059887,0.13491
+deterministico,principal,long method,Exception Catching Throwing,0,429,0.038275,0.429308,0.830701,-0.056608,0.132473,0.13491
+deterministico,principal,long method,General Fixture,0,429,-0.035629,0.461923,0.830701,-0.129869,0.059249,0.13491
+deterministico,principal,long method,IgnoredTest,0,429,0.041117,0.395814,0.830701,-0.05377,0.135268,0.13491
+deterministico,principal,long method,Lazy Test,1,395,-0.017076,0.735278,0.882872,-0.115554,0.081735,0.140565
+deterministico,principal,long method,Magic Number Test,0,429,0.125883,0.009,0.227996,0.031582,0.217963,0.13491
+deterministico,principal,long method,Mystery Guest,0,429,0.036956,0.4454,0.830701,-0.057925,0.131175,0.13491
+deterministico,principal,long method,Print Statement,0,429,0.009374,0.846576,0.946173,-0.085379,0.10396,0.13491
+deterministico,principal,long method,Redundant Assertion,0,429,0.00563,0.907496,0.980953,-0.089096,0.100254,0.13491
+deterministico,principal,long method,Resource Optimism,0,429,0.045266,0.349827,0.830701,-0.049624,0.139347,0.13491
+deterministico,principal,long method,Sensitive Equality,0,429,-0.015752,0.745073,0.882872,-0.110265,0.079044,0.13491
+deterministico,principal,long method,Sleepy Test,0,429,-0.042267,0.382722,0.830701,-0.136399,0.052622,0.13491
+deterministico,principal,long method,Verbose Test,0,429,0.120733,0.012276,0.233245,0.026356,0.212976,0.13491
 deterministico,sensibilidade_sem_filtro,blob,Eager Test,0,306,-0.044548,0.437773,,-0.155895,0.067917,0.159571
 deterministico,sensibilidade_sem_filtro,blob,Lazy Test,0,306,0.02077,0.717652,,-0.091569,0.132587,0.159571
 deterministico,sensibilidade_sem_filtro,data class,Eager Test,0,306,0.126913,0.026341,,0.015001,0.235685,0.159571

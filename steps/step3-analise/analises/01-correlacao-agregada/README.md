@@ -24,17 +24,18 @@ Ramo determinístico, 730 arquivos, code smell agregado:
 
 | desfecho | N | rho | p | IC95% | rho com o tamanho do teste |
 |---|---:|---:|---:|---|---:|
-| `bruto` (soma das ocorrências) | 730 | 0,094 | 0,011 | [0,022, 0,166] | **0,554** |
-| `densidade` (soma / métodos) | 726 | 0,050 | 0,175 | [−0,022, 0,123] | −0,077 |
-| `distintos` (quantos dos 13) | 730 | 0,084 | 0,022 | [0,012, 0,156] | **0,433** |
+| `bruto` (soma das ocorrências) | 730 | 0,087 | 0,019 | [0,014, 0,158] | **0,560** |
+| `densidade` (soma / métodos) | 726 | 0,044 | 0,238 | [−0,029, 0,116] | −0,087 |
+| `distintos` (quantos dos 20) | 730 | 0,072 | 0,051 | [−0,000, 0,144] | **0,447** |
 
 | controlando `n_metodos_teste` | N | rho parcial | p |
 |---|---:|---:|---:|
-| `bruto` | 730 | 0,062 | 0,096 |
-| `distintos` | 730 | 0,056 | 0,129 |
+| `bruto` | 730 | 0,052 | 0,162 |
+| `distintos` | 730 | 0,042 | 0,260 |
 
-Os dois desfechos que dependem de tamanho dão significância nominal; o normalizado não dá.
-Sob controle explícito de tamanho, os dois caem para ~0,06 e perdem a significância.
+O desfecho bruto dá significância nominal e o de distintos fica no limiar; o normalizado
+não chega perto. Sob controle explícito de tamanho, os dois caem para ~0,05 e ficam longe
+da significância.
 
 ## O mecanismo, medido
 
@@ -42,12 +43,12 @@ A confusão não é hipótese — as três pernas do triângulo estão medidas:
 
 | par | rho |
 |---|---:|
-| test smell bruto × tamanho do teste | 0,554 |
+| test smell bruto × tamanho do teste | 0,560 |
 | code smell × tamanho do teste (`n_metodos_teste`) | 0,078 (p = 0,035) |
 | code smell × tamanho do teste (`loc_teste`) | 0,090 (p = 0,015) |
 
 Classe com mais code smell tende a ter teste maior; teste maior tem mais ocorrências de
-tudo. O produto das duas relações gera a correlação bruta de 0,094 sem que exista relação
+tudo. O produto das duas relações gera a correlação bruta de 0,087 sem que exista relação
 com *qualidade* do teste.
 
 **Se a análise tivesse parado no desfecho bruto, o artigo reportaria uma correlação
@@ -57,9 +58,9 @@ positiva significativa que é artefato.**
 
 | desfecho | N | rho | p |
 |---|---:|---:|---:|
-| `bruto` | 1.369 | 0,012 | 0,659 |
-| `densidade` | 1.365 | 0,001 | 0,959 |
-| `distintos` | 1.369 | −0,003 | 0,913 |
+| `bruto` | 1.369 | 0,008 | 0,775 |
+| `densidade` | 1.365 | −0,004 | 0,888 |
+| `distintos` | 1.369 | −0,013 | 0,641 |
 
 Tudo em zero, como esperado: com 10,1% de precisão para o construto "o teste testa esta
 classe", a atenuação por erro de medida leva qualquer relação verdadeira para perto de
@@ -73,35 +74,35 @@ testes formam uma família, com p ajustado por Benjamini-Hochberg:
 
 | smell | N | rho (densidade) | IC95% | p | p ajustado |
 |---|---:|---:|---|---:|---:|
-| blob | 306 | 0,019 | [−0,094, 0,131] | 0,745 | 0,836 |
-| data class | 306 | 0,012 | [−0,100, 0,124] | 0,836 | 0,836 |
-| feature envy | 426 | 0,040 | [−0,055, 0,135] | 0,408 | 0,816 |
-| long method | 429 | 0,053 | [−0,042, 0,147] | 0,273 | 0,816 |
+| blob | 306 | 0,002 | [−0,110, 0,114] | 0,968 | 0,968 |
+| data class | 306 | 0,013 | [−0,099, 0,125] | 0,823 | 0,968 |
+| feature envy | 426 | 0,035 | [−0,060, 0,129] | 0,473 | 0,945 |
+| long method | 429 | 0,053 | [−0,042, 0,147] | 0,273 | 0,945 |
 
-Nenhum smell se associa à densidade de test smell, e o teto do IC fica entre 0,12 e 0,15.
+Nenhum smell se associa à densidade de test smell, e o teto do IC fica entre 0,11 e 0,15.
 
 Nos três desfechos, o quadro completo:
 
-**Determinístico.** Três células alcançam p < 0,05, todas em desfecho sensível a tamanho,
-e a densidade do mesmo smell fica perto de zero:
+**Determinístico.** Duas células alcançam p < 0,05, ambas no desfecho bruto, e a densidade
+do mesmo smell fica perto de zero:
 
 | smell | N | bruto | densidade | distintos |
 |---|---:|---:|---:|---:|
-| blob | 307 | **0,140 (p=0,014)** | 0,019 (p=0,745) | **0,113 (p=0,047)** |
-| data class | 307 | 0,063 (p=0,273) | 0,012 (p=0,836) | 0,087 (p=0,129) |
-| feature envy | 429 | 0,028 (p=0,560) | 0,040 (p=0,408) | 0,062 (p=0,198) |
-| long method | 432 | **0,101 (p=0,035)** | 0,053 (p=0,273) | 0,078 (p=0,105) |
+| blob | 307 | **0,128 (p=0,025)** | 0,002 (p=0,968) | 0,097 (p=0,090) |
+| data class | 307 | 0,058 (p=0,309) | 0,013 (p=0,823) | 0,086 (p=0,133) |
+| feature envy | 429 | 0,023 (p=0,641) | 0,035 (p=0,473) | 0,046 (p=0,346) |
+| long method | 432 | **0,097 (p=0,044)** | 0,053 (p=0,273) | 0,067 (p=0,162) |
 
-**Ampliado.** Nenhuma célula alcança p < 0,05; a maior é feature envy em densidade, 0,066
-(p = 0,074).
+**Ampliado.** Nenhuma célula alcança p < 0,05; a maior é feature envy em densidade, 0,062
+(p = 0,093).
 
-**As cinco significâncias nominais desta análise estão em desfecho sensível a tamanho, e
-as cinco somem quando o tamanho é normalizado.**
+**As três significâncias nominais desta análise (o agregado e as duas células acima) estão
+no desfecho bruto, sensível a tamanho, e as três somem quando o tamanho é normalizado.**
 
 ## O que dá para afirmar
 
-**Não dá para afirmar que existe relação.** O desfecho que isola qualidade dá rho = 0,050
-com IC [−0,022, 0,123], que inclui o zero.
+**Não dá para afirmar que existe relação.** O desfecho que isola qualidade dá rho = 0,044
+com IC [−0,029, 0,116], que inclui o zero.
 
 **Dá para afirmar que, se existe, é pequena** — e isso vem do step 2:
 
@@ -110,7 +111,7 @@ com IC [−0,022, 0,123], que inclui o zero.
 - o poder está calculado: este desenho detecta r ≥ 0,104 com 80% de poder.
 
 Juntando: **qualquer associação entre densidade de test smell e severidade de code smell,
-em classes com teste dedicado, é menor que r ≈ 0,12 no agregado, e menor que 0,13 a 0,15
+em classes com teste dedicado, é menor que r ≈ 0,12 no agregado, e menor que 0,11 a 0,15
 em cada smell.**
 
 ---

@@ -472,7 +472,7 @@ resto como ameaça à validade declarada. O custo é uma tarde de trabalho manua
 
 | estrato | pares | auditados | corretos | precisão | |
 |---|---:|---:|---:|---:|---|
-| `caminho_exato` | 675 | 50 | 49 | **98,0%** | IC95% 94,1%–100% |
+| `caminho_exato` | 675 | 50 | 49 | **98,0%** | IC95% ±3,9 pp |
 | `convencao/caminho_espelhado` | 50 | 50 | 42 | **84,0%** | censo, exato |
 | `convencao/so_basename` | 43 | 43 | 20 | **46,5%** | censo, exato |
 | **ponderado** | **768** | 143 | | **94,2%** | |

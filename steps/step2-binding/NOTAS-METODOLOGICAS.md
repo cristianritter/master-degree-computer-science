@@ -314,7 +314,7 @@ Lista curta de afirmações tentadoras que este dataset não sustenta:
 4. **"A classe tem o smell porque um revisor marcou."** Com um único revisor, qualquer
    flag escalava a amostra ao crosscheck; `any > none` é quase um marcador de crosscheck.
 5. **"Cada amostra do MLCQ tem 2 revisores."** Cada revisor julga a amostra para dois
-   smells; as duas linhas são do mesmo revisor. 74% das unidades (amostra, smell) têm um
+   smells; as duas linhas são do mesmo revisor. 74,1% das unidades (amostra, smell) têm um
    revisor só (README, seção 3).
 6. **"Não anotado = negativo."** O MLCQ julga cada amostra só para os dois smells da sua
    granularidade: uma classe não diz nada sobre feature envy. Por isso as colunas `cs_*`

@@ -144,10 +144,14 @@ def benjamini_hochberg(ps):
     exploracao onde perder um achado real custa caro.
 
     Recebe a lista de p na ordem original e devolve os ajustados na mesma ordem.
+
+    p nan e teste que nao pode ser calculado (variavel constante, como um smell que nao
+    ocorre em nenhum arquivo do ramo): nao entra na familia, nao conta em m e volta nan.
     """
-    indexado = sorted(range(len(ps)), key=lambda i: ps[i])
-    m = len(ps)
-    ajustados = [0.0] * m
+    validos = [i for i, p in enumerate(ps) if not math.isnan(p)]
+    indexado = sorted(validos, key=lambda i: ps[i])
+    m = len(indexado)
+    ajustados = [float("nan")] * len(ps)
     anterior = 1.0
     for posicao in range(m - 1, -1, -1):
         i = indexado[posicao]
@@ -155,6 +159,11 @@ def benjamini_hochberg(ps):
         ajustados[i] = valor
         anterior = valor
     return ajustados
+
+
+def calculaveis(resultados, chave="p"):
+    """Os resultados que sao teste de fato: p calculado (ver benjamini_hochberg)."""
+    return [r for r in resultados if not math.isnan(r[chave])]
 
 
 Z_ALFA, Z_PODER = 1.959964, 0.841621   # bicaudal 0,05 e poder 80%

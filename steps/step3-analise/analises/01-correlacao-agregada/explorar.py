@@ -11,7 +11,7 @@ para que a escolha seja feita com o resultado das tres a vista:
 
   bruto       ts_n_total, a soma das ocorrencias        sensivel a tamanho
   densidade   ts_n_total / n_metodos_teste              normalizado por tamanho
-  distintos   ts_n_distintos, quantos dos 13 aparecem   pouco sensivel a tamanho
+  distintos   ts_n_distintos, quantos dos 20 aparecem   pouco sensivel a tamanho
 
 E imprime, junto, a correlacao de cada desfecho com o proprio tamanho do teste: se o bruto
 correlaciona forte com tamanho e os outros nao, o tamanho esta mandando no resultado, e

@@ -19,7 +19,7 @@ def desfechos(linha):
 
     bruto       soma das ocorrencias                 sensivel ao tamanho do teste
     densidade   soma / numero de metodos de teste    normalizado por tamanho
-    distintos   quantos dos 13 smells aparecem       pouco sensivel a tamanho
+    distintos   quantos dos 20 smells aparecem       pouco sensivel a tamanho
 
     As tres existem porque a analise 01 mostrou que a escolha entre elas muda o resultado:
     as sensiveis a tamanho dao significancia, a normalizada nao.

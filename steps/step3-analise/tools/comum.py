@@ -54,7 +54,7 @@ def _step2_comum():
 
 
 _c2 = _step2_comum()
-SMELLS = _c2.SMELLS                    # os 13 test smells habilitados na coleta
+SMELLS = _c2.SMELLS                    # os 20 test smells habilitados na coleta
 CODE_SMELLS = sorted(_c2.CODE_SMELLS)  # blob, data class, feature envy, long method
 
 

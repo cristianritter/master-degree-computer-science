@@ -1,41 +1,41 @@
 ramo,code_smell,analise,desfecho,n,rho,p,ic_baixo,ic_alto,rho_com_tamanho,p_ajustado
-ampliado,agregado,simples,bruto,1369,0.011922,0.659464,-0.041085,0.064863,0.675252,
-ampliado,agregado,simples,densidade,1365,0.001381,0.959341,-0.051681,0.054436,-0.031528,
-ampliado,agregado,simples,distintos,1369,-0.002944,0.913344,-0.055917,0.050045,0.601656,
-ampliado,agregado,parcial,bruto,1369,0.002046,0.939734,,,,
-ampliado,agregado,parcial,densidade,1365,0.002008,0.940959,,,,
-ampliado,agregado,parcial,distintos,1369,-0.015303,0.571771,,,,
+ampliado,agregado,simples,bruto,1369,0.00775,0.774543,-0.04525,0.060706,0.680804,
+ampliado,agregado,simples,densidade,1365,-0.003832,0.887536,-0.056879,0.049237,-0.045211,
+ampliado,agregado,simples,distintos,1369,-0.012612,0.64111,-0.065549,0.040397,0.624242,
+ampliado,agregado,parcial,bruto,1369,-0.003753,0.889721,,,,
+ampliado,agregado,parcial,densidade,1365,-0.00294,0.913642,,,,
+ampliado,agregado,parcial,distintos,1369,-0.028469,0.29276,,,,
 ampliado,agregado,confundidor,code smell x n_metodos_teste,1369,0.015421,0.568687,-0.037591,0.068346,,
 ampliado,agregado,confundidor,code smell x loc_teste,1369,0.016938,0.53127,-0.036076,0.069856,,
-ampliado,blob,simples,bruto,648,0.049883,0.204823,-0.027244,0.12642,0.646602,
-ampliado,blob,simples,densidade,646,-0.027527,0.485054,-0.104447,0.04972,-0.062506,0.646739
-ampliado,blob,simples,distintos,648,0.055927,0.155069,-0.021186,0.132379,0.600667,
-ampliado,data class,simples,bruto,648,0.024598,0.532084,-0.052524,0.101428,0.646019,
-ampliado,data class,simples,densidade,646,-0.0034,0.931291,-0.08052,0.07376,-0.060416,0.931291
-ampliado,data class,simples,distintos,648,0.022132,0.573996,-0.054984,0.098985,0.601151,
-ampliado,feature envy,simples,bruto,729,0.044209,0.233281,-0.028497,0.116449,0.689894,
-ampliado,feature envy,simples,densidade,727,0.066322,0.073913,-0.006424,0.138369,-0.021412,0.295651
-ampliado,feature envy,simples,distintos,729,0.038624,0.297771,-0.034086,0.110928,0.588867,
-ampliado,long method,simples,bruto,736,0.031078,0.399964,-0.041282,0.103115,0.691908,
-ampliado,long method,simples,densidade,734,0.032888,0.373724,-0.039572,0.105005,-0.017125,0.646739
-ampliado,long method,simples,distintos,736,-0.014666,0.691295,-0.086842,0.057663,0.590841,
-deterministico,agregado,simples,bruto,730,0.094483,0.010614,0.02207,0.16591,0.55437,
-deterministico,agregado,simples,densidade,726,0.050382,0.17515,-0.022465,0.122696,-0.077079,
-deterministico,agregado,simples,distintos,730,0.084443,0.022474,0.011952,0.156051,0.432562,
-deterministico,agregado,parcial,bruto,730,0.061617,0.096446,,,,
-deterministico,agregado,parcial,densidade,726,0.05716,0.124157,,,,
-deterministico,agregado,parcial,distintos,730,0.056307,0.12882,,,,
+ampliado,blob,simples,bruto,648,0.043945,0.264085,-0.033189,0.120559,0.652536,
+ampliado,blob,simples,densidade,646,-0.039694,0.313899,-0.116479,0.037562,-0.077383,0.583299
+ampliado,blob,simples,distintos,648,0.052621,0.181014,-0.024501,0.12912,0.614735,
+ampliado,data class,simples,bruto,648,0.02676,0.49664,-0.050366,0.103569,0.651962,
+ampliado,data class,simples,densidade,646,-0.000755,0.984726,-0.077892,0.076391,-0.07487,0.984726
+ampliado,data class,simples,distintos,648,0.01848,0.638791,-0.058625,0.095366,0.615596,
+ampliado,feature envy,simples,bruto,729,0.039082,0.292079,-0.033628,0.11138,0.695644,
+ampliado,feature envy,simples,densidade,727,0.0624,0.092722,-0.010361,0.134504,-0.034454,0.370889
+ampliado,feature envy,simples,distintos,729,0.026125,0.481375,-0.046577,0.098553,0.619377,
+ampliado,long method,simples,bruto,736,0.026644,0.470583,-0.045712,0.098722,0.69761,
+ampliado,long method,simples,densidade,734,0.028711,0.437474,-0.043747,0.100868,-0.030502,0.583299
+ampliado,long method,simples,distintos,736,-0.029752,0.420392,-0.101801,0.042608,0.622055,
+deterministico,agregado,simples,bruto,730,0.086592,0.019251,0.014116,0.158163,0.559586,
+deterministico,agregado,simples,densidade,726,0.043881,0.237739,-0.028976,0.116274,-0.086833,
+deterministico,agregado,simples,distintos,730,0.072196,0.051174,-0.00037,0.144007,0.446793,
+deterministico,agregado,parcial,bruto,730,0.051832,0.16216,,,,
+deterministico,agregado,parcial,densidade,726,0.051475,0.16625,,,,
+deterministico,agregado,parcial,distintos,730,0.041767,0.26015,,,,
 deterministico,agregado,confundidor,code smell x n_metodos_teste,730,0.078212,0.034588,0.00568,0.149926,,
 deterministico,agregado,confundidor,code smell x loc_teste,730,0.089906,0.01507,0.017455,0.161417,,
-deterministico,blob,simples,bruto,307,0.140309,0.013793,0.028819,0.248351,0.521659,
-deterministico,blob,simples,densidade,306,0.018716,0.744558,-0.093606,0.130567,-0.093144,0.836366
-deterministico,blob,simples,distintos,307,0.11334,0.04718,0.001415,0.22246,0.35928,
-deterministico,data class,simples,bruto,307,0.062743,0.273342,-0.049548,0.173467,0.521659,
-deterministico,data class,simples,densidade,306,0.011865,0.836366,-0.100394,0.123826,-0.093144,0.836366
-deterministico,data class,simples,distintos,307,0.086881,0.128851,-0.025308,0.196908,0.35928,
-deterministico,feature envy,simples,bruto,429,0.028241,0.559863,-0.066615,0.122591,0.566216,
-deterministico,feature envy,simples,densidade,426,0.040204,0.40805,-0.055017,0.134701,-0.074289,0.8161
-deterministico,feature envy,simples,distintos,429,0.062246,0.198298,-0.032624,0.156005,0.462925,
-deterministico,long method,simples,bruto,432,0.10138,0.035113,0.0071,0.193874,0.570402,
-deterministico,long method,simples,densidade,429,0.053023,0.273334,-0.041865,0.146963,-0.068862,0.8161
-deterministico,long method,simples,distintos,432,0.078082,0.105114,-0.016387,0.171169,0.466281,
+deterministico,blob,simples,bruto,307,0.127981,0.02485,0.016272,0.236535,0.52616,
+deterministico,blob,simples,densidade,306,0.00229,0.968204,-0.109864,0.114386,-0.102252,0.968204
+deterministico,blob,simples,distintos,307,0.097057,0.089584,-0.015049,0.206754,0.374714,
+deterministico,data class,simples,bruto,307,0.058325,0.308635,-0.05397,0.169163,0.52616,
+deterministico,data class,simples,densidade,306,0.012885,0.82253,-0.099385,0.12483,-0.102252,0.968204
+deterministico,data class,simples,distintos,307,0.085876,0.133359,-0.02632,0.195935,0.374714,
+deterministico,feature envy,simples,bruto,429,0.022581,0.641118,-0.072252,0.117008,0.571428,
+deterministico,feature envy,simples,densidade,426,0.034909,0.472593,-0.060302,0.129491,-0.08455,0.945186
+deterministico,feature envy,simples,distintos,429,0.045594,0.346342,-0.049296,0.139669,0.474961,
+deterministico,long method,simples,bruto,432,0.097028,0.043798,0.002705,0.18964,0.575536,
+deterministico,long method,simples,densidade,429,0.053071,0.272899,-0.041817,0.147011,-0.079011,0.945186
+deterministico,long method,simples,distintos,432,0.067477,0.161594,-0.027043,0.160801,0.480102,

@@ -46,32 +46,32 @@ positivo é de revisor solitário):
 
 | desfecho | mediana confirmados | mediana limpos | delta | p | p ajustado | delta detectável |
 |---|---:|---:|---:|---:|---:|---:|
-| bruto | 21,0 | 14,0 | 0,138 | 0,013 | **0,020** | 0,156 |
-| densidade | 1,800 | 1,636 | 0,074 | 0,184 | 0,184 | 0,156 |
-| distintos | 5,0 | 4,0 | 0,138 | 0,012 | **0,020** | 0,156 |
+| bruto | 21,0 | 15,0 | 0,127 | 0,022 | **0,039** | 0,156 |
+| densidade | 1,875 | 1,689 | 0,069 | 0,215 | 0,215 | 0,156 |
+| distintos | 5,0 | 4,0 | 0,123 | 0,026 | **0,039** | 0,156 |
 
 **Ampliado** — 267 confirmados, 985 limpos:
 
 | desfecho | mediana confirmados | mediana limpos | delta | p | p ajustado | delta detectável |
 |---|---:|---:|---:|---:|---:|---:|
-| bruto | 32,0 | 27,0 | 0,031 | 0,438 | 0,831 | 0,112 |
-| densidade | 1,456 | 1,550 | −0,009 | 0,831 | 0,831 | 0,112 |
-| distintos | 5,0 | 5,0 | 0,009 | 0,827 | 0,831 | 0,112 |
+| bruto | 35,0 | 29,0 | 0,026 | 0,508 | 0,890 | 0,112 |
+| densidade | 1,550 | 1,600 | −0,016 | 0,693 | 0,890 | 0,112 |
+| distintos | 5,0 | 6,0 | −0,005 | 0,890 | 0,890 | 0,112 |
 
 ## A leitura
 
 **No ramo determinístico, os desfechos sensíveis a tamanho separam os grupos, e a densidade
-não.** Bruto e distintos dão delta 0,138, significativos depois do FDR. A densidade dá
-0,074, com p = 0,184.
+não.** Bruto e distintos dão delta 0,127 e 0,123, significativos depois do FDR. A
+densidade dá 0,069, com p = 0,215.
 
 É o mesmo mecanismo medido na análise 01: classes com code smell confirmado tendem a ter
 testes maiores, e teste maior acumula mais ocorrências de tudo. A mediana de métodos de
-teste não é controlada aqui; a análise 01 controla, e lá a associação cai a ~0,06 sem
+teste não é controlada aqui; a análise 01 controla, e lá a associação cai a ~0,05 sem
 significância.
 
 **A densidade aponta na direção esperada, mas sem decidir.** Com 135 contra 524 (os
 arquivos com métodos de teste), esta comparação detectaria delta ≥ 0,156 com 80% de poder;
-o 0,074 observado está abaixo disso.
+o 0,069 observado está abaixo disso.
 É compatível com o limite superior da análise 01 (r < 0,12), não o contradiz.
 
 **O ramo ampliado não separa em nada**, como na análise 01: com 10,1% de precisão para "o
