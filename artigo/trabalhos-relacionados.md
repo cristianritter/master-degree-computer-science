@@ -49,8 +49,8 @@ ameaça:
 > faults... The same would likely be true for the presence of different test smells."
 
 É interpretação defensável — mas deixa aberta exatamente a pergunta que medimos: **quando o
-tamanho sai, sobra alguma coisa?** No nosso dado, não sobra: 0,084 no número de tipos de
-test smell, a medida deles, contra 0,050 em densidade, sem significância.
+tamanho sai, sobra alguma coisa?** No nosso dado, não sobra: 0,072 no número de tipos de
+test smell, a medida deles (p = 0,051), e 0,044 em densidade (p = 0,238), nenhum significativo.
 
 ---
 
