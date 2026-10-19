@@ -1,7 +1,7 @@
-gerado por montar_analise.py em 2026-10-19 13:00:34
+gerado por montar_analise.py em 2026-10-19 13:36:44
 
 comando           python montar_analise.py --rotulo sev_media --saida analise_deterministico.csv --metodos caminho_exato convencao
-commit            4eb8f6a
+commit            951a195
 python            3.12.10 (Windows)
 
 rotulo            sev_media  (severidade media como valor continuo (0-3), sem dicotomizar)
