@@ -25,9 +25,14 @@ eram os candidatos naturais a mostrá-la.
 20 smells × bruto/densidade × com e sem o filtro de `nome_divergente`, ramo determinístico,
 contra o code smell agregado: 80 células. O **Default Test** não ocorre em nenhum dos 730
 arquivos (análise 00); constante, não tem correlação calculável, e suas 4 células ficam
-fora da família. Restam **76 testes**. O ajuste para comparações múltiplas
-(Benjamini-Hochberg) entra aqui de verdade — com 76 testes, α = 0,05 por teste deixaria
-~3,8 falsos positivos esperados.
+fora da família. Restam **76 testes**, em **duas famílias de 38**: a das 730 linhas e a das
+677 sem `nome_divergente`. O ajuste para comparações múltiplas (Benjamini-Hochberg) entra
+aqui de verdade, dentro de cada família — com 38 testes, α = 0,05 por teste deixaria ~1,9
+falsos positivos esperados.
+
+As famílias são separadas porque os dois recortes fazem as **mesmas 38 perguntas** sobre
+conjuntos quase idênticos (677 dos 730 arquivos estão nos dois). Juntá-los numa família de
+76 contaria cada hipótese duas vezes.
 
 ---
 

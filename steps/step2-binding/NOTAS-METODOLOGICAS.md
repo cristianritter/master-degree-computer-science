@@ -321,6 +321,10 @@ Lista curta de afirmações tentadoras que este dataset não sustenta:
    têm três estados, e vazio nunca vira 0.
 7. **"Eager Test e Lazy Test nas linhas de classe aninhada."** Caem 28× e 23× por defeito
    do `jnose-core`. Filtrar ou estratificar por `n_testes_nome_divergente` é obrigatório.
+8. **"Densidade de test smell por método de teste."** O denominador é o `numberMethods` do
+   JNose, que conta membros da classe (campos, construtores, classes internas), e na
+   classe aninhada conta os do *helper* (README, seção 2). O que a tabela tem é
+   "ocorrências por membro da classe".
 
 ---
 

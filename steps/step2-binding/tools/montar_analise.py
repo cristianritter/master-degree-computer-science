@@ -58,7 +58,7 @@ AGREGACOES = {
     "soma": "soma do smell em todas as classes de teste ligadas",
     "max": "maior valor entre as classes de teste ligadas",
     "media": "media entre as classes de teste ligadas",
-    "densidade": "soma dividida pelo total de metodos de teste ligados (por metodo)",
+    "densidade": "soma dividida pelo total de membros das classes de teste ligadas (n_metodos do JNose)",
 }
 
 METODOS = ["caminho_exato", "convencao", "referencia_estatica"]

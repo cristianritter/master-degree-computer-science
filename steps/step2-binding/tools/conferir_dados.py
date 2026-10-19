@@ -16,6 +16,7 @@ import argparse
 import collections
 import csv
 import glob
+import gzip
 import os
 import sys
 
@@ -120,6 +121,31 @@ def secao_2():
               "Eager/1k %7.1f  Lazy/1k %7.1f  Fixture/1k %6.1f"
               % (rotulo, len(sub), 100 * vazio / len(sub),
                  1000 * eager / len(sub), 1000 * lazy / len(sub), 1000 * fixture / len(sub)))
+
+    # 5. o n_metodos do JNose e getMembers().size() da ultima classe que o flowClass visita:
+    # conta membros (campos, construtores, classes internas), nao metodos de teste, e na
+    # linha aninhada e o do helper. O sinal medivel: classe com mais metodos com smell do
+    # que n_metodos. Smells de classe ficam fora; o Lazy Test registra um grupo de metodos.
+    com_smell = collections.defaultdict(set)
+    de_classe = {"Default Test", "General Fixture", "Constructor Initialization"}
+    with gzip.open(os.path.join(c.DADOS, "test_smell_occurrences.csv.gz"), "rt",
+                   encoding="utf-8-sig", newline="") as fh:
+        for r in csv.DictReader(fh):
+            if r["smell"] not in de_classe:
+                com_smell[(r["github_repo"], r["path"])].update(
+                    m.strip() for m in r["metodo"].split(","))
+    excede = {}
+    for flag in ("0", "1"):
+        sub = [t for t in classes if t["nome_divergente"] == flag]
+        excede[flag] = (sum(1 for t in sub if len(com_smell[(t["github_repo"], t["path"])])
+                            > int(t["n_metodos"] or 0)), len(sub))
+    print("    mais metodos com smell do que n_metodos:  aninhadas %d de %d (%.1f%%),"
+          "  demais %d de %d"
+          % (excede["1"][0], excede["1"][1], 100 * excede["1"][0] / excede["1"][1],
+             excede["0"][0], excede["0"][1]))
+    exigir(excede["1"][0] == 2388 and excede["0"][0] == 15,
+           "n_metodos subconta em 2.388 aninhadas e em 15 das demais",
+           "%d e %d" % (excede["1"][0], excede["0"][0]))
 
 
 def secao_3():

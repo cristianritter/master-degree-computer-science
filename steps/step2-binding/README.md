@@ -82,6 +82,22 @@ O `byclasstest` do step 1 com três mudanças:
 > `montar_analise.py --excluir-nome-divergente` existe. Corrigir de verdade exigiria
 > consertar o `jnose-core` e repetir a coleta.
 
+> **`n_metodos` não conta métodos de teste.** No jnose-core 0.9.4 o valor é
+> `ClassOrInterfaceDeclaration.getMembers().size()` da **última** classe que o `flowClass`
+> visita: métodos, mas também campos, construtores, inicializadores e classes internas. E
+> `loc` é a última linha do arquivo, não da classe. Dois efeitos, ambos conferidos
+> (`conferir_dados.py --secao 2`):
+>
+> - em toda linha, o denominador da densidade é "membros da classe", não "métodos de
+>   teste": uma classe com muitos campos ou helpers tem densidade menor do que sua taxa
+>   real de smell por método de teste;
+> - na linha aninhada, `n_metodos` é o do *helper*. O sinal medível é uma classe com mais
+>   métodos com smell do que `n_metodos`: acontece em **2.388 das 6.842 aninhadas
+>   (34,9%)** e em **15 das 100.693 demais**. Nas aninhadas, a densidade sai inflada.
+>
+> A contagem correta de métodos de teste exige o código-fonte das classes, que a coleta
+> não guarda.
+
 ### `dados/test_smell_occurrences.csv.gz` — 2.150.044 linhas, 1 por ocorrência
 
 Nível de método (`testSmellMethod`, faixa de linhas, hashes), para drill-down posterior. O
@@ -737,8 +753,8 @@ MLCQ.
 | `nome_divergente` | 1 quando os dois diferem → defeito de classe aninhada (seção 2) |
 | `production_path` | arquivo de produção que o JNose resolveu; vazio em 53,6% |
 | `tem_production` | 1 se `production_path` está preenchido |
-| `loc` | linhas da classe de teste |
-| `n_metodos` | métodos da classe de teste |
+| `loc` | linhas do **arquivo** de teste: a última linha da unidade de compilação, com licença, imports e comentários |
+| `n_metodos` | **membros** da última classe que o JNose visitou: métodos, campos, construtores, classes internas. Não é contagem de métodos de teste (seção 2) |
 | `ts_assertion_roulette` … `ts_verbose_test` | **20 colunas**, contagem de cada test smell habilitado |
 | `n_smells_distintos` | quantos dos 20 têm contagem > 0 |
 | `n_smells_total` | soma das 20 contagens |
@@ -749,7 +765,7 @@ MLCQ.
 |---|---|
 | `github_repo`, `path`, `nome_arquivo`, `production_path` | como em `test_classes.csv` |
 | `junit` | `JUnit3`, `JUnit4` ou `JUnit5`, detectado pelo JNose |
-| `loc`, `n_metodos` | da classe de teste |
+| `loc`, `n_metodos` | da classe de teste, com o significado de `test_classes.csv` |
 | `smell` | qual dos 20 |
 | `metodo` | método de teste onde o smell ocorre (`testSmellMethod`) |
 | `linha_inicio`, `linha_fim` | faixa de linhas da ocorrência |
@@ -846,7 +862,7 @@ Mesmas colunas nos dois; muda só qual binding alimentou as linhas (seção 6).
 | `cs_*_sev_max`, `cs_*_n_reviews` | evidência por trás dos rótulos |
 | `n_testes`, `test_paths` | classes de teste agregadas |
 | `n_testes_nome_divergente` | quantas delas têm o nome corrompido pelo defeito de classe aninhada. **Filtrar ou estratificar por esta coluna é obrigatório em análise com Eager/Lazy Test** |
-| `loc_teste`, `n_metodos_teste` | totais do lado do teste; `n_metodos_teste` é o denominador de `--agregacao densidade` |
+| `loc_teste`, `n_metodos_teste` | totais do lado do teste; `n_metodos_teste` é o denominador de `--agregacao densidade`, e soma **membros**, não métodos de teste (seção 2) |
 | `ts_*` (20), `ts_n_total` | test smells agregados pela regra de `--agregacao` |
 | `ts_n_distintos` | quantos dos 20 smells aparecem em ao menos uma classe de teste ligada. É **união**, não a agregação escolhida — somar "quantos smells distintos cada classe tem" não dá "quantos smells distintos existem" |
 

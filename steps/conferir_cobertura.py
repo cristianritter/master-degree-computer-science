@@ -56,6 +56,8 @@ COMANDOS = [
     (os.path.join(A3, "04-disputados"), ["disputados.py"]),
     (os.path.join(A3, "05-code-x-test-smell"), ["cruzado.py"]),
     (S3, ["tools/conferir_resultados.py"]),
+    (S3, ["tools/validar_estat.py"]),
+    (os.path.join(RAIZ, "artigo"), ["tools/folha_de_fatos.py"]),
 ]
 
 DOCUMENTOS = [

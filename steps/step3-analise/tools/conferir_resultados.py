@@ -220,7 +220,18 @@ def conferir_segunda_rodada():
         sem_teste = sorted({r["test_smell"] for r in todas if r["p"] == "nan"})
         exigir(sem_teste == ["Default Test"], "so o Default Test fica sem teste (constante)",
                ", ".join(sem_teste) or "nenhum")
-        exigir(len(L) == 76, "analise 02 tem 76 testes na familia", len(L))
+        exigir(len(L) == 76, "analise 02 tem 76 testes", len(L))
+        # uma familia por recorte (todas, sem_nome_divergente): o BH de cada uma tem que
+        # reproduzir o p_ajustado gravado, recalculado aqui sobre os p do proprio CSV
+        for recorte in ("todas", "sem_nome_divergente"):
+            fam = [r for r in L if r["recorte"] == recorte]
+            refeito = estat.benjamini_hochberg([float(r["p"]) for r in fam])
+            difere = max(abs(a - float(r["p_ajustado"])) for a, r in zip(refeito, fam))
+            exigir(len(fam) == 38 and difere < 1e-4,
+                   "familia %s: 38 testes, BH dentro dela" % recorte,
+                   "%d testes, diferenca %.6f" % (len(fam), difere))
+            print("    familia %s: %d testes, %.1f falsos positivos esperados a alfa 0,05 sem ajuste"
+                  % (recorte, len(fam), 0.05 * len(fam)))
         sobrevivem = [r for r in L if float(r["p_ajustado"]) < 0.05]
         exigir(len(sobrevivem) == 0,
                "nenhum test smell sobrevive ao ajuste FDR", len(sobrevivem))

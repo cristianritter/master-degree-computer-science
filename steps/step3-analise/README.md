@@ -67,7 +67,8 @@ step3-analise/
 │   ├── comum.py                caminhos, leitura das tabelas do step 2, precisao de cada ramo
 │   ├── variaveis.py            as definicoes de desfecho e rotulo, iguais para todos
 │   ├── estat.py                Spearman, Mann-Whitney, IC de Fisher, parcial, FDR
-│   └── conferir_resultados.py  reapura todo numero afirmado nos READMEs
+│   ├── conferir_resultados.py  reapura todo numero afirmado nos READMEs
+│   └── validar_estat.py        confere o estat.py contra o scipy, nos dados reais
 └── analises/
     ├── 00-caracterizacao/      README.md + caracterizar.py + dados/
     ├── 01-correlacao-agregada/ README.md + explorar.py + dados/
@@ -94,8 +95,11 @@ em vez de manter uma cópia que pode divergir — mesmo padrão que o step 2 usa
 |---|---|
 | Python | 3.12.10, biblioteca padrão apenas |
 
-Nenhuma dependência externa: Spearman, Mann-Whitney com correção de empates, intervalo por
-z de Fisher, correlação parcial e Benjamini-Hochberg estão implementados em `estat.py`.
+Nenhuma dependência externa nas análises: Spearman, Mann-Whitney com correção de empates,
+intervalo por z de Fisher, correlação parcial e Benjamini-Hochberg estão implementados em
+`estat.py`. A exceção é `validar_estat.py`, que usa scipy e pandas para conferir essas
+implementações contra uma biblioteca de referência — o rho e o delta batem na sexta casa,
+e o p difere só pela aproximação (z de Fisher no `estat.py`, t no scipy).
 Decisão consciente — evita que reproduzir o step exija montar ambiente, e mantém cada
 fórmula visível no fonte em vez de escondida numa chamada de biblioteca. Se a análise
 exigir modelo mais pesado (regressão com excesso de zeros), a dependência entra aí,
@@ -119,7 +123,7 @@ nenhum arquivo) não tem p calculável e não entra (`estat.calculaveis`).
 | # | análise | testes | resultado |
 |---|---|---:|---|
 | 1–40 | 01 — correlação agregada | 40 | 3 significâncias nominais, todas no desfecho bruto; sem ajuste |
-| 41–116 | 02 — por test smell | 76 | nenhum sobrevive ao FDR (menor p ajustado 0,379) |
+| 41–116 | 02 — por test smell (duas famílias de 38, com e sem `nome_divergente`) | 76 | nenhum sobrevive ao FDR (menor p ajustado 0,379) |
 | 117–122 | 03 — extremos | 6 | bruto e distintos do determinístico sobrevivem ao FDR (0,039); densidade não |
 | 123–128 | 04 — confirmados × só disputados | 6 | nenhum p < 0,05, todos abaixo do detectável |
 | 129–212 | 05 — code smell × test smell (76 + 8 de sensibilidade) | 84 | nenhum sobrevive ao FDR (menor p ajustado 0,153); 2 células acima do r detectável |

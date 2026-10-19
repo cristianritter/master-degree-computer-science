@@ -18,7 +18,10 @@ def desfechos(linha):
     """As tres definicoes de 'quanto test smell tem o teste desta classe'.
 
     bruto       soma das ocorrencias                 sensivel ao tamanho do teste
-    densidade   soma / numero de metodos de teste    normalizado por tamanho
+    densidade   soma / n_metodos_teste               normalizado por tamanho
+
+    n_metodos_teste e o numberMethods do JNose: membros da classe (metodos, campos,
+    construtores, classes internas), nao metodos de teste (step 2, secao 2).
     distintos   quantos dos 20 smells aparecem       pouco sensivel a tamanho
 
     As tres existem porque a analise 01 mostrou que a escolha entre elas muda o resultado:
