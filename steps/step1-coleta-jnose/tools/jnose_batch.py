@@ -5,6 +5,7 @@ Contorna dois bugs do JNose 2.5.0:
   - config de smells so em memoria: reaplicada a cada execucao
 """
 import csv
+import gzip
 import os
 import re
 import shutil
@@ -12,6 +13,7 @@ import sqlite3
 import subprocess
 import sys
 import time
+import zipfile
 
 import requests
 
@@ -31,12 +33,27 @@ REPORTS = os.path.join(STEP, "reports")
 MAP = os.path.join(STEP, "dados", "repos_map.csv")
 LOG = os.path.join(REPORTS, "run_log.csv")
 
+# A configuracao padrao do JNose (TestSmellDetectorConfig liga os 21 smells) menos o Unknown
+# Test. O detector de Unknown Test do jnose-core 0.9.4 (UnknownTest.java, linha 58) chama
+# getBody().get() sem checar se o metodo tem corpo; em metodo abstrato isso lanca
+# NoSuchElementException, e o JNose descarta a analise da CLASSE INTEIRA, de todos os
+# smells. O efeito e medido rodando a configuracao padrao inteira (--config-padrao, abaixo)
+# e comparando com esta (tools/efeito_unknown_test.py; README, secao 4).
 SMELLS_ON = [
-    "cbAssertionRoulette", "cbConditionalTestLogic", "cbDependentTest", "cbDuplicateAssert",
-    "cbEagerTest", "cbExceptionCatchingThrowing", "cbGeneralFixture", "cbLazyTest",
-    "cbMagicNumberTest", "cbMysteryGuest", "cbRedundantAssertion", "cbResourceOptimism",
-    "cbVerboseTest",
+    "cbAssertionRoulette", "cbConditionalTestLogic", "cbConstructorInitialization",
+    "cbDefaultTest", "cbDependentTest", "cbDuplicateAssert", "cbEagerTest", "cbEmptyTest",
+    "cbExceptionCatchingThrowing", "cbGeneralFixture", "cbIgnoredTest", "cbLazyTest",
+    "cbMagicNumberTest", "cbMysteryGuest", "cbPrintStatement", "cbRedundantAssertion",
+    "cbResourceOptimism", "cbSensitiveEquality", "cbSleepyTest", "cbVerboseTest",
 ]
+
+# --config-padrao: os 21 smells, com o Unknown Test, gravando em reports-config-padrao/.
+# Serve so para medir o defeito; a coleta do estudo e a de reports/.
+if "--config-padrao" in sys.argv:
+    sys.argv.remove("--config-padrao")
+    SMELLS_ON = sorted(SMELLS_ON + ["cbUnknownTest"])
+    REPORTS = os.path.join(STEP, "reports-config-padrao")
+    LOG = os.path.join(REPORTS, "run_log.csv")
 
 PAGES = ["bytestsmells", "byclasstest"]
 
@@ -133,27 +150,14 @@ def db_reset_to(project=None):
     con.close()
 
 
-# O JNose ignora estas pastas ao varrer o projeto (JNoseCore.lambda$getFilesTest)
-IGNORAR_DIRS = {"target", "build", "classes", ".git", "node_modules", "out", "bin", "dist"}
-
-# Os seis padroes de isPotentialTestFileName, aplicados ao nome do arquivo sem
-# extensao e em minusculas. Note que pegam bem mais que "*Test.java": TestUtils
-# entra por ^test.*, por exemplo. package-info nao casa com nenhum - por isso
-# nunca derrubou os 439 projetos que deram certo.
-NOME_DE_TESTE = re.compile(r"^(?:.*test\d*|.*tests\d*|.*testcase\d*|test.*|tests.*|testcase.*)$")
-
-# Tipos declarados no nivel de topo do arquivo. O JavaParser trata class e
-# interface como o mesmo no (ClassOrInterfaceDeclaration); @interface, enum e
-# record sao nos distintos, que o flowClass do JNose ignora.
-TIPO_DE_TOPO = re.compile(r"@interface\b|(?<![.\w$])(?:class|interface|enum|record)\s+[A-Za-z_$]")
-ACEITOS = ("class", "interface")
-
-# O detectJUnitVersion aceita o arquivo se algum import contiver org.junit.jupiter
-# (JUnit5), org.junit (JUnit4) ou junit.framework (JUnit3). Sem nenhum deles o
-# isTestFile devolve false e o arquivo nunca e analisado - logo nao quebra nada,
-# mesmo sem classe.
-IMPORTA_JUNIT = re.compile(r"^[ \t]*import[ \t][^;]*(?:org\.junit|junit\.framework)",
-                           re.MULTILINE)
+# O oraculo que decide quais arquivos derrubariam o JNose (ver remover_testes_sem_classe).
+# Roda com o javaparser-core de dentro do proprio jar do JNose: a decisao sai do mesmo
+# parser que o JNose usa, nao de uma heuristica de texto.
+JAVAC = os.path.join(os.path.dirname(JAVA), "javac.exe")
+JNOSE_JAR = os.path.join(JNOSE_DIR, "jnose-2.5.0.jar")
+ORACULO_SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "AchaNulos.java")
+ORACULO_DIR = os.path.join(STEP, ".oraculo")
+_classpath_oraculo = None
 
 
 def _sem_comentarios(texto):
@@ -184,64 +188,43 @@ def _sem_comentarios(texto):
     return "".join(saida)
 
 
-def _declara_classe_ou_interface(limpo):
-    """Ha alguma class/interface no nivel de topo do texto (ja sem comentarios)?
-
-    E exatamente a condicao para o JNose conseguir preencher TestClass.name: o
-    flowClass so chama setName para ClassOrInterfaceDeclaration, e so recursa por
-    dentro dela. Um arquivo que declara apenas @interface, enum ou record - ou
-    nada, com a classe toda comentada - deixa o nome nulo.
-    """
-    profundidade, pos = 0, 0
-    for achado in TIPO_DE_TOPO.finditer(limpo):
-        trecho = limpo[pos:achado.start()]
-        profundidade += trecho.count("{") - trecho.count("}")
-        pos = achado.start()
-        if profundidade == 0 and achado.group(0).startswith(ACEITOS):
-            return True
-    return False
-
-
-def nome_ficaria_nulo(caminho):
-    """O JNose aceitaria este arquivo como teste e ficaria sem nome de classe?
-
-    Sao as duas condicoes juntas: sem class/interface de topo (nome nulo) e com
-    import de org.junit (aceito como teste). So a combinacao estoura o NPE.
-    """
-    try:
-        with open(caminho, encoding="utf-8", errors="ignore") as fh:
-            texto = fh.read()
-    except OSError:
-        return False  # na duvida, nao mexe no arquivo
-    if not IMPORTA_JUNIT.search(texto):
-        return False
-    return not _declara_classe_ou_interface(_sem_comentarios(texto))
+def classpath_oraculo():
+    """Extrai o javaparser do jar do JNose e compila o AchaNulos.java, uma vez por execucao."""
+    global _classpath_oraculo
+    if _classpath_oraculo is None:
+        with zipfile.ZipFile(JNOSE_JAR) as z:
+            nome = next(n for n in z.namelist()
+                        if "javaparser-core" in n and n.endswith(".jar"))
+            z.extract(nome, ORACULO_DIR)
+        jp = os.path.join(ORACULO_DIR, nome.replace("/", os.sep))
+        classes = os.path.join(ORACULO_DIR, "classes")
+        os.makedirs(classes, exist_ok=True)
+        subprocess.run([JAVAC, "-cp", jp, "-d", classes, ORACULO_SRC],
+                       check=True, capture_output=True, text=True)
+        _classpath_oraculo = jp + os.pathsep + classes
+    return _classpath_oraculo
 
 
 def remover_testes_sem_classe(dest):
-    """Tira do clone os candidatos a teste cujo nome de classe ficaria nulo.
+    """Tira do clone os arquivos que o JNose aceitaria como teste sem achar classe neles.
 
-    O JNose escolhe o arquivo pelo nome e aceita como teste qualquer um que
-    importe JUnit, sem verificar se achou uma classe. Quando nao achou, o
-    getFilesTest estoura um NullPointerException que aborta a analise do projeto
-    INTEIRO, nao so do arquivo - e em silencio, deixando a tela parada em 25%.
-    Esses arquivos nao sao classes de teste (sao anotacoes de @Category/@Tag,
-    enums ou arquivos vazios), entao remove-los nao muda o resultado.
+    O JNose escolhe o arquivo pelo nome e aceita como teste qualquer um que importe
+    JUnit, sem verificar se achou uma classe. Quando nao achou, o getFilesTest estoura
+    um NullPointerException que aborta a analise do projeto INTEIRO, nao so do arquivo -
+    e em silencio, deixando a tela parada em 25%. Quem decide quais sao esses arquivos e
+    o AchaNulos.java, que replica isTestFile + flowClass sobre o AST do JavaParser.
+    Esses arquivos nao tem classe de teste para analisar (sao anotacoes de @Category/@Tag,
+    enums ou arquivos vazios), entao remove-los nao tira nada da coleta.
     """
+    saida = subprocess.run([JAVA, "-cp", classpath_oraculo(), "AchaNulos", dest],
+                           capture_output=True, text=True, timeout=1800, check=True).stdout
     removidos = []
-    for root, dirs, files in os.walk(dest):
-        dirs[:] = [d for d in dirs if d not in IGNORAR_DIRS]
-        for name in files:
-            if not name.endswith(".java") or not NOME_DE_TESTE.match(name[:-5].lower()):
-                continue
-            caminho = os.path.join(root, name)
-            if not nome_ficaria_nulo(caminho):
-                continue
-            try:
-                os.remove(caminho)
-            except OSError:
-                continue
-            removidos.append(os.path.relpath(caminho, dest))
+    for linha in saida.splitlines():
+        relativo = linha.strip()
+        if not relativo:
+            continue
+        os.remove(os.path.join(dest, relativo))   # falhar aqui e melhor que analisar errado
+        removidos.append(relativo)
     return removidos
 
 
@@ -344,6 +327,32 @@ def rmtree(path):
     return not os.path.exists(path)
 
 
+def parar_jnose():
+    """Derruba o JVM do JNose e comprime o console que ele deixou."""
+    subprocess.run(["powershell", "-NoProfile", "-Command",
+                    "Get-CimInstance Win32_Process -Filter \"Name='java.exe'\""
+                    " | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }"],
+                   capture_output=True, timeout=120)
+    time.sleep(5)
+    comprimir_consoles()
+
+
+def comprimir_consoles():
+    """Comprime os consoles ja fechados: no lote inteiro passam de 150 MB em texto."""
+    if not os.path.isdir(JNOSE_LOGS):
+        return
+    for nome in sorted(os.listdir(JNOSE_LOGS)):
+        if not nome.endswith((".out", ".err")):
+            continue
+        caminho = os.path.join(JNOSE_LOGS, nome)
+        try:
+            with open(caminho, "rb") as fh, gzip.open(caminho + ".gz", "wb") as gz:
+                shutil.copyfileobj(fh, gz)
+            os.remove(caminho)
+        except OSError:
+            continue  # ainda aberto pelo JVM: fica para o proximo restart
+
+
 def restart_jnose(session):
     """Reinicia o JNose e reaplica a config. Usado quando uma analise trava.
 
@@ -351,11 +360,7 @@ def restart_jnose(session):
     arquivos e disputando CPU com os proximos repositorios.
     """
     log("  reiniciando o JNose")
-    subprocess.run(["powershell", "-NoProfile", "-Command",
-                    "Get-CimInstance Win32_Process -Filter \"Name='java.exe'\""
-                    " | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }"],
-                   capture_output=True, timeout=120)
-    time.sleep(5)
+    parar_jnose()
     # O JNose so reporta a falha do getFilesTest pelo LOGGER, que vai para o console.
     # Sem guardar essa saida a analise morre sem deixar rastro nenhum.
     os.makedirs(JNOSE_LOGS, exist_ok=True)
@@ -478,9 +483,16 @@ def main():
             linhas = {}
             for page in PAGES:
                 data, pct = analyze(session, page)
-                saida = os.path.join(REPORTS, page, safe + ".csv")
+                # bytestsmells traz o codigo de cada metodo e passa de 1 GB no lote: sai
+                # comprimido daqui mesmo, para o artefato versionado ser o que o script grava
+                if page == "bytestsmells":
+                    saida = os.path.join(REPORTS, page, safe + ".csv.gz")
+                    abrir = lambda c: gzip.open(c, "wb")
+                else:
+                    saida = os.path.join(REPORTS, page, safe + ".csv")
+                    abrir = lambda c: open(c, "wb")
                 os.makedirs(os.path.dirname(saida), exist_ok=True)
-                with open(saida, "wb") as fh:
+                with abrir(saida) as fh:
                     fh.write(data)
                 linhas[page] = max(data.count(b"\n") - 1, 0)
                 log("  %s: %d linhas (%d%%)" % (page, linhas[page], pct))
@@ -512,6 +524,7 @@ def main():
                 log("  aviso: nao consegui limpar a tabela Projeto: %s" % falha)
             if not rmtree(dest):
                 log("  aviso: nao consegui apagar " + dest)
+    parar_jnose()
     log("fim")
 
 

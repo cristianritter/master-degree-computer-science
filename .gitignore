@@ -7,3 +7,7 @@ __pycache__/
 # (ver steps/step2-binding/README.md, secao 10)
 steps/step2-binding/dados/test_smell_occurrences.csv.gz
 .cache-auditoria/
+
+# ocorrencias da configuracao padrao (185 MB): so o byclasstest entra na medida do defeito
+steps/step1-coleta-jnose/reports-config-padrao/bytestsmells/
+steps/step1-coleta-jnose/.oraculo/

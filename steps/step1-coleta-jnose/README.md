@@ -9,10 +9,12 @@ Saída: `reports/bytestsmells/` (uma linha por ocorrência de smell) e `reports/
 |---|---|
 | Repositórios no MLCQ | 522 |
 | Analisados (`HASH_OK`) | **451 (100% dos elegíveis)** |
-| Ocorrências de smell coletadas | 2.059.905 |
+| Ocorrências de smell coletadas | 2.150.044 |
 | Classes de teste | 107.535 |
-| Smells habilitados | 13 |
-| Tempo total de execução | ~34,7 h |
+| Smells habilitados | 20 (a configuração padrão do JNose menos o Unknown Test) |
+| Tempo total de execução | ~4,4 h |
+
+Todo número deste README é reapurado por `python tools/conferir_coleta.py` (seção 7).
 
 ---
 
@@ -42,11 +44,11 @@ máquina são ajustáveis por variável de ambiente:
 | Variável | Padrão |
 |---|---|
 | `JNOSE_DIR` | `C:\Users\crist\Documents\Mestrado PPGCC\jnose-tests-smell` |
-| `JAVA_EXE` | `C:\Program Files\Java\jdk-26.0.2\bin\java.exe` |
+| `JAVA_EXE` | `C:\Program Files\Java\jdk-26.0.2\bin\java.exe` (o `javac.exe` ao lado também é usado) |
 | `JNOSE_PROJECTS` | `~/.jnose_projects` (onde os clones são feitos) |
 | `JNOSE_URL` | `http://localhost:8080` |
 | `JNOSE_TIMEOUT` | `1200` (segundos por análise) |
-| `JNOSE_JANELA_MORTO` | `180` (ver seção 4) |
+| `JNOSE_JANELA_MORTO` | `180` (ver seção 4.1) |
 
 ---
 
@@ -92,53 +94,56 @@ e o experimento precisa continuar reproduzindo o mesmo recorte.
 ## 3. Execução da coleta
 
 ```bash
-python tools/jnose_batch.py              # todos os HASH_OK ainda não concluídos
-python tools/jnose_batch.py --pendentes  # reprocessa tudo que não terminou OK
-python tools/jnose_batch.py storm        # filtra pelo nome do repositório
-python tools/jnose_batch.py 10           # limita a quantidade
+python tools/jnose_batch.py                  # todos os HASH_OK ainda não concluídos
+python tools/jnose_batch.py --pendentes      # reprocessa tudo que não terminou OK
+python tools/jnose_batch.py storm            # filtra pelo nome do repositório
+python tools/jnose_batch.py 10               # limita a quantidade
+python tools/jnose_batch.py --config-padrao  # os 21 smells, em reports-config-padrao/ (seção 4.2)
 ```
 
 Para cada repositório, em sequência:
 
 1. `git clone --depth 1` do espelho e conferência do HEAD contra o commit esperado
    (divergência ⇒ `MISMATCH`, repositório pulado);
-2. remoção dos arquivos que travariam o JNose (**seção 4**);
+2. remoção dos arquivos que derrubariam a análise do JNose (**seção 4.1**);
 3. detecção da versão de JUnit do projeto;
 4. inserção do projeto direto no `jnose.db` via SQLite;
 5. disparo da análise das páginas `bytestsmells` e `byclasstest`, com polling até 100%;
-6. exportação dos CSVs;
+6. exportação dos CSVs (`bytestsmells` já sai comprimido em `.csv.gz`);
 7. remoção do clone e da linha do projeto no banco.
 
 O JNose é reiniciado a cada 15 repositórios (não libera memória entre análises) e
-sempre que uma análise falha. Cada execução registra uma linha em
-`reports/run_log.csv`.
+sempre que uma análise falha. A cada parada, o console do JNose é comprimido em
+`reports/console-jnose/`. Cada tentativa registra uma linha em `reports/run_log.csv`.
 
 ### Dois defeitos do JNose contornados pelo script
 
 - **Aba *Projects* quebrada** (incompatibilidade github-api × Jackson): não é possível
   cadastrar projeto pela interface. O script insere a linha direto no `jnose.db`.
-- **Configuração de smells só em memória**: a seleção dos 13 smells é perdida a cada
+- **Configuração de smells só em memória**: a seleção de smells é perdida a cada
   reinício. O script reaplica e **verifica** a cada execução, abortando se divergir.
 
-### Smells habilitados (13)
+### Smells habilitados (20)
 
-`AssertionRoulette`, `ConditionalTestLogic`, `DependentTest`, `DuplicateAssert`,
-`EagerTest`, `ExceptionCatchingThrowing`, `GeneralFixture`, `LazyTest`,
-`MagicNumberTest`, `MysteryGuest`, `RedundantAssertion`, `ResourceOptimism`,
-`VerboseTest`.
+`AssertionRoulette`, `ConditionalTestLogic`, `ConstructorInitialization`, `DefaultTest`,
+`DependentTest`, `DuplicateAssert`, `EagerTest`, `EmptyTest`,
+`ExceptionCatchingThrowing`, `GeneralFixture`, `IgnoredTest`, `LazyTest`,
+`MagicNumberTest`, `MysteryGuest`, `PrintStatement`, `RedundantAssertion`,
+`ResourceOptimism`, `SensitiveEquality`, `SleepyTest`, `VerboseTest`.
 
-Os CSVs trazem colunas para todos os smells que o JNose conhece; as não habilitadas
-ficam zeradas.
+É a configuração padrão do JNose (`TestSmellDetectorConfig` liga os 21 smells que a
+ferramenta conhece) menos o **Unknown Test**, cujo detector descarta a análise de classes
+inteiras (seção 4.2). Usar a configuração padrão tira do pesquisador a escolha de quais
+smells contam; a única exceção é um detector que corrompe os demais. Os CSVs trazem a
+coluna do Unknown Test, zerada em todas as linhas.
 
 ---
 
-## 4. O defeito que travava a coleta
+## 4. Defeitos do JNose que afetam a coleta
 
-Onze repositórios nunca terminavam: a interface ficava parada em **25%**
-indefinidamente. Um deles (`apache/storm`) chegou a rodar 14 horas antes de ser
-interrompido. Diagnóstico e correção:
+### 4.1 Arquivo sem classe derruba a análise do projeto inteiro
 
-### Causa
+#### Causa
 
 O JNose seleciona candidatos a teste **pelo nome do arquivo**
 (`JNoseCore.isPotentialTestFileName`, seis expressões aplicadas ao nome sem extensão,
@@ -169,8 +174,8 @@ if (node instanceof ClassOrInterfaceDeclaration c) {
 }
 ```
 
-Logo, um arquivo que case pelo nome, importe JUnit e **não declare nenhuma `class` ou
-`interface` no nível de topo** deixa `TestClass.name` nulo. Em seguida
+Logo, um arquivo que case pelo nome, importe JUnit, seja parseável e **não declare
+nenhuma `class` ou `interface` no nível de topo** deixa `TestClass.name` nulo. Em seguida
 `JNoseCallable.call` faz `getName().toLowerCase()` e lança `NullPointerException`. O
 `JNose.processarProjetos` captura a exceção num `catch (Exception)` que apenas registra
 no log e segue:
@@ -182,67 +187,78 @@ catch (Exception e) { LOGGER.log(SEVERE, "Failed processing project: " + p.getNa
 
 `setProcessado(true)` nunca é chamado, a porcentagem congela em 25 e o link de
 resultado nunca ganha `href`. **A tela de um projeto morto é idêntica à de um projeto
-processando.**
+processando**, e o projeto inteiro fica sem resultado, não só o arquivo.
 
 O "25%" é um marcador de estágio fixo no código, não progresso — `processarProjeto`
-faz `setProcentagem(25)`, chama `getFilesTest()` e faz `setProcentagem(100)`. Por isso
-aumentar o timeout (600 s → 1200 s → 5400 s) nunca resolveu: o trabalho já havia
-abortado nos primeiros segundos.
+faz `setProcentagem(25)`, chama `getFilesTest()` e faz `setProcentagem(100)`. Aumentar
+o timeout não resolve: o trabalho já abortou nos primeiros segundos.
 
-Os arquivos culpados não são classes de teste: anotações de `@Category`/`@Tag`
-(`DockerTest.java`, `SpringBootTest.java`, `GemFireUnitTest.java`), enums
-(`TestEnum.java`) e um arquivo do visualvm com a classe inteira comentada.
+#### Correção
 
-### Correção
+`remover_testes_sem_classe()` apaga do clone, antes da análise, exatamente os arquivos
+que satisfariam essas condições. Quem decide não é uma heurística de texto: é o
+`AchaNulos.java`, que roda com o **mesmo `javaparser-core` de dentro do jar do JNose** e
+replica `isPotentialTestFileName`, `isTestFile` e a travessia do `flowClass` sobre o AST.
+O script extrai o javaparser do jar e compila o oráculo em `.oraculo/` na primeira
+chamada.
 
-`remover_testes_sem_classe()` apaga do clone, antes da análise, os arquivos que
-satisfazem as duas condições simultaneamente: **casam com um dos seis padrões de nome**
-e **têm import de JUnit** e **não declaram `class`/`interface` no topo**. Como esses
-arquivos jamais gerariam um `TestClass`, removê-los não altera o resultado — apenas
-evita o NPE. Foram **46 arquivos em 12 repositórios**, registrados na coluna `detalhe`
-do `run_log.csv`.
+Um arquivo que o JavaParser não consegue parsear não entra: o JNose captura esse erro e
+ignora o arquivo, sem derrubar o projeto. Como os arquivos removidos jamais gerariam um
+`TestClass`, removê-los não tira nada da coleta — apenas evita o NPE. Foram **25 arquivos
+em 11 repositórios**, registrados na coluna `detalhe` do `run_log.csv`.
 
-### Detecção de análise morta
+#### Detecção de análise morta
 
-Como o JNose não sinaliza a falha, o script passou a distinguir "trabalhando" de
+Como o JNose não sinaliza falhas desse tipo, o script distingue "trabalhando" de
 "morreu" olhando o processo: a cada 180 s sem conclusão, se a JVM gastou menos de 2 s
 de CPU na janela **e** o `jstack` não mostra nenhum frame `io.github.arieslab`, a
 análise é dada como morta (status `MORTO`). Os dois sinais juntos porque nenhum
 sozinho é seguro — o `jstack` pode falhar, e uma análise legítima parada em I/O
 enganaria o critério de CPU.
 
-O limiar é conservador: a análise bem-sucedida mais lenta de todo o dataset levou
-420 s **de trabalho real**, e uma análise viva queima CPU continuamente. Falha em
-~3 min em vez de 90.
+O limiar é conservador: a análise bem-sucedida mais lenta da coleta levou **230 s** no
+total, e uma análise viva queima CPU continuamente.
 
-### Validação do filtro contra um oráculo
-
-O filtro é heurística de texto (ignora comentários e literais, procura declaração de
-topo). Heurística de texto erra — durante o desenvolvimento errou duas vezes, uma
-delas removendo interfaces legítimas. Por isso existe o `AchaNulos.java`, que usa o
-**mesmo `javaparser-core` de dentro do jar do JNose** e replica a travessia do
-`flowClass` nó a nó, decidindo pelo AST:
-
-```bash
-python tools/validar_filtro.py            # os 12 repositórios que precisaram do filtro
-python tools/validar_filtro.py --todos    # todos os 451 (lento: ~450 clones)
-```
-
-Resultado nos 12: **filtro e oráculo coincidem em todos**. Dos 46 arquivos que o lote
-removeu (`run_log.csv`), 25 causavam mesmo o NPE e 21 não tinham import de JUnit. Esses 21
-o `isTestFile` rejeitaria de qualquer forma, então removê-los foi desnecessário, porém
-inócuo.
-
-Em 11 dos 12 repositórios os arquivos removidos são exatamente os do oráculo mais os sem
-JUnit. No `spring-projects/spring-boot` o lote removeu só os 13 do oráculo, e 11 arquivos
-sem JUnit ficaram no clone. Também são inócuos, pelo mesmo motivo: sem import de JUnit, o
-JNose não os trata como teste.
-
-### Terceiro defeito: o JNose tranca os próprios clones
+#### O JNose tranca os próprios clones
 
 A `ProjetosPage` abre um repositório jgit para cada diretório sob a pasta de projetos,
 e o jgit mantém o `.pack` aberto no Windows — impedindo apagar o clone depois. Por isso
 os health checks do script usam `/config`, nunca `/projects`.
+
+### 4.2 O detector de Unknown Test zera classes inteiras
+
+#### Causa
+
+No jnose-core 0.9.4, o detector de Unknown Test (`UnknownTest.java`, linha 58) chama
+`n.getBody().get()` sem verificar se o método tem corpo. Em método abstrato, o `Optional`
+está vazio e a chamada lança `NoSuchElementException`. O JNose captura a exceção no nível
+da classe e **descarta a análise da classe inteira, de todos os smells**: a classe sai no
+`byclasstest` com todos os contadores zerados e some do `bytestsmells`.
+
+#### Medida
+
+A configuração padrão completa (21 smells) foi rodada nos mesmos 451 repositórios
+(`jnose_batch.py --config-padrao`, em `reports-config-padrao/`). A única diferença entre
+ela e a coleta do estudo é esse detector, e o JNose é determinístico: com a mesma
+entrada, produz a mesma saída. Logo, toda diferença entre as duas é efeito dele.
+
+```bash
+python tools/efeito_unknown_test.py
+```
+
+compara as duas classe a classe, nos 20 smells em comum, e confere que a única diferença
+é o efeito previsto pelo código:
+
+| | |
+|---|---:|
+| Classes de teste | 107.535 |
+| Classes zeradas pelo Unknown Test | **142 (0,13%)**, em 51 repositórios |
+| Ocorrências dos outros 20 smells que a configuração padrão perderia | **5.500 (0,26%)** |
+| Qualquer outra diferença (classes, LOC, métodos, produção, contagens) | nenhuma |
+
+Por isso o Unknown Test fica de fora: ligado, ele não acrescenta um smell — apaga os
+demais em classes com método abstrato. Só o `byclasstest` da configuração padrão é
+versionado; o `bytestsmells` dela (185 MB) não entra na medida.
 
 ---
 
@@ -296,24 +312,29 @@ que envolvem Eager/Lazy Test, ou seria preciso corrigir o `jnose-core` e reproce
 step1-coleta-jnose/
 ├── README.md
 ├── tools/
-│   ├── jnose_batch.py        orquestra a coleta
-│   ├── mapear_repos.py       gera dados/repos_map.csv (--conferir para validar)
-│   ├── validar_filtro.py     compara o filtro com o oráculo
-│   ├── conferir_coleta.py    reapura todo número deste README
-│   └── AchaNulos.java        oráculo: JavaParser + travessia do flowClass
+│   ├── jnose_batch.py          orquestra a coleta
+│   ├── AchaNulos.java          oráculo do filtro: JavaParser + travessia do flowClass
+│   ├── mapear_repos.py         gera dados/repos_map.csv (--conferir para validar)
+│   ├── efeito_unknown_test.py  mede o detector de Unknown Test (seção 4.2)
+│   └── conferir_coleta.py      reapura todo número deste README
 ├── dados/
-│   ├── repos_map.csv         522 repos do MLCQ e seus espelhos
-│   ├── piloto.csv            execução piloto (Shopify/graphql_java_gen)
-│   └── proveniencia/         artefatos do mapeamento
-└── reports/
-    ├── bytestsmells/         451 CSVs .gz — uma linha por ocorrência de smell
-    ├── byclasstest/          451 CSVs — uma linha por classe de teste
-    ├── run_log.csv           481 tentativas: status, contagens, tempo, detalhe
-    ├── logs/                 saída dos passes de execução
-    └── console-jnose/        stdout/stderr do JNose .gz (evidência do NPE)
+│   ├── repos_map.csv           522 repos do MLCQ e seus espelhos
+│   ├── piloto.csv              execução piloto (Shopify/graphql_java_gen)
+│   └── proveniencia/           artefatos do mapeamento
+├── reports/                    a coleta do estudo (20 smells)
+│   ├── bytestsmells/           451 CSVs .gz — uma linha por ocorrência de smell
+│   ├── byclasstest/            451 CSVs — uma linha por classe de teste
+│   ├── run_log.csv             uma linha por tentativa: status, contagens, tempo, detalhe
+│   ├── logs/lote.log           saída do jnose_batch.py
+│   └── console-jnose/          stdout/stderr do JNose, .gz
+└── reports-config-padrao/      a configuração padrão (21 smells), só para a seção 4.2
+    ├── byclasstest/            451 CSVs
+    ├── run_log.csv
+    ├── logs/lote.log
+    └── console-jnose/
 ```
 
-`reports/bytestsmells/` está comprimido (1,4 GB → 167 MB). Para ler:
+`reports/bytestsmells/` está comprimido (1,5 GB → 173 MB). Para ler:
 
 ```bash
 gunzip -k reports/bytestsmells/apache__hadoop.csv.gz
@@ -325,8 +346,8 @@ df = pd.read_csv("reports/bytestsmells/apache__hadoop.csv.gz", sep=";")  # lê .
 
 ### `run_log.csv`
 
-Uma linha por tentativa (481 no total; 451 repositórios × novas tentativas dos que
-falharam antes da correção).
+Uma linha por tentativa, 455 no total; o estado de cada repositório é o da sua última
+linha. O estado final é 451/451 `OK`.
 
 | Coluna | Conteúdo |
 |---|---|
@@ -337,9 +358,6 @@ falharam antes da correção).
 | `linhas_bytestsmells`, `linhas_byclasstest` | linhas exportadas |
 | `segundos` | duração da tentativa |
 | `detalhe` | mensagem de erro, ou quantos arquivos foram removidos |
-
-Os status `MORTO`, `TIMEOUT` e `ERRO` presentes no histórico são de tentativas
-**anteriores** à correção. O estado final é 451/451 `OK`.
 
 ---
 
@@ -356,19 +374,19 @@ python tools/mapear_repos.py --conferir     # deve imprimir "REPRODUZ o CSV em d
 # 3. subir o JNose (o script sobe sozinho se estiver fora do ar)
 java -Xmx2g -Djavax.net.ssl.trustStoreType=WINDOWS-ROOT -jar jnose-2.5.0.jar
 
-# 4. coletar (34,7 h; retomável — pula o que já está OK no run_log)
+# 4. coletar (~4,4 h; retomável — pula o que já está OK no run_log)
 python tools/jnose_batch.py
 
-# 5. conferir o filtro contra o oráculo (clona os 12 repositórios que precisaram do filtro)
-python tools/validar_filtro.py > reports/logs/validar_filtro.txt
+# 5. só para a seção 4.2: a configuração padrão, nos mesmos repositórios
+python tools/jnose_batch.py --config-padrao
 
 # 6. conferir que todo número deste README ainda vale
 python tools/conferir_coleta.py
 ```
 
-O `conferir_coleta.py` lê só o que a coleta deixou em disco (`repos_map.csv`, `run_log.csv`,
-`byclasstest/`, `bytestsmells/` e o log do passo 5) e falha com código 1 se algum número
-deste README divergir.
+O `conferir_coleta.py` lê só o que a coleta deixou em disco (`repos_map.csv`,
+`run_log.csv`, `byclasstest/`, `bytestsmells/` e o `byclasstest/` da configuração padrão)
+e falha com código 1 se algum número deste README divergir.
 
 A coleta é retomável: o `run_log.csv` é lido no início e repositórios já `OK` são
 pulados. Interromper e reexecutar é seguro.

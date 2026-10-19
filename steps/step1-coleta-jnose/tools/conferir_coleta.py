@@ -3,8 +3,8 @@
 Mesmo papel do conferir_dados.py no step 2 e do conferir_resultados.py no step 3: numero
 citado em texto que nao sai de um comando envelhece em silencio, e numero digitado a mao
 nao e reproduzivel. Le so o que a coleta deixou em disco - dados/repos_map.csv,
-reports/run_log.csv, reports/byclasstest/, reports/bytestsmells/ e o log do
-validar_filtro.py -, sem clonar nada e sem subir o JNose.
+reports/run_log.csv, reports/byclasstest/ e reports/bytestsmells/, alem do byclasstest da
+configuracao padrao (reports-config-padrao/) -, sem clonar nada e sem subir o JNose.
 
 Falha com codigo 1 se algum numero divergir.
 
@@ -52,7 +52,7 @@ def execucao():
     log = ler(os.path.join(REPORTS, "run_log.csv"))
     st = collections.Counter(r["status"] for r in log)
     print("  tentativas: %d  %s" % (len(log), dict(st)))
-    exigir(len(log) == 481, "481 tentativas no run_log", len(log))
+    exigir(len(log) == 455, "455 tentativas no run_log", len(log))
 
     final = {}
     for r in log:
@@ -64,15 +64,15 @@ def execucao():
 
     horas = sum(float(r["segundos"] or 0) for r in log) / 3600
     print("  tempo total de execucao: %.1f h" % horas)
-    exigir(abs(horas - 34.7) < 0.05, "tempo total ~34,7 h", "%.1f h" % horas)
+    exigir(abs(horas - 4.4) < 0.05, "tempo total ~4,4 h", "%.1f h" % horas)
     mais_lenta = max(float(r["segundos"]) for r in ok)
     print("  analise bem-sucedida mais lenta: %.0f s" % mais_lenta)
-    exigir(mais_lenta == 420, "analise OK mais lenta: 420 s", mais_lenta)
+    exigir(mais_lenta == 230, "analise OK mais lenta: 230 s", mais_lenta)
 
     occ = sum(int(r["linhas_bytestsmells"] or 0) for r in ok)
     cls = sum(int(r["linhas_byclasstest"] or 0) for r in ok)
     print("  ocorrencias de smell: %d   classes de teste: %d" % (occ, cls))
-    exigir(occ == 2059905, "2.059.905 ocorrencias de test smell", occ)
+    exigir(occ == 2150044, "2.150.044 ocorrencias de test smell", occ)
     exigir(cls == 107535, "107.535 classes de teste", cls)
 
     junit = collections.Counter(r["junit"] for r in ok)
@@ -84,58 +84,31 @@ def execucao():
                  for r in ok if re.match(r"\d+ arquivo", r["detalhe"] or "")}
     print("  arquivos sem classe removidos: %d em %d repositorios"
           % (sum(removidos.values()), len(removidos)))
-    exigir((sum(removidos.values()), len(removidos)) == (46, 12),
-           "46 arquivos removidos em 12 repositorios",
+    exigir((sum(removidos.values()), len(removidos)) == (25, 11),
+           "25 arquivos removidos em 11 repositorios",
            "%d em %d" % (sum(removidos.values()), len(removidos)))
-    return removidos
 
 
-def validacao_do_filtro(removidos_no_lote):
-    print("\nVALIDACAO DO FILTRO CONTRA O ORACULO (secao 4)")
-    caminho = os.path.join(REPORTS, "logs", "validar_filtro.txt")
-    if not os.path.exists(caminho):
-        exigir(False, "log do validar_filtro.py existe",
-               "ausente - rode: python tools/validar_filtro.py > reports/logs/validar_filtro.txt")
-        return
-    linhas = open(caminho, encoding="utf-8", errors="replace").read().splitlines()
-    val = {}
-    for l in linhas:
-        m = re.match(r"^(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\S.*)$", l)
-        if m:
-            val[m.group(1)] = {"oraculo": int(m.group(2)), "filtro": int(m.group(3)),
-                               "sem_junit": int(m.group(4))}
-    coincidem = any("coincidem em todos" in l for l in linhas)
-    exigir(len(val) == 12 and coincidem, "filtro e oraculo coincidem nos 12 repositorios",
-           "%d repositorios, coincidem=%s" % (len(val), coincidem))
-
-    # O que o lote removeu esta no run_log; o que o validador chama de oraculo e o que
-    # causaria o NPE. A diferenca, por repositorio, e o que foi removido sem precisar.
-    oraculo = sum(v["oraculo"] for v in val.values())
-    total = sum(removidos_no_lote.get(r, 0) for r in val)
-    sem_junit_removidos = total - oraculo
-    fecha = [r for r, v in val.items()
-             if removidos_no_lote.get(r) == v["oraculo"] + v["sem_junit"]]
-    so_oraculo = [r for r, v in val.items()
-                  if r not in fecha and removidos_no_lote.get(r) == v["oraculo"]]
-    print("  removidos pelo lote: %d = %d que causavam o NPE + %d sem import de JUnit"
-          % (total, oraculo, sem_junit_removidos))
-    print("  repositorios em que removidos = oraculo + sem_junit: %d" % len(fecha))
-    for r in so_oraculo:
-        print("  %s: removidos so os %d do oraculo; %d sem JUnit ficaram no clone"
-              % (r, val[r]["oraculo"], val[r]["sem_junit"]))
-    exigir((total, oraculo, sem_junit_removidos) == (46, 25, 21),
-           "dos 46 removidos, 25 causavam o NPE e 21 nao tinham JUnit",
-           "%d = %d + %d" % (total, oraculo, sem_junit_removidos))
-    exigir(len(fecha) == 11 and so_oraculo == ["spring-projects/spring-boot"]
-           and val["spring-projects/spring-boot"]["sem_junit"] == 11,
-           "11 repositorios fecham; no spring-boot ficaram 11 sem JUnit",
-           "%d fecham, so oraculo: %s" % (len(fecha), ", ".join(so_oraculo)))
+def unknown_test():
+    print("\nDETECTOR DE UNKNOWN TEST (secao 4)")
+    import efeito_unknown_test as eu
+    tot, afetados, problemas = eu.medir()
+    print("  classes zeradas: %d em %d repositorios, %d ocorrencias perdidas"
+          % (tot["zeradas"], len(afetados), tot["ocorrencias_apagadas"]))
+    exigir(not problemas, "config padrao difere do estudo so pelo Unknown Test",
+           "%d outra(s) divergencia(s)" % len(problemas))
+    exigir((tot["zeradas"], len(afetados), tot["ocorrencias_apagadas"]) == (142, 51, 5500),
+           "142 classes zeradas em 51 repositorios, 5.500 ocorrencias",
+           "%d em %d, %d" % (tot["zeradas"], len(afetados), tot["ocorrencias_apagadas"]))
 
 
 def classe_aninhada():
     print("\nLIMITACAO: CLASSE ANINHADA (secao 5)")
     linhas = div = 0
     repos_div = set()
+    # por grupo (nome bate / diverge): linhas, production vazio e soma de cada smell
+    smells = ["Eager Test", "Lazy Test", "General Fixture"]
+    grupo = {g: collections.Counter() for g in ("bate", "diverge")}
     for caminho in sorted(glob.glob(os.path.join(REPORTS, "byclasstest", "*.csv"))):
         with open(caminho, encoding="utf-8", errors="replace") as fh:
             for r in csv.DictReader(fh, delimiter=";"):
@@ -143,14 +116,34 @@ def classe_aninhada():
                 path = (r.get("PathFile") or "").strip()
                 base = re.split(r"[\\/]", path)[-1]
                 base = base[:-5] if base.endswith(".java") else base
+                g = "bate"
                 if (r.get("TestFileName") or "").strip() != base:
                     div += 1
                     repos_div.add(r["App"])
+                    g = "diverge"
+                grupo[g]["linhas"] += 1
+                grupo[g]["sem_producao"] += not (r.get("ProductionFileName") or "").strip()
+                for s in smells:
+                    grupo[g][s] += int(r.get(s) or 0)
     print("  linhas com nome divergente: %d de %d (%.1f%%), em %d repositorios"
           % (div, linhas, 100 * div / linhas, len(repos_div)))
     exigir((div, linhas, len(repos_div)) == (6842, 107535, 320),
            "6.842 de 107.535 linhas, em 320 repositorios",
            "%d de %d, %d repos" % (div, linhas, len(repos_div)))
+
+    tabela = {}
+    for g, c in grupo.items():
+        tabela[g] = [c["linhas"], round(100 * c["sem_producao"] / c["linhas"], 1)] + \
+                    [round(1000 * c[s] / c["linhas"], 1) for s in smells]
+        print("  %-8s linhas=%d  production vazio=%.1f%%  por 1k: Eager=%.1f Lazy=%.1f GF=%.1f"
+              % tuple([g] + tabela[g]))
+    esperado = {"bate": [100693, 50.9, 1138.9, 1189.0, 280.1],
+                "diverge": [6842, 93.8, 40.8, 52.3, 322.3]}
+    exigir(tabela == esperado, "tabela da secao 5 (production vazio, smells por 1k)",
+           "ok" if tabela == esperado else tabela)
+    queda = [round(tabela["bate"][i] / tabela["diverge"][i]) for i in (2, 3)]
+    print("  queda na linha aninhada: Eager %dx, Lazy %dx" % tuple(queda))
+    exigir(queda == [28, 23], "Eager Test cai 28x e Lazy Test 23x", queda)
 
 
 def tamanho_dos_reports():
@@ -166,8 +159,8 @@ def tamanho_dos_reports():
     print("  bytestsmells: %d arquivos, %.1f GB descomprimido, %.0f MB comprimido"
           % (len(gz), original / 1e9, comprimido / 1e6))
     exigir(len(gz) == 451, "451 CSVs comprimidos em bytestsmells", len(gz))
-    exigir(round(original / 1e9, 1) == 1.4 and round(comprimido / 1e6) == 167,
-           "1,4 GB descomprimido, 167 MB comprimido",
+    exigir(round(original / 1e9, 1) == 1.5 and round(comprimido / 1e6) == 173,
+           "1,5 GB descomprimido, 173 MB comprimido",
            "%.1f GB, %.0f MB" % (original / 1e9, comprimido / 1e6))
 
 
@@ -177,8 +170,8 @@ def main():
     except Exception:
         pass
     repositorios()
-    removidos = execucao()
-    validacao_do_filtro(removidos)
+    execucao()
+    unknown_test()
     classe_aninhada()
     tamanho_dos_reports()
     print()

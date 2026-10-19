@@ -1,0 +1,1518 @@
+[21:05:39] 451 repos elegiveis, 0 ja concluidos, processando 451
+[21:05:39] config aplicada: 20 smells ligados
+[21:05:39] (1/451) Esri/arcgis-runtime-samples-android -> test-smells-arcgis-runtime-samples-android
+[21:06:31]   bytestsmells: 0 linhas (100%)
+[21:06:42]   byclasstest: 0 linhas (100%)
+[21:06:43] (2/451) Esri/arcgis-runtime-samples-java -> test-smells-arcgis-runtime-samples-java
+[21:07:27]   bytestsmells: 0 linhas (100%)
+[21:07:38]   byclasstest: 0 linhas (100%)
+[21:07:38] (3/451) Esri/defense-solutions-proofs-of-concept -> test-smells-defense-solutions-proofs-of-concept
+[21:09:35]   bytestsmells: 76 linhas (100%)
+[21:09:46]   byclasstest: 15 linhas (100%)
+[21:09:47] (4/451) Esri/geometry-api-java -> test-smells-geometry-api-java
+[21:10:02]   bytestsmells: 5720 linhas (100%)
+[21:10:14]   byclasstest: 56 linhas (100%)
+[21:10:14] (5/451) Esri/geoportal-server-harvester -> test-smells-geoportal-server-harvester
+[21:10:27]   bytestsmells: 26 linhas (100%)
+[21:10:38]   byclasstest: 6 linhas (100%)
+[21:10:38] (6/451) Esri/maps-app-android -> test-smells-maps-app-android
+[21:10:54]   bytestsmells: 23 linhas (100%)
+[21:11:05]   byclasstest: 1 linhas (100%)
+[21:11:05] (7/451) Esri/spatial-framework-for-hadoop -> test-smells-spatial-framework-for-hadoop
+[21:11:18]   bytestsmells: 396 linhas (100%)
+[21:11:29]   byclasstest: 19 linhas (100%)
+[21:11:29] (8/451) IBM/ibm-cos-sdk-java -> test-smells-ibm-cos-sdk-java
+[21:11:44]   bytestsmells: 2599 linhas (100%)
+[21:11:55]   byclasstest: 179 linhas (100%)
+[21:11:55] (9/451) IBM/janusgraph-utils -> test-smells-janusgraph-utils
+[21:12:07]   bytestsmells: 0 linhas (100%)
+[21:12:18]   byclasstest: 0 linhas (100%)
+[21:12:18] (10/451) IBM/og -> test-smells-og
+[21:12:31]   bytestsmells: 829 linhas (100%)
+[21:12:42]   byclasstest: 57 linhas (100%)
+[21:12:42] (11/451) Microsoft/ApplicationInsights-Java -> test-smells-ApplicationInsights-Java
+[21:12:57]   bytestsmells: 2099 linhas (100%)
+[21:13:08]   byclasstest: 164 linhas (100%)
+[21:13:08] (12/451) Microsoft/azure-chat-for-java -> test-smells-azure-chat-for-java
+[21:13:21]   bytestsmells: 0 linhas (100%)
+[21:13:32]   byclasstest: 0 linhas (100%)
+[21:13:32] (13/451) Microsoft/azure-maven-plugins -> test-smells-azure-maven-plugins
+[21:13:45]   bytestsmells: 581 linhas (100%)
+[21:13:56]   byclasstest: 35 linhas (100%)
+[21:13:56] (14/451) Microsoft/azure-tools-for-java -> test-smells-azure-tools-for-java
+[21:14:15]   bytestsmells: 222 linhas (100%)
+[21:14:26]   byclasstest: 23 linhas (100%)
+[21:14:27] (15/451) Microsoft/java-debug -> test-smells-java-debug
+[21:14:39]   bytestsmells: 99 linhas (100%)
+[21:14:50]   byclasstest: 14 linhas (100%)
+[21:14:50] (16/451) Microsoft/malmo -> test-smells-malmo
+[21:14:50]   reiniciando o JNose
+[21:14:56]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-211456.{out,err}
+[21:15:04] config aplicada: 20 smells ligados
+[21:15:18]   bytestsmells: 0 linhas (100%)
+[21:15:29]   byclasstest: 0 linhas (100%)
+[21:15:29] (17/451) Microsoft/mssql-jdbc -> test-smells-mssql-jdbc
+[21:15:45]   bytestsmells: 2403 linhas (100%)
+[21:15:57]   byclasstest: 82 linhas (100%)
+[21:15:57] (18/451) Microsoft/pai -> test-smells-pai
+[21:16:13]   bytestsmells: 380 linhas (100%)
+[21:16:24]   byclasstest: 10 linhas (100%)
+[21:16:25] (19/451) Microsoft/project-rome -> test-smells-project-rome
+[21:17:09]   bytestsmells: 4 linhas (100%)
+[21:17:20]   byclasstest: 2 linhas (100%)
+[21:17:20] (20/451) Microsoft/team-explorer-everywhere -> test-smells-team-explorer-everywhere
+[21:17:49]   bytestsmells: 3223 linhas (100%)
+[21:18:00]   byclasstest: 85 linhas (100%)
+[21:18:02] (21/451) Microsoft/vso-httpclient-java -> test-smells-vso-httpclient-java
+[21:18:16]   bytestsmells: 76 linhas (100%)
+[21:18:27]   byclasstest: 9 linhas (100%)
+[21:18:27] (22/451) SAP/SapMachine -> test-smells-SapMachine
+[21:21:08]   bytestsmells: 29052 linhas (100%)
+[21:21:29]   byclasstest: 1381 linhas (100%)
+[21:21:47] (23/451) SAP/cf-java-client-sap -> test-smells-cf-java-client-sap
+[21:22:14]   bytestsmells: 632 linhas (100%)
+[21:22:25]   byclasstest: 16 linhas (100%)
+[21:22:25] (24/451) SAP/cloud-espm-v2 -> test-smells-cloud-espm-v2
+[21:22:40]   bytestsmells: 87 linhas (100%)
+[21:22:51]   byclasstest: 12 linhas (100%)
+[21:22:51] (25/451) SAP/iot-starterkit -> test-smells-cloud-platform-iot-starterkit
+[21:23:11]   bytestsmells: 0 linhas (100%)
+[21:23:21]   byclasstest: 2 linhas (100%)
+[21:23:22] (26/451) SAP/olingo-jpa-processor-v4 -> test-smells-olingo-jpa-processor-v4
+[21:23:37]   bytestsmells: 1799 linhas (100%)
+[21:23:48]   byclasstest: 77 linhas (100%)
+[21:23:49] (27/451) Shopify/graphql_java_gen -> test-smells-graphql_java_gen
+[21:24:02]   bytestsmells: 15 linhas (100%)
+[21:24:13]   byclasstest: 3 linhas (100%)
+[21:24:14] (28/451) Shopify/mobile-buy-sdk-android -> test-smells-mobile-buy-sdk-android
+[21:24:26]   bytestsmells: 1 linhas (100%)
+[21:24:37]   byclasstest: 1 linhas (100%)
+[21:24:37] (29/451) Tencent/GT -> test-smells-GT
+[21:24:55]   bytestsmells: 12 linhas (100%)
+[21:25:06]   byclasstest: 6 linhas (100%)
+[21:25:07] (30/451) Tencent/RapidView -> test-smells-RapidView
+[21:25:22]   bytestsmells: 2345 linhas (100%)
+[21:25:33]   byclasstest: 27 linhas (100%)
+[21:25:33] (31/451) Tencent/soter -> test-smells-soter
+[21:25:33]   reiniciando o JNose
+[21:25:39]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-212539.{out,err}
+[21:25:47] config aplicada: 20 smells ligados
+[21:26:02]   bytestsmells: 0 linhas (100%)
+[21:26:13]   byclasstest: 0 linhas (100%)
+[21:26:13] (32/451) Tencent/tinker -> test-smells-tinker
+[21:26:26]   bytestsmells: 6 linhas (100%)
+[21:26:37]   byclasstest: 3 linhas (100%)
+[21:26:37] (33/451) alexa/alexa-skills-kit-sdk-for-java -> test-smells-alexa-skills-kit-sdk-for-java
+[21:26:50]   bytestsmells: 411 linhas (100%)
+[21:27:01]   byclasstest: 33 linhas (100%)
+[21:27:02] (34/451) alibaba/ARouter -> test-smells-ARouter
+[21:27:25]   bytestsmells: 0 linhas (100%)
+[21:27:36]   byclasstest: 0 linhas (100%)
+[21:27:36] (35/451) alibaba/atlas -> test-smells-atlas
+[21:28:07]   bytestsmells: 81 linhas (100%)
+[21:28:18]   byclasstest: 32 linhas (100%)
+[21:28:20] (36/451) alibaba/canal -> test-smell-canal
+[21:28:35]   bytestsmells: 839 linhas (100%)
+[21:28:46]   byclasstest: 72 linhas (100%)
+[21:28:46] (37/451) alibaba/cobar -> test-smells-cobar
+[21:29:16]   bytestsmells: 3719 linhas (100%)
+[21:29:27]   byclasstest: 54 linhas (100%)
+[21:29:28] (38/451) alibaba/druid -> test-smells-alibaba-druid
+[21:30:03]   bytestsmells: 15696 linhas (100%)
+[21:30:17]   byclasstest: 1726 linhas (100%)
+[21:30:18] (39/451) alibaba/jstorm -> test-smells-jstorm
+[21:30:40]   bytestsmells: 331 linhas (100%)
+[21:30:52]   byclasstest: 47 linhas (100%)
+[21:30:52] (40/451) alibaba/jvm-sandbox -> test-smells-jvm-sandbox
+[21:31:05]   bytestsmells: 227 linhas (100%)
+[21:31:16]   byclasstest: 11 linhas (100%)
+[21:31:16] (41/451) alibaba/otter -> test-smells-otter
+[21:31:48]   bytestsmells: 511 linhas (100%)
+[21:31:59]   byclasstest: 75 linhas (100%)
+[21:32:00] (42/451) amzn/ion-java -> test-smells-ion-java
+[21:32:14]   bytestsmells: 3176 linhas (100%)
+[21:32:25]   byclasstest: 105 linhas (100%)
+[21:32:25] (43/451) apache/accumulo -> test-smells-accumulo
+[21:32:48]   bytestsmells: 8372 linhas (100%)
+[21:33:00]   byclasstest: 378 linhas (100%)
+[21:33:01] (44/451) apache/accumulo-testing -> test-smells-accumulo-testing
+[21:33:13]   bytestsmells: 2 linhas (100%)
+[21:33:24]   byclasstest: 1 linhas (100%)
+[21:33:24] (45/451) apache/activemq -> test-smells-activemq
+[21:33:53]   bytestsmells: 13080 linhas (100%)
+[21:34:06]   byclasstest: 1055 linhas (100%)
+[21:34:08] (46/451) apache/activemq-apollo -> test-smells-activemq-apollo
+[21:34:08]   reiniciando o JNose
+[21:34:13]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-213413.{out,err}
+[21:34:22] config aplicada: 20 smells ligados
+[21:34:39]   bytestsmells: 437 linhas (100%)
+[21:34:50]   byclasstest: 28 linhas (100%)
+[21:34:50] (47/451) apache/activemq-artemis -> test-smells-artemis
+[21:35:36]   bytestsmells: 34340 linhas (100%)
+[21:35:51]   byclasstest: 1327 linhas (100%)
+[21:35:53] (48/451) apache/airavata -> test-smells-airavata
+[21:36:14]   bytestsmells: 431 linhas (100%)
+[21:36:25]   byclasstest: 40 linhas (100%)
+[21:36:26] (49/451) apache/ambari -> test-smells-ambari
+[21:37:24]   bytestsmells: 26016 linhas (100%)
+[21:37:35]   byclasstest: 825 linhas (100%)
+[21:37:38] (50/451) apache/ant -> test-smells-ant
+[21:37:57]   bytestsmells: 3759 linhas (100%)
+[21:38:09]   byclasstest: 298 linhas (100%)
+[21:38:09] (51/451) apache/ant-ivy -> test-smells-ant-ivy
+[21:38:29]   bytestsmells: 6230 linhas (100%)
+[21:38:40]   byclasstest: 135 linhas (100%)
+[21:38:40] (52/451) apache/ant-ivyde -> test-smells-ant-ivyde
+[21:38:57]   bytestsmells: 28 linhas (100%)
+[21:39:08]   byclasstest: 3 linhas (100%)
+[21:39:09] (53/451) apache/apex-core -> test-smells-apex-core
+[21:39:24]   bytestsmells: 2744 linhas (100%)
+[21:39:35]   byclasstest: 95 linhas (100%)
+[21:39:35] (54/451) apache/apex-malhar -> test-smells-apex-malhar
+[21:39:56]   bytestsmells: 6680 linhas (100%)
+[21:40:07]   byclasstest: 564 linhas (100%)
+[21:40:08] (55/451) apache/archiva -> test-smells-archiva
+[21:40:35]   bytestsmells: 2961 linhas (100%)
+[21:40:47]   byclasstest: 175 linhas (100%)
+[21:40:48] (56/451) apache/aries -> test-smells-aries
+[21:41:12]   bytestsmells: 7085 linhas (100%)
+[21:41:24]   byclasstest: 329 linhas (100%)
+[21:41:26] (57/451) apache/aries-jax-rs-whiteboard -> test-smells-aries-jax-rs-whiteboard
+[21:41:38]   bytestsmells: 608 linhas (100%)
+[21:41:49]   byclasstest: 12 linhas (100%)
+[21:41:49] (58/451) apache/aries-jpa -> test-smells-aries-jpa
+[21:42:02]   bytestsmells: 83 linhas (100%)
+[21:42:12]   byclasstest: 21 linhas (100%)
+[21:42:13] (59/451) apache/aries-rsa -> test-smells-aries-rsa
+[21:42:25]   bytestsmells: 643 linhas (100%)
+[21:42:36]   byclasstest: 51 linhas (100%)
+[21:42:37] (60/451) apache/asterixdb -> test-smells-asterixdb
+[21:43:44]   bytestsmells: 3517 linhas (100%)
+[21:43:55]   byclasstest: 310 linhas (100%)
+[21:44:03] (61/451) apache/atlas -> test-smells-apache-atlas
+[21:44:03]   reiniciando o JNose
+[21:44:09]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-214409.{out,err}
+[21:44:18] config aplicada: 20 smells ligados
+[21:44:40]   bytestsmells: 2298 linhas (100%)
+[21:44:52]   byclasstest: 138 linhas (100%)
+[21:44:52] (62/451) apache/attic-polygene-java -> test-smells-polygene-java
+[21:45:14]   bytestsmells: 2325 linhas (100%)
+[21:45:25]   byclasstest: 371 linhas (100%)
+[21:45:27] (63/451) apache/aurora -> test-smells-aurora
+[21:45:46]   bytestsmells: 2499 linhas (100%)
+[21:45:58]   byclasstest: 196 linhas (100%)
+[21:45:58] (64/451) apache/avro -> test-smells-avro
+[21:46:15]   bytestsmells: 3152 linhas (100%)
+[21:46:26]   byclasstest: 180 linhas (100%)
+[21:46:27] (65/451) apache/bahir-flink -> test-smells-bahir-flink
+[21:46:28]   2 candidato(s) a teste sem classe removido(s): flink-connector-flume\src\test\java\org\apache\flink\streaming\connectors\flume\DockerTest.java, flink-connector-kudu\src\test\java\org\apache\flink\streaming\connectors\kudu\DockerTest.java
+[21:46:39]   bytestsmells: 133 linhas (100%)
+[21:46:50]   byclasstest: 23 linhas (100%)
+[21:46:50] (66/451) apache/beam -> test-smells-beam
+[21:47:34]   bytestsmells: 17883 linhas (100%)
+[21:47:48]   byclasstest: 1035 linhas (100%)
+[21:47:49] (67/451) apache/bigtop -> test-smells-bigtop
+[21:48:09]   bytestsmells: 502 linhas (100%)
+[21:48:20]   byclasstest: 61 linhas (100%)
+[21:48:20] (68/451) apache/bookkeeper -> test-smells-bookkeeper
+[21:48:45]   bytestsmells: 12176 linhas (100%)
+[21:48:57]   byclasstest: 471 linhas (100%)
+[21:48:58] (69/451) apache/brooklyn-library -> test-smells-brooklyn-library
+[21:49:13]   bytestsmells: 790 linhas (100%)
+[21:49:24]   byclasstest: 160 linhas (100%)
+[21:49:25] (70/451) apache/brooklyn-server -> test-smells-brooklyn-server
+[21:49:49]   bytestsmells: 11615 linhas (100%)
+[21:50:02]   byclasstest: 828 linhas (100%)
+[21:50:03] (71/451) apache/bval -> test-smells-bval
+[21:50:16]   bytestsmells: 581 linhas (100%)
+[21:50:27]   byclasstest: 46 linhas (100%)
+[21:50:27] (72/451) apache/calcite -> test-smells-calcite
+[21:50:48]   bytestsmells: 6694 linhas (100%)
+[21:51:00]   byclasstest: 159 linhas (100%)
+[21:51:01] (73/451) apache/camel -> test-smells-camel
+[21:52:15]   bytestsmells: 37567 linhas (100%)
+[21:52:34]   byclasstest: 8113 linhas (100%)
+[21:52:42] (74/451) apache/cassandra -> test-smells-cassandra
+[21:53:25]   bytestsmells: 24917 linhas (100%)
+[21:53:37]   byclasstest: 597 linhas (100%)
+[21:53:38] (75/451) apache/cayenne -> test-smells-cayenne
+[21:53:59]   bytestsmells: 7301 linhas (100%)
+[21:54:11]   byclasstest: 401 linhas (100%)
+[21:54:12] (76/451) apache/chemistry-opencmis -> test-smells-chemistry-opencmis
+[21:54:12]   reiniciando o JNose
+[21:54:18]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-215418.{out,err}
+[21:54:26] config aplicada: 20 smells ligados
+[21:54:45]   bytestsmells: 3306 linhas (100%)
+[21:54:57]   byclasstest: 75 linhas (100%)
+[21:54:57] (77/451) apache/chukwa -> test-smells-chukwa
+[21:55:20]   bytestsmells: 1180 linhas (100%)
+[21:55:32]   byclasstest: 90 linhas (100%)
+[21:55:32] (78/451) apache/clerezza -> test-smells-clerezza
+[21:55:45]   bytestsmells: 552 linhas (100%)
+[21:55:56]   byclasstest: 24 linhas (100%)
+[21:55:57] (79/451) apache/cloudstack -> test-smells-cloudstack
+[21:56:33]   bytestsmells: 5317 linhas (100%)
+[21:56:45]   byclasstest: 461 linhas (100%)
+[21:56:47] (80/451) apache/commons-beanutils -> test-smells-commons-beanutils
+[21:57:02]   bytestsmells: 2457 linhas (100%)
+[21:57:13]   byclasstest: 87 linhas (100%)
+[21:57:13] (81/451) apache/commons-bsf -> test-smells-commons-bsf
+[21:57:28]   bytestsmells: 76 linhas (100%)
+[21:57:39]   byclasstest: 4 linhas (100%)
+[21:57:39] (82/451) apache/commons-chain -> test-smells-commons-chain
+[21:57:51]   bytestsmells: 649 linhas (100%)
+[21:58:02]   byclasstest: 27 linhas (100%)
+[21:58:02] (83/451) apache/commons-collections -> test-smells-commons-collections
+[21:58:19]   bytestsmells: 6375 linhas (100%)
+[21:58:30]   byclasstest: 116 linhas (100%)
+[21:58:30] (84/451) apache/commons-compress -> test-smells-commons-compress
+[21:58:49]   bytestsmells: 3694 linhas (100%)
+[21:59:00]   byclasstest: 138 linhas (100%)
+[21:59:00] (85/451) apache/commons-configuration -> test-smells-commons-configuration
+[21:59:16]   bytestsmells: 3950 linhas (100%)
+[21:59:27]   byclasstest: 165 linhas (100%)
+[21:59:28] (86/451) apache/commons-crypto -> test-smells-commons-crypto
+[21:59:40]   bytestsmells: 124 linhas (100%)
+[21:59:51]   byclasstest: 21 linhas (100%)
+[21:59:51] (87/451) apache/commons-dbcp -> test-smells-commons-dbcp
+[22:00:04]   bytestsmells: 2674 linhas (100%)
+[22:00:15]   byclasstest: 46 linhas (100%)
+[22:00:16] (88/451) apache/commons-dbutils -> test-smells-commons-dbutils
+[22:00:28]   bytestsmells: 200 linhas (100%)
+[22:00:39]   byclasstest: 25 linhas (100%)
+[22:00:39] (89/451) apache/commons-digester -> test-smells-commons-digester
+[22:00:52]   bytestsmells: 828 linhas (100%)
+[22:01:03]   byclasstest: 55 linhas (100%)
+[22:01:03] (90/451) apache/commons-functor -> test-smells-commons-functor
+[22:01:16]   bytestsmells: 2323 linhas (100%)
+[22:01:28]   byclasstest: 166 linhas (100%)
+[22:01:28] (91/451) apache/commons-imaging -> test-smells-commons-imaging
+[22:01:28]   reiniciando o JNose
+[22:01:33]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-220133.{out,err}
+[22:01:42] config aplicada: 20 smells ligados
+[22:02:24]   bytestsmells: 683 linhas (100%)
+[22:02:36]   byclasstest: 116 linhas (100%)
+[22:02:36] (92/451) apache/commons-io -> test-smells-commons-io
+[22:02:52]   bytestsmells: 4885 linhas (100%)
+[22:03:04]   byclasstest: 104 linhas (100%)
+[22:03:04] (93/451) apache/commons-jcs -> test-smells-commons-jcs
+[22:03:19]   bytestsmells: 1002 linhas (100%)
+[22:03:30]   byclasstest: 131 linhas (100%)
+[22:03:30] (94/451) apache/commons-jelly -> test-smells-commons-jelly
+[22:03:45]   bytestsmells: 346 linhas (100%)
+[22:03:56]   byclasstest: 70 linhas (100%)
+[22:03:56] (95/451) apache/commons-jexl -> test-smells-commons-jexl
+[22:04:10]   bytestsmells: 2028 linhas (100%)
+[22:04:21]   byclasstest: 49 linhas (100%)
+[22:04:21] (96/451) apache/commons-jxpath -> test-smells-commons-jxpath
+[22:04:34]   bytestsmells: 71 linhas (100%)
+[22:04:45]   byclasstest: 13 linhas (100%)
+[22:04:45] (97/451) apache/commons-math -> test-smells-commons-math
+[22:05:07]   bytestsmells: 16333 linhas (100%)
+[22:05:20]   byclasstest: 404 linhas (100%)
+[22:05:20] (98/451) apache/commons-net -> test-smells-commons-net
+[22:05:33]   bytestsmells: 954 linhas (100%)
+[22:05:44]   byclasstest: 34 linhas (100%)
+[22:05:45] (99/451) apache/commons-numbers -> test-smells-commons-numbers
+[22:05:59]   bytestsmells: 2522 linhas (100%)
+[22:06:10]   byclasstest: 46 linhas (100%)
+[22:06:10] (100/451) apache/commons-ognl -> test-smells-commons-ognl
+[22:06:22]   bytestsmells: 282 linhas (100%)
+[22:06:33]   byclasstest: 64 linhas (100%)
+[22:06:33] (101/451) apache/commons-pool -> test-smells-commons-pool
+[22:06:47]   bytestsmells: 2114 linhas (100%)
+[22:06:58]   byclasstest: 23 linhas (100%)
+[22:06:58] (102/451) apache/commons-proxy -> test-smells-commons-proxy
+[22:07:10]   bytestsmells: 289 linhas (100%)
+[22:07:21]   byclasstest: 27 linhas (100%)
+[22:07:21] (103/451) apache/commons-text -> test-smells-commons-text
+[22:07:36]   bytestsmells: 6183 linhas (100%)
+[22:07:47]   byclasstest: 79 linhas (100%)
+[22:07:47] (104/451) apache/commons-validator -> test-smells-commons-validator
+[22:08:00]   bytestsmells: 919 linhas (100%)
+[22:08:11]   byclasstest: 31 linhas (100%)
+[22:08:11] (105/451) apache/commons-vfs -> test-smells-commons-vfs
+[22:08:24]   bytestsmells: 550 linhas (100%)
+[22:08:35]   byclasstest: 81 linhas (100%)
+[22:08:36] (106/451) apache/creadur-rat -> test-smells-creadur-rat
+[22:08:36]   reiniciando o JNose
+[22:08:41]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-220841.{out,err}
+[22:08:49] config aplicada: 20 smells ligados
+[22:09:03]   bytestsmells: 524 linhas (100%)
+[22:09:15]   byclasstest: 45 linhas (100%)
+[22:09:15] (107/451) apache/crunch -> test-smells-crunch
+[22:09:29]   bytestsmells: 1013 linhas (100%)
+[22:09:40]   byclasstest: 100 linhas (100%)
+[22:09:41] (108/451) apache/curator -> test-smells-curator
+[22:09:56]   bytestsmells: 2948 linhas (100%)
+[22:10:07]   byclasstest: 110 linhas (100%)
+[22:10:07] (109/451) apache/cxf -> test-smells-cxf
+[22:10:52]   bytestsmells: 25105 linhas (100%)
+[22:11:03]   byclasstest: 1414 linhas (100%)
+[22:11:07] (110/451) apache/cxf-fediz -> test-smells-cxf-fediz
+[22:11:21]   bytestsmells: 866 linhas (100%)
+[22:11:32]   byclasstest: 63 linhas (100%)
+[22:11:32] (111/451) apache/datafu -> test-smells-datafu
+[22:11:45]   bytestsmells: 909 linhas (100%)
+[22:11:56]   byclasstest: 50 linhas (100%)
+[22:11:56] (112/451) apache/deltaspike -> test-smells-deltaspike
+[22:12:13]   bytestsmells: 4469 linhas (100%)
+[22:12:24]   byclasstest: 292 linhas (100%)
+[22:12:25] (113/451) apache/derby -> test-smells-derby
+[22:12:57]   bytestsmells: 14693 linhas (100%)
+[22:13:11]   byclasstest: 479 linhas (100%)
+[22:13:11] (114/451) apache/directory-fortress-commander -> test-smells-directory-fortress-commander
+[22:13:24]   bytestsmells: 0 linhas (100%)
+[22:13:35]   byclasstest: 0 linhas (100%)
+[22:13:35] (115/451) apache/directory-fortress-core -> test-smells-directory-fortress-core
+[22:13:49]   bytestsmells: 127 linhas (100%)
+[22:14:00]   byclasstest: 20 linhas (100%)
+[22:14:00] (116/451) apache/directory-kerby -> test-smells-directory-kerby
+[22:14:14]   bytestsmells: 889 linhas (100%)
+[22:14:25]   byclasstest: 125 linhas (100%)
+[22:14:26] (117/451) apache/directory-ldap-api -> test-smells-directory-ldap-api
+[22:14:49]   bytestsmells: 18684 linhas (100%)
+[22:15:01]   byclasstest: 341 linhas (100%)
+[22:15:02] (118/451) apache/directory-server -> test-smells-directory-server
+[22:15:25]   bytestsmells: 10588 linhas (100%)
+[22:15:37]   byclasstest: 241 linhas (100%)
+[22:15:37] (119/451) apache/directory-studio -> test-smells-directory-studio
+[22:15:58]   bytestsmells: 3473 linhas (100%)
+[22:16:09]   byclasstest: 54 linhas (100%)
+[22:16:10] (120/451) apache/drill -> test-smells-drill
+[22:16:38]   bytestsmells: 13534 linhas (100%)
+[22:16:50]   byclasstest: 571 linhas (100%)
+[22:16:51] (121/451) apache/eagle -> test-smells-eagle
+[22:16:51]   reiniciando o JNose
+[22:16:56]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-221656.{out,err}
+[22:17:05] config aplicada: 20 smells ligados
+[22:17:16]   1 candidato(s) a teste sem classe removido(s): eagle-security\eagle-security-hdfs-auditlog\src\test\java\org\apache\eagle\security\dataproc\TestOuterDataJoiner.java
+[22:17:33]   bytestsmells: 4843 linhas (100%)
+[22:17:45]   byclasstest: 330 linhas (100%)
+[22:17:46] (122/451) apache/empire-db -> test-smells-empire-db
+[22:18:00]   bytestsmells: 557 linhas (100%)
+[22:18:11]   byclasstest: 26 linhas (100%)
+[22:18:11] (123/451) apache/falcon -> test-smells-falcon
+[22:18:29]   bytestsmells: 4293 linhas (100%)
+[22:18:41]   byclasstest: 215 linhas (100%)
+[22:18:41] (124/451) apache/fineract -> test-smells-fineract
+[22:19:01]   bytestsmells: 2027 linhas (100%)
+[22:19:12]   byclasstest: 81 linhas (100%)
+[22:19:13] (125/451) apache/fineract-cn-customer -> test-smells-fineract-cn-customer
+[22:19:25]   bytestsmells: 193 linhas (100%)
+[22:19:36]   byclasstest: 10 linhas (100%)
+[22:19:36] (126/451) apache/fineract-cn-portfolio -> test-smells-fineract-cn-portfolio
+[22:19:49]   bytestsmells: 342 linhas (100%)
+[22:20:00]   byclasstest: 52 linhas (100%)
+[22:20:00] (127/451) apache/flink -> test-smells-flink
+[22:20:48]   bytestsmells: 40296 linhas (100%)
+[22:20:59]   byclasstest: 1391 linhas (100%)
+[22:21:01] (128/451) apache/flume -> test-smells-logging-flume
+[22:21:18]   bytestsmells: 5266 linhas (100%)
+[22:21:29]   byclasstest: 214 linhas (100%)
+[22:21:30] (129/451) apache/fluo -> test-smells-accumulo-fluo
+[22:21:42]   bytestsmells: 1267 linhas (100%)
+[22:21:53]   byclasstest: 35 linhas (100%)
+[22:21:53] (130/451) apache/freemarker -> test-smells-freemarker
+[22:22:09]   bytestsmells: 4881 linhas (100%)
+[22:22:21]   byclasstest: 129 linhas (100%)
+[22:22:21] (131/451) apache/geode -> test-smells-geode
+[22:23:20]   bytestsmells: 46081 linhas (100%)
+[22:23:33]   byclasstest: 2533 linhas (100%)
+[22:23:35] (132/451) apache/giraph -> test-smells-giraph
+[22:23:51]   bytestsmells: 2094 linhas (100%)
+[22:24:02]   byclasstest: 141 linhas (100%)
+[22:24:02] (133/451) apache/gora -> test-smells-gora
+[22:24:16]   bytestsmells: 623 linhas (100%)
+[22:24:27]   byclasstest: 54 linhas (100%)
+[22:24:27] (134/451) apache/griffin -> test-smells-griffin
+[22:24:41]   bytestsmells: 112 linhas (100%)
+[22:24:52]   byclasstest: 30 linhas (100%)
+[22:24:52] (135/451) apache/groovy -> test-smells-groovy
+[22:25:10]   bytestsmells: 756 linhas (100%)
+[22:25:21]   byclasstest: 60 linhas (100%)
+[22:25:22] (136/451) apache/hadoop -> test-smells-hadoop
+[22:25:22]   reiniciando o JNose
+[22:25:28]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261018-222528.{out,err}
+[22:25:36] config aplicada: 20 smells ligados
+[22:27:18]   bytestsmells: 83787 linhas (100%)
+[06:30:22] 451 repos elegiveis, 135 ja concluidos, processando 316
+[06:30:23] config aplicada: 20 smells ligados
+[06:30:23] (1/316) apache/hadoop -> test-smells-hadoop
+[06:32:00]   bytestsmells: 83787 linhas (100%)
+[06:32:16]   byclasstest: 2915 linhas (100%)
+[06:32:20] (2/316) apache/hadoop-common -> test-smells-hadoop-common
+[06:33:04]   bytestsmells: 36316 linhas (100%)
+[06:33:17]   byclasstest: 1544 linhas (100%)
+[06:33:19] (3/316) apache/hadoop-mapreduce -> test-smells-hadoop-mapreduce
+[06:33:39]   bytestsmells: 5474 linhas (100%)
+[06:33:50]   byclasstest: 339 linhas (100%)
+[06:33:51] (4/316) apache/hama -> test-smells-hama
+[06:34:04]   bytestsmells: 652 linhas (100%)
+[06:34:15]   byclasstest: 60 linhas (100%)
+[06:34:15] (5/316) apache/hbase -> test-smells-hbase
+[06:34:56]   bytestsmells: 31520 linhas (100%)
+[06:35:08]   byclasstest: 1373 linhas (100%)
+[06:35:09] (6/316) apache/helix -> test-smells-helix
+[06:35:28]   bytestsmells: 6108 linhas (100%)
+[06:35:39]   byclasstest: 325 linhas (100%)
+[06:35:39] (7/316) apache/hive -> test-smells-hive
+[06:36:39]   bytestsmells: 34421 linhas (100%)
+[06:36:50]   byclasstest: 1020 linhas (100%)
+[06:36:54] (8/316) apache/httpcomponents-client -> test-smells-httpcomponents-client
+[06:37:09]   bytestsmells: 3796 linhas (100%)
+[06:37:21]   byclasstest: 150 linhas (100%)
+[06:37:21] (9/316) apache/httpcomponents-core -> test-smells-httpcomponents-core
+[06:37:36]   bytestsmells: 6703 linhas (100%)
+[06:37:47]   byclasstest: 142 linhas (100%)
+[06:37:48] (10/316) apache/ignite -> test-smells-ignite
+[06:38:57]   bytestsmells: 35204 linhas (100%)
+[06:39:14]   byclasstest: 2366 linhas (100%)
+[06:39:18] (11/316) apache/incubator-ambari -> test-smells-incubator-ambari
+[06:39:40]   bytestsmells: 6134 linhas (100%)
+[06:39:51]   byclasstest: 211 linhas (100%)
+[06:39:52] (12/316) apache/incubator-atlas -> test-smells-incubator-atlas
+[06:40:12]   bytestsmells: 3347 linhas (100%)
+[06:40:23]   byclasstest: 160 linhas (100%)
+[06:40:24] (13/316) apache/incubator-batchee -> test-smells-incubator-batchee
+[06:40:37]   bytestsmells: 447 linhas (100%)
+[06:40:48]   byclasstest: 86 linhas (100%)
+[06:40:48] (14/316) apache/incubator-brooklyn -> test-smells-incubator-brooklyn
+[06:41:26]   bytestsmells: 8964 linhas (100%)
+[06:41:38]   byclasstest: 719 linhas (100%)
+[06:41:40] (15/316) apache/incubator-druid -> test-smells-druid
+[06:42:19]   bytestsmells: 20473 linhas (100%)
+[06:42:32]   byclasstest: 928 linhas (100%)
+[06:42:33] (16/316) apache/incubator-heron -> test-smells-incubator-heron
+[06:42:33]   reiniciando o JNose
+[06:42:39]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-064239.{out,err}
+[06:42:48] config aplicada: 20 smells ligados
+[06:43:35]   bytestsmells: 3126 linhas (100%)
+[06:43:47]   byclasstest: 181 linhas (100%)
+[06:43:48] (17/316) apache/incubator-hivemall -> test-smells-incubator-hivemall
+[06:44:09]   bytestsmells: 3532 linhas (100%)
+[06:44:21]   byclasstest: 153 linhas (100%)
+[06:44:21] (18/316) apache/incubator-hudi -> test-smells-incubator-hudi
+[06:44:37]   bytestsmells: 1723 linhas (100%)
+[06:44:48]   byclasstest: 55 linhas (100%)
+[06:44:48] (19/316) apache/incubator-myriad -> test-smells-incubator-myriad
+fatal: unable to access 'https://github.com/cristianritter/test-smells-incubator-myriad.git/': Failed to connect to github.com port 443 after 21112 ms: Couldn't connect to server
+[06:45:09]   ERRO: CalledProcessError: Command '['git', '-c', 'http.sslBackend=schannel', 'clone', '--depth', '1', '-q', 'https://github.com/cristianritter/test-smells-incubator-myriad.git', 'C:\\Users\\crist\\.jnose_projects\\test-smells-incubator-myriad']' returned non-zero exit status 128.
+[06:45:09] (20/316) apache/incubator-netbeans-html4j -> test-smells-netbeans-html4j
+[06:45:23]   bytestsmells: 515 linhas (100%)
+[06:45:34]   byclasstest: 74 linhas (100%)
+[06:45:34] (21/316) apache/incubator-omid -> test-smells-phoenix-omid
+[06:45:48]   bytestsmells: 1165 linhas (100%)
+[06:45:59]   byclasstest: 61 linhas (100%)
+[06:45:59] (22/316) apache/incubator-pinot -> test-smells-incubator-pinot
+[06:46:35]   bytestsmells: 11931 linhas (100%)
+[06:46:47]   byclasstest: 457 linhas (100%)
+[06:46:48] (23/316) apache/incubator-plc4x -> test-smells-plc4x
+[06:47:05]   bytestsmells: 1827 linhas (100%)
+[06:47:16]   byclasstest: 166 linhas (100%)
+[06:47:16] (24/316) apache/incubator-ratis -> test-smells-incubator-ratis
+[06:47:31]   bytestsmells: 805 linhas (100%)
+[06:47:42]   byclasstest: 56 linhas (100%)
+[06:47:42] (25/316) apache/incubator-samoa -> test-smells-incubator-samoa
+[06:47:55]   bytestsmells: 252 linhas (100%)
+[06:48:06]   byclasstest: 27 linhas (100%)
+[06:48:06] (26/316) apache/incubator-sentry -> test-smells-incubator-sentry
+[06:48:23]   bytestsmells: 4181 linhas (100%)
+[06:48:35]   byclasstest: 208 linhas (100%)
+[06:48:35] (27/316) apache/incubator-skywalking -> test-smells-skywalking
+[06:48:52]   bytestsmells: 1833 linhas (100%)
+[06:49:03]   byclasstest: 161 linhas (100%)
+[06:49:04] (28/316) apache/incubator-taverna-common-activities -> test-smells-incubator-taverna-common-activities
+[06:49:33]   bytestsmells: 482 linhas (100%)
+[06:49:44]   byclasstest: 35 linhas (100%)
+[06:49:45] (29/316) apache/incubator-taverna-engine -> test-smells-incubator-taverna-engine
+[06:50:13]   2 candidato(s) a teste sem classe removido(s): taverna-activity-archetype\src\main\resources\archetype-resources\__rootArtifactId__-activity\src\test\java\__classPrefix__ActivityFactoryTest.java, taverna-activity-archetype\src\main\resources\archetype-resources\__rootArtifactId__-activity\src\test\java\__classPrefix__ActivityTest.java
+[06:50:24]   bytestsmells: 884 linhas (100%)
+[06:50:35]   byclasstest: 50 linhas (100%)
+[06:50:36] (30/316) apache/incubator-taverna-workbench -> test-smells-incubator-taverna-workbench
+[06:51:19]   bytestsmells: 264 linhas (100%)
+[06:51:30]   byclasstest: 18 linhas (100%)
+[06:51:31] (31/316) apache/incubator-tez -> test-smells-incubator-tez
+[06:51:31]   reiniciando o JNose
+[06:51:36]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-065136.{out,err}
+[06:51:45] config aplicada: 20 smells ligados
+[06:52:02]   bytestsmells: 3251 linhas (100%)
+[06:52:14]   byclasstest: 78 linhas (100%)
+[06:52:14] (32/316) apache/james-mime4j -> test-smells-james-mime4j
+[06:52:29]   bytestsmells: 2588 linhas (100%)
+[06:52:40]   byclasstest: 90 linhas (100%)
+[06:52:41] (33/316) apache/james-project -> test-smells-james-project
+[06:53:15]   bytestsmells: 9206 linhas (100%)
+[06:53:28]   byclasstest: 1400 linhas (100%)
+[06:53:30] (34/316) apache/jclouds -> test-smells-jclouds
+[06:53:58]   bytestsmells: 8325 linhas (100%)
+[06:54:10]   byclasstest: 872 linhas (100%)
+[06:54:12] (35/316) apache/jena -> test-smells-jena
+[06:54:48]   bytestsmells: 17351 linhas (100%)
+[06:54:59]   byclasstest: 883 linhas (100%)
+[06:55:02] (36/316) apache/joshua -> test-smells-joshua
+[06:55:42]   bytestsmells: 592 linhas (100%)
+[06:55:53]   byclasstest: 50 linhas (100%)
+[06:55:53] (37/316) apache/jspwiki -> test-smells-jspwiki
+[06:56:11]   bytestsmells: 3004 linhas (100%)
+[06:56:22]   byclasstest: 98 linhas (100%)
+[06:56:23] (38/316) apache/juneau -> test-smells-juneau
+[06:56:55]   bytestsmells: 11636 linhas (100%)
+[06:57:07]   byclasstest: 281 linhas (100%)
+[06:57:07] (39/316) apache/kafka -> test-smells-kafka
+[06:57:34]   bytestsmells: 16818 linhas (100%)
+[06:57:47]   byclasstest: 494 linhas (100%)
+[06:57:47] (40/316) apache/karaf -> test-smells-karaf
+[06:58:10]   bytestsmells: 2386 linhas (100%)
+[06:58:22]   byclasstest: 208 linhas (100%)
+[06:58:23] (41/316) apache/karaf-cellar -> test-smells-karaf-cellar
+[06:58:36]   bytestsmells: 55 linhas (100%)
+[06:58:47]   byclasstest: 18 linhas (100%)
+[06:58:47] (42/316) apache/knox -> test-smells-knox
+[06:59:07]   bytestsmells: 7337 linhas (100%)
+[06:59:18]   byclasstest: 251 linhas (100%)
+[06:59:19] (43/316) apache/lens -> test-smells-lens
+[06:59:36]   bytestsmells: 5077 linhas (100%)
+[06:59:47]   byclasstest: 168 linhas (100%)
+[06:59:48] (44/316) apache/logging-chainsaw -> test-smells-logging-chainsaw
+[07:00:00]   bytestsmells: 30 linhas (100%)
+[07:00:11]   byclasstest: 6 linhas (100%)
+[07:00:11] (45/316) apache/logging-log4j-audit -> test-smells-logging-log4j-audit
+[07:00:24]   bytestsmells: 84 linhas (100%)
+[07:00:35]   byclasstest: 10 linhas (100%)
+[07:00:36] (46/316) apache/lucene-solr -> test-smells-lucene-solr
+[07:00:36]   reiniciando o JNose
+[07:00:41]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-070041.{out,err}
+[07:00:49] config aplicada: 20 smells ligados
+[07:02:19]   bytestsmells: 45656 linhas (100%)
+[07:02:37]   byclasstest: 1425 linhas (100%)
+[07:02:40] (47/316) apache/mahout -> test-smells-mahout
+[07:03:00]   bytestsmells: 5212 linhas (100%)
+[07:03:12]   byclasstest: 266 linhas (100%)
+[07:03:12] (48/316) apache/marmotta -> test-smells-marmotta
+[07:03:32]   bytestsmells: 1932 linhas (100%)
+[07:03:43]   byclasstest: 144 linhas (100%)
+[07:03:45] (49/316) apache/maven -> test-smells-maven
+[07:04:06]   bytestsmells: 1828 linhas (100%)
+[07:04:17]   byclasstest: 114 linhas (100%)
+[07:04:18] (50/316) apache/maven-archetype -> test-smells-maven-archetype
+[07:04:31]   bytestsmells: 139 linhas (100%)
+[07:04:42]   byclasstest: 7 linhas (100%)
+[07:04:43] (51/316) apache/maven-checkstyle-plugin -> test-smells-maven-checkstyle-plugin
+[07:04:55]   bytestsmells: 139 linhas (100%)
+[07:05:06]   byclasstest: 9 linhas (100%)
+[07:05:06] (52/316) apache/maven-compiler-plugin -> test-smells-maven-compiler-plugin
+[07:05:19]   bytestsmells: 43 linhas (100%)
+[07:05:30]   byclasstest: 41 linhas (100%)
+[07:05:30] (53/316) apache/maven-indexer -> test-smells-maven-indexer
+[07:05:46]   bytestsmells: 1307 linhas (100%)
+[07:05:57]   byclasstest: 24 linhas (100%)
+[07:05:57] (54/316) apache/maven-javadoc-plugin -> test-smells-maven-javadoc-plugin
+[07:06:12]   bytestsmells: 507 linhas (100%)
+[07:06:23]   byclasstest: 27 linhas (100%)
+[07:06:23] (55/316) apache/maven-plugins -> test-smells-maven-plugins
+[07:06:52]   bytestsmells: 2347 linhas (100%)
+[07:07:03]   byclasstest: 318 linhas (100%)
+[07:07:07] (56/316) apache/maven-resolver -> test-smells-maven-resolver
+[07:07:21]   bytestsmells: 2488 linhas (100%)
+[07:07:32]   byclasstest: 100 linhas (100%)
+[07:07:32] (57/316) apache/maven-scm -> test-smells-maven-scm
+[07:07:48]   bytestsmells: 990 linhas (100%)
+[07:07:59]   byclasstest: 69 linhas (100%)
+[07:08:00] (58/316) apache/maven-surefire -> test-smells-maven-surefire
+[07:08:04]   1 candidato(s) a teste sem classe removido(s): surefire-its\src\test\resources\unicode-testnames\src\test\java\junit\twoTestCases\XXYZTest.java
+[07:08:17]   bytestsmells: 3475 linhas (100%)
+[07:08:28]   byclasstest: 513 linhas (100%)
+[07:08:29] (59/316) apache/meecrowave -> test-smells-openwebbeans-meecrowave
+[07:08:42]   bytestsmells: 217 linhas (100%)
+[07:08:53]   byclasstest: 47 linhas (100%)
+[07:08:53] (60/316) apache/metamodel -> test-smells-metamodel
+[07:09:09]   bytestsmells: 5313 linhas (100%)
+[07:09:20]   byclasstest: 175 linhas (100%)
+[07:09:20] (61/316) apache/metron -> test-smells-metron
+[07:09:20]   reiniciando o JNose
+[07:09:26]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-070926.{out,err}
+[07:09:34] config aplicada: 20 smells ligados
+[07:10:16]   bytestsmells: 7918 linhas (100%)
+[07:10:29]   byclasstest: 369 linhas (100%)
+[07:10:30] (62/316) apache/mina -> test-smells-mina
+[07:10:43]   bytestsmells: 1817 linhas (100%)
+[07:10:54]   byclasstest: 74 linhas (100%)
+[07:10:55] (63/316) apache/mina-sshd -> test-smells-mina-sshd
+[07:11:11]   bytestsmells: 2342 linhas (100%)
+[07:11:23]   byclasstest: 206 linhas (100%)
+[07:11:23] (64/316) apache/myfaces-tobago -> test-smells-myfaces-tobago
+[07:11:41]   bytestsmells: 895 linhas (100%)
+[07:11:52]   byclasstest: 62 linhas (100%)
+[07:11:52] (65/316) apache/nifi -> test-smells-nifi
+[07:12:47]   bytestsmells: 25175 linhas (100%)
+[07:12:58]   byclasstest: 787 linhas (100%)
+[07:13:00] (66/316) apache/nifi-minifi -> test-smells-nifi-minifi
+[07:13:14]   bytestsmells: 766 linhas (100%)
+[07:13:25]   byclasstest: 50 linhas (100%)
+[07:13:25] (67/316) apache/nifi-registry -> test-smells-nifi-registry
+[07:13:41]   bytestsmells: 1170 linhas (100%)
+[07:13:52]   byclasstest: 29 linhas (100%)
+[07:13:52] (68/316) apache/olingo-odata2 -> test-smells-olingo-odata2
+[07:14:12]   bytestsmells: 11266 linhas (100%)
+[07:14:24]   byclasstest: 293 linhas (100%)
+[07:14:24] (69/316) apache/olingo-odata4 -> test-smells-olingo-odata4
+[07:14:44]   bytestsmells: 7188 linhas (100%)
+[07:14:55]   byclasstest: 196 linhas (100%)
+[07:14:56] (70/316) apache/oodt -> test-smells-oodt
+[07:15:16]   bytestsmells: 4187 linhas (100%)
+[07:15:27]   byclasstest: 203 linhas (100%)
+[07:15:28] (71/316) apache/oozie -> test-smells-oozie
+[07:15:46]   bytestsmells: 5552 linhas (100%)
+[07:15:58]   byclasstest: 223 linhas (100%)
+[07:15:58] (72/316) apache/openejb -> test-smells-openejb
+[07:16:27]   1 candidato(s) a teste sem classe removido(s): openejb\container\openejb-core\src\test\java\org\apache\openejb\meta\MetaTest.java
+[07:16:42]   bytestsmells: 4694 linhas (100%)
+[07:16:53]   byclasstest: 636 linhas (100%)
+[07:16:56] (73/316) apache/openjpa -> test-smells-openjpa
+[07:17:18]   bytestsmells: 1942 linhas (100%)
+[07:17:30]   byclasstest: 132 linhas (100%)
+[07:17:31] (74/316) apache/openmeetings -> test-smells-openmeetings
+[07:17:49]   bytestsmells: 209 linhas (100%)
+[07:18:00]   byclasstest: 70 linhas (100%)
+[07:18:00] (75/316) apache/opennlp -> test-smells-opennlp
+[07:18:16]   bytestsmells: 3835 linhas (100%)
+[07:18:27]   byclasstest: 197 linhas (100%)
+[07:18:28] (76/316) apache/openwebbeans -> test-smells-openwebbeans
+[07:18:28]   reiniciando o JNose
+[07:18:33]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-071833.{out,err}
+[07:18:41] config aplicada: 20 smells ligados
+[07:18:59]   bytestsmells: 1666 linhas (100%)
+[07:19:11]   byclasstest: 260 linhas (100%)
+[07:19:12] (77/316) apache/parquet-mr -> test-smells-parquet-java
+[07:19:29]   bytestsmells: 4827 linhas (100%)
+[07:19:41]   byclasstest: 172 linhas (100%)
+[07:19:41] (78/316) apache/phoenix -> test-smells-phoenix
+[07:20:02]   bytestsmells: 5695 linhas (100%)
+[07:20:14]   byclasstest: 198 linhas (100%)
+[07:20:15] (79/316) apache/pivot -> test-smells-pivot
+[07:20:31]   bytestsmells: 1041 linhas (100%)
+[07:20:42]   byclasstest: 44 linhas (100%)
+[07:20:43] (80/316) apache/portals-pluto -> test-smells-portals-pluto
+[07:21:02]   bytestsmells: 3119 linhas (100%)
+[07:21:13]   byclasstest: 70 linhas (100%)
+[07:21:14] (81/316) apache/pulsar -> test-smells-pulsar
+[07:21:43]   bytestsmells: 15491 linhas (100%)
+[07:21:56]   byclasstest: 428 linhas (100%)
+[07:21:57] (82/316) apache/qpid -> test-smells-qpid
+[07:22:10]   bytestsmells: 0 linhas (100%)
+[07:22:21]   byclasstest: 0 linhas (100%)
+[07:22:21] (83/316) apache/qpid-broker-j -> test-smells-qpid-broker-j
+[07:22:44]   bytestsmells: 6661 linhas (100%)
+[07:22:56]   byclasstest: 516 linhas (100%)
+[07:22:57] (84/316) apache/qpid-jms -> test-smells-qpid-jms
+[07:23:15]   bytestsmells: 7955 linhas (100%)
+[07:23:26]   byclasstest: 228 linhas (100%)
+[07:23:26] (85/316) apache/qpid-proton-j -> test-smells-qpid-proton-j
+[07:23:41]   bytestsmells: 3647 linhas (100%)
+[07:23:52]   byclasstest: 73 linhas (100%)
+[07:23:52] (86/316) apache/ranger -> test-smells-ranger
+[07:24:13]   bytestsmells: 3081 linhas (100%)
+[07:24:24]   byclasstest: 127 linhas (100%)
+[07:24:25] (87/316) apache/reef -> test-smells-reef
+[07:24:44]   bytestsmells: 1385 linhas (100%)
+[07:24:55]   byclasstest: 150 linhas (100%)
+[07:24:56] (88/316) apache/rocketmq -> test-smellls-rocketmq
+[07:25:12]   bytestsmells: 1812 linhas (100%)
+[07:25:23]   byclasstest: 159 linhas (100%)
+[07:25:23] (89/316) apache/rocketmq-externals -> test-smells-rocketmq-externals
+[07:25:39]   bytestsmells: 452 linhas (100%)
+[07:25:50]   byclasstest: 56 linhas (100%)
+[07:25:50] (90/316) apache/royale-compiler -> test-smells-royale-compiler
+[07:26:09]   bytestsmells: 1606 linhas (100%)
+[07:26:20]   byclasstest: 176 linhas (100%)
+[07:26:20] (91/316) apache/samza -> test-smells-samza
+[07:26:20]   reiniciando o JNose
+[07:26:26]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-072626.{out,err}
+[07:26:34] config aplicada: 20 smells ligados
+[07:26:59]   bytestsmells: 5462 linhas (100%)
+[07:27:11]   byclasstest: 258 linhas (100%)
+[07:27:11] (92/316) apache/sentry -> test-smells-sentry
+[07:27:31]   bytestsmells: 5835 linhas (100%)
+[07:27:43]   byclasstest: 253 linhas (100%)
+[07:27:43] (93/316) apache/servicecomb-java-chassis -> test-smells-servicecomb-java-chassis
+[07:28:05]   bytestsmells: 7334 linhas (100%)
+[07:28:16]   byclasstest: 585 linhas (100%)
+[07:28:18] (94/316) apache/servicemix-bundles -> test-smells-servicemix-bundles
+[07:28:32]   bytestsmells: 0 linhas (100%)
+[07:28:42]   byclasstest: 0 linhas (100%)
+[07:28:43] (95/316) apache/shindig -> test-smells-shindig
+[07:29:03]   bytestsmells: 7845 linhas (100%)
+[07:29:15]   byclasstest: 323 linhas (100%)
+[07:29:16] (96/316) apache/shiro -> test-smells-shiro
+[07:29:30]   bytestsmells: 938 linhas (100%)
+[07:29:41]   byclasstest: 92 linhas (100%)
+[07:29:41] (97/316) apache/sis -> test-smells-sis
+[07:29:49]   1 candidato(s) a teste sem classe removido(s): storage\sis-netcdf\src\test\java\org\apache\sis\internal\netcdf\TestData.java
+[07:30:06]   bytestsmells: 10695 linhas (100%)
+[07:30:18]   byclasstest: 503 linhas (100%)
+[07:30:19] (98/316) apache/sling-org-apache-sling-testing-clients -> test-smells-sling-org-apache-sling-testing-clients
+[07:30:31]   bytestsmells: 47 linhas (100%)
+[07:30:42]   byclasstest: 13 linhas (100%)
+[07:30:42] (99/316) apache/sqoop -> test-smells-sqoop
+[07:30:57]   bytestsmells: 1637 linhas (100%)
+[07:31:09]   byclasstest: 237 linhas (100%)
+[07:31:09] (100/316) apache/stanbol -> test-smells-stanbol
+[07:31:38]   bytestsmells: 3459 linhas (100%)
+[07:31:49]   byclasstest: 178 linhas (100%)
+[07:31:50] (101/316) apache/storm -> test-smells-storm
+[07:31:59]   2 candidato(s) a teste sem classe removido(s): storm-client\test\jvm\org\apache\storm\testing\IntegrationTest.java, storm-client\test\jvm\org\apache\storm\testing\PerformanceTest.java
+[07:32:13]   bytestsmells: 4747 linhas (100%)
+[07:32:25]   byclasstest: 243 linhas (100%)
+[07:32:26] (102/316) apache/streams -> test-smells-streams
+[07:32:42]   bytestsmells: 1246 linhas (100%)
+[07:32:53]   byclasstest: 101 linhas (100%)
+[07:32:53] (103/316) apache/struts -> test-smells-struts
+[07:33:11]   bytestsmells: 1670 linhas (100%)
+[07:33:22]   byclasstest: 115 linhas (100%)
+[07:33:22] (104/316) apache/struts-examples -> test-smells-struts-examples
+[07:33:37]   bytestsmells: 28 linhas (100%)
+[07:33:48]   byclasstest: 4 linhas (100%)
+[07:33:48] (105/316) apache/struts1 -> test-smells-struts1
+[07:34:06]   bytestsmells: 572 linhas (100%)
+[07:34:17]   byclasstest: 28 linhas (100%)
+[07:34:17] (106/316) apache/syncope -> test-smells-syncope
+[07:34:17]   reiniciando o JNose
+[07:34:23]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-073423.{out,err}
+[07:34:31] config aplicada: 20 smells ligados
+[07:34:52]   bytestsmells: 1601 linhas (100%)
+[07:35:03]   byclasstest: 70 linhas (100%)
+[07:35:04] (107/316) apache/tajo -> test-smells-tajo
+[07:35:28]   bytestsmells: 8210 linhas (100%)
+[07:35:40]   byclasstest: 256 linhas (100%)
+[07:35:41] (108/316) apache/tapestry-5 -> test-smells-tapestry-5
+[07:36:02]   bytestsmells: 2662 linhas (100%)
+[07:36:13]   byclasstest: 214 linhas (100%)
+[07:36:14] (109/316) apache/tez -> test-smells-tez
+[07:36:37]   bytestsmells: 10176 linhas (100%)
+[07:36:50]   byclasstest: 206 linhas (100%)
+[07:36:50] (110/316) apache/tika -> test-smells-tika
+[07:37:42]   bytestsmells: 7111 linhas (100%)
+[07:37:54]   byclasstest: 279 linhas (100%)
+[07:37:55] (111/316) apache/tinkerpop -> test-smells-tinkerpop
+[07:39:08]   bytestsmells: 13357 linhas (100%)
+[07:39:20]   byclasstest: 398 linhas (100%)
+[07:39:22] (112/316) apache/tomcat -> test-smells-tomcat
+[07:39:45]   bytestsmells: 6335 linhas (100%)
+[07:39:57]   byclasstest: 437 linhas (100%)
+[07:39:58] (113/316) apache/tomee -> test-smells-tomee
+[07:40:11]   1 candidato(s) a teste sem classe removido(s): container\openejb-core\src\test\java\org\apache\openejb\meta\MetaTest.java
+[07:40:27]   bytestsmells: 6606 linhas (100%)
+[07:40:38]   byclasstest: 1066 linhas (100%)
+[07:40:41] (114/316) apache/uima-uimafit -> test-smells-uima-uimafit
+[07:40:54]   bytestsmells: 1806 linhas (100%)
+[07:41:05]   byclasstest: 98 linhas (100%)
+[07:41:05] (115/316) apache/uima-uimaj -> test-smells-uima-uimaj
+[07:41:28]   bytestsmells: 5675 linhas (100%)
+[07:41:39]   byclasstest: 155 linhas (100%)
+[07:41:40] (116/316) apache/unomi -> test-smells-unomi
+[07:41:54]   bytestsmells: 76 linhas (100%)
+[07:42:05]   byclasstest: 4 linhas (100%)
+[07:42:05] (117/316) apache/vxquery -> test-smells-vxquery
+[07:42:20]   bytestsmells: 99 linhas (100%)
+[07:42:31]   byclasstest: 14 linhas (100%)
+[07:42:31] (118/316) apache/wicket -> test-smells-wicket
+[07:42:58]   bytestsmells: 8212 linhas (100%)
+[07:43:10]   byclasstest: 619 linhas (100%)
+[07:43:11] (119/316) apache/zeppelin -> test-smells-zeppelin
+[07:43:43]   bytestsmells: 4543 linhas (100%)
+[07:43:54]   byclasstest: 169 linhas (100%)
+[07:43:55] (120/316) apache/zookeeper -> test-smells-zookeeper
+[07:44:12]   bytestsmells: 4301 linhas (100%)
+[07:44:23]   byclasstest: 256 linhas (100%)
+[07:44:24] (121/316) aws/amazon-kinesis-video-streams-parser-library -> test-smells-amazon-kinesis-video-streams-parser-library
+[07:44:24]   reiniciando o JNose
+[07:44:29]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-074429.{out,err}
+[07:44:37] config aplicada: 20 smells ligados
+[07:45:02]   bytestsmells: 298 linhas (100%)
+[07:45:13]   byclasstest: 20 linhas (100%)
+[07:45:13] (122/316) aws/aws-cloudtrail-processing-library -> test-smells-aws-cloudtrail-processing-library
+[07:45:25]   bytestsmells: 0 linhas (100%)
+[07:45:36]   byclasstest: 0 linhas (100%)
+[07:45:36] (123/316) aws/aws-sdk-java-v2 -> test-smells-aws-sdk-java-v2
+[07:46:05]   bytestsmells: 5766 linhas (100%)
+[07:46:17]   byclasstest: 454 linhas (100%)
+[07:46:18] (124/316) aws/aws-toolkit-eclipse -> test-smells-aws-toolkit-eclipse
+[07:46:37]   bytestsmells: 372 linhas (100%)
+[07:46:48]   byclasstest: 32 linhas (100%)
+[07:46:49] (125/316) awsdocs/amazon-s3-developer-guide -> test-smells-amazon-s3-developer-guide
+[07:47:03]   bytestsmells: 0 linhas (100%)
+[07:47:14]   byclasstest: 0 linhas (100%)
+[07:47:14] (126/316) awsdocs/aws-doc-sdk-examples -> test-smells-aws-doc-sdk-examples
+[07:47:30]   bytestsmells: 0 linhas (100%)
+[07:47:41]   byclasstest: 0 linhas (100%)
+[07:47:41] (127/316) awslabs/amazon-kinesis-client -> test-smells-amazon-kinesis-client
+[07:47:55]   bytestsmells: 1059 linhas (100%)
+[07:48:06]   byclasstest: 65 linhas (100%)
+[07:48:06] (128/316) baidu/Jprotobuf-rpc-socket -> test-smells-Jprotobuf-rpc-socket
+[07:48:19]   bytestsmells: 186 linhas (100%)
+[07:48:30]   byclasstest: 28 linhas (100%)
+[07:48:30] (129/316) cloudfoundry/java-buildpack-dependency-builder -> test-smells-java-buildpack-dependency-builder
+[07:48:42]   bytestsmells: 0 linhas (100%)
+[07:48:53]   byclasstest: 0 linhas (100%)
+[07:48:53] (130/316) cloudfoundry/uaa -> test-smells-uaa
+[07:49:16]   bytestsmells: 9385 linhas (100%)
+[07:49:28]   byclasstest: 426 linhas (100%)
+[07:49:29] (131/316) eclipse/aCute -> test-smells-aCute
+[07:49:41]   bytestsmells: 36 linhas (100%)
+[07:49:52]   byclasstest: 22 linhas (100%)
+[07:49:52] (132/316) eclipse/acceleo -> test-smells-acceleo
+[07:50:32]   bytestsmells: 11286 linhas (100%)
+[07:50:44]   byclasstest: 142 linhas (100%)
+[07:50:45] (133/316) eclipse/birt -> test-smells-birt
+[07:51:50]   bytestsmells: 14639 linhas (100%)
+[07:52:01]   byclasstest: 544 linhas (100%)
+[07:52:05] (134/316) eclipse/bpmn2-modeler -> test-smells-bpmn2-modeler
+[07:52:26]   bytestsmells: 29 linhas (100%)
+[07:52:37]   byclasstest: 4 linhas (100%)
+[07:52:37] (135/316) eclipse/buildship -> test-smells-buildship
+[07:52:59]   bytestsmells: 8 linhas (100%)
+[07:53:10]   byclasstest: 1 linhas (100%)
+[07:53:11] (136/316) eclipse/ceylon -> test-smells-ceylon
+[07:53:11]   reiniciando o JNose
+[07:53:16]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-075316.{out,err}
+[07:53:24] config aplicada: 20 smells ligados
+[07:54:09]   bytestsmells: 4067 linhas (100%)
+[07:54:20]   byclasstest: 144 linhas (100%)
+[07:54:23] (137/316) eclipse/cft -> test-smells-cft
+[07:54:49]   bytestsmells: 76 linhas (100%)
+[07:55:00]   byclasstest: 7 linhas (100%)
+[07:55:01] (138/316) eclipse/che -> test-smells-che
+warning: the following paths have collided (e.g. case-sensitive paths
+on a case-insensitive filesystem) and only one from the same
+colliding group is in the working tree:
+
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/TEST'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/TEst'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/TeST'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/Test'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/tESt'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/tEst'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/tesT'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-lib/folder/test'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/TEST'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/TEst'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/TeST'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/TeSt'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/tESt'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/teSt'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/tesT'
+  'selenium/che-selenium-test/src/test/resources/projects/java-multimodule-for-navigate/my-webapp/folder/test'
+[07:55:39]   bytestsmells: 7753 linhas (100%)
+[07:55:50]   byclasstest: 1041 linhas (100%)
+[07:55:55] (139/316) eclipse/che-ls-jdt -> test-smells-che-ls-jdt
+[07:56:07]   bytestsmells: 164 linhas (100%)
+[07:56:18]   byclasstest: 26 linhas (100%)
+[07:56:18] (140/316) eclipse/concierge -> test-smells-concierge
+[07:56:31]   bytestsmells: 300 linhas (100%)
+[07:56:42]   byclasstest: 21 linhas (100%)
+[07:56:43] (141/316) eclipse/corrosion -> test-smells-corrosion
+[07:56:55]   bytestsmells: 49 linhas (100%)
+[07:57:06]   byclasstest: 11 linhas (100%)
+[07:57:06] (142/316) eclipse/dawnsci -> test-smells-dawnsci
+[07:57:53]   bytestsmells: 2466 linhas (100%)
+[07:58:04]   byclasstest: 72 linhas (100%)
+[07:58:04] (143/316) eclipse/ditto -> test-smells-ditto
+[07:58:29]   bytestsmells: 5268 linhas (100%)
+[07:58:41]   byclasstest: 804 linhas (100%)
+[07:58:42] (144/316) eclipse/dltk.core -> test-smells-dltk.core
+[07:59:02]   bytestsmells: 1043 linhas (100%)
+[07:59:13]   byclasstest: 64 linhas (100%)
+[07:59:14] (145/316) eclipse/eavp -> test-smells-eavp
+[07:59:27]   bytestsmells: 145 linhas (100%)
+[07:59:38]   byclasstest: 23 linhas (100%)
+[07:59:39] (146/316) eclipse/eclipse-collections -> test-smells-eclipse-collections
+[08:00:09]   bytestsmells: 30068 linhas (100%)
+[08:00:22]   byclasstest: 1494 linhas (100%)
+[08:00:23] (147/316) eclipse/eclipse.jdt.core -> test-smells-eclipse.jdt.core
+[08:01:31]   bytestsmells: 30116 linhas (100%)
+[08:01:48]   byclasstest: 500 linhas (100%)
+[08:01:50] (148/316) eclipse/eclipse.jdt.ls -> test-smells-eclipse.jdt.ls
+[08:02:07]   bytestsmells: 2430 linhas (100%)
+[08:02:18]   byclasstest: 92 linhas (100%)
+[08:02:19] (149/316) eclipse/eclipse.platform.swt -> test-smells-eclipse.platform.swt
+[08:02:40]   bytestsmells: 7718 linhas (100%)
+[08:02:51]   byclasstest: 114 linhas (100%)
+[08:02:52] (150/316) eclipse/eclipse.platform.ui -> test-smells-eclipse.platform.ui
+[08:03:24]   bytestsmells: 12248 linhas (100%)
+[08:03:35]   byclasstest: 583 linhas (100%)
+[08:03:37] (151/316) eclipse/egit -> test-smells-egit
+[08:03:37]   reiniciando o JNose
+[08:03:43]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-080343.{out,err}
+[08:03:51] config aplicada: 20 smells ligados
+[08:04:14]   bytestsmells: 3111 linhas (100%)
+[08:04:26]   byclasstest: 181 linhas (100%)
+[08:04:26] (152/316) eclipse/egit-github -> test-smells-egit-github
+[08:04:41]   bytestsmells: 2915 linhas (100%)
+[08:04:52]   byclasstest: 122 linhas (100%)
+[08:04:52] (153/316) eclipse/elk -> test-smells-elk
+[08:05:09]   bytestsmells: 1044 linhas (100%)
+[08:05:20]   byclasstest: 39 linhas (100%)
+[08:05:21] (154/316) eclipse/gef -> test-smells-gef
+[08:06:16]   bytestsmells: 4157 linhas (100%)
+[08:06:27]   byclasstest: 88 linhas (100%)
+[08:06:28] (155/316) eclipse/gef-legacy -> test-smells-gef-legacy
+[08:07:15]   bytestsmells: 654 linhas (100%)
+[08:07:26]   byclasstest: 36 linhas (100%)
+[08:07:27] (156/316) eclipse/gemoc-studio -> test-smells-gemoc-studio
+[08:07:59]   bytestsmells: 17 linhas (100%)
+[08:08:10]   byclasstest: 8 linhas (100%)
+[08:08:11] (157/316) eclipse/golo-lang -> test-smells-golo-lang
+[08:08:24]   bytestsmells: 2497 linhas (100%)
+[08:08:35]   byclasstest: 53 linhas (100%)
+[08:08:36] (158/316) eclipse/hawkbit -> test-smells-hawkbit
+[08:08:54]   bytestsmells: 2084 linhas (100%)
+[08:09:06]   byclasstest: 116 linhas (100%)
+[08:09:06] (159/316) eclipse/hawkbit-extensions -> test-smells-hawkbit-extensions
+[08:09:18]   bytestsmells: 16 linhas (100%)
+[08:09:29]   byclasstest: 2 linhas (100%)
+[08:09:29] (160/316) eclipse/hono -> test-smells-hono
+[08:09:45]   bytestsmells: 941 linhas (100%)
+[08:09:56]   byclasstest: 91 linhas (100%)
+[08:09:56] (161/316) eclipse/january -> test-smells-january
+[08:10:11]   bytestsmells: 4706 linhas (100%)
+[08:10:23]   byclasstest: 60 linhas (100%)
+[08:10:23] (162/316) eclipse/jetty.project -> test-smells-jetty.project
+[08:11:01]   bytestsmells: 20150 linhas (100%)
+[08:11:14]   byclasstest: 728 linhas (100%)
+[08:11:15] (163/316) eclipse/jgit -> test-smells-jgit
+[08:11:39]   bytestsmells: 20112 linhas (100%)
+[08:11:51]   byclasstest: 418 linhas (100%)
+[08:11:51] (164/316) eclipse/jnosql -> test-smells-jnosql
+[08:12:07]   bytestsmells: 2680 linhas (100%)
+[08:12:18]   byclasstest: 236 linhas (100%)
+[08:12:18] (165/316) eclipse/kapua -> test-smells-kapua
+[08:12:38]   bytestsmells: 745 linhas (100%)
+[08:12:49]   byclasstest: 101 linhas (100%)
+[08:12:50] (166/316) eclipse/kura -> test-smells-kura
+[08:12:50]   reiniciando o JNose
+[08:12:56]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-081256.{out,err}
+[08:13:04] config aplicada: 20 smells ligados
+[08:13:33]   bytestsmells: 6571 linhas (100%)
+[08:13:45]   byclasstest: 178 linhas (100%)
+[08:13:47] (167/316) eclipse/leshan -> test-smells-leshan
+[08:14:04]   bytestsmells: 734 linhas (100%)
+[08:14:16]   byclasstest: 43 linhas (100%)
+[08:14:16] (168/316) eclipse/linuxtools -> test-smells-org.eclipse.linuxtools
+[08:14:43]   bytestsmells: 4947 linhas (100%)
+[08:14:55]   byclasstest: 289 linhas (100%)
+[08:14:56] (169/316) eclipse/lsp4j -> test-smells-lsp4j
+[08:15:09]   bytestsmells: 557 linhas (100%)
+[08:15:20]   byclasstest: 35 linhas (100%)
+[08:15:21] (170/316) eclipse/m2e-core -> test-smells-m2e-core
+[08:15:35]   bytestsmells: 21 linhas (100%)
+[08:15:46]   byclasstest: 5 linhas (100%)
+[08:15:46] (171/316) eclipse/microprofile-opentracing -> test-smells-microprofile-opentracing
+[08:15:58]   bytestsmells: 25 linhas (100%)
+[08:16:09]   byclasstest: 5 linhas (100%)
+[08:16:09] (172/316) eclipse/milo -> test-smells-milo
+[08:16:23]   bytestsmells: 437 linhas (100%)
+[08:16:34]   byclasstest: 68 linhas (100%)
+[08:16:35] (173/316) eclipse/n4js -> test-smells-n4js
+[08:17:13]   bytestsmells: 1169 linhas (100%)
+[08:17:24]   byclasstest: 177 linhas (100%)
+[08:17:27] (174/316) eclipse/nebula.widgets.nattable -> test-smells-nattable
+[08:18:15]   bytestsmells: 42815 linhas (100%)
+[08:18:27]   byclasstest: 251 linhas (100%)
+[08:18:27] (175/316) eclipse/openj9 -> test-smells-openj9
+[08:19:06]   bytestsmells: 10556 linhas (100%)
+[08:19:18]   byclasstest: 359 linhas (100%)
+[08:19:21] (176/316) eclipse/org.aspectj -> test-smells-aspectj
+[08:20:27]   bytestsmells: 2818 linhas (100%)
+[08:20:38]   byclasstest: 323 linhas (100%)
+[08:20:41] (177/316) eclipse/orion.server -> test-smells-orion.server
+[08:21:00]   bytestsmells: 3458 linhas (100%)
+[08:21:11]   byclasstest: 79 linhas (100%)
+[08:21:12] (178/316) eclipse/packagedrone -> test-smells-packagedrone
+[08:21:29]   bytestsmells: 461 linhas (100%)
+[08:21:40]   byclasstest: 54 linhas (100%)
+[08:21:41] (179/316) eclipse/paho.mqtt.java -> test-smells-paho.mqtt.java
+[08:21:54]   bytestsmells: 906 linhas (100%)
+[08:22:05]   byclasstest: 54 linhas (100%)
+[08:22:05] (180/316) eclipse/rap -> test-smells-org.eclipse.rap
+[08:22:36]   bytestsmells: 15709 linhas (100%)
+[08:22:48]   byclasstest: 584 linhas (100%)
+[08:22:50] (181/316) eclipse/rdf4j -> test-smells-rdf4j
+[08:22:50]   reiniciando o JNose
+[08:22:55]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-082255.{out,err}
+[08:23:04] config aplicada: 20 smells ligados
+[08:23:22]   bytestsmells: 2190 linhas (100%)
+[08:23:34]   byclasstest: 114 linhas (100%)
+[08:23:34] (182/316) eclipse/reddeer -> test-smells-reddeer
+[08:23:51]   bytestsmells: 1802 linhas (100%)
+[08:24:02]   byclasstest: 233 linhas (100%)
+[08:24:03] (183/316) eclipse/smarthome -> test-smells-smarthome
+[08:24:35]   bytestsmells: 7841 linhas (100%)
+[08:24:47]   byclasstest: 356 linhas (100%)
+[08:24:49] (184/316) eclipse/texlipse -> test-smells-texlipse
+[08:25:04]   bytestsmells: 0 linhas (100%)
+[08:25:15]   byclasstest: 0 linhas (100%)
+[08:25:15] (185/316) eclipse/thym -> test-smells-thym
+[08:25:30]   bytestsmells: 316 linhas (100%)
+[08:25:41]   byclasstest: 21 linhas (100%)
+[08:25:42] (186/316) eclipse/titan.EclipsePlug-ins -> test-smells-titan.EclipsePlug-ins
+[08:26:16]   bytestsmells: 83 linhas (100%)
+[08:26:27]   byclasstest: 32 linhas (100%)
+[08:26:28] (187/316) eclipse/triquetrum -> test-smells-triquetrum
+[08:26:41]   bytestsmells: 255 linhas (100%)
+[08:26:52]   byclasstest: 19 linhas (100%)
+[08:26:52] (188/316) eclipse/tycho -> test-smells-tycho
+[08:27:16]   bytestsmells: 2474 linhas (100%)
+[08:27:27]   byclasstest: 283 linhas (100%)
+[08:27:28] (189/316) eclipse/vorto -> test-smells-vorto
+[08:27:46]   bytestsmells: 667 linhas (100%)
+[08:27:57]   byclasstest: 50 linhas (100%)
+[08:27:58] (190/316) eclipse/webtools.sourceediting -> test-smells-sourceediting
+[08:28:43]   bytestsmells: 3035 linhas (100%)
+[08:28:54]   byclasstest: 339 linhas (100%)
+[08:29:03] (191/316) eclipse/xsemantics -> test-smells-xsemantics
+[08:29:17]   bytestsmells: 131 linhas (100%)
+[08:29:28]   byclasstest: 37 linhas (100%)
+[08:29:28] (192/316) eclipse/xtext-core -> test-smells-xtext-core
+[08:29:39]   1 candidato(s) a teste sem classe removido(s): org.eclipse.xtext.testing\src\org\eclipse\xtext\testing\RepeatedTest.java
+[08:29:55]   bytestsmells: 8097 linhas (100%)
+[08:30:07]   byclasstest: 429 linhas (100%)
+[08:30:09] (193/316) eclipse/xtext-eclipse -> test-smells-xtext-eclipse
+[08:30:36]   bytestsmells: 4758 linhas (100%)
+[08:30:47]   byclasstest: 357 linhas (100%)
+[08:30:50] (194/316) eclipse/xtext-extras -> test-smells-xtext-extras
+[08:31:12]   bytestsmells: 4492 linhas (100%)
+[08:31:24]   byclasstest: 232 linhas (100%)
+[08:31:25] (195/316) eclipse/xtext-idea -> test-smells-xtext-idea
+[08:31:43]   bytestsmells: 465 linhas (100%)
+[08:31:54]   byclasstest: 4 linhas (100%)
+[08:31:55] (196/316) eclipse/xtext-lib -> test-smells-xtext-lib
+[08:31:55]   reiniciando o JNose
+[08:32:01]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-083201.{out,err}
+[08:32:09] config aplicada: 20 smells ligados
+[08:32:23]   bytestsmells: 674 linhas (100%)
+[08:32:34]   byclasstest: 13 linhas (100%)
+[08:32:34] (197/316) eclipse/xtext-xtend -> test-smells-xtext-xtend
+[08:33:03]   bytestsmells: 8125 linhas (100%)
+[08:33:17]   byclasstest: 517 linhas (100%)
+[08:33:18] (198/316) epam/JDI -> test-smells-JDI
+[08:33:54]   bytestsmells: 121 linhas (100%)
+[08:34:05]   byclasstest: 71 linhas (100%)
+[08:34:05] (199/316) epam/Wilma -> test-smells-Wilma
+[08:34:22]   bytestsmells: 755 linhas (100%)
+[08:34:33]   byclasstest: 376 linhas (100%)
+[08:34:34] (200/316) facebook/buck -> test-smells-buck
+[08:38:13]   bytestsmells: 18339 linhas (100%)
+[08:38:24]   byclasstest: 1356 linhas (100%)
+[08:38:28] (201/316) facebook/facebook-android-sdk -> test-smells-facebook-android-sdk
+[08:38:46]   bytestsmells: 1187 linhas (100%)
+[08:38:57]   byclasstest: 77 linhas (100%)
+[08:38:58] (202/316) facebook/facebook-java-business-sdk -> test-smells-facebook-java-business-sdk
+[08:39:11]   bytestsmells: 0 linhas (100%)
+[08:39:22]   byclasstest: 0 linhas (100%)
+[08:39:22] (203/316) facebook/fresco -> test-smells-fresco
+[08:39:54]   bytestsmells: 5253 linhas (100%)
+[08:40:05]   byclasstest: 167 linhas (100%)
+[08:40:06] (204/316) facebook/litho -> test-smells-litho
+[08:42:03]   bytestsmells: 5369 linhas (100%)
+[08:42:14]   byclasstest: 238 linhas (100%)
+[08:42:15] (205/316) google/ExoPlayer -> test-smells-ExoPlayer
+[08:42:38]   bytestsmells: 4596 linhas (100%)
+[08:42:49]   byclasstest: 163 linhas (100%)
+[08:42:50] (206/316) google/MOE -> test-smells-MOE
+[08:43:03]   bytestsmells: 790 linhas (100%)
+[08:43:14]   byclasstest: 60 linhas (100%)
+[08:43:14] (207/316) google/agera -> test-smells-agera
+[08:43:27]   bytestsmells: 495 linhas (100%)
+[08:43:38]   byclasstest: 38 linhas (100%)
+[08:43:38] (208/316) google/auto -> test-smells-auto
+[08:43:52]   bytestsmells: 969 linhas (100%)
+[08:44:03]   byclasstest: 44 linhas (100%)
+[08:44:03] (209/316) google/binnavi -> test-smells-binnavi
+[08:44:40]   bytestsmells: 18292 linhas (100%)
+[08:44:52]   byclasstest: 867 linhas (100%)
+[08:44:53] (210/316) google/blockly-android -> test-smells-blockly-android
+[08:45:07]   bytestsmells: 1163 linhas (100%)
+[08:45:18]   byclasstest: 44 linhas (100%)
+[08:45:18] (211/316) google/caja -> test-smells-caja
+[08:45:18]   reiniciando o JNose
+[08:45:23]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-084523.{out,err}
+[08:45:32] config aplicada: 20 smells ligados
+[08:46:57]   bytestsmells: 849 linhas (100%)
+[08:47:08]   byclasstest: 35 linhas (100%)
+[08:47:09] (212/316) google/caliper -> test-smells-caliper
+[08:47:22]   bytestsmells: 261 linhas (100%)
+[08:47:33]   byclasstest: 22 linhas (100%)
+[08:47:33] (213/316) google/closure-compiler -> test-smells-closure-compiler
+[08:48:12]   bytestsmells: 12148 linhas (100%)
+[08:55:12] 451 repos elegiveis, 346 ja concluidos, processando 105
+[08:55:12] config aplicada: 20 smells ligados
+[08:55:12] (1/105) apache/incubator-myriad -> test-smells-incubator-myriad
+[08:55:26]   bytestsmells: 341 linhas (100%)
+[08:55:37]   byclasstest: 33 linhas (100%)
+[08:55:37] (2/105) google/closure-compiler -> test-smells-closure-compiler
+[08:56:04]   bytestsmells: 12148 linhas (100%)
+[08:56:17]   byclasstest: 381 linhas (100%)
+[08:56:17] (3/105) google/closure-stylesheets -> test-smells-closure-stylesheets
+[08:56:30]   bytestsmells: 1790 linhas (100%)
+[08:56:42]   byclasstest: 104 linhas (100%)
+[08:56:42] (4/105) google/closure-templates -> test-smells-closure-templates
+[08:56:58]   bytestsmells: 4472 linhas (100%)
+[08:57:10]   byclasstest: 206 linhas (100%)
+[08:57:10] (5/105) google/conscrypt -> test-smells-conscrypt
+[08:57:30]   bytestsmells: 1907 linhas (100%)
+[08:57:41]   byclasstest: 64 linhas (100%)
+[08:57:41] (6/105) google/copybara -> test-smells-copybara
+[08:57:55]   bytestsmells: 2122 linhas (100%)
+[08:58:06]   byclasstest: 91 linhas (100%)
+[08:58:06] (7/105) google/error-prone -> test-smells-error-prone
+[08:58:24]   bytestsmells: 1087 linhas (100%)
+[08:58:35]   byclasstest: 498 linhas (100%)
+[08:58:36] (8/105) google/error-prone-javac -> test-smells-error-prone-javac
+[08:59:01]   bytestsmells: 1315 linhas (100%)
+[08:59:12]   byclasstest: 423 linhas (100%)
+[08:59:15] (9/105) google/gcm -> test-smells-gcm
+[08:59:29]   bytestsmells: 377 linhas (100%)
+[08:59:40]   byclasstest: 6 linhas (100%)
+[08:59:40] (10/105) google/gdata-java-client -> test-smells-gdata-java-client
+[08:59:56]   bytestsmells: 0 linhas (100%)
+[09:00:07]   byclasstest: 0 linhas (100%)
+[09:00:07] (11/105) google/gitiles -> test-smells-gitiles
+[09:00:20]   bytestsmells: 1291 linhas (100%)
+[09:00:31]   byclasstest: 24 linhas (100%)
+[09:00:31] (12/105) google/google-authenticator -> test-smells-google-authenticator
+[09:00:44]   bytestsmells: 0 linhas (100%)
+[09:00:55]   byclasstest: 0 linhas (100%)
+[09:00:55] (13/105) google/google-java-format -> test-smells-google-java-format
+[09:01:08]   bytestsmells: 361 linhas (100%)
+[09:01:19]   byclasstest: 17 linhas (100%)
+[09:01:19] (14/105) google/gtfs-realtime-bindings -> test-smells-gtfs-realtime-bindings
+[09:01:31]   bytestsmells: 4 linhas (100%)
+[09:01:42]   byclasstest: 1 linhas (100%)
+[09:01:42] (15/105) google/guava -> test-smells-guava
+[09:02:15]   bytestsmells: 41532 linhas (100%)
+[09:02:29]   byclasstest: 819 linhas (100%)
+[09:02:30] (16/105) google/guice -> test-smells-guice
+[09:02:30]   reiniciando o JNose
+[09:02:35]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-090235.{out,err}
+[09:02:43] config aplicada: 20 smells ligados
+[09:03:11]   bytestsmells: 2616 linhas (100%)
+[09:03:23]   byclasstest: 140 linhas (100%)
+[09:03:24] (17/105) google/hover -> test-smells-hover
+[09:03:36]   bytestsmells: 8 linhas (100%)
+[09:03:47]   byclasstest: 4 linhas (100%)
+[09:03:47] (18/105) google/j2cl -> test-smells-j2cl
+[09:04:11]   bytestsmells: 1315 linhas (100%)
+[09:04:23]   byclasstest: 143 linhas (100%)
+[09:04:24] (19/105) google/j2objc -> test-smells-j2objc
+[09:05:26]   bytestsmells: 47986 linhas (100%)
+[09:05:42]   byclasstest: 830 linhas (100%)
+[09:05:43] (20/105) google/jimfs -> test-smells-jimfs
+[09:05:56]   bytestsmells: 2217 linhas (100%)
+[09:06:07]   byclasstest: 43 linhas (100%)
+[09:06:07] (21/105) google/jsinterop-generator -> test-smells-jsinterop-generator
+[09:06:20]   bytestsmells: 0 linhas (100%)
+[09:06:31]   byclasstest: 0 linhas (100%)
+[09:06:31] (22/105) google/nomulus -> test-smells-nomulus
+[09:06:52]   bytestsmells: 4573 linhas (100%)
+[09:07:03]   byclasstest: 469 linhas (100%)
+[09:07:04] (23/105) google/physical-web -> test-smells-physical-web
+[09:07:18]   bytestsmells: 154 linhas (100%)
+[09:07:29]   byclasstest: 8 linhas (100%)
+[09:07:29] (24/105) google/protobuf-dt -> test-smells-protobuf-dt
+[09:07:43]   bytestsmells: 180 linhas (100%)
+[09:07:54]   byclasstest: 154 linhas (100%)
+[09:07:54] (25/105) google/rejoiner -> test-smells-rejoiner
+[09:08:06]   bytestsmells: 69 linhas (100%)
+[09:08:17]   byclasstest: 10 linhas (100%)
+[09:08:17] (26/105) google/ringdroid -> test-smells-ringdroid
+[09:08:30]   bytestsmells: 0 linhas (100%)
+[09:08:41]   byclasstest: 0 linhas (100%)
+[09:08:41] (27/105) google/sagetv -> test-smells-sagetv
+[09:09:29]   bytestsmells: 117 linhas (100%)
+[09:09:40]   byclasstest: 23 linhas (100%)
+[09:09:42] (28/105) google/tink -> test-smells-tink
+[09:09:57]   bytestsmells: 2903 linhas (100%)
+[09:10:08]   byclasstest: 141 linhas (100%)
+[09:10:09] (29/105) google/volley -> test-smells-volley
+[09:10:21]   bytestsmells: 436 linhas (100%)
+[09:10:32]   byclasstest: 29 linhas (100%)
+[09:10:32] (30/105) linkedin/ambry -> test-smells-ambry
+[09:10:48]   bytestsmells: 3915 linhas (100%)
+[09:11:00]   byclasstest: 179 linhas (100%)
+[09:11:00] (31/105) linkedin/li-apache-kafka-clients -> test-smells-li-apache-kafka-clients
+[09:11:00]   reiniciando o JNose
+[09:11:06]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-091106.{out,err}
+[09:11:14] config aplicada: 20 smells ligados
+[09:11:28]   bytestsmells: 501 linhas (100%)
+[09:11:39]   byclasstest: 18 linhas (100%)
+[09:11:39] (32/105) linkedin/parseq -> test-smells-parseq
+[09:11:54]   bytestsmells: 2045 linhas (100%)
+[09:12:06]   byclasstest: 63 linhas (100%)
+[09:12:06] (33/105) linkedin/rest.li -> test-smells-rest.li
+[09:12:32]   bytestsmells: 16190 linhas (100%)
+[09:12:46]   byclasstest: 511 linhas (100%)
+[09:12:47] (34/105) oracle/fastr -> test-smells-fastr
+[09:13:15]   bytestsmells: 1638 linhas (100%)
+[09:13:27]   byclasstest: 662 linhas (100%)
+[09:13:27] (35/105) oracle/graal -> test-smells-graal
+[09:14:06]   bytestsmells: 18326 linhas (100%)
+[09:14:19]   byclasstest: 831 linhas (100%)
+[09:14:21] (36/105) oracle/oci-java-sdk -> test-smells-oci-java-sdk
+[09:14:38]   bytestsmells: 504 linhas (100%)
+[09:14:48]   byclasstest: 38 linhas (100%)
+[09:14:49] (37/105) oracle/opengrok -> test-smells-opengrok
+[09:15:07]   bytestsmells: 3751 linhas (100%)
+[09:15:19]   byclasstest: 218 linhas (100%)
+[09:15:19] (38/105) oracle/pgql-lang -> test-smells-pgql-lang
+[09:15:31]   bytestsmells: 20 linhas (100%)
+[09:15:42]   byclasstest: 12 linhas (100%)
+[09:15:42] (39/105) oracle/soda-for-java -> test-smells-soda-for-java
+[09:15:59]   bytestsmells: 24 linhas (100%)
+[09:16:10]   byclasstest: 4 linhas (100%)
+[09:16:10] (40/105) oracle/visualvm -> test-smells-visualvm
+[09:16:34]   1 candidato(s) a teste sem classe removido(s): visualvm\libs.profiler\lib.profiler\test\qa-functional\src\org\graalvm\visualvm\lib\jfluid\tests\jfluid\profilingpoints\BasicTest.java
+[09:16:46]   bytestsmells: 603 linhas (100%)
+[09:16:57]   byclasstest: 26 linhas (100%)
+[09:16:58] (41/105) oracle/weblogic-monitoring-exporter -> test-smells-weblogic-monitoring-exporter
+[09:17:10]   bytestsmells: 146 linhas (100%)
+[09:17:21]   byclasstest: 14 linhas (100%)
+[09:17:21] (42/105) rabbitmq/rabbitmq-java-client -> test-smells-rabbitmq-java-client
+[09:17:36]   bytestsmells: 627 linhas (100%)
+[09:17:47]   byclasstest: 58 linhas (100%)
+[09:17:47] (43/105) rabbitmq/rabbitmq-jms-client -> test-smells-rabbitmq-jms-client
+[09:18:03]   bytestsmells: 213 linhas (100%)
+[09:18:14]   byclasstest: 18 linhas (100%)
+[09:18:14] (44/105) reactor/reactive-streams-commons -> test-smells-reactive-streams-commons
+[09:18:28]   bytestsmells: 2159 linhas (100%)
+[09:18:39]   byclasstest: 117 linhas (100%)
+[09:18:39] (45/105) reactor/reactor-core -> test-smells-reactor-core
+[09:18:59]   bytestsmells: 10592 linhas (100%)
+[09:19:11]   byclasstest: 339 linhas (100%)
+[09:19:11] (46/105) reactor/reactor-kafka -> test-smells-reactor-kafka
+[09:19:11]   reiniciando o JNose
+[09:19:16]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-091916.{out,err}
+[09:19:24] config aplicada: 20 smells ligados
+[09:19:39]   bytestsmells: 381 linhas (100%)
+[09:19:50]   byclasstest: 16 linhas (100%)
+[09:19:50] (47/105) reactor/reactor-netty -> test-smells-reactor-netty
+[09:20:07]   bytestsmells: 856 linhas (100%)
+[09:20:18]   byclasstest: 40 linhas (100%)
+[09:20:19] (48/105) robolectric/robolectric -> test-smells-robolectric
+[09:20:41]   bytestsmells: 13258 linhas (100%)
+[09:20:54]   byclasstest: 489 linhas (100%)
+[09:20:54] (49/105) spring-projects/Spring-Integration-in-Action -> test-smells-Spring-Integration-in-Action
+[09:21:07]   bytestsmells: 129 linhas (100%)
+[09:21:18]   byclasstest: 44 linhas (100%)
+[09:21:18] (50/105) spring-projects/aws-maven -> test-smells-aws-maven
+[09:21:30]   bytestsmells: 0 linhas (100%)
+[09:21:41]   byclasstest: 0 linhas (100%)
+[09:21:41] (51/105) spring-projects/eclipse-integration-tcserver -> test-smells-eclipse-integration-tcserver
+[09:21:54]   bytestsmells: 192 linhas (100%)
+[09:22:05]   byclasstest: 19 linhas (100%)
+[09:22:05] (52/105) spring-projects/grails-ide -> test-smells-grails-ide
+[09:22:27]   bytestsmells: 504 linhas (100%)
+[09:22:38]   byclasstest: 38 linhas (100%)
+[09:22:38] (53/105) spring-projects/greenhouse -> test-smells-greenhouse
+[09:22:51]   bytestsmells: 219 linhas (100%)
+[09:23:02]   byclasstest: 18 linhas (100%)
+[09:23:02] (54/105) spring-projects/spring-amqp -> test-smells-spring-amqp
+[09:23:17]   bytestsmells: 3898 linhas (100%)
+[09:23:28]   byclasstest: 143 linhas (100%)
+[09:23:28] (55/105) spring-projects/spring-batch -> test-smells-spring-batch
+[09:23:51]   bytestsmells: 10900 linhas (100%)
+[09:24:03]   byclasstest: 721 linhas (100%)
+[09:24:04] (56/105) spring-projects/spring-batch-admin -> test-smells-spring-batch-admin
+[09:24:18]   bytestsmells: 742 linhas (100%)
+[09:24:29]   byclasstest: 93 linhas (100%)
+[09:24:29] (57/105) spring-projects/spring-boot -> test-smells-spring-boot
+[09:24:40]   13 candidato(s) a teste sem classe removido(s): spring-boot-project\spring-boot-test\src\main\java\org\springframework\boot\test\context\SpringBootTest.java, spring-boot-project\spring-boot-test-autoconfigure\src\main\java\org\springframework\boot\test\autoconfigure\data\jdbc\DataJdbcTest.java, spring-boot-project\spring-boot-test-autoconfigure\src\main\java\org\springframework\boot\test\autoconfigure\data\ldap\DataLdapTest.java ...
+[09:24:59]   bytestsmells: 12383 linhas (100%)
+[09:25:11]   byclasstest: 1410 linhas (100%)
+[09:25:13] (58/105) spring-projects/spring-data-cassandra -> test-smells-spring-data-cassandra
+[09:25:27]   bytestsmells: 1644 linhas (100%)
+[09:25:39]   byclasstest: 177 linhas (100%)
+[09:25:39] (59/105) spring-projects/spring-data-commons -> test-smells-spring-data-commons
+[09:25:53]   bytestsmells: 1303 linhas (100%)
+[09:26:04]   byclasstest: 206 linhas (100%)
+[09:26:04] (60/105) spring-projects/spring-data-couchbase -> test-smells-spring-data-couchbase
+[09:26:17]   bytestsmells: 1370 linhas (100%)
+[09:26:28]   byclasstest: 55 linhas (100%)
+[09:26:29] (61/105) spring-projects/spring-data-dev-tools -> test-smells-spring-data-dev-tools
+[09:26:29]   reiniciando o JNose
+[09:26:34]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-092634.{out,err}
+[09:26:42] config aplicada: 20 smells ligados
+[09:26:55]   bytestsmells: 70 linhas (100%)
+[09:27:06]   byclasstest: 28 linhas (100%)
+[09:27:07] (62/105) spring-projects/spring-data-examples -> test-smells-spring-data-examples
+[09:27:25]   bytestsmells: 281 linhas (100%)
+[09:27:36]   byclasstest: 96 linhas (100%)
+[09:27:37] (63/105) spring-projects/spring-data-gemfire -> test-smells-spring-data-gemfire
+[09:27:41]   1 candidato(s) a teste sem classe removido(s): src\test\java\org\springframework\data\gemfire\test\mock\annotation\GemFireUnitTest.java
+[09:27:57]   bytestsmells: 8245 linhas (100%)
+[09:28:09]   byclasstest: 357 linhas (100%)
+[09:28:10] (64/105) spring-projects/spring-data-graph -> test-smells-spring-data-graph
+[09:28:23]   bytestsmells: 293 linhas (100%)
+[09:28:34]   byclasstest: 60 linhas (100%)
+[09:28:34] (65/105) spring-projects/spring-data-jdbc -> test-smells-spring-data-relational
+[09:28:47]   bytestsmells: 385 linhas (100%)
+[09:28:59]   byclasstest: 73 linhas (100%)
+[09:28:59] (66/105) spring-projects/spring-data-jdbc-ext -> test-smells-spring-data-jdbc-ext
+[09:29:12]   bytestsmells: 70 linhas (100%)
+[09:29:22]   byclasstest: 15 linhas (100%)
+[09:29:23] (67/105) spring-projects/spring-data-jpa -> test-smells-spring-data-jpa
+[09:29:36]   bytestsmells: 721 linhas (100%)
+[09:29:47]   byclasstest: 125 linhas (100%)
+[09:29:47] (68/105) spring-projects/spring-data-keyvalue -> test-smells-spring-data-keyvalue
+[09:30:03]   bytestsmells: 122 linhas (100%)
+[09:30:14]   byclasstest: 21 linhas (100%)
+[09:30:14] (69/105) spring-projects/spring-data-mongodb -> test-smells-spring-data-mongodb
+[09:30:34]   bytestsmells: 5299 linhas (100%)
+[09:30:45]   byclasstest: 253 linhas (100%)
+[09:30:45] (70/105) spring-projects/spring-data-neo4j -> test-smells-spring-data-neo4j
+[09:31:03]   bytestsmells: 948 linhas (100%)
+[09:31:14]   byclasstest: 60 linhas (100%)
+[09:31:14] (71/105) spring-projects/spring-data-redis -> test-smells-spring-data-redis
+[09:31:30]   bytestsmells: 4555 linhas (100%)
+[09:31:42]   byclasstest: 192 linhas (100%)
+[09:31:42] (72/105) spring-projects/spring-data-rest -> test-smells-spring-data-rest
+[09:31:56]   bytestsmells: 471 linhas (100%)
+[09:32:07]   byclasstest: 108 linhas (100%)
+[09:32:07] (73/105) spring-projects/spring-data-solr -> test-smells-spring-data-solr
+[09:32:20]   bytestsmells: 1774 linhas (100%)
+[09:32:31]   byclasstest: 45 linhas (100%)
+[09:32:31] (74/105) spring-projects/spring-framework -> test-smells-spring-framework
+[09:32:51]   1 candidato(s) a teste sem classe removido(s): spring-test\src\test\java\org\springframework\test\context\junit\jupiter\FailingTestCase.java
+[09:33:25]   bytestsmells: 51670 linhas (100%)
+[09:33:37]   byclasstest: 1963 linhas (100%)
+[09:33:39] (75/105) spring-projects/spring-hadoop -> test-smells-spring-hadoop
+[09:33:55]   bytestsmells: 4091 linhas (100%)
+[09:34:06]   byclasstest: 237 linhas (100%)
+[09:34:06] (76/105) spring-projects/spring-hateoas -> test-smells-spring-hateoas
+[09:34:06]   reiniciando o JNose
+[09:34:12]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-093412.{out,err}
+[09:34:20] config aplicada: 20 smells ligados
+[09:34:34]   bytestsmells: 535 linhas (100%)
+[09:34:46]   byclasstest: 90 linhas (100%)
+[09:34:46] (77/105) spring-projects/spring-ide -> test-smells-spring-ide
+[09:35:34]   bytestsmells: 4035 linhas (100%)
+[09:35:46]   byclasstest: 139 linhas (100%)
+[09:35:48] (78/105) spring-projects/spring-integration -> tests-smells-spring-integration
+[09:35:57]   1 candidato(s) a teste sem classe removido(s): spring-integration-test-support\src\main\java\org\springframework\integration\test\condition\LongRunningTest.java
+[09:36:18]   bytestsmells: 18803 linhas (100%)
+[09:36:31]   byclasstest: 950 linhas (100%)
+[09:36:32] (79/105) spring-projects/spring-integration-aws -> test-smells-spring-integration-aws
+[09:36:45]   bytestsmells: 497 linhas (100%)
+[09:36:56]   byclasstest: 23 linhas (100%)
+[09:36:56] (80/105) spring-projects/spring-integration-java-dsl -> test-smells-spring-integration-java-dsl
+[09:37:09]   bytestsmells: 562 linhas (100%)
+[09:37:20]   byclasstest: 27 linhas (100%)
+[09:37:20] (81/105) spring-projects/spring-integration-samples -> test-smells-spring-integration-samples
+[09:37:34]   bytestsmells: 158 linhas (100%)
+[09:37:45]   byclasstest: 56 linhas (100%)
+[09:37:45] (82/105) spring-projects/spring-ldap -> test-smells-spring-ldap
+[09:38:01]   bytestsmells: 3581 linhas (100%)
+[09:38:12]   byclasstest: 160 linhas (100%)
+[09:38:12] (83/105) spring-projects/spring-loaded -> test-smells-spring-loaded
+[09:38:32]   bytestsmells: 2616 linhas (100%)
+[09:38:43]   byclasstest: 71 linhas (100%)
+[09:38:43] (84/105) spring-projects/spring-mvc-showcase -> test-smells-spring-mvc-showcase
+[09:38:56]   bytestsmells: 0 linhas (100%)
+[09:39:07]   byclasstest: 17 linhas (100%)
+[09:39:07] (85/105) spring-projects/spring-restdocs -> test-smells-spring-restdocs
+[09:39:20]   bytestsmells: 603 linhas (100%)
+[09:39:31]   byclasstest: 88 linhas (100%)
+[09:39:31] (86/105) spring-projects/spring-retry -> test-smells-spring-retry
+[09:39:44]   bytestsmells: 847 linhas (100%)
+[09:39:55]   byclasstest: 48 linhas (100%)
+[09:39:55] (87/105) spring-projects/spring-roo -> test-smells-spring-roo
+[09:40:13]   bytestsmells: 724 linhas (100%)
+[09:40:24]   byclasstest: 83 linhas (100%)
+[09:40:25] (88/105) spring-projects/spring-security -> test-smells-spring-security
+[09:40:48]   bytestsmells: 7585 linhas (100%)
+[09:41:00]   byclasstest: 816 linhas (100%)
+[09:41:01] (89/105) spring-projects/spring-session -> test-smells-spring-session
+[09:41:22]   bytestsmells: 880 linhas (100%)
+[09:41:33]   byclasstest: 84 linhas (100%)
+[09:41:33] (90/105) spring-projects/spring-social -> test-smells-spring-social
+[09:41:47]   bytestsmells: 555 linhas (100%)
+[09:41:58]   byclasstest: 30 linhas (100%)
+[09:41:58] (91/105) spring-projects/spring-social-facebook -> test-smells-spring-social-facebook
+[09:41:58]   reiniciando o JNose
+[09:42:03]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-094203.{out,err}
+[09:42:12] config aplicada: 20 smells ligados
+[09:42:32]   bytestsmells: 1127 linhas (100%)
+[09:42:43]   byclasstest: 43 linhas (100%)
+[09:42:43] (92/105) spring-projects/spring-social-linkedin -> test-smells-spring-social-linkedin
+[09:42:57]   bytestsmells: 466 linhas (100%)
+[09:43:08]   byclasstest: 10 linhas (100%)
+[09:43:08] (93/105) spring-projects/spring-statemachine -> test-smells-spring-statemachine
+[09:43:32]   bytestsmells: 4478 linhas (100%)
+[09:43:44]   byclasstest: 152 linhas (100%)
+[09:43:45] (94/105) spring-projects/spring-vault -> test-smells-spring-vault
+[09:43:59]   bytestsmells: 346 linhas (100%)
+[09:44:10]   byclasstest: 91 linhas (100%)
+[09:44:10] (95/105) spring-projects/spring-ws -> test-smells-spring-ws
+[09:44:26]   bytestsmells: 1033 linhas (100%)
+[09:44:37]   byclasstest: 230 linhas (100%)
+[09:44:37] (96/105) spring-projects/spring-xd -> test-smells-spring-xd
+[09:45:01]   bytestsmells: 3700 linhas (100%)
+[09:45:13]   byclasstest: 334 linhas (100%)
+[09:45:14] (97/105) uber/NullAway -> test-smells-NullAway
+[09:45:26]   bytestsmells: 40 linhas (100%)
+[09:45:37]   byclasstest: 7 linhas (100%)
+[09:45:37] (98/105) uber/rave -> test-smells-rave
+[09:45:49]   bytestsmells: 239 linhas (100%)
+[09:46:00]   byclasstest: 7 linhas (100%)
+[09:46:00] (99/105) uber/tchannel-java -> test-smells-tchannel-java
+[09:46:13]   bytestsmells: 468 linhas (100%)
+[09:46:24]   byclasstest: 37 linhas (100%)
+[09:46:24] (100/105) uber/uReplicator -> test-smells-uReplicator
+[09:46:37]   bytestsmells: 582 linhas (100%)
+[09:46:48]   byclasstest: 21 linhas (100%)
+[09:46:48] (101/105) vmware/admiral -> test-smells-admiral
+[09:47:15]   bytestsmells: 7259 linhas (100%)
+[09:47:27]   byclasstest: 280 linhas (100%)
+[09:47:28] (102/105) vmware/hillview -> test-smells-hillview
+[09:47:42]   bytestsmells: 937 linhas (100%)
+[09:47:53]   byclasstest: 65 linhas (100%)
+[09:47:53] (103/105) vmware/xenon -> test-smells-xenon
+[09:48:14]   bytestsmells: 4672 linhas (100%)
+[09:48:26]   byclasstest: 127 linhas (100%)
+[09:48:26] (104/105) yandex/clickhouse-jdbc -> test-smells-clickhouse-java
+[09:48:38]   bytestsmells: 1101 linhas (100%)
+[09:48:49]   byclasstest: 30 linhas (100%)
+[09:48:49] (105/105) yandex/graphouse -> test-smells-graphouse
+[09:49:02]   bytestsmells: 91 linhas (100%)
+[09:49:12]   byclasstest: 8 linhas (100%)
+[09:49:13] fim
+[10:18:27] 451 repos elegiveis, 451 ja concluidos, processando 1
+[10:18:31] JNose fora do ar; subindo
+[10:18:31]   reiniciando o JNose
+[10:18:37]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-101837.{out,err}
+[10:18:46] config aplicada: 20 smells ligados
+[10:18:46] config aplicada: 20 smells ligados
+[10:18:46] (1/1) apache/eagle -> test-smells-eagle
+[10:19:17]   bytestsmells: 4843 linhas (100%)
+[10:19:30]   byclasstest: 330 linhas (100%)
+[10:19:36] fim
+[10:21:03] 451 repos elegiveis, 451 ja concluidos, processando 1
+[10:21:08] JNose fora do ar; subindo
+[10:21:08]   reiniciando o JNose
+[10:21:13]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-102113.{out,err}
+[10:21:21] config aplicada: 20 smells ligados
+[10:21:21] config aplicada: 20 smells ligados
+[10:21:21] (1/1) apache/incubator-taverna-engine -> test-smells-incubator-taverna-engine
+[10:21:38]   bytestsmells: 884 linhas (100%)
+[10:21:49]   byclasstest: 50 linhas (100%)
+[10:21:55] fim
+[10:22:48] 451 repos elegiveis, 451 ja concluidos, processando 1
+[10:22:52] JNose fora do ar; subindo
+[10:22:52]   reiniciando o JNose
+[10:22:58]   console do JNose em D:\master-degree-git\steps\step1-coleta-jnose\reports\console-jnose\20261019-102258.{out,err}
+[10:23:06] config aplicada: 20 smells ligados
+[10:23:06] config aplicada: 20 smells ligados
+[10:23:06] (1/1) apache/maven-surefire -> test-smells-maven-surefire
+[10:23:29]   bytestsmells: 3476 linhas (100%)
+[10:23:41]   byclasstest: 514 linhas (100%)
+[10:23:47] fim
