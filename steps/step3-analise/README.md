@@ -26,6 +26,7 @@ explica a pergunta, o resultado e a leitura. **Este arquivo é só o índice.**
 | **03** | classes com code smell confirmado têm testes piores? | em contagem sim, em densidade não: de novo o tamanho do teste | [extremos](analises/03-extremos/) |
 | **04** | entre as sinalizadas, o test smell prediz quais a maioria confirmou? | **inconclusiva** — poder insuficiente, não nulo | [disputados](analises/04-disputados/) |
 | **05** | algum code smell específico se associa a algum test smell específico? | nenhum dos 76 testes sobrevive ao FDR; duas candidatas acima do r detectável | [code × test smell](analises/05-code-x-test-smell/) |
+| **06** | o nulo de 01 resiste a equivalência, dependência entre arquivos e classe aninhada? | resiste: os dados excluem rho acima de 0,105; bootstrap por repositório e recorte sem aninhadas não mudam o IC | [robustez](analises/06-robustez/) |
 
 ### O que o conjunto diz
 
@@ -75,7 +76,8 @@ step3-analise/
     ├── 02-por-test-smell/      README.md + por_test_smell.py + dados/
     ├── 03-extremos/            README.md + extremos.py + dados/
     ├── 04-disputados/          README.md + disputados.py + dados/
-    └── 05-code-x-test-smell/   README.md + cruzado.py + dados/
+    ├── 05-code-x-test-smell/   README.md + cruzado.py + dados/
+    └── 06-robustez/            README.md + robustez.py + dados/
 ```
 
 **Por que `variaveis.py` mora em `tools/` e não dentro de uma análise.** As definições de
@@ -129,8 +131,9 @@ nenhum arquivo) não tem p calculável e não entra (`estat.calculaveis`).
 | 129–212 | 05 — code smell × test smell (76 + 8 de sensibilidade) | 84 | nenhum sobrevive ao FDR (menor p ajustado 0,153); 2 células acima do r detectável |
 | 213–215 | 02 — sensibilidade: Eager, Lazy e General Fixture só em `caminho_exato` | 3 | os três seguem perto de zero (−0,032 a 0,024) |
 | 216–223 | 05 — sensibilidade: Eager e Lazy só em `caminho_exato` | 8 | diferença para a família abaixo de 0,01 |
+| 224–235 | 06 — robustez: TOST na margem 0,10, dois ramos × dois recortes × três desfechos | 12 | densidade do determinístico não alcança equivalência (p = 0,065); o ampliado alcança |
 
-**223 testes rodados no total.** Os 40 da primeira análise saem sem ajuste e estão
+**235 testes rodados no total.** Os 40 da primeira análise saem sem ajuste e estão
 reportados assim; os seguintes saem com p ajustado por Benjamini-Hochberg dentro de cada
 família. O artigo reporta o total e declara o regime como exploratório — é o que o volume
 exige.
@@ -151,11 +154,12 @@ cd steps/step3-analise
 (cd analises/03-extremos            && python extremos.py --csv)
 (cd analises/04-disputados          && python disputados.py --csv)
 (cd analises/05-code-x-test-smell   && python cruzado.py --csv)
+(cd analises/06-robustez            && python robustez.py --csv)
 
 python tools/conferir_resultados.py
 ```
 
-Todos levam segundos, nenhum depende de rede. `conferir_resultados.py` reapura cada número
+Todos levam segundos, menos o bootstrap da 06 (cerca de um minuto); nenhum depende de rede. `conferir_resultados.py` reapura cada número
 afirmado nos READMEs e falha com código 1 se algum divergir; ele lê os CSVs das análises,
 então elas têm que ter rodado antes.
 

@@ -132,14 +132,17 @@ def conferir_caderno():
     # o total do caderno e a soma das linhas de resultado de cada analise
     import csv
     por = []
-    for pasta, nome in (("01-correlacao-agregada", "exploracao.csv"),
-                        ("02-por-test-smell", "por_test_smell.csv"),
-                        ("03-extremos", "extremos.csv"), ("04-disputados", "disputados.csv"),
-                        ("05-code-x-test-smell", "cruzado.csv")):
+    # a 06 repete o p de Fisher da 01; o teste novo dela e o TOST
+    for pasta, nome, col in (("01-correlacao-agregada", "exploracao.csv", "p"),
+                             ("02-por-test-smell", "por_test_smell.csv", "p"),
+                             ("03-extremos", "extremos.csv", "p"),
+                             ("04-disputados", "disputados.csv", "p"),
+                             ("05-code-x-test-smell", "cruzado.csv", "p"),
+                             ("06-robustez", "robustez.csv", "p_tost")):
         with open(os.path.join(c.STEP, "analises", pasta, "dados", nome), "r",
                   encoding="utf-8-sig", newline="") as f:
             # linha com p nan nao e teste: a variavel e constante no ramo (estat.calculaveis)
-            por.append(sum(1 for r in csv.DictReader(f) if r["p"] not in ("", "nan")))
+            por.append(sum(1 for r in csv.DictReader(f) if r[col] not in ("", "nan")))
     print("  testes registrados nos CSVs das analises: %s = %d"
           % (" + ".join(map(str, por)), sum(por)))
     # as linhas do caderno separam a rodada original das sensibilidades de caminho_exato
@@ -151,13 +154,13 @@ def conferir_caderno():
         exato = rec.count("sensibilidade_caminho_exato")
         print("    %s: %d sem a sensibilidade caminho_exato, %d com ela"
               % (pasta, len(rec) - exato, exato))
-    exigir(sum(por) == 223, "223 testes no caderno", sum(por))
+    exigir(sum(por) == 235, "235 testes no caderno", sum(por))
 
     # as faixas numeradas da tabela do caderno, na ordem das linhas dela
-    def contar(pasta, nome, recortes):
+    def contar(pasta, nome, recortes, col="p"):
         with open(os.path.join(c.STEP, "analises", pasta, "dados", nome), "r",
                   encoding="utf-8-sig", newline="") as f:
-            return sum(1 for r in csv.DictReader(f) if r["p"] not in ("", "nan")
+            return sum(1 for r in csv.DictReader(f) if r[col] not in ("", "nan")
                        and (recortes is None or r["recorte"] in recortes))
     exato = {"sensibilidade_caminho_exato"}
     linhas = [
@@ -168,6 +171,7 @@ def conferir_caderno():
         ("05", contar("05-code-x-test-smell", "cruzado.csv", {"principal", "sensibilidade_sem_filtro"})),
         ("02 caminho_exato", contar("02-por-test-smell", "por_test_smell.csv", exato)),
         ("05 caminho_exato", contar("05-code-x-test-smell", "cruzado.csv", exato)),
+        ("06", contar("06-robustez", "robustez.csv", None, "p_tost")),
     ]
     inicio, faixas = 1, []
     for nome, n in linhas:
@@ -388,6 +392,54 @@ def conferir_cruzado():
            "%.3f e %.3f" % (dc["Eager Test"], dc["Lazy Test"]))
 
 
+def conferir_robustez():
+    """A analise 06: o nulo da 01 sob equivalencia, bootstrap por repositorio e recorte."""
+    import csv
+    print("")
+    print("ANALISE 06 - robustez")
+    print("-" * 21)
+    caminho = os.path.join(c.STEP, "analises", "06-robustez", "dados", "robustez.csv")
+    if not os.path.exists(caminho):
+        exigir(False, "robustez.csv existe", "ausente - rode robustez.py --csv")
+        return
+    with open(caminho, "r", encoding="utf-8-sig", newline="") as f:
+        L = list(csv.DictReader(f))
+    exigir(len(L) == 12, "robustez.csv tem 12 linhas", len(L))
+
+    def linha(ramo, recorte, desfecho):
+        return [r for r in L if r["ramo"] == ramo and r["recorte"] == recorte
+                and r["desfecho"] == desfecho][0]
+
+    det = linha("deterministico", "todas", "densidade")
+    sem = linha("deterministico", "sem_nome_divergente", "densidade")
+    amp = linha("ampliado", "todas", "densidade")
+    for nome, r in (("todas", det), ("sem aninhada", sem)):
+        print("  determ. %-13s N=%s repos=%s rho=%.3f IC90 [%.3f, %.3f] TOST p=%.3f "
+              "boot [%.3f, %.3f]" % (nome, r["n"], r["n_repos"], float(r["rho"]),
+                                     float(r["ic90_baixo"]), float(r["ic90_alto"]),
+                                     float(r["p_tost"]), float(r["boot_ic95_baixo"]),
+                                     float(r["boot_ic95_alto"])))
+    exigir(det["n"] == "726" and det["n_repos"] == "245", "densidade: 726 arquivos em 245 repos",
+           "%s e %s" % (det["n"], det["n_repos"]))
+    exigir(perto(float(det["maior_efeito_compativel"]), 0.105),
+           "os dados excluem rho acima de 0,105", det["maior_efeito_compativel"])
+    exigir(perto(float(det["p_tost"]), 0.065) and float(det["p_tost"]) > 0.05,
+           "TOST na margem 0,10 nao alcanca equivalencia (p = 0,065)", det["p_tost"])
+    exigir(perto(float(det["boot_ic95_baixo"]), -0.028) and perto(float(det["boot_ic95_alto"]), 0.119),
+           "bootstrap por repositorio [-0,028, 0,119]",
+           "%s, %s" % (det["boot_ic95_baixo"], det["boot_ic95_alto"]))
+    exigir(sem["n"] == "677" and perto(float(sem["rho"]), 0.041),
+           "sem classe aninhada: 677 arquivos, rho 0,041", "%s, %s" % (sem["n"], sem["rho"]))
+    exigir(perto(float(sem["p_tost"]), 0.063), "sem aninhada: TOST p 0,063", sem["p_tost"])
+    exigir(float(amp["p_tost"]) < 0.001 and perto(float(amp["ic90_baixo"]), -0.048)
+           and perto(float(amp["ic90_alto"]), 0.041),
+           "ampliado equivalente a zero: IC90 [-0,048, 0,041], TOST p < 0,001",
+           "%s, %s, %s" % (amp["ic90_baixo"], amp["ic90_alto"], amp["p_tost"]))
+    bruto = linha("deterministico", "todas", "bruto")
+    exigir(float(bruto["boot_ic95_baixo"]) > 0, "bruto: IC do bootstrap acima de zero",
+           bruto["boot_ic95_baixo"])
+
+
 def main():
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -399,6 +451,7 @@ def main():
     conferir_segunda_rodada()
     conferir_disputados()
     conferir_cruzado()
+    conferir_robustez()
     conferir_caderno()
 
     print()

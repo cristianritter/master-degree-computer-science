@@ -398,15 +398,83 @@ def resultados():
     fato("acimaDetectavelGrade", sum(1 for r in prin if abs(float(r["rho"])) >= float(r["r_detectavel"])),
          "células da grade com |rho| acima do r detectável", fonte)
 
+    rb = ler(os.path.join(A3, "06-robustez", "dados", "robustez.csv"))
+    fonte = "steps/step3-analise/analises/06-robustez/dados/robustez.csv"
+    rob = carregar("robustez", os.path.join(A3, "06-robustez", "robustez.py"))
+    fato("margemEquivalencia", rob.MARGEM, "margem do TOST: |rho| de efeito pequeno (Cohen)",
+         "steps/step3-analise/analises/06-robustez/robustez.py", 2)
+    fato("replicasBootstrap", rob.REPLICAS, "réplicas do bootstrap por repositório",
+         "steps/step3-analise/analises/06-robustez/robustez.py")
+
+    def rob_linha(ramo, recorte, desfecho):
+        return [r for r in rb if r["ramo"] == ramo and r["recorte"] == recorte
+                and r["desfecho"] == desfecho][0]
+
+    for ramo, chave in (("deterministico", "Det"), ("ampliado", "Amp")):
+        r = rob_linha(ramo, "todas", "densidade")
+        fato("maiorEfeito" + chave, float(r["maior_efeito_compativel"]),
+             "maior |rho| compatível com os dados, densidade (limite do IC90%%, %s)" % ramo,
+             fonte, 3)
+        fato("bootBaixo" + chave, float(r["boot_ic95_baixo"]),
+             "IC95%% do bootstrap por repositório, limite inferior, densidade (%s)" % ramo, fonte, 3)
+        fato("bootAlto" + chave, float(r["boot_ic95_alto"]),
+             "IC95%% do bootstrap por repositório, limite superior, densidade (%s)" % ramo, fonte, 3)
+    r = rob_linha(det, "todas", "densidade")
+    fato("pTostDensidadeDet", float(r["p_tost"]),
+         "p do TOST na margem, densidade (determinístico)", fonte, 3)
+    fato("icNoventaBaixo", float(r["ic90_baixo"]), "IC90%, limite inferior, densidade (determinístico)", fonte, 3)
+    s = rob_linha(det, "sem_nome_divergente", "densidade")
+    fato("rhoSemAninhadaDet", float(s["rho"]),
+         "Spearman densidade × rótulo sem arquivos com classe aninhada (determinístico)", fonte, 3)
+    fato("nSemAninhadaDet", int(s["n"]), "N desse recorte", fonte)
+    fato("pSemAninhadaDet", float(s["p"]), "p bicaudal, idem", fonte, 3)
+
     total = 0
-    for pasta, nome in (("01-correlacao-agregada", "exploracao.csv"),
-                        ("02-por-test-smell", "por_test_smell.csv"),
-                        ("03-extremos", "extremos.csv"), ("04-disputados", "disputados.csv"),
-                        ("05-code-x-test-smell", "cruzado.csv")):
+    for pasta, nome, col in (("01-correlacao-agregada", "exploracao.csv", "p"),
+                             ("02-por-test-smell", "por_test_smell.csv", "p"),
+                             ("03-extremos", "extremos.csv", "p"),
+                             ("04-disputados", "disputados.csv", "p"),
+                             ("05-code-x-test-smell", "cruzado.csv", "p"),
+                             ("06-robustez", "robustez.csv", "p_tost")):
         total += sum(1 for r in ler(os.path.join(A3, pasta, "dados", nome))
-                     if r["p"] not in ("", "nan"))
+                     if r[col] not in ("", "nan"))
     fato("testesTotal", total, "testes estatísticos rodados no step 3 (caderno)",
-         "soma das linhas com p nos CSVs das análises 01 a 05")
+         "soma das linhas com p nos CSVs das análises 01 a 05 e com p_tost na 06")
+
+
+# ---------------------------------------------------------------------------------------
+# o censo humano do binding (PROTOCOLO-AUDITORIA-HUMANA.md)
+
+PENDENTES = []      # (chave, descricao): macros que o artigo ja usa e o dado ainda nao tem
+
+
+def censo():
+    secao("Censo humano do binding (step 2)")
+    av1 = ler(os.path.join(D2, "auditoria_humana_avaliador1.csv"))
+    av2 = ler(os.path.join(D2, "auditoria_humana_avaliador2.csv"))
+    fonte = "steps/step2-binding/dados/auditoria_humana_avaliador2.csv"
+    fato("paresSegundoAvaliador", len(av2), "pares julgados também pelo avaliador 2", fonte)
+    estrato = {str(i): r["estrato_auditoria"]
+               for i, r in enumerate(ler(os.path.join(D2, "auditoria_binding.csv")), 1)}
+    por = collections.Counter(estrato[r["par"]] for r in av2)
+    assert len(set(por.values())) == 1, "subamostra do avaliador 2 desbalanceada: %s" % por
+    fato("paresPorEstratoSegundo", next(iter(por.values())),
+         "pares por estrato na subamostra do avaliador 2", fonte)
+    fato("estratosAuditoria", len(por), "estratos da auditoria do binding", fonte)
+    preenchidos = sum(1 for r in av1 if r["correto_estrito"].strip() and r["correto_amplo"].strip())
+    if preenchidos == len(av1):
+        sys.exit("o censo esta completo: troque os PENDENTES pelos valores de "
+                 "auditoria_humana.py --apurar, calculados aqui")
+    for chave, desc in (
+            ("concordanciaEstrito", "concordância entre avaliadores, critério estrito (%)"),
+            ("concordanciaAmplo", "concordância entre avaliadores, critério amplo (%)"),
+            ("kappaEstrito", "kappa de Cohen entre avaliadores, critério estrito"),
+            ("kappaAmplo", "kappa de Cohen entre avaliadores, critério amplo"),
+            ("kappaHumanoAuto", "kappa humano final × julgamento automatizado, estrito"),
+            ("precisaoHumanaDet", "precisão humana do binding, ramo determinístico (%)"),
+            ("precisaoHumanaAmp", "precisão humana, ramo ampliado, critério estrito (%)"),
+            ("precisaoHumanaAmpAmplo", "precisão humana, ramo ampliado, critério amplo (%)")):
+        PENDENTES.append((chave, desc))
 
 
 # ---------------------------------------------------------------------------------------
@@ -431,6 +499,12 @@ def gerar_md():
         out.append("| `\\F%s` | %s | %s | `%s` |" % (f.chave, formatar(f, "pt"), f.descricao, f.fonte))
         if FATOS.index(f) + 1 == len(FATOS) or FATOS[FATOS.index(f) + 1].secao != atual:
             out.append("")
+    if PENDENTES:
+        out += ["## Pendentes", "",
+                "Macros que o artigo já usa e cujo dado ainda não existe: no PDF aparecem como",
+                "`[?? chave]`. Saem desta lista quando o censo humano estiver completo.", "",
+                "| macro | o que será |", "|---|---|"]
+        out += ["| `\\F%s` | %s |" % (k, d) for k, d in PENDENTES] + [""]
     return "\n".join(out)
 
 
@@ -443,6 +517,10 @@ def gerar_tex():
             atual = f.secao
             out += ["", "% " + atual]
         out.append("\\newcommand{\\F%s}{%s}" % (f.chave, formatar(f, "en")))
+    if PENDENTES:
+        out += ["", "% Pendentes: o dado ainda nao existe (censo humano do binding)",
+                "\\providecommand{\\pendente}[1]{\\textbf{[??~#1]}}"]
+        out += ["\\newcommand{\\F%s}{\\pendente{%s}}" % (k, k) for k, _ in PENDENTES]
     return "\n".join(out) + "\n"
 
 
@@ -462,6 +540,7 @@ def main():
     binding()
     amostra()
     resultados()
+    censo()
 
     atual = None
     for f in FATOS:

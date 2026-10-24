@@ -143,4 +143,41 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FtestesGrade` | 76 | testes da grade code smell × test smell | `steps/step3-analise/analises/05-code-x-test-smell/dados/cruzado.csv` |
 | `\FmenorPajGrade` | 0,153 | menor p ajustado por BH na grade | `steps/step3-analise/analises/05-code-x-test-smell/dados/cruzado.csv` |
 | `\FacimaDetectavelGrade` | 2 | células da grade com |rho| acima do r detectável | `steps/step3-analise/analises/05-code-x-test-smell/dados/cruzado.csv` |
-| `\FtestesTotal` | 223 | testes estatísticos rodados no step 3 (caderno) | `soma das linhas com p nos CSVs das análises 01 a 05` |
+| `\FmargemEquivalencia` | 0,10 | margem do TOST: |rho| de efeito pequeno (Cohen) | `steps/step3-analise/analises/06-robustez/robustez.py` |
+| `\FreplicasBootstrap` | 2.000 | réplicas do bootstrap por repositório | `steps/step3-analise/analises/06-robustez/robustez.py` |
+| `\FmaiorEfeitoDet` | 0,105 | maior |rho| compatível com os dados, densidade (limite do IC90%, deterministico) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FbootBaixoDet` | −0,028 | IC95% do bootstrap por repositório, limite inferior, densidade (deterministico) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FbootAltoDet` | 0,119 | IC95% do bootstrap por repositório, limite superior, densidade (deterministico) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FmaiorEfeitoAmp` | 0,048 | maior |rho| compatível com os dados, densidade (limite do IC90%, ampliado) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FbootBaixoAmp` | −0,054 | IC95% do bootstrap por repositório, limite inferior, densidade (ampliado) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FbootAltoAmp` | 0,047 | IC95% do bootstrap por repositório, limite superior, densidade (ampliado) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FpTostDensidadeDet` | 0,065 | p do TOST na margem, densidade (determinístico) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FicNoventaBaixo` | −0,017 | IC90%, limite inferior, densidade (determinístico) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FrhoSemAninhadaDet` | 0,041 | Spearman densidade × rótulo sem arquivos com classe aninhada (determinístico) | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FnSemAninhadaDet` | 677 | N desse recorte | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FpSemAninhadaDet` | 0,283 | p bicaudal, idem | `steps/step3-analise/analises/06-robustez/dados/robustez.csv` |
+| `\FtestesTotal` | 235 | testes estatísticos rodados no step 3 (caderno) | `soma das linhas com p nos CSVs das análises 01 a 05 e com p_tost na 06` |
+
+## Censo humano do binding (step 2)
+
+| macro | valor | o que é | origem |
+|---|---:|---|---|
+| `\FparesSegundoAvaliador` | 48 | pares julgados também pelo avaliador 2 | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
+| `\FparesPorEstratoSegundo` | 8 | pares por estrato na subamostra do avaliador 2 | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
+| `\FestratosAuditoria` | 6 | estratos da auditoria do binding | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
+
+## Pendentes
+
+Macros que o artigo já usa e cujo dado ainda não existe: no PDF aparecem como
+`[?? chave]`. Saem desta lista quando o censo humano estiver completo.
+
+| macro | o que será |
+|---|---|
+| `\FconcordanciaEstrito` | concordância entre avaliadores, critério estrito (%) |
+| `\FconcordanciaAmplo` | concordância entre avaliadores, critério amplo (%) |
+| `\FkappaEstrito` | kappa de Cohen entre avaliadores, critério estrito |
+| `\FkappaAmplo` | kappa de Cohen entre avaliadores, critério amplo |
+| `\FkappaHumanoAuto` | kappa humano final × julgamento automatizado, estrito |
+| `\FprecisaoHumanaDet` | precisão humana do binding, ramo determinístico (%) |
+| `\FprecisaoHumanaAmp` | precisão humana, ramo ampliado, critério estrito (%) |
+| `\FprecisaoHumanaAmpAmplo` | precisão humana, ramo ampliado, critério amplo (%) |
