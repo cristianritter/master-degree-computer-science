@@ -22,6 +22,7 @@ Uso:
 import argparse
 import collections
 import csv
+import glob
 import gzip
 import importlib.util
 import math
@@ -38,7 +39,8 @@ D2 = os.path.join(S2, "dados")
 A3 = os.path.join(S3, "analises")
 
 MD = os.path.join(ARTIGO, "folha-de-fatos.md")
-TEX = os.path.join(ARTIGO, "fatos.tex")
+LATEX = os.path.join(ARTIGO, "latex")
+TEX = os.path.join(LATEX, "fatos.tex")
 
 Z_ALFA, Z_PODER = 1.959964, 0.841621   # bicaudal 0,05 e poder 80%, como nos steps 2 e 3
 
@@ -221,6 +223,8 @@ def mlcq():
     fato("amostrasMlcq", len({s["sample_id"] for s in samples}), "amostras do MLCQ", fonte)
     fato("unidadesMlcq", len(samples), "unidades de rótulo (amostra, smell)", fonte)
     fato("revisoesMlcq", len(reviews), "revisões do MLCQ", fonte)
+    fato("escalaMax", max(c2.RANK.values()), "maior código da escala de severidade (critical)",
+         "steps/step2-binding/tools/comum.py (SEVERIDADES)")
     fato("revisoresMlcq", len({r["reviewer_id"] for r in reviews}), "revisores distintos", fonte)
     um = sum(1 for s in samples if int(s["n_revisores"]) == 1)
     fato("unidadesUmRevisor", um, "unidades com um único revisor", fonte)
@@ -264,6 +268,13 @@ def binding():
     aud = ler(os.path.join(D2, "auditoria_binding_auto.csv"))
     fonte = "steps/step2-binding/dados/auditoria_binding_auto.csv"
     fato("paresAuditados", len(aud), "pares auditados", fonte)
+    fato("paresPorEstratoAuditoria",
+         max(collections.Counter(r["estrato_auditoria"] for r in aud).values()),
+         "pares sorteados por estrato amostrado (os de censo têm menos)", fonte)
+    g = open(os.path.join(S2, "tools", "gerar_analises.py"), encoding="utf-8").read()
+    fato("maxTestes", int(re.search(r'"--max-testes", "(\d+)"', g).group(1)),
+         "teto de classes de teste por arquivo de produção no ramo ampliado",
+         "steps/step2-binding/tools/gerar_analises.py")
 
     estratos = sorted({r["estrato_auditoria"] for r in aud})
     peso = {r["estrato_auditoria"]: float(r["peso_no_universo"]) for r in aud}
@@ -478,6 +489,46 @@ def censo():
 
 
 # ---------------------------------------------------------------------------------------
+# o texto do artigo: nenhum numero digitado
+
+# O que pode aparecer como digito no texto sem vir de macro, e por que. Fica curto de
+# proposito: cada entrada e uma afirmacao de que aquele numero nao e dado do estudo.
+PERMITIDOS = [
+    ("2.5.0", "versao do JNose Test"),
+    ("0.9.4", "versao do jnose-core"),
+    (r"95\%", "nivel de confianca convencional"),
+    (r"90\%", "IC do TOST a 5% unilateral, convencao"),
+    (r"80\%", "poder convencional"),
+    ("0.05", "alfa convencional"),
+    ("2em", "espacamento de layout"),
+    (r"0.9\linewidth", "largura de layout"),
+]
+# comandos cujo argumento nao e texto, as macros de fato e os nomes das RQs
+RE_COMANDO = re.compile(r"\\(?:cite|ref|label|begin|end|input|includegraphics)\{[^}]*\}"
+                        r"|\\F[A-Za-z]+|\bRQ\d\b")
+
+
+def conferir_latex():
+    """Os .tex de sections/: todo \\F usado existe, e nenhum digito fica fora de macro."""
+    problemas = []
+    chaves = {f.chave for f in FATOS} | {k for k, _ in PENDENTES}
+    for caminho in sorted(glob.glob(os.path.join(LATEX, "sections", "*.tex"))):
+        nome = os.path.relpath(caminho, RAIZ)
+        with open(caminho, encoding="utf-8") as fh:
+            for i, linha in enumerate(fh, 1):
+                linha = re.sub(r"(?<!\\)%.*", "", linha)
+                for m in re.findall(r"\\F([A-Za-z]+)", linha):
+                    if m not in chaves:
+                        problemas.append("%s:%d macro inexistente \\F%s" % (nome, i, m))
+                resto = RE_COMANDO.sub(" ", linha)
+                for txt, _ in PERMITIDOS:
+                    resto = resto.replace(txt, " ")
+                if re.search(r"\d", resto):
+                    problemas.append("%s:%d numero digitado: %s" % (nome, i, linha.strip()[:90]))
+    return problemas
+
+
+# ---------------------------------------------------------------------------------------
 # saida
 
 def gerar_md():
@@ -567,11 +618,16 @@ def main():
             with open(caminho, encoding="utf-8") as fh:
                 if fh.read().replace("\r\n", "\n") != txt:
                     velhos.append(caminho)
+        problemas = conferir_latex()
+        for p in problemas:
+            print("LATEX: " + p)
         if velhos:
             print("DESATUALIZADOS: %s - rode com --gravar"
                   % ", ".join(os.path.relpath(p, RAIZ) for p in velhos))
+        if velhos or problemas:
             sys.exit(1)
-        print("folha-de-fatos.md e fatos.tex conferem com os dados")
+        print("folha-de-fatos.md e fatos.tex conferem com os dados, e o texto do artigo "
+              "so usa macros")
 
 
 if __name__ == "__main__":

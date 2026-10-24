@@ -51,6 +51,7 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FamostrasMlcq` | 4.770 | amostras do MLCQ | `steps/step2-binding/dados/mlcq_samples.csv e mlcq_reviews.csv` |
 | `\FunidadesMlcq` | 9.517 | unidades de rótulo (amostra, smell) | `steps/step2-binding/dados/mlcq_samples.csv e mlcq_reviews.csv` |
 | `\FrevisoesMlcq` | 14.739 | revisões do MLCQ | `steps/step2-binding/dados/mlcq_samples.csv e mlcq_reviews.csv` |
+| `\FescalaMax` | 3 | maior código da escala de severidade (critical) | `steps/step2-binding/tools/comum.py (SEVERIDADES)` |
 | `\FrevisoresMlcq` | 26 | revisores distintos | `steps/step2-binding/dados/mlcq_samples.csv e mlcq_reviews.csv` |
 | `\FunidadesUmRevisor` | 7.051 | unidades com um único revisor | `steps/step2-binding/dados/mlcq_samples.csv e mlcq_reviews.csv` |
 | `\FpctUnidadesUmRevisor` | 74,1% | idem, em porcentagem | `steps/step2-binding/dados/mlcq_samples.csv e mlcq_reviews.csv` |
@@ -70,6 +71,8 @@ steps, o que faz desta folha uma segunda apuração.
 |---|---:|---|---|
 | `\FparesBinding` | 16.869 | pares (produção, teste) no binding | `steps/step2-binding/dados/binding.csv` |
 | `\FparesAuditados` | 293 | pares auditados | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
+| `\FparesPorEstratoAuditoria` | 50 | pares sorteados por estrato amostrado (os de censo têm menos) | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
+| `\FmaxTestes` | 10 | teto de classes de teste por arquivo de produção no ramo ampliado | `steps/step2-binding/tools/gerar_analises.py` |
 | `\FprecisaoDet` | 94,2% | precisão do binding no ramo deterministico ("o teste tem a classe como alvo") | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
 | `\FprecisaoDetBaixo` | 90,9% | limite inferior do IC95% estratificado da precisão (deterministico) | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
 | `\FprecisaoDetAlto` | 97,5% | limite superior do IC95% estratificado da precisão (deterministico) | `steps/step2-binding/dados/auditoria_binding_auto.csv` |

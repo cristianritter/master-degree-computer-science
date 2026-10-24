@@ -54,7 +54,7 @@ O que temos e os trabalhos relacionados não têm:
    unidades (amostra, smell), contra métricas calculadas ou heurísticas de defeito.
 4. **Escala** — a análise principal cobre 730 arquivos de 246 repositórios, contra 5 e 10
    sistemas dos trabalhos citados.
-5. **Rastro completo** — 223 testes registrados, incluindo os que não deram em nada.
+5. **Rastro completo** — 235 testes registrados, incluindo os que não deram em nada.
 
 ## Destino
 
@@ -69,9 +69,11 @@ Detalhes no documento de eventos-alvo.
 - **Cobertura de 37,5%** do binding. Os 62,5% restantes misturam classe sem teste e falha
   do método.
 - **Recall do binding não medido.**
-- **Arquivos do mesmo repositório não são independentes.** 113 dos 246 repositórios
-  contribuem com um único arquivo, e os 10 maiores somam 20,5% dos arquivos.
-- **223 testes registrados** — o artigo tem que declarar regime exploratório.
+- **Arquivos do mesmo repositório não são independentes.** O bootstrap por repositório
+  (análise 06) dá IC [−0,028, 0,119] para a densidade, quase o mesmo de Fisher.
+- **235 testes registrados** — o artigo tem que declarar regime exploratório.
+- **Equivalência não declarada.** Os dados excluem rho acima de 0,105, mas o TOST na margem
+  0,10 dá p = 0,065. O artigo afirma o limite, não a equivalência.
 
 ## O que não fazer
 

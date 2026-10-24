@@ -1,0 +1,244 @@
+% Metodologia. Nenhum numero digitado: todo valor vem de uma macro \F... de fatos.tex,
+% gerada por artigo/tools/folha_de_fatos.py. O conferidor (folha_de_fatos.py --conferir)
+% recusa digito solto neste arquivo.
+
+\section{Study Design}
+\label{sec:design}
+
+\subsection{Research Questions}
+\label{sec:rqs}
+
+We ask whether the production classes that professional developers perceive as smelly are
+tested by worse tests. We operationalize ``worse tests'' as test smells detected by a
+static tool, and ``perceived as smelly'' as the severity that reviewers assigned to the
+class in a curated code smell data set.
+
+\begin{description}
+  \item[RQ1] Is the perceived severity of code smells in a production class associated
+  with the test smell density of the tests dedicated to that class?
+  \item[RQ2] Is any individual test smell, or any pair of code smell and test smell,
+  associated with perceived severity?
+  \item[RQ3] How do the choices of outcome normalization and of test-to-code binding
+  change the answer to RQ1?
+\end{description}
+
+RQ1 is the main question and is answered with three operationalizations
+(Section~\ref{sec:analysis}). RQ2 checks whether a null aggregate result hides opposite
+effects of individual smells. RQ3 makes explicit the two measurement decisions that, in
+our data, decide whether an association appears at all.
+
+Figure~\ref{fig:pipeline} summarizes the pipeline: we collect test smells in the
+repositories of the code smell data set, at the commit the reviewers saw
+(Section~\ref{sec:collection}); we link each annotated production class to its tests
+(Section~\ref{sec:binding}); and we correlate the two sides
+(Section~\ref{sec:analysis}).
+
+\begin{figure}[t]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering\vspace{2em}pipeline: MLCQ $\rightarrow$ mirrors
+  at the MLCQ commit $\rightarrow$ JNose $\rightarrow$ binding $\rightarrow$ analysis
+  \vspace{2em}}}
+  \caption{Study pipeline. Every number reported in this paper is produced by a versioned
+  script of the replication package.}
+  \label{fig:pipeline}
+\end{figure}
+
+\subsection{Code Smell Labels: the MLCQ Data Set}
+\label{sec:mlcq}
+
+MLCQ~\cite{madeyski2020mlcq} contains \FrevisoesMlcq{} reviews by \FrevisoresMlcq{}
+professional developers of \FamostrasMlcq{} code samples from open-source Java projects.
+Each review grades one sample for two smells at once: blob and data class for classes,
+feature envy and long method for methods. The grade is a severity on the scale none,
+minor, major, critical, which we code from zero to \FescalaMax{}. Our unit of label is
+therefore the pair (sample, smell); MLCQ has \FunidadesMlcq{} such units.
+
+\paragraph{The sampling design makes binary labels circular}
+MLCQ's appendix states that the reviewers of the last phase cross-checked only samples
+already graded above none. We verified this in the data: all \FamostrasCrosscheck{}
+cross-checked samples had a previous positive grade. The number of reviewers of a unit is
+thus a consequence of its label, not independent evidence for it: \FpctUnidadesUmRevisor{}
+of the units have a single reviewer, and almost all of them are negative. A rule such as
+``positive if any reviewer graded above none'' discards the verdict of the cross-check,
+which was collected precisely to judge the flagged samples: \FpctDisputadas{} of the
+positive units with two or more reviewers were graded none by some reviewer.
+
+The same design lets us measure how reliable an isolated ``none'' is. Because samples, and
+not units, were routed to the cross-check, \FnoneRevisados{} units graded none were
+reviewed again only because the other smell of the sample had been flagged. In
+\FpctNoneSeSustenta{} of them the isolated ``none'' agreed with the final majority.
+
+\paragraph{Label used}
+We avoid any threshold and use the mean severity of the reviewers of each unit as a
+continuous label. A production file may hold several samples of the same smell (e.g.,
+several methods judged for long method); the file's severity for that smell is the
+largest among them. The aggregate label of the file, used in RQ1, is the largest severity
+among the smells it was judged for, i.e., the smell perceived as most severe. Smells for
+which a file was not judged remain missing and are never treated as zero.
+
+For the group comparisons we also classify each unit by strength of evidence:
+\emph{confirmed} (the majority graded above none), \emph{clean} (all reviewers graded
+none), and \emph{disputed} (someone graded above none, but not the majority).
+
+\subsection{Test Smell Collection}
+\label{sec:collection}
+
+\paragraph{Repositories}
+MLCQ references \FreposMlcq{} repositories, each at a specific commit. We use mirrors of
+these repositories created at that commit and match each one by commit hash. We analyze
+the \FreposHashOk{} repositories whose mirror head equals the MLCQ commit; the collection
+script re-checks the head of every clone. The remaining repositories have a mirror at a
+different commit (\FreposHashDiverge{}) or no mirror (\FreposSemEspelho{}), and are
+excluded: analyzing another commit would pair the reviewers' judgment with code they did
+not see.
+
+\paragraph{Detector}
+We detect test smells with JNose Test~\cite{virginio2020jnose}, version 2.5.0
+(jnose-core 0.9.4), a JUnit-aware extension of tsDetect~\cite{peruma2020tsdetect}. We
+enable the tool's default configuration of \FsmellsHabilitados{} test smells, minus
+Unknown Test. We exclude Unknown Test because its detector, when it fails on a class,
+discards the analysis of all other smells of that class: in a separate run with the full
+default configuration it would have erased \FunknownOcorrencias{} occurrences of other
+smells in \FunknownClasses{} classes. Keeping the default configuration removes the
+researcher's choice of which smells count.
+
+The collection covers \FclassesTeste{} test classes in \FreposComTeste{} repositories and
+yields \Focorrencias{} test smell occurrences. A file whose name matches JNose's test
+pattern and imports JUnit, but declares no top-level class or interface, aborts the
+analysis of the whole project without any error on screen. Before analysis, the
+collection script removes exactly these files from each clone, as decided by an oracle
+that replicates JNose's own checks on the syntax tree with the parser bundled in the tool.
+Such a file can never yield a test class, so removing it changes nothing in the
+collection; \FarquivosRemovidosNpe{} files in \FreposRemovidosNpe{} repositories were
+removed.
+
+\paragraph{A known defect of the detector}
+JNose names a test class after the \emph{last} class declaration it visits. In files with
+a nested class, it reports the nested helper's name, and Eager Test and Lazy Test are
+measured against the wrong production class. This affects \FclassesAninhadas{} test
+classes (\FpctClassesAninhadas{}). We keep these classes and flag them; RQ2 and the
+sensitivity analyses report results with and without them.
+
+\subsection{Test-to-Code Binding}
+\label{sec:binding}
+
+To answer RQ1 we need, for each annotated production file, the tests dedicated to it. We
+link production files and test classes with three strategies, each recorded per pair so
+that its precision can be measured separately:
+
+\begin{itemize}
+  \item \emph{Exact path}: the production file that JNose itself resolves for the test
+  class. We disassembled the tool to check what this is: a naming convention (strip the
+  \texttt{Test} prefix or suffix) followed by a file name search in the project.
+  \item \emph{Convention}: \texttt{X.java} is linked to \texttt{XTest},
+  \texttt{XTests}, \texttt{XTestCase}, \texttt{XIT}, or \texttt{XITCase} in the same
+  repository; a pair is marked as \emph{mirrored} when test and production share the
+  package path.
+  \item \emph{Static reference}: the test class references the production type, through
+  an exact import, a wildcard import, or the same package.
+\end{itemize}
+
+The first two strategies form the \emph{deterministic} branch: \FarquivosDet{} production
+files in \FreposDet{} repositories, linked to \FclassesTesteDet{} test classes. Adding
+static references, capped at \FmaxTestes{} test classes per production file, forms the
+\emph{extended} branch: \FarquivosAmp{} files in \FreposAmp{} repositories, linked to
+\FclassesTesteAmp{} test classes.
+
+\paragraph{Precision audit}
+We audited \FparesAuditados{} pairs, sampled at random and stratified by strategy and
+evidence (\FestratosAuditoria{} strata, up to \FparesPorEstratoAuditoria{} pairs each; the
+two convention strata are a census). The first author judged all pairs, blind to the
+stratum, under two criteria: whether the production class is the \emph{target} of the test
+(strict), and whether the test \emph{executes} code of the class, even as a fixture
+(broad). A second rater, not involved in the study, independently judged a stratified
+subsample of \FparesSegundoAvaliador{} pairs (\FparesPorEstratoSegundo{} per stratum).
+Inter-rater agreement was \FconcordanciaEstrito{} (Cohen's $\kappa$ = \FkappaEstrito{})
+under the strict criterion and \FconcordanciaAmplo{} ($\kappa$ = \FkappaAmplo{}) under the
+broad one, computed before disagreements were resolved by discussion. The audit protocol
+was registered before the first pair was judged.
+
+The precision of each branch is the per-stratum precision weighted by the stratum's share
+of the pairs. The deterministic branch has a precision of \FprecisaoHumanaDet{}. The
+extended branch has a precision of \FprecisaoHumanaAmp{} under the strict criterion and
+\FprecisaoHumanaAmpAmplo{} under the broad one: a static reference identifies the classes
+a test \emph{exercises}, not the class it \emph{tests}. We therefore treat the two
+branches as answering different questions. The deterministic branch answers RQ1; the
+extended branch is reported for RQ3, as the answer one would get by conflating the two
+constructs.
+
+\subsection{Outcome Variables}
+\label{sec:outcomes}
+
+For each production file we sum, over its linked test classes, the occurrences of each
+test smell. RQ1 uses three outcomes:
+
+\begin{itemize}
+  \item \emph{raw}: the total number of test smell occurrences;
+  \item \emph{density}: the raw count divided by the number of members of the linked test
+  classes;
+  \item \emph{distinct}: how many of the \FsmellsHabilitados{} test smells occur at least
+  once.
+\end{itemize}
+
+Raw and distinct grow with the size of the test. Density is our primary outcome because
+it isolates the quality of the test from its size: its correlation with test size is
+\FrhoDensidadeTamanho{}, against \FrhoBrutoTamanho{} for the raw count.
+
+The denominator of density is the member count that JNose reports for the class
+(methods, fields, constructors, and nested types), not the number of test methods. We
+report density as occurrences per class member and do not claim it is per test method.
+In classes with a nested type the count is the helper's, which underestimates the
+denominator; the sensitivity analysis without these files addresses this.
+
+\subsection{Analysis}
+\label{sec:analysis}
+
+The variables are far from normal: most files have zero occurrences of most smells. We
+therefore use rank-based statistics throughout.
+
+\paragraph{RQ1}
+Spearman's $\rho$ between each outcome and the aggregate label, with 95\% confidence
+intervals from Fisher's $z$ transformation. To quantify the role of test size, we also
+report the partial Spearman correlation controlling for the member count of the tests,
+and the correlation of the label itself with test size. As a second operationalization,
+we compare files whose label was confirmed by the reviewers' majority
+(\FnConfirmados{} files) with clean files (\FnLimpos{}) using the Mann--Whitney $U$ test,
+with the rank-biserial correlation as effect size. As a third, we compare confirmed files
+with files that were flagged but not confirmed (\FnDisputados{}). This last comparison is
+the only one immune to the sampling design of MLCQ, since both groups were flagged and
+routed to the cross-check.
+
+\paragraph{RQ2}
+Spearman's $\rho$ for each test smell, in raw and density form, against the aggregate
+label; and for each pair of code smell and test smell, in density form, against the
+severity of that code smell. Default Test does not occur in any analyzed file and is
+excluded as a constant. Each set of tests is a family, adjusted with
+Benjamini--Hochberg~\cite{benjamini1995fdr}.
+
+\paragraph{Power and equivalence}
+A null result is only informative if the design could have detected an effect. With the
+deterministic branch, a two-sided test at $\alpha = 0.05$ has 80\% power to detect
+$|\rho| \geq$ \FrDetectavelDet{}. Beyond power, we report the largest effect compatible
+with the data, i.e., the bound of the 90\% confidence interval farthest from zero, and
+run two one-sided tests (TOST)~\cite{lakens2017equivalence} against
+$|\rho| = $ \FmargemEquivalencia{}, the conventional threshold of a small
+correlation~\cite{cohen1988power}.
+
+\paragraph{Robustness}
+Files from the same repository are not independent. We recompute the confidence interval
+of RQ1 with a cluster bootstrap that resamples whole repositories (\FreplicasBootstrap{}
+replicates), and repeat RQ1 without the files whose tests are affected by the nested class
+defect.
+
+\paragraph{Exploratory regime}
+We ran \FtestesTotal{} statistical tests in total, all logged in the replication package,
+including those that led nowhere. We present the study as exploratory: results that do not
+survive the false discovery rate correction are reported as hypotheses, not findings.
+
+\subsection{Reproducibility}
+\label{sec:reproducibility}
+
+The replication package contains the mirrors' mapping, the raw JNose reports, the
+normalized tables, the audit spreadsheets, and one script per analysis. Every number in
+this paper is a macro generated from the versioned data by a single script, and a checker
+fails if any number in the documentation lacks a command that produces it.

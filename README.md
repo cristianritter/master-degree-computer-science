@@ -14,7 +14,7 @@ garantem isso, e cada um termina com código 1 se encontrar divergência:
 | `python steps/step2-binding/tools/conferir_dados.py` | os números do README e das notas do step 2 |
 | `python steps/step3-analise/tools/conferir_resultados.py` | os números dos READMEs do step 3 |
 | `python steps/step3-analise/tools/validar_estat.py` | que as estatísticas implementadas no step 3 batem com o scipy, nos dados reais |
-| `python artigo/tools/folha_de_fatos.py --conferir` | que `artigo/folha-de-fatos.md` e `artigo/fatos.tex` estão em dia com os dados |
+| `python artigo/tools/folha_de_fatos.py --conferir` | que `artigo/folha-de-fatos.md` e `artigo/latex/fatos.tex` estão em dia com os dados, e que o texto do artigo não tem número digitado |
 | `python steps/conferir_cobertura.py` | que nenhum número dos documentos (steps e `artigo/`) fique sem origem em algum comando |
 
 Os três primeiros conferem valores, e o quarto confere as fórmulas que os produzem. O
