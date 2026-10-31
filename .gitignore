@@ -11,3 +11,8 @@ steps/step2-binding/dados/test_smell_occurrences.csv.gz
 # ocorrencias da configuracao padrao (185 MB): so o byclasstest entra na medida do defeito
 steps/step1-coleta-jnose/reports-config-padrao/bytestsmells/
 steps/step1-coleta-jnose/.oraculo/
+
+# pacote do avaliador 2: derivado, regenerado por auditoria_humana.py --pacote
+steps/step2-binding/pacote-avaliador2/
+steps/step2-binding/dossie_revisao_avaliador1.txt
+steps/step2-binding/envio-avaliador2/

@@ -96,6 +96,132 @@ def limpar_preservando_linhas(fonte):
     return "".join(saida)
 
 
+FIM_INSTRUCAO = (";", "{", "}")
+MAX_CONTEXTO = 14      # mesmas 14 mencoes que a listagem simples mostra
+MAX_USOS = 8           # chamadas mostradas por variavel
+
+
+def tipo_da_producao(prod, nome):
+    """'interface (2 metodos default)', 'abstract class', 'enum'... do tipo com o nome do arquivo.
+
+    Interface sem codigo e classe abstrata mudam a leitura do criterio amplo: o que roda e
+    a implementacao. O dossie so informa; quem decide e o avaliador.
+    """
+    limpo = limpar_preservando_linhas(prod)
+    m = re.search(r"((?:\b(?:public|protected|private|abstract|final|static|sealed)\s+)*)"
+                  r"\b(class|interface|enum|record)\s+%s\b" % re.escape(nome), limpo)
+    if not m:
+        return "?"
+    mods = m.group(1).split()
+    tipo = " ".join([x for x in mods if x == "abstract"] + [m.group(2)])
+    if m.group(2) == "interface":
+        corpo = re.findall(r"\b(?:default|static)\s+[\w<>\[\], ?]+\s+(\w+)\s*\([^;]*?\)\s*"
+                           r"(?:throws[^{;]*)?\{", limpo)
+        tipo += " (metodos default/static com corpo: %s)" % (", ".join(sorted(set(corpo))) or "nenhum")
+    return tipo
+
+
+def instrucao(limpas, n):
+    """Intervalo de linhas da instrucao que contem a linha n (uma chamada quebrada em varias
+    linhas mostra so um pedaco na listagem simples; e o resto que diz o que acontece)."""
+    ini = n
+    while ini > 0 and n - ini < 6 and not limpas[ini - 1].rstrip().endswith(FIM_INSTRUCAO) \
+            and limpas[ini - 1].strip():
+        ini -= 1
+    fim = n
+    while fim + 1 < len(limpas) and fim - n < 6 and not limpas[fim].rstrip().endswith(FIM_INSTRUCAO):
+        fim += 1
+    return ini, fim
+
+
+def imprimir_contexto(prod, nome, todas, limpas, hits):
+    print("  tipo da producao: %s" % tipo_da_producao(prod, nome))
+    if not hits:
+        return
+    vistos, textos = set(), []
+    print("  instrucao completa de cada mencao:")
+    for n in hits[:MAX_CONTEXTO]:
+        ini, fim = instrucao(limpas, n)
+        if (ini, fim) in vistos:
+            continue
+        vistos.add((ini, fim))
+        texto = " ".join(todas[i].strip() for i in range(ini, fim + 1))
+        textos.append(" ".join(limpas[i].strip() for i in range(ini, fim + 1)))
+        faixa = "%d" % (ini + 1) if ini == fim else "%d-%d" % (ini + 1, fim + 1)
+        print("   %9s| %s" % (faixa, texto[:240] + (" ..." if len(texto) > 240 else "")))
+
+    # variaveis declaradas com o tipo, ou que recebem algo onde o nome aparece (inclusive
+    # Foo.class passado a uma fabrica): o que o teste chama nelas e o que decide se roda
+    nm = re.escape(nome)
+    variaveis = []
+    for t in textos:
+        # ':' cobre a variavel do for-each: for (Foo f : lista)
+        for v in re.findall(r"\b%s\b(?:\s*<[^;()]*?>)?(?:\s*\[\s*\])*\s+(\w+)\s*(?=[=;,):]|$)" % nm, t):
+            variaveis.append(v)
+        for v in re.findall(r"(\w+)\s*=(?!=)[^;]*\b%s\b" % nm, t):
+            variaveis.append(v)
+    imprimir_auxiliares(nome, todas, limpas)
+
+    reservadas = {nome, "return", "new", "this", "super", "final", "class"}
+    variaveis = [v for i, v in enumerate(variaveis) if v not in reservadas and v not in variaveis[:i]]
+    if not variaveis:
+        return
+    # linhas onde o tipo aparece declarando a variavel nao sao uso dela
+    declaracoes = {i for i in hits}
+    print("  uso das variaveis ligadas a '%s':" % nome)
+    for v in variaveis[:6]:
+        ve = re.escape(v)
+        chamada = re.compile(r"\b%s\s*\.\s*\w+\s*\(" % ve)
+        # passada a um metodo ou construtor: o codigo da classe pode rodar do outro lado
+        argumento = re.compile(r"\(\s*(?:[^;]*?,\s*)?%s\s*[,)]|,\s*%s\s*[,)]" % (ve, ve))
+        chamadas = [i for i, l in enumerate(limpas) if chamada.search(l)]
+        argumentos = [i for i, l in enumerate(limpas)
+                      if i not in declaracoes and i not in chamadas and argumento.search(l)]
+        if not chamadas and not argumentos:
+            print("   %s: nenhuma chamada de metodo, nao e passada como argumento" % v)
+            continue
+        for rotulo, linhas in (("metodos chamados em %s" % v, chamadas),
+                               ("%s passada como argumento" % v, argumentos)):
+            if not linhas:
+                continue
+            print("   %s:" % rotulo)
+            for i in linhas[:MAX_USOS]:
+                print("   %9d| %s" % (i + 1, todas[i].strip()[:150]))
+            if len(linhas) > MAX_USOS:
+                print("   %9s  ... mais %d" % ("", len(linhas) - MAX_USOS))
+
+
+def imprimir_auxiliares(nome, todas, limpas):
+    """Corpo dos metodos do proprio teste que devolvem o tipo (createFoo(), newFoo()...):
+    e ali que se ve se o objeto e real, mock ou outra implementacao."""
+    decl = re.compile(r"^\s*(?:(?:public|protected|private|static|final|synchronized)\s+)*"
+                      r"%s(?:\s*<[^>]*>)?\s+(\w+)\s*\([^;]*$" % re.escape(nome))
+    achados = []
+    for i, l in enumerate(limpas):
+        m = decl.match(l)
+        if not m:
+            continue
+        # corpo: do '{' ate as chaves fecharem, no maximo 12 linhas
+        prof, fim, abriu = 0, i, False
+        for j in range(i, min(i + 40, len(limpas))):
+            prof += limpas[j].count("{") - limpas[j].count("}")
+            abriu = abriu or "{" in limpas[j]
+            fim = j
+            if abriu and prof <= 0:
+                break
+        if abriu:
+            achados.append((m.group(1), i, fim))
+    if not achados:
+        return
+    print("  metodos do teste que devolvem '%s':" % nome)
+    for metodo, ini, fim in achados[:4]:
+        for j in range(ini, min(fim, ini + 11) + 1):
+            if todas[j].strip():
+                print("   %9d| %s" % (j + 1, todas[j].rstrip()[:150]))
+        if fim > ini + 11:
+            print("   %9s  ... mais %d linhas" % ("", fim - ini - 11))
+
+
 def ler(url):
     caminho = b.caminho_cache(url)
     if not os.path.exists(caminho):
@@ -120,6 +246,9 @@ def main():
     p.add_argument("--estrato", help="so os pares deste estrato de auditoria")
     # para a auditoria humana: o estrato sugere a resposta, entao o avaliador nao o ve
     p.add_argument("--cego", action="store_true", help="omite o estrato do cabecalho")
+    p.add_argument("--contexto", action="store_true",
+                   help="acrescenta o tipo da producao, a instrucao completa de cada mencao "
+                        "e o que o teste faz com as variaveis ligadas a classe")
     args = p.parse_args()
     if args.cego and args.estrato:
         sys.exit("--cego e --estrato juntos revelariam o estrato")
@@ -179,6 +308,8 @@ def main():
             print("   %5d| %s" % (n + 1, todas[n].strip()[:150]))
         if len(hits) > 14:
             print("   ... mais %d linhas com mencao" % (len(hits) - 14))
+        if args.contexto:
+            imprimir_contexto(prod, nome_prod, todas, limpas, hits)
         print()
 
 

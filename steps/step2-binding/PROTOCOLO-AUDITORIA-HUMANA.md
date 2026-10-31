@@ -105,3 +105,42 @@ decidir. Não serve para "parece que sim". Toda resposta `?` leva uma justificat
 > not involved in the study, independently judged a stratified subsample of 48 pairs (8 per
 > stratum); inter-rater agreement is reported as percent agreement and Cohen's kappa,
 > computed before consensus. Disagreements were resolved by discussion.
+
+## Evidência do julgamento e material dos avaliadores — 31/10/2026
+
+Decidido durante o julgamento do avaliador 1, antes de o avaliador 2 começar. Critérios e
+procedimento não mudam; muda o que conta como evidência e, por consequência, o `?`.
+
+- **A evidência é o dossiê**, não os fontes completos. `?` passa a valer quando o dossiê
+  não permite decidir. Abrir os 293 pares a mão não é viável, e um `?` que significasse
+  "não abri o arquivo" mediria o esforço do avaliador, não o par.
+- **Dossiê com contexto.** `dossie_auditoria.py --contexto` acrescenta ao dossiê simples o
+  tipo da classe de produção (classe, classe abstrata, interface e seus métodos com corpo),
+  a instrução completa de cada menção (uma chamada quebrada em várias linhas aparece
+  inteira), o corpo dos métodos do próprio teste que devolvem o tipo (`createFoo()`), e o uso
+  das variáveis declaradas com o tipo ou que recebem algo onde o nome aparece (inclusive
+  `Foo.class` passado a uma fábrica): os métodos chamados nelas e as chamadas a que são
+  passadas como argumento. Continua sendo evidência: não há heurística de decisão.
+- **Avaliador 1.** Os vereditos `s`/`n` do censo foram dados com o dossiê simples e ficam
+  como estão. Os pares com `?` são rejulgados com o dossiê com contexto
+  (`python tools/auditoria_humana.py --revisao` gera `dossie_revisao_avaliador1.txt`).
+- **Avaliador 2.** Recebe `pacote-avaliador2.zip` (`python tools/auditoria_humana.py
+  --pacote`): a planilha dos 48 pares em branco e o dossiê `--cego --contexto` desses pares.
+  Não recebe os fontes e não abre os links da planilha.
+- **Efeito do `?` na precisão.** `--apurar` reporta, além da precisão sobre os pares
+  decididos, os limites com todo `?` contado como `n` (inferior) e como `s` (superior), por
+  estrato e global. O artigo traz os três números.
+
+## Regra para teste que não cita a classe — 31/10/2026
+
+Quando o teste não cita o nome da classe de produção nenhuma vez fora de comentário e literal
+(o dossiê mostra `0 linhas` de menção):
+
+- `correto_estrito` = `n`: um teste cujo alvo é a classe a cita; o nome dos arquivos não
+  basta;
+- `correto_amplo` = `?`: a classe ainda pode ser executada por interface, reflexão, injeção
+  ou superclasse do teste, o que o dossiê não mostra.
+
+Vale para os dois avaliadores. O efeito é conservador no estrito (o par conta como erro) e
+retira o par do denominador no amplo, com os limites acima. No censo do avaliador 1 são 13
+pares.

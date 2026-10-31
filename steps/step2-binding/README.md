@@ -922,6 +922,7 @@ step2-binding/
 │   ├── gerar_analises.py      -> as DUAS tabelas oficiais de uma vez
 │   ├── baixar_auditoria.py    baixa os arquivos dos pares sorteados (cache local)
 │   ├── dossie_auditoria.py    monta a evidencia de cada par para a conferencia
+│   ├── auditoria_humana.py    planilhas, pacote do avaliador 2 e apuracao do censo humano
 │   ├── registrar_auditoria.py grava vereditos incrementalmente (dois criterios)
 │   ├── candidatos_auditoria.py os arquivos homonimos que a regra NAO escolheu
 │   ├── poder_analise.py       efeito minimo detectavel por ramo e por regra de rotulo
@@ -973,6 +974,11 @@ python tools/baixar_auditoria.py          # baixa os 501 arquivos para cache loc
 python tools/dossie_auditoria.py --de 1 --ate 25   # evidencia de cada par
 #    preencher a coluna correto em dados/auditoria_binding.csv
 python tools/auditar_binding.py --apurar
+#    censo humano (PROTOCOLO-AUDITORIA-HUMANA.md)
+python tools/auditoria_humana.py --gerar     # planilhas dos dois avaliadores
+python tools/auditoria_humana.py --revisao   # dossie com contexto dos '?' do avaliador 1
+python tools/auditoria_humana.py --pacote    # pacote-avaliador2.zip
+python tools/auditoria_humana.py --apurar    # precisao humana, limites dos '?', concordancias
 
 # 6. gerar as duas tabelas de analise
 python tools/gerar_analises.py
@@ -1224,9 +1230,9 @@ de menor impacto sobre o poder. O trabalho não foi desperdiçado: foi o que per
   foram medidas (`NOTAS-METODOLOGICAS.md`, seção 1). Se o step 3 der nulo, isso vira
   ameaça relevante e vale o desenho complementar: sortear arquivos de produção não ligados
   e procurar teste à mão.
-- **Concordância humana sobre a auditoria.** Os 293 vereditos atuais são automatizados. O
-  censo humano e a subamostra do segundo avaliador seguem o
-  `PROTOCOLO-AUDITORIA-HUMANA.md`.
+- **Concordância humana sobre a auditoria.** O censo humano dos 293 pares está completo
+  (`dados/auditoria_humana_avaliador1.csv`); falta a subamostra do segundo avaliador, que
+  dá a concordância entre humanos. Ambos seguem o `PROTOCOLO-AUDITORIA-HUMANA.md`.
 - **Atenuação residual.** Mesmo com 94,2% de precisão, 6% de pares falsos atenuam a
   correlação. Com a precisão medida, dá para estimar o quanto — e isso só vale a pena se o
   resultado for nulo (notas, seção 2).
