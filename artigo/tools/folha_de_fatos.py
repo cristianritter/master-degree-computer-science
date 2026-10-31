@@ -11,7 +11,8 @@ entao um numero que este script calcule diferente do step aparece como divergenc
 Fontes, todas lidas do disco, sem rede:
   step 1   dados/repos_map.csv, reports/run_log.csv, reports-config-padrao/ (Unknown Test)
   step 2   mlcq_samples.csv, mlcq_reviews.csv, test_classes.csv, binding.csv,
-           auditoria_binding_auto.csv, test_smell_occurrences.csv.gz, as duas tabelas
+           auditoria_binding_auto.csv, test_smell_occurrences.csv.gz, as duas tabelas,
+           as planilhas do censo humano (conferidas com auditoria_humana.py --json)
   step 3   os CSVs que cada analise grava em analises/*/dados/
 
 Uso:
@@ -25,9 +26,11 @@ import csv
 import glob
 import gzip
 import importlib.util
+import json
 import math
 import os
 import re
+import subprocess
 import sys
 
 ARTIGO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -460,32 +463,106 @@ PENDENTES = []      # (chave, descricao): macros que o artigo ja usa e o dado ai
 
 
 def censo():
+    """Recalcula o censo humano por codigo proprio e confere com auditoria_humana.py: as
+    duas contas tem que dar o mesmo numero, ou a folha nao e gerada."""
     secao("Censo humano do binding (step 2)")
     av1 = ler(os.path.join(D2, "auditoria_humana_avaliador1.csv"))
     av2 = ler(os.path.join(D2, "auditoria_humana_avaliador2.csv"))
-    fonte = "steps/step2-binding/dados/auditoria_humana_avaliador2.csv"
-    fato("paresSegundoAvaliador", len(av2), "pares julgados também pelo avaliador 2", fonte)
-    estrato = {str(i): r["estrato_auditoria"]
-               for i, r in enumerate(ler(os.path.join(D2, "auditoria_binding.csv")), 1)}
+    fonte2 = "steps/step2-binding/dados/auditoria_humana_avaliador2.csv"
+    fonte1 = "steps/step2-binding/dados/auditoria_humana_avaliador1.csv"
+    fato("paresSegundoAvaliador", len(av2), "pares julgados também pelo avaliador 2", fonte2)
+    base = ler(os.path.join(D2, "auditoria_binding.csv"))
+    estrato = {str(i): r["estrato_auditoria"] for i, r in enumerate(base, 1)}
+    peso = {r["estrato_auditoria"]: float(r["peso_no_universo"]) for r in base}
     por = collections.Counter(estrato[r["par"]] for r in av2)
     assert len(set(por.values())) == 1, "subamostra do avaliador 2 desbalanceada: %s" % por
     fato("paresPorEstratoSegundo", next(iter(por.values())),
-         "pares por estrato na subamostra do avaliador 2", fonte)
-    fato("estratosAuditoria", len(por), "estratos da auditoria do binding", fonte)
-    preenchidos = sum(1 for r in av1 if r["correto_estrito"].strip() and r["correto_amplo"].strip())
-    if preenchidos == len(av1):
-        sys.exit("o censo esta completo: troque os PENDENTES pelos valores de "
-                 "auditoria_humana.py --apurar, calculados aqui")
-    for chave, desc in (
-            ("concordanciaEstrito", "concordância entre avaliadores, critério estrito (%)"),
-            ("concordanciaAmplo", "concordância entre avaliadores, critério amplo (%)"),
-            ("kappaEstrito", "kappa de Cohen entre avaliadores, critério estrito"),
-            ("kappaAmplo", "kappa de Cohen entre avaliadores, critério amplo"),
-            ("kappaHumanoAuto", "kappa humano final × julgamento automatizado, estrito"),
-            ("precisaoHumanaDet", "precisão humana do binding, ramo determinístico (%)"),
-            ("precisaoHumanaAmp", "precisão humana, ramo ampliado, critério estrito (%)"),
-            ("precisaoHumanaAmpAmplo", "precisão humana, ramo ampliado, critério amplo (%)")):
-        PENDENTES.append((chave, desc))
+         "pares por estrato na subamostra do avaliador 2", fonte2)
+    fato("estratosAuditoria", len(por), "estratos da auditoria do binding", fonte2)
+
+    v = lambda x: (x or "").strip().lower() if (x or "").strip().lower() in ("s", "n", "?") else ""
+    incompletos = [r["par"] for r in av1 if not (v(r["correto_estrito"]) and v(r["correto_amplo"]))]
+    assert not incompletos, "censo do avaliador 1 incompleto: %s" % incompletos[:10]
+    segundo_pronto = av2 and all(v(r["correto_estrito"]) and v(r["correto_amplo"]) for r in av2)
+
+    def kappa(pares):
+        d = [(a, b) for a, b in pares if a in ("s", "n") and b in ("s", "n")]
+        po = sum(a == b for a, b in d) / len(d)
+        pa, pb = (sum(x == "s" for x in lado) / len(d) for lado in zip(*d))
+        pe = pa * pb + (1 - pa) * (1 - pb)
+        return po, (po - pe) / (1 - pe) if pe < 1 else None
+
+    det = ["caminho_exato", "convencao/caminho_espelhado", "convencao/so_basename"]
+    auto = ler(os.path.join(D2, "auditoria_binding_auto.csv"))
+    # processo separado: os steps tem cada um seu comum.py, e importar os dois aqui colide
+    do_step = json.loads(subprocess.run(
+        [sys.executable, os.path.join(S2, "tools", "auditoria_humana.py"), "--json"],
+        capture_output=True, check=True, text=True).stdout)
+
+    for crit, sufixo in (("estrito", ""), ("amplo", "Amplo")):
+        col = "correto_" + crit
+        cons = {r["par"]: v(r["consenso_" + crit]) for r in av2}
+        final = {r["par"]: cons.get(r["par"]) or v(r[col]) for r in av1}
+        cont = collections.defaultdict(collections.Counter)
+        for par, x in final.items():
+            cont[estrato[par]][x] += 1
+        conta = {}
+        for ramo, grupo in (("Det", det), ("Amp", sorted(cont))):
+            W = sum(peso[e] for e in grupo)
+            dec = [e for e in grupo if cont[e]["s"] + cont[e]["n"]]
+            Wd = sum(peso[e] for e in dec)
+            p = sum(cont[e]["s"] / (cont[e]["s"] + cont[e]["n"]) * peso[e] for e in dec) / Wd
+            tot = lambda e: sum(cont[e].values())
+            lo = sum(cont[e]["s"] / tot(e) * peso[e] for e in grupo) / W
+            hi = sum((cont[e]["s"] + cont[e]["?"]) / tot(e) * peso[e] for e in grupo) / W
+            conta[ramo] = (p, lo, hi)
+            nome = {"Det": "determinístico", "Amp": "ampliado"}[ramo]
+            fato("precisaoHumana%s%s" % (ramo, sufixo), 100 * p,
+                 "precisão humana, ramo %s, critério %s, sobre os pares decididos" % (nome, crit),
+                 fonte1, 1, "pct")
+            fato("precisaoHumana%s%sInf" % (ramo, sufixo), 100 * lo,
+                 "idem, limite inferior: todo '?' contado como n", fonte1, 1, "pct")
+            fato("precisaoHumana%s%sSup" % (ramo, sufixo), 100 * hi,
+                 "idem, limite superior: todo '?' contado como s", fonte1, 1, "pct")
+        fato("interrogacoes%s" % (sufixo or "Estrito"), sum(c["?"] for c in cont.values()),
+             "pares com veredito final '?', critério %s" % crit, fonte1)
+
+        # o juiz automatizado so preencheu correto_amplo onde as leituras divergem
+        col_auto = "correto_amplo" if crit == "amplo" else "correto"
+        pha = [(final[str(i)], v(r.get(col_auto)) or v(r["correto"]))
+               for i, r in enumerate(auto, 1)]
+        po_ha, k_ha = kappa(pha)
+        fato("concordanciaHumanoAuto%s" % sufixo, 100 * po_ha,
+             "concordância humano final × julgamento automatizado, critério %s" % crit,
+             fonte1, 1, "pct")
+        fato("kappaHumanoAuto%s" % sufixo, k_ha,
+             "kappa humano final × julgamento automatizado, critério %s" % crit, fonte1, 3)
+
+        # segunda apuracao: o step tem que dar o mesmo numero
+        st = do_step[crit]
+        for ramo, nome in (("Det", "deterministico"), ("Amp", "ampliado")):
+            r = st["ramos"][nome]
+            assert all(abs(a - b) < 1e-9 for a, b in
+                       zip(conta[ramo], (r["precisao"], r["inferior"], r["superior"]))), \
+                "precisao %s/%s difere de auditoria_humana.py" % (crit, nome)
+        assert abs(st["humano_auto"][1] - po_ha) < 1e-9 and abs(st["humano_auto"][2] - k_ha) < 1e-9, \
+            "humano x automatizado %s difere de auditoria_humana.py" % crit
+
+        chave = {"estrito": "Estrito", "amplo": "Amplo"}[crit]
+        if segundo_pronto:
+            po12, k12 = kappa([(v(a[col]), v(b[col])) for b in av2
+                               for a in av1 if a["par"] == b["par"]])
+            assert abs(st["humanos"][1] - po12) < 1e-9, "concordancia %s difere" % crit
+            fato("concordancia" + chave, 100 * po12,
+                 "concordância entre avaliadores, critério %s, antes do consenso" % crit,
+                 fonte2, 1, "pct")
+            fato("kappa" + chave, k12,
+                 "kappa de Cohen entre avaliadores, critério %s, antes do consenso" % crit, fonte2, 3)
+        else:
+            PENDENTES.append(("concordancia" + chave,
+                              "concordância entre avaliadores, critério %s (%%)" % crit))
+            PENDENTES.append(("kappa" + chave,
+                              "kappa de Cohen entre avaliadores, critério %s" % crit))
 
 
 # ---------------------------------------------------------------------------------------

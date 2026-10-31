@@ -49,6 +49,7 @@ COMANDOS = [
     (S2, ["tools/auditar_binding.py", "--apurar", "--arquivo", "dados/auditoria_binding_auto.csv"]),
     (S2, ["tools/auditar_binding.py", "--apurar", "--arquivo", "dados/auditoria_binding_auto.csv",
           "--criterio", "amplo"]),
+    (S2, ["tools/auditoria_humana.py", "--apurar"]),
     (os.path.join(A3, "00-caracterizacao"), ["caracterizar.py"]),
     (os.path.join(A3, "01-correlacao-agregada"), ["explorar.py", "--por-smell"]),
     (os.path.join(A3, "02-por-test-smell"), ["por_test_smell.py"]),

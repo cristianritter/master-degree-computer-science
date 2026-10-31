@@ -19,6 +19,7 @@ Uso:
     python auditoria_humana.py --apurar    # precisao humana e concordancias
     python auditoria_humana.py --pacote    # pacote-avaliador2.zip: planilha e dossie com contexto
     python auditoria_humana.py --revisao   # dossie com contexto dos pares '?' do avaliador 1
+    python auditoria_humana.py --json      # as medidas do --apurar, lidas pela folha de fatos
 
 Como preencher, nas duas colunas, para todo par:
     correto_estrito   s/n/?   a classe de producao e o ALVO do teste
@@ -26,6 +27,7 @@ Como preencher, nas duas colunas, para todo par:
 """
 import argparse
 import collections
+import json
 import os
 import random
 import shutil
@@ -162,22 +164,51 @@ def fmt_kappa(rotulo, n, po, k, total):
         rotulo, n, total, 100 * po, "indefinido" if k is None else "%.3f" % k)
 
 
-def apurar():
+# os dois ramos do binding, como no artigo: o deterministico sao as regras de caminho e de
+# convencao; o ampliado soma a referencia estatica e cobre todos os estratos
+RAMOS = (("deterministico", ("caminho_exato", "convencao/caminho_espelhado",
+                             "convencao/so_basename")),
+         ("ampliado", None))
+
+
+def precisao_do_ramo(cont, peso, estratos):
+    """Precisao ponderada pelo peso dos estratos, sobre os pares decididos, e os limites
+    com todo '?' contado como n (inferior) e como s (superior)."""
+    num = den = inf = sup = 0.0
+    for e in estratos:
+        t = cont[e]
+        dec, tot = t["s"] + t["n"], t["s"] + t["n"] + t["?"]
+        if not tot:
+            continue
+        if dec:
+            num += t["s"] / dec * peso[e]
+            den += peso[e]
+        inf += t["s"] / tot * peso[e]
+        sup += (t["s"] + t["?"]) / tot * peso[e]
+    W = sum(peso[e] for e in estratos if sum(cont[e].values()))
+    return {"precisao": num / den if den else None, "inferior": inf / W, "superior": sup / W,
+            "interrogacoes": sum(cont[e]["?"] for e in estratos)}
+
+
+def medidas():
+    """Tudo o que o protocolo manda calcular, por criterio. --apurar imprime; a folha de
+    fatos do artigo le daqui, para nao haver duas contas da mesma coisa."""
     base = c.ler_csv(ORIGEM)
     estrato = {i: r["estrato_auditoria"] for i, r in enumerate(base, 1)}
     peso = {r["estrato_auditoria"]: float(r["peso_no_universo"]) for r in base}
     auto = {i: r for i, r in enumerate(c.ler_csv(AUTO), 1)}
     av1 = {int(r["par"]): r for r in c.ler_csv(AV1)}
     av2 = {int(r["par"]): r for r in c.ler_csv(AV2)} if os.path.exists(AV2) else {}
+    todos = sorted(set(estrato.values()))
 
+    saida = {}
     for crit in ("estrito", "amplo"):
         col = "correto_" + crit
-        print("=" * 78)
-        print("criterio %s" % crit.upper())
+        m = saida[crit] = {}
 
         # 1. concordancia entre humanos, nos vereditos INDEPENDENTES (antes do consenso)
         p12 = [(veredito(av1[i][col]), veredito(r[col])) for i, r in av2.items()]
-        print(fmt_kappa("avaliador 1 x avaliador 2", *kappa(p12), len(p12)))
+        m["humanos"] = kappa(p12) + (len(p12),)
 
         # 2. veredito final: o consenso, onde existe; o do avaliador 1 no resto
         final = {}
@@ -186,42 +217,46 @@ def apurar():
             if i in av2:
                 v = veredito(av2[i]["consenso_" + crit]) or v
             final[i] = v
+        m["com_veredito"], m["pares"] = sum(1 for v in final.values() if v), len(final)
 
         # 3. concordancia do juiz automatizado com o veredito humano final. Nos estratos
         # deterministicos o automatizado so preencheu o estrito (as leituras coincidem la)
         coluna_auto = "correto_amplo" if crit == "amplo" else "correto"
         pha = [(final[i], veredito(auto[i].get(coluna_auto)) or veredito(auto[i]["correto"]))
                for i in final]
-        print(fmt_kappa("humano final x automatizado", *kappa(pha), len(pha)))
+        m["humano_auto"] = kappa(pha) + (len(pha),)
 
-        # 4. precisao humana por estrato, ponderada como no auditar_binding.py
-        print("\n%-38s %4s %4s %4s %8s %8s %8s" % ("estrato", "s", "n", "?", "precisao",
-                                                  "inferior", "superior"))
+        # 4. precisao humana por estrato e por ramo, ponderada como no auditar_binding.py
         cont = collections.defaultdict(collections.Counter)
         for i, v in final.items():
             if v:
                 cont[estrato[i]][v] += 1
-        # '?' sai do denominador; os limites dizem quanto isso pode mover o numero:
-        # inferior com todo '?' contado como n, superior com todo '?' contado como s
-        num = den = inf = sup = den_lim = 0.0
-        for e in sorted(cont):
-            t = cont[e]
-            dec = t["s"] + t["n"]
-            tot = dec + t["?"]
-            p = t["s"] / dec if dec else None
-            print("%-38s %4d %4d %4d %s %7.1f%% %7.1f%%" % (
-                e, t["s"], t["n"], t["?"], "       -" if p is None else "%7.1f%%" % (100 * p),
-                100 * t["s"] / tot, 100 * (t["s"] + t["?"]) / tot))
-            if p is not None:
-                num += p * peso[e]
-                den += peso[e]
-            inf += t["s"] / tot * peso[e]
-            sup += (t["s"] + t["?"]) / tot * peso[e]
-            den_lim += peso[e]
-        if den:
-            print("precisao global ponderada: %.1f%%  (limites com '?': %.1f%% a %.1f%%)"
-                  % (100 * num / den, 100 * inf / den_lim, 100 * sup / den_lim))
-        print("pares com veredito: %d de %d" % (sum(1 for v in final.values() if v), len(final)))
+        m["estratos"] = {e: dict(cont[e]) for e in todos}
+        m["ramos"] = {nome: precisao_do_ramo(cont, peso, grupo or todos) for nome, grupo in RAMOS}
+    return saida
+
+
+def apurar():
+    pct = lambda x: "       -" if x is None else "%7.1f%%" % (100 * x)
+    for crit, m in medidas().items():
+        print("=" * 78)
+        print("criterio %s" % crit.upper())
+        print(fmt_kappa("avaliador 1 x avaliador 2", *m["humanos"]))
+        print(fmt_kappa("humano final x automatizado", *m["humano_auto"]))
+
+        # '?' sai do denominador; os limites dizem quanto isso pode mover o numero
+        print("\n%-38s %4s %4s %4s %8s %8s %8s" % ("estrato", "s", "n", "?", "precisao",
+                                                  "inferior", "superior"))
+        for e, t in sorted(m["estratos"].items()):
+            s_, n_, q = t.get("s", 0), t.get("n", 0), t.get("?", 0)
+            tot = s_ + n_ + q
+            print("%-38s %4d %4d %4d %s %s %s" % (
+                e, s_, n_, q, pct(s_ / (s_ + n_) if s_ + n_ else None),
+                pct(s_ / tot if tot else None), pct((s_ + q) / tot if tot else None)))
+        for nome, r in m["ramos"].items():
+            print("ramo %-33s %14s %s %s %s" % (nome, "", pct(r["precisao"]),
+                                              pct(r["inferior"]), pct(r["superior"])))
+        print("pares com veredito: %d de %d" % (m["com_veredito"], m["pares"]))
 
 
 def main():
@@ -231,6 +266,7 @@ def main():
     g.add_argument("--apurar", action="store_true")
     g.add_argument("--pacote", action="store_true")
     g.add_argument("--revisao", action="store_true")
+    g.add_argument("--json", action="store_true", help="as medidas do --apurar, para a folha de fatos")
     args = ap.parse_args()
     if args.gerar:
         gerar()
@@ -238,6 +274,8 @@ def main():
         pacote()
     elif args.revisao:
         revisao()
+    elif args.json:
+        json.dump(medidas(), sys.stdout)
     else:
         apurar()
 

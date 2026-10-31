@@ -168,6 +168,24 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FparesSegundoAvaliador` | 48 | pares julgados também pelo avaliador 2 | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
 | `\FparesPorEstratoSegundo` | 8 | pares por estrato na subamostra do avaliador 2 | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
 | `\FestratosAuditoria` | 6 | estratos da auditoria do binding | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
+| `\FprecisaoHumanaDet` | 90,2% | precisão humana, ramo determinístico, critério estrito, sobre os pares decididos | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaDetInf` | 90,2% | idem, limite inferior: todo '?' contado como n | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaDetSup` | 90,2% | idem, limite superior: todo '?' contado como s | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaAmp` | 7,2% | precisão humana, ramo ampliado, critério estrito, sobre os pares decididos | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaAmpInf` | 7,1% | idem, limite inferior: todo '?' contado como n | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaAmpSup` | 7,3% | idem, limite superior: todo '?' contado como s | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FinterrogacoesEstrito` | 1 | pares com veredito final '?', critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FconcordanciaHumanoAuto` | 87,7% | concordância humano final × julgamento automatizado, critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FkappaHumanoAuto` | 0,752 | kappa humano final × julgamento automatizado, critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaDetAmplo` | 100,0% | precisão humana, ramo determinístico, critério amplo, sobre os pares decididos | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaDetAmploInf` | 90,2% | idem, limite inferior: todo '?' contado como n | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaDetAmploSup` | 100,0% | idem, limite superior: todo '?' contado como s | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaAmpAmplo` | 82,1% | precisão humana, ramo ampliado, critério amplo, sobre os pares decididos | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaAmpAmploInf` | 81,1% | idem, limite inferior: todo '?' contado como n | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FprecisaoHumanaAmpAmploSup` | 82,2% | idem, limite superior: todo '?' contado como s | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FinterrogacoesAmplo` | 20 | pares com veredito final '?', critério amplo | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FconcordanciaHumanoAutoAmplo` | 86,4% | concordância humano final × julgamento automatizado, critério amplo | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FkappaHumanoAutoAmplo` | 0,277 | kappa humano final × julgamento automatizado, critério amplo | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 
 ## Pendentes
 
@@ -177,10 +195,6 @@ Macros que o artigo já usa e cujo dado ainda não existe: no PDF aparecem como
 | macro | o que será |
 |---|---|
 | `\FconcordanciaEstrito` | concordância entre avaliadores, critério estrito (%) |
-| `\FconcordanciaAmplo` | concordância entre avaliadores, critério amplo (%) |
 | `\FkappaEstrito` | kappa de Cohen entre avaliadores, critério estrito |
+| `\FconcordanciaAmplo` | concordância entre avaliadores, critério amplo (%) |
 | `\FkappaAmplo` | kappa de Cohen entre avaliadores, critério amplo |
-| `\FkappaHumanoAuto` | kappa humano final × julgamento automatizado, estrito |
-| `\FprecisaoHumanaDet` | precisão humana do binding, ramo determinístico (%) |
-| `\FprecisaoHumanaAmp` | precisão humana, ramo ampliado, critério estrito (%) |
-| `\FprecisaoHumanaAmpAmplo` | precisão humana, ramo ampliado, critério amplo (%) |
