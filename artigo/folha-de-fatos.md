@@ -175,6 +175,7 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FprecisaoHumanaAmpInf` | 7,1% | idem, limite inferior: todo '?' contado como n | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FprecisaoHumanaAmpSup` | 7,3% | idem, limite superior: todo '?' contado como s | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FinterrogacoesEstrito` | 1 | pares com veredito final '?', critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FerrosHumanosDet` | 13 | pares do ramo determinístico em que o teste não tem a classe como alvo (todos: o teste não cita a classe) | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FconcordanciaHumanoAuto` | 87,7% | concordância humano final × julgamento automatizado, critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FkappaHumanoAuto` | 0,752 | kappa humano final × julgamento automatizado, critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FprecisaoHumanaDetAmplo` | 100,0% | precisão humana, ramo determinístico, critério amplo, sobre os pares decididos | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
@@ -190,7 +191,7 @@ steps, o que faz desta folha uma segunda apuração.
 ## Pendentes
 
 Macros que o artigo já usa e cujo dado ainda não existe: no PDF aparecem como
-`[?? chave]`. Saem desta lista quando o censo humano estiver completo.
+`[?? chave]`. Saem desta lista quando a planilha do avaliador 2 voltar.
 
 | macro | o que será |
 |---|---|

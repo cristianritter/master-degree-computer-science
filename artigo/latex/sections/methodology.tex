@@ -144,23 +144,29 @@ static references, capped at \FmaxTestes{} test classes per production file, for
 \emph{extended} branch: \FarquivosAmp{} files in \FreposAmp{} repositories, linked to
 \FclassesTesteAmp{} test classes.
 
-\paragraph{Precision audit}
-We audited \FparesAuditados{} pairs, sampled at random and stratified by strategy and
-evidence (\FestratosAuditoria{} strata, up to \FparesPorEstratoAuditoria{} pairs each; the
-two convention strata are a census). The first author judged all pairs, blind to the
-stratum, under two criteria: whether the production class is the \emph{target} of the test
-(strict), and whether the test \emph{executes} code of the class, even as a fixture
-(broad). A second rater, not involved in the study, independently judged a stratified
-subsample of \FparesSegundoAvaliador{} pairs (\FparesPorEstratoSegundo{} per stratum).
-Inter-rater agreement was \FconcordanciaEstrito{} (Cohen's $\kappa$ = \FkappaEstrito{})
-under the strict criterion and \FconcordanciaAmplo{} ($\kappa$ = \FkappaAmplo{}) under the
-broad one, computed before disagreements were resolved by discussion. The audit protocol
-was registered before the first pair was judged.
+\paragraph{Precision audit} We audited \FparesAuditados{} pairs, sampled at random and
+stratified by strategy and evidence (\FestratosAuditoria{} strata, up to
+\FparesPorEstratoAuditoria{} pairs each; the two convention strata are a census). The
+first author judged all pairs, blind to the stratum, under two criteria: whether the
+production class is the \emph{target} of the test (strict), and whether the test
+\emph{executes} code of the class, even as a fixture (broad). Each pair was judged from an
+extract of the two files at the collection commit: the test lines that reference the
+class, with their full statements and the calls made on the resulting objects. A pair the
+extract could not settle was marked undecided. A second rater, not involved in the study,
+independently judged a stratified subsample of \FparesSegundoAvaliador{} pairs
+(\FparesPorEstratoSegundo{} per stratum). Inter-rater agreement was
+\FconcordanciaEstrito{} (Cohen's $\kappa$ = \FkappaEstrito{}) under the strict criterion
+and \FconcordanciaAmplo{} ($\kappa$ = \FkappaAmplo{}) under the broad one, computed before
+disagreements were resolved by discussion. The audit protocol was registered before the
+first pair was judged.
 
 The precision of each branch is the per-stratum precision weighted by the stratum's share
-of the pairs. The deterministic branch has a precision of \FprecisaoHumanaDet{}. The
-extended branch has a precision of \FprecisaoHumanaAmp{} under the strict criterion and
-\FprecisaoHumanaAmpAmplo{} under the broad one: a static reference identifies the classes
+of the pairs, over the decided pairs. The deterministic branch has a precision of
+\FprecisaoHumanaDet{}. All of its \FerrosHumanosDet{} errors are the same case: a test
+named after the class that never references it. The extended branch has a precision of
+\FprecisaoHumanaAmp{} under the strict criterion and \FprecisaoHumanaAmpAmplo{} under the
+broad one (\FprecisaoHumanaAmpAmploInf{} to \FprecisaoHumanaAmpAmploSup{} if every
+undecided pair is counted as wrong or as right): a static reference identifies the classes
 a test \emph{exercises}, not the class it \emph{tests}. We therefore treat the two
 branches as answering different questions. The deterministic branch answers RQ1; the
 extended branch is reported for RQ3, as the answer one would get by conflating the two

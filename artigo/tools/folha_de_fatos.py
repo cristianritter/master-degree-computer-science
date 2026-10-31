@@ -526,6 +526,20 @@ def censo():
                  "idem, limite superior: todo '?' contado como s", fonte1, 1, "pct")
         fato("interrogacoes%s" % (sufixo or "Estrito"), sum(c["?"] for c in cont.values()),
              "pares com veredito final '?', critério %s" % crit, fonte1)
+        if crit == "estrito":
+            # todo erro do ramo deterministico tem a assinatura da regra do teste que nao cita
+            # a classe (estrito n, amplo ?): o texto afirma isso, entao a folha confere
+            erros = [r["par"] for r in av1 if estrato[r["par"]] in det and final[r["par"]] == "n"]
+            amplo = {r["par"]: cons_amplo or v(r["correto_amplo"])
+                     for r in av1
+                     for cons_amplo in [next((v(b["consenso_amplo"]) for b in av2
+                                              if b["par"] == r["par"]), "")]}
+            assert all(amplo[p] == "?" for p in erros), \
+                "erro no ramo deterministico fora da regra do teste sem mencao: %s" % \
+                [p for p in erros if amplo[p] != "?"]
+            fato("errosHumanosDet", len(erros),
+                 "pares do ramo determinístico em que o teste não tem a classe como alvo "
+                 "(todos: o teste não cita a classe)", fonte1)
 
         # o juiz automatizado so preencheu correto_amplo onde as leituras divergem
         col_auto = "correto_amplo" if crit == "amplo" else "correto"
@@ -630,7 +644,7 @@ def gerar_md():
     if PENDENTES:
         out += ["## Pendentes", "",
                 "Macros que o artigo já usa e cujo dado ainda não existe: no PDF aparecem como",
-                "`[?? chave]`. Saem desta lista quando o censo humano estiver completo.", "",
+                "`[?? chave]`. Saem desta lista quando a planilha do avaliador 2 voltar.", "",
                 "| macro | o que será |", "|---|---|"]
         out += ["| `\\F%s` | %s |" % (k, d) for k, d in PENDENTES] + [""]
     return "\n".join(out)
