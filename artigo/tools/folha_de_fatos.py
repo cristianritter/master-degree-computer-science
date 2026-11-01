@@ -167,7 +167,12 @@ def coleta():
     por1k = {}
     for g, linhas in (("bate", [r for r in tc if r["nome_divergente"] == "0"]), ("diverge", div)):
         por1k[g] = {s: 1000 * sum(int(r[c2.coluna(s)]) for r in linhas) / len(linhas)
-                    for s in ("Eager Test", "Lazy Test")}
+                    for s in ("Eager Test", "Lazy Test", "General Fixture")}
+    # o texto afirma que General Fixture, que so le o teste, fica estavel nas linhas
+    # aninhadas (o controle do defeito): a folha confere em vez de confiar na frase
+    razao_gf = por1k["diverge"]["General Fixture"] / por1k["bate"]["General Fixture"]
+    assert 0.8 <= razao_gf <= 1.25, \
+        "General Fixture nao e mais estavel nas linhas aninhadas (razao %.2f)" % razao_gf
     fato("quedaEager", por1k["bate"]["Eager Test"] / por1k["diverge"]["Eager Test"],
          "queda de Eager Test por classe nas linhas aninhadas", fonte, 0, "x")
     fato("quedaLazy", por1k["bate"]["Lazy Test"] / por1k["diverge"]["Lazy Test"],
