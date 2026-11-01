@@ -148,6 +148,8 @@ static references forms the \emph{extended} branch: \FarquivosAmp{} files in
 \FreposAmp{} repositories, linked to \FclassesTesteAmp{} test classes. Production files
 referenced by more than \FmaxTestes{} test classes are excluded from this branch, to keep
 widely shared types, such as data objects used across a test suite, from dominating it.
+We fixed this cap before computing any correlation, as a trade-off between the coverage of
+the branch and the number of test classes linked to each file.
 
 \paragraph{Precision audit} We audited \FparesAuditados{} pairs, sampled at random and
 stratified by strategy and evidence (\FestratosAuditoria{} strata, up to
