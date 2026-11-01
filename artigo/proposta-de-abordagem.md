@@ -74,6 +74,12 @@ Detalhes no documento de eventos-alvo.
 - **235 testes registrados** — o artigo tem que declarar regime exploratório.
 - **Equivalência não declarada.** Os dados excluem rho acima de 0,105, mas o TOST na margem
   0,10 dá p = 0,065. O artigo afirma o limite, não a equivalência.
+- **Seleção por convenção de nome.** O ramo determinístico liga teste e classe por nome ou
+  caminho, o que favorece projetos com suítes organizadas por convenção (hábito associado a
+  TDD), onde a variação de test smells pode ser menor e atenuar a correlação. Vai em
+  Threats to Validity, como validade externa: o resultado vale para classes com teste
+  dedicado identificado por convenção. Os demais argumentos ligados a TDD (direção causal,
+  prática como causa comum) não se aplicam a um estudo correlacional com resultado nulo.
 
 ## O que não fazer
 

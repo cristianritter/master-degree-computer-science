@@ -225,6 +225,9 @@ def mlcq():
     fonte = "steps/step2-binding/dados/mlcq_samples.csv e mlcq_reviews.csv"
     fato("amostrasMlcq", len({s["sample_id"] for s in samples}), "amostras do MLCQ", fonte)
     fato("unidadesMlcq", len(samples), "unidades de rótulo (amostra, smell)", fonte)
+    por_amostra = collections.Counter(s["sample_id"] for s in samples)
+    fato("amostrasUmSmell", sum(1 for n in por_amostra.values() if n == 1),
+         "amostras julgadas para um só dos dois smells da granularidade", fonte)
     fato("revisoesMlcq", len(reviews), "revisões do MLCQ", fonte)
     fato("escalaMax", max(c2.RANK.values()), "maior código da escala de severidade (critical)",
          "steps/step2-binding/tools/comum.py (SEVERIDADES)")

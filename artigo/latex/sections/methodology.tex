@@ -52,7 +52,8 @@ professional developers of \FamostrasMlcq{} code samples from open-source Java p
 Each review grades one sample for two smells at once: blob and data class for classes,
 feature envy and long method for methods. The grade is a severity on the scale none,
 minor, major, critical, which we code from zero to \FescalaMax{}. Our unit of label is
-therefore the pair (sample, smell); MLCQ has \FunidadesMlcq{} such units.
+therefore the pair (sample, smell); \FamostrasUmSmell{} samples were graded for only one
+of their two smells, so MLCQ has \FunidadesMlcq{} such units.
 
 \paragraph{The sampling design makes binary labels circular}
 MLCQ's appendix states that the reviewers of the last phase cross-checked only samples
@@ -141,9 +142,10 @@ that its precision can be measured separately:
 
 The first two strategies form the \emph{deterministic} branch: \FarquivosDet{} production
 files in \FreposDet{} repositories, linked to \FclassesTesteDet{} test classes. Adding
-static references, capped at \FmaxTestes{} test classes per production file, forms the
-\emph{extended} branch: \FarquivosAmp{} files in \FreposAmp{} repositories, linked to
-\FclassesTesteAmp{} test classes.
+static references forms the \emph{extended} branch: \FarquivosAmp{} files in
+\FreposAmp{} repositories, linked to \FclassesTesteAmp{} test classes. Production files
+referenced by more than \FmaxTestes{} test classes are excluded from this branch, to keep
+widely shared types, such as data objects used across a test suite, from dominating it.
 
 \paragraph{Precision audit} We audited \FparesAuditados{} pairs, sampled at random and
 stratified by strategy and evidence (\FestratosAuditoria{} strata, up to
@@ -224,7 +226,7 @@ Benjamini--Hochberg~\cite{benjamini1995fdr}.
 
 \paragraph{Power and equivalence}
 A null result is only informative if the design could have detected an effect. With the
-deterministic branch, a two-sided test at $\alpha = 0.05$ has 80\% power to detect
+\FarquivosDet{} files of the deterministic branch, a two-sided test at $\alpha = 0.05$ has 80\% power to detect
 $|\rho| \geq$ \FrDetectavelDet{}. Beyond power, we report the largest effect compatible
 with the data, i.e., the bound of the 90\% confidence interval farthest from zero, and
 run two one-sided tests (TOST)~\cite{lakens2017equivalence} against
