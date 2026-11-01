@@ -115,8 +115,11 @@ removed.
 
 \paragraph{A known defect of the detector}
 JNose names a test class after the \emph{last} class declaration it visits. In files with
-a nested class, it reports the nested helper's name, and Eager Test and Lazy Test are
-measured against the wrong production class. This affects \FclassesAninhadas{} test
+a nested class it reports the nested helper's name, and it resolves the production class
+from that name. The two smells that compare the test against its production class, Eager
+Test and Lazy Test, are therefore mostly missed: their rate drops \FquedaEager{} and
+\FquedaLazy{} in these files, while General Fixture, which reads only the test, is stable.
+This affects \FclassesAninhadas{} test
 classes (\FpctClassesAninhadas{}). We keep these classes and flag them; RQ2 and the
 sensitivity analyses report results with and without them.
 
