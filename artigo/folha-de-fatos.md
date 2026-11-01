@@ -73,6 +73,8 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FparesBinding` | 16.869 | pares (produção, teste) no binding | `steps/step2-binding/dados/binding.csv` |
 | `\FparesAuditados` | 293 | pares auditados | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
 | `\FparesPorEstratoAuditoria` | 50 | pares sorteados por estrato amostrado (os de censo têm menos) | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
+| `\FestratosCheiosAuditoria` | 5 | estratos da auditoria com o número máximo de pares | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
+| `\FparesMenorEstrato` | 43 | pares do menor estrato da auditoria (censo) | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
 | `\FmaxTestes` | 10 | teto de classes de teste por arquivo de produção no ramo ampliado | `steps/step2-binding/tools/gerar_analises.py` |
 | `\FprecisaoDet` | 94,2% | precisão do binding no ramo deterministico ("o teste tem a classe como alvo") | `steps/step2-binding/dados/auditoria_binding_auto.csv` |
 | `\FprecisaoDetBaixo` | 90,9% | limite inferior do IC95% estratificado da precisão (deterministico) | `steps/step2-binding/dados/auditoria_binding_auto.csv` |

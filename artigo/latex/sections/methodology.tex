@@ -152,8 +152,9 @@ We fixed this cap before computing any correlation, as a trade-off between the c
 the branch and the number of test classes linked to each file.
 
 \paragraph{Precision audit} We audited \FparesAuditados{} pairs, sampled at random and
-stratified by strategy and evidence (\FestratosAuditoria{} strata, up to
-\FparesPorEstratoAuditoria{} pairs each; the two convention strata are a census). The
+stratified by strategy and evidence (\FestratosAuditoria{} strata:
+\FestratosCheiosAuditoria{} contribute \FparesPorEstratoAuditoria{} pairs each and the
+smallest contributes \FparesMenorEstrato{}; the two convention strata are audited in full). The
 first author judged all pairs, blind to the stratum, under two criteria: whether the
 production class is the \emph{target} of the test (strict), and whether the test
 \emph{executes} code of the class, even as a fixture (broad). Each pair was judged from an
@@ -187,8 +188,8 @@ test smell. RQ1 uses three outcomes:
 
 \begin{itemize}
   \item \emph{raw}: the total number of test smell occurrences;
-  \item \emph{density}: the raw count divided by the number of members of the linked test
-  classes;
+  \item \emph{density}: the raw count divided by the total number of members of the linked
+  test classes;
   \item \emph{distinct}: how many of the \FsmellsHabilitados{} test smells occur at least
   once.
 \end{itemize}
@@ -210,8 +211,8 @@ The variables are far from normal: most files have zero occurrences of most smel
 therefore use rank-based statistics throughout.
 
 \paragraph{RQ1}
-Spearman's $\rho$ between each outcome and the aggregate label, with 95\% confidence
-intervals from Fisher's $z$ transformation. To quantify the role of test size, we also
+Spearman's $\rho$ between each outcome and the aggregate label, with average ranks for
+ties and 95\% confidence intervals from Fisher's $z$ transformation. To quantify the role of test size, we also
 report the partial Spearman correlation controlling for the member count of the tests,
 and the correlation of the label itself with test size. As a second operationalization,
 we compare files whose label was confirmed by the reviewers' majority
@@ -225,8 +226,11 @@ routed to the cross-check.
 Spearman's $\rho$ for each test smell, in raw and density form, against the aggregate
 label; and for each pair of code smell and test smell, in density form, against the
 severity of that code smell. Default Test does not occur in any analyzed file and is
-excluded as a constant. Each set of tests is a family, adjusted with
-Benjamini--Hochberg~\cite{benjamini1995fdr}.
+excluded as a constant. We adjust $p$-values with
+Benjamini--Hochberg~\cite{benjamini1995fdr} within three families: the per-smell tests on
+all files, the same tests on the files without nested classes, and the code smell $\times$
+test smell cells. The first two are kept apart because they ask the same questions of
+nearly the same files; pooling them would count each hypothesis twice.
 
 \paragraph{Power and equivalence}
 A null result is only informative if the design could have detected an effect. With the

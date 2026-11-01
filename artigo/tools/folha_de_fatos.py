@@ -282,6 +282,12 @@ def binding():
     fato("paresPorEstratoAuditoria",
          max(collections.Counter(r["estrato_auditoria"] for r in aud).values()),
          "pares sorteados por estrato amostrado (os de censo têm menos)", fonte)
+    por_estrato = collections.Counter(r["estrato_auditoria"] for r in aud)
+    cheio = max(por_estrato.values())
+    fato("estratosCheiosAuditoria", sum(1 for v in por_estrato.values() if v == cheio),
+         "estratos da auditoria com o número máximo de pares", fonte)
+    fato("paresMenorEstrato", min(por_estrato.values()),
+         "pares do menor estrato da auditoria (censo)", fonte)
     g = open(os.path.join(S2, "tools", "gerar_analises.py"), encoding="utf-8").read()
     fato("maxTestes", int(re.search(r'"--max-testes", "(\d+)"', g).group(1)),
          "teto de classes de teste por arquivo de produção no ramo ampliado",
