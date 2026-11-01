@@ -923,6 +923,7 @@ step2-binding/
 │   ├── baixar_auditoria.py    baixa os arquivos dos pares sorteados (cache local)
 │   ├── dossie_auditoria.py    monta a evidencia de cada par para a conferencia
 │   ├── auditoria_humana.py    planilhas, pacote do avaliador 2 e apuracao do censo humano
+│   ├── recall_binding.py      recall nos arquivos sem ligacao (varredura automatica)
 │   ├── registrar_auditoria.py grava vereditos incrementalmente (dois criterios)
 │   ├── candidatos_auditoria.py os arquivos homonimos que a regra NAO escolheu
 │   ├── poder_analise.py       efeito minimo detectavel por ramo e por regra de rotulo
@@ -979,6 +980,10 @@ python tools/auditoria_humana.py --gerar     # planilhas dos dois avaliadores
 python tools/auditoria_humana.py --revisao   # dossie com contexto dos '?' do avaliador 1
 python tools/auditoria_humana.py --pacote    # pacote-avaliador2.zip
 python tools/auditoria_humana.py --apurar    # precisao humana, limites dos '?', concordancias
+#    recall nos arquivos sem ligacao (clona os repositorios sorteados; retomavel)
+python tools/recall_binding.py --sortear
+python tools/recall_binding.py --varrer
+python tools/recall_binding.py --apurar
 
 # 6. gerar as duas tabelas de analise
 python tools/gerar_analises.py
@@ -1226,10 +1231,13 @@ de menor impacto sobre o poder. O trabalho não foi desperdiçado: foi o que per
 
 ### 12.6 O que continua não medido
 
-- **Recall do binding.** A auditoria mede precisão; as ligações verdadeiras perdidas não
-  foram medidas (`NOTAS-METODOLOGICAS.md`, seção 1). Se o step 3 der nulo, isso vira
-  ameaça relevante e vale o desenho complementar: sortear arquivos de produção não ligados
-  e procurar teste à mão.
+- **Recall do binding, medido só nos arquivos sem ligação.** `tools/recall_binding.py`
+  sorteou 100 dos arquivos com `sem_ligacao_resolvida` e varreu todos os arquivos de teste
+  de cada repositório, no commit da coleta, atrás de qualquer referência à classe. Nenhum
+  teste analisado pelo JNose referencia esses arquivos (limite superior de 95%: 3,0%). As
+  referências achadas vêm só de arquivos fora do universo do JNose (jtreg, utilitários de
+  teste, código gerado), que não têm medida de test smell. Os arquivos ligados só por
+  referência estática não entram nessa medida.
 - **Concordância humana sobre a auditoria.** O censo humano dos 293 pares está completo
   (`dados/auditoria_humana_avaliador1.csv`); falta a subamostra do segundo avaliador, que
   dá a concordância entre humanos. Ambos seguem o `PROTOCOLO-AUDITORIA-HUMANA.md`.
