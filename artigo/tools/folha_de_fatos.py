@@ -354,6 +354,16 @@ def amostra():
         if ramo == "deterministico":
             fato("arquivosUmaAmostraDet", sum(1 for r in L if r["n_amostras"] == "1"),
                  "arquivos com uma única amostra do MLCQ (determinístico)", fonte)
+            # o rotulo agregado da RQ1 existe em todo arquivo (o texto afirma); as celulas
+            # code smell x test smell da RQ2 usam so os arquivos avaliados para o smell
+            cols = ["cs_%s_sev_media" % s.replace(" ", "_") for s in c2.CODE_SMELLS]
+            assert all(any(r[col] != "" for col in cols) for r in L), \
+                "arquivo do ramo deterministico sem nenhum smell avaliado"
+            avaliados = [sum(1 for r in L if r[col] != "") for col in cols]
+            fato("nCelulaMinDet", min(avaliados),
+                 "arquivos avaliados para o code smell menos coberto (determinístico)", fonte)
+            fato("nCelulaMaxDet", max(avaliados),
+                 "arquivos avaliados para o code smell mais coberto (determinístico)", fonte)
         fato("rDetectavel" + chave, r_detectavel(len(L)),
              "menor r detectável com 80%% de poder, N do ramo %s" % ramo,
              "fórmula de poder do step 2 (poder_analise.py)", 3)

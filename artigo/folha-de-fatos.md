@@ -96,6 +96,8 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FpctRotuloPositivoDet` | 27,9% | idem, em porcentagem | `steps/step2-binding/dados/analise_deterministico.csv` |
 | `\FcomAninhadaDet` | 53 | arquivos com algum teste de classe aninhada (deterministico) | `steps/step2-binding/dados/analise_deterministico.csv` |
 | `\FarquivosUmaAmostraDet` | 710 | arquivos com uma única amostra do MLCQ (determinístico) | `steps/step2-binding/dados/analise_deterministico.csv` |
+| `\FnCelulaMinDet` | 307 | arquivos avaliados para o code smell menos coberto (determinístico) | `steps/step2-binding/dados/analise_deterministico.csv` |
+| `\FnCelulaMaxDet` | 432 | arquivos avaliados para o code smell mais coberto (determinístico) | `steps/step2-binding/dados/analise_deterministico.csv` |
 | `\FrDetectavelDet` | 0,104 | menor r detectável com 80% de poder, N do ramo deterministico | `fórmula de poder do step 2 (poder_analise.py)` |
 | `\FarquivosAmp` | 1.369 | arquivos de produção no ramo ampliado | `steps/step2-binding/dados/analise_ampliado.csv` |
 | `\FreposAmp` | 323 | repositórios no ramo ampliado | `steps/step2-binding/dados/analise_ampliado.csv` |

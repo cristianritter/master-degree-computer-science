@@ -235,9 +235,12 @@ nearly the same files; pooling them would count each hypothesis twice.
 \paragraph{Power and equivalence}
 A null result is only informative if the design could have detected an effect. With the
 \FarquivosDet{} files of the deterministic branch, a two-sided test at $\alpha = 0.05$ has 80\% power to detect
-$|\rho| \geq$ \FrDetectavelDet{}. Beyond power, we report the largest effect compatible
-with the data, i.e., the bound of the 90\% confidence interval farthest from zero, and
-run two one-sided tests (TOST)~\cite{lakens2017equivalence} against
+$|\rho| \geq$ \FrDetectavelDet{}; every one of these files has an aggregate label. The code
+smell $\times$ test smell cells of RQ2 use only the files judged for that code smell
+(\FnCelulaMinDet{} to \FnCelulaMaxDet{}), so their detectable effect is larger. Beyond
+power, we report the largest effect compatible with the data, i.e., the bound of the 90\%
+confidence interval farthest from zero (the interval that corresponds to the equivalence
+test below at $\alpha = 0.05$), and run two one-sided tests (TOST)~\cite{lakens2017equivalence} against
 $|\rho| = $ \FmargemEquivalencia{}, the conventional threshold of a small
 correlation~\cite{cohen1988power}.
 
