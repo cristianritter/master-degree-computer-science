@@ -16,3 +16,13 @@ steps/step1-coleta-jnose/.oraculo/
 steps/step2-binding/pacote-avaliador2/
 steps/step2-binding/dossie_revisao_avaliador1.txt
 steps/step2-binding/envio-avaliador2/
+
+# compilacao local do artigo (LaTeX Workshop / latexmk)
+artigo/latex/*.aux
+artigo/latex/*.bbl
+artigo/latex/*.blg
+artigo/latex/*.fdb_latexmk
+artigo/latex/*.fls
+artigo/latex/*.log
+artigo/latex/*.synctex.gz
+artigo/latex/main.pdf
