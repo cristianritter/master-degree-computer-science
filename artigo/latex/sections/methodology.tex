@@ -96,13 +96,12 @@ not see.
 
 \paragraph{Detector}
 We detect test smells with JNose Test~\cite{virginio2020jnose}, version 2.5.0
-(jnose-core 0.9.4), a JUnit-aware extension of tsDetect~\cite{peruma2020tsdetect}. We
-enable the tool's default configuration of \FsmellsHabilitados{} test smells, minus
-Unknown Test. We exclude Unknown Test because its detector, when it fails on a class,
-discards the analysis of all other smells of that class: in a separate run with the full
-default configuration it would have erased \FunknownOcorrencias{} occurrences of other
-smells in \FunknownClasses{} classes. Keeping the default configuration removes the
-researcher's choice of which smells count.
+(jnose-core 0.9.4), a JUnit-aware extension of tsDetect~\cite{peruma2020tsdetect}. We use
+the tool's default configuration of \FsmellsHabilitados{} test smells rather than
+selecting smells ourselves, with one exception: Unknown Test. Its detector, when it fails
+on a class, discards the analysis of all other smells of that class; in a separate run
+with the full default configuration it would have erased \FunknownOcorrencias{}
+occurrences of other smells in \FunknownClasses{} classes.
 
 The collection covers \FclassesTeste{} test classes in \FreposComTeste{} repositories and
 yields \Focorrencias{} test smell occurrences. A file whose name matches JNose's test
