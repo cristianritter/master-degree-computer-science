@@ -164,9 +164,9 @@ extract could not settle was marked undecided. A second rater, not involved in t
 independently judged a stratified subsample of \FparesSegundoAvaliador{} pairs
 (\FparesPorEstratoSegundo{} per stratum). Inter-rater agreement was
 \FconcordanciaEstrito{} (Cohen's $\kappa$ = \FkappaEstrito{}) under the strict criterion
-and \FconcordanciaAmplo{} ($\kappa$ = \FkappaAmplo{}) under the broad one, computed before
-disagreements were resolved by discussion. The audit protocol was registered before the
-first pair was judged.
+and \FconcordanciaAmplo{} ($\kappa$ = \FkappaAmplo{}) under the broad one. The second rater
+served only to measure agreement; the final verdict is the first author's. The audit
+protocol was registered before the first pair was judged.
 
 The precision of each branch is the per-stratum precision weighted by the stratum's share
 of the pairs, over the decided pairs. The deterministic branch has a precision of
@@ -217,7 +217,8 @@ report the partial Spearman correlation controlling for the member count of the 
 and the correlation of the label itself with test size. As a second operationalization,
 we compare files whose label was confirmed by the reviewers' majority
 (\FnConfirmados{} files) with clean files (\FnLimpos{}) using the Mann--Whitney $U$ test,
-with the rank-biserial correlation as effect size. As a third, we compare confirmed files
+with the rank-biserial correlation as effect size; in each comparison, the $p$-values of the
+three outcomes are adjusted with Benjamini--Hochberg. As a third, we compare confirmed files
 with files that were flagged but not confirmed (\FnDisputados{}). This last comparison is
 the only one immune to the sampling design of MLCQ, since both groups were flagged and
 routed to the cross-check.
@@ -226,7 +227,8 @@ routed to the cross-check.
 Spearman's $\rho$ for each test smell, in raw and density form, against the aggregate
 label; and for each pair of code smell and test smell, in density form, against the
 severity of that code smell. Default Test does not occur in any analyzed file and is
-excluded as a constant. We adjust $p$-values with
+excluded as a constant. In the cells of Eager Test and Lazy Test, we use only the files
+without nested classes, the ones these two smells are measured correctly in. We adjust $p$-values with
 Benjamini--Hochberg~\cite{benjamini1995fdr} within three families: the per-smell tests on
 all files, the same tests on the files without nested classes, and the code smell $\times$
 test smell cells. The first two are kept apart because they ask the same questions of

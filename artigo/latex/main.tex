@@ -9,6 +9,9 @@
 % Os numeros do artigo. Gerado por artigo/tools/folha_de_fatos.py --gravar; nao editar.
 \input{fatos.tex}
 
+% Caixa de resposta ao fim de cada RQ nos resultados
+\newcommand{\rqanswer}[2]{\par\medskip\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\textbf{Answer to #1.} #2}}\par\medskip}
+
 \begin{document}
 
 \title{Smelly Classes, Smelly Tests? Developer-Perceived Code Smells and Test Smell
@@ -30,8 +33,7 @@ To be written.
 
 \input{sections/methodology}
 
-\section{Results}
-To be written.
+\input{sections/results}
 
 \section{Threats to Validity}
 To be written.

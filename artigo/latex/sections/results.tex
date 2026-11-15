@@ -1,0 +1,135 @@
+% !TEX root = ../main.tex
+% Resultados. Nenhum numero digitado: todo valor vem de uma macro \F... de fatos.tex,
+% gerada por artigo/tools/folha_de_fatos.py. O conferidor (folha_de_fatos.py --conferir)
+% recusa digito solto neste arquivo.
+% Duas camadas: a primeira frase de cada paragrafo diz em palavras o que se encontrou, e os
+% numeros vem entre parenteses como prova. Cada conceito estatistico e traduzido uma vez, na
+% primeira vez que aparece. Cada RQ fecha com uma caixa de resposta (\rqanswer, em main.tex).
+
+\section{Results}
+\label{sec:results}
+
+Unless stated otherwise, results refer to the deterministic branch (\FarquivosDet{}
+production files) and to density, the primary outcome. Table~\ref{tab:rq1} reports the
+three outcomes in both branches.
+
+\begin{table*}[t]
+  \centering
+  \caption{Spearman's $\rho$ between each outcome and the aggregate label. The partial
+  $\rho$ removes the effect of the member count of the linked tests.}
+  \label{tab:rq1}
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Outcome & deterministic $\rho$ [95\% CI] & deterministic $p$ & deterministic partial $\rho$
+      & extended $\rho$ & extended $p$ \\
+    \midrule
+    density & \FrhoDensidadeDet{} [\FicDensidadeBaixo{}, \FicDensidadeAlto{}] & \FpDensidadeDet{}
+      & \FparcialDensidade{} & \FrhoDensidadeAmp{} & \FpDensidadeAmp{} \\
+    raw & \FrhoBrutoDet{} [\FicBrutoBaixo{}, \FicBrutoAlto{}] & \FpBrutoDet{}
+      & \FparcialBruto{} & \FrhoBrutoAmp{} & \FpBrutoAmp{} \\
+    distinct & \FrhoDistintosDet{} [\FicDistintosBaixo{}, \FicDistintosAlto{}] & \FpDistintosDet{}
+      & \FparcialDistintos{} & \FrhoDistintosAmp{} & \FpDistintosAmp{} \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\subsection{RQ1: Perceived Severity and Test Smell Density}
+\label{sec:res-rq1}
+
+Classes that reviewers judged more severe are not tested by tests with more test smells
+per member. The correlation is close to zero: $\rho$ = \FrhoDensidadeDet{}, where zero
+means no relation and one means that the files would be ranked in the same order by
+severity and by density. The $p$-value, the probability of a correlation at least this far
+from zero if there were no relation, is \FpDensidadeDet{}, above the usual threshold of
+$0.05$.
+
+This does not show that the relation is absent. The confidence interval, the range of
+correlations compatible with the data, goes from \FicDensidadeBaixo{} to
+\FicDensidadeAlto{} at 95\%. To ask whether the correlation is smaller than
+\FmargemEquivalencia{}, the conventional threshold of a small correlation, we use an
+equivalence test: at
+90\% the interval ends at \FmaiorEfeitoDet{}, slightly above that threshold, so the test
+cannot conclude that the correlation is smaller than it ($p$ = \FpTostDensidadeDet{}). The
+data rule out correlations larger than \FmaiorEfeitoDet{}, but not a small positive one
+below that value.
+
+Counting test smells without dividing by test size gives a different picture: the raw
+count does grow with severity ($\rho$ = \FrhoBrutoDet{}, $p$ = \FpBrutoDet{}). Part of this
+comes from size. Larger tests have more smells ($\rho$ = \FrhoBrutoTamanho{} between the
+raw count and the member count of the tests), and classes judged more severe have slightly
+larger tests ($\rho$ = \FrhoRotuloMetodos{}). The partial correlation, which removes the
+effect of test size, drops from \FrhoBrutoDet{} to \FparcialBruto{} for the raw count. For
+density, which already divides by size, it stays at \FparcialDensidade{}. The number of
+distinct smells lies between the two ($\rho$ = \FrhoDistintosDet{}, $p$ =
+\FpDistintosDet{}) and, like the raw count, drops when test size is removed (partial
+$\rho$ = \FparcialDistintos{}).
+
+Comparing groups of files leads to the same picture. Files whose label the majority of
+reviewers confirmed (\FnConfirmados{}) have more raw occurrences than clean files
+(\FnLimpos{}), but not a higher density. We measure the difference between two groups with
+the rank-biserial correlation, which reads like $\rho$: zero means the groups do not
+differ. It is \FdeltaBrutoExtremos{} for the raw count ($p$ = \FpajBrutoExtremos{}) and
+\FdeltaDensidadeExtremos{} for density ($p$ = \FpajDensidadeExtremos{}); both $p$-values
+are adjusted by Benjamini--Hochberg for the three outcomes compared. Confirmed files and
+files flagged but not confirmed (\FnDisputados{}) differ by \FdeltaDisputados{} in
+density, but this comparison cannot answer the question: with groups of this size, only a
+difference of \FdeltaDetectavelDisputados{} or more would be detected with 80\% power,
+i.e., in eight out of ten samples.
+
+The result holds under the two robustness checks. Files of the same repository may
+resemble each other; resampling whole repositories instead of files, the 95\% interval of
+density goes from \FbootBaixoDet{} to \FbootAltoDet{}, close to the original. Removing the
+files affected by the nested class defect of the detector (\FnSemAninhadaDet{} files
+remain), the correlation is \FrhoSemAninhadaDet{} ($p$ = \FpSemAninhadaDet{}).
+
+\rqanswer{RQ1}{We found no relation between the severity that reviewers perceived in a
+production class and the density of test smells in its tests. The data rule out a relation
+of moderate or large size, but not a small one. Counting test smells without dividing by
+test size produces a relation, part of which comes from test size.}
+
+\subsection{RQ2: Individual Test Smells and Smell Pairs}
+\label{sec:res-rq2}
+
+No individual test smell, and no pair of code smell and test smell, is related to
+perceived severity once we account for the number of tests. When many tests are run, some
+fall below $p = 0.05$ by chance alone; the Benjamini--Hochberg correction adjusts each
+$p$-value for that. Of the \FtestesPorSmell{} tests per test smell (each smell as raw
+count and as density, on all files and again without the files with nested classes),
+\FnominaisPorSmell{} fall below $0.05$ before the correction, and after it the smallest $p$-value is
+\FmenorPajPorSmell{}. In the \FtestesGrade{} tests for pairs of code smell and test smell,
+the smallest corrected $p$-value is \FmenorPajGrade{}. The uncorrected results are listed
+in the replication package.
+
+\rqanswer{RQ2}{No individual test smell explains the absence of a relation in RQ1. We
+found no smells with opposite effects that cancel out in the aggregate, at least none that
+our tests could detect.}
+
+\subsection{RQ3: Normalization and Binding}
+\label{sec:res-rq3}
+
+Each of the two measurement decisions changes the answer to RQ1.
+
+\paragraph{Normalization}
+Whether test smells are counted or divided by test size decides whether a relation
+appears. As a raw count, they are related to perceived severity ($p$ = \FpBrutoDet{} for
+the correlation, \FpajBrutoExtremos{} for confirmed versus clean files); as density, they
+are not ($p$ = \FpDensidadeDet{} and \FpajDensidadeExtremos{}). As shown in RQ1, the raw
+count carries the size of the test, and test size is itself related to the label. A study
+that counts test smells without dividing by size measures, in part, test size.
+
+\paragraph{Binding}
+Linking each class to every test that references it also changes the answer, because most
+of these tests are not dedicated to the class. In the extended branch (\FarquivosAmp{}
+files), the correlation is close to zero for all three outcomes (Table~\ref{tab:rq1}).
+With more files, the estimate is narrower than in the deterministic branch: at 90\% the
+interval ends at \FmaiorEfeitoAmp{}, below the threshold of a small correlation, and
+resampling repositories gives an interval from \FbootBaixoAmp{} to \FbootAltoAmp{}. In the
+audit, however, the class is the target of the test in only \FprecisaoHumanaAmp{} of the
+pairs of this branch, against \FprecisaoHumanaDet{} in the deterministic branch; the test
+executes code of the class in \FprecisaoHumanaAmpAmplo{} of them. Most tests linked by a
+static reference use the class without testing it.
+
+\rqanswer{RQ3}{Both decisions change the result. Without dividing by test size, a relation
+appears that partly reflects test size. Linking classes to every test that references
+them yields a precise null result, but about tests that, for the most part, do not test
+the class.}
