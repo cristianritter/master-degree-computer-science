@@ -1,0 +1,40 @@
+% Diagrama do pipeline (Fig. pipeline, incluido em sections/methodology.tex).
+% Fica fora de sections/ porque as coordenadas do TikZ tem digitos, que o conferidor
+% recusaria. Os numeros do estudo continuam vindo so das macros \F... de fatos.tex.
+\begin{tikzpicture}[
+    node distance=4mm and 5mm,
+    etapa/.style={draw, rounded corners=2pt, align=center, font=\footnotesize,
+                  text width=29mm, minimum height=15mm, inner sep=2pt},
+    pergunta/.style={etapa, fill=black!6},
+    seta/.style={-{Stealth[length=1.8mm]}, semithick}
+  ]
+  \node[etapa] (mlcq)
+    {\textbf{MLCQ}\\ \FrevisoesMlcq{} reviews of\\ \FamostrasMlcq{} code samples\\
+     in \FreposMlcq{} repositories};
+  \node[etapa, right=of mlcq] (mirror)
+    {\textbf{Mirrors at the}\\ \textbf{MLCQ commit}\\ \FreposHashOk{} repositories\\
+     with matching hash};
+  \node[etapa, right=of mirror] (jnose)
+    {\textbf{JNose Test}\\ \FclassesTeste{} test classes\\ \Focorrencias{}\\
+     test smell occurrences};
+
+  \node[etapa, above right=2mm and 5mm of jnose.east, anchor=south west] (det)
+    {\textbf{Deterministic binding}\\ path and convention\\ \FarquivosDet{} production files\\
+     target precision \FprecisaoHumanaDet{}};
+  \node[etapa, below right=2mm and 5mm of jnose.east, anchor=north west] (amp)
+    {\textbf{Extended binding}\\ + static references\\ \FarquivosAmp{} production files\\
+     target precision \FprecisaoHumanaAmp{}};
+
+  \node[pergunta, right=of det] (rq12)
+    {\textbf{RQ1, RQ2}\\ severity $\times$\\ test smell density};
+  \node[pergunta, right=of amp] (rq3)
+    {\textbf{RQ3}\\ effect of normalization\\ and of binding};
+
+  \draw[seta] (mlcq) -- (mirror);
+  \draw[seta] (mirror) -- (jnose);
+  \draw[seta] (jnose.east) -- ++(2.5mm,0) |- (det.west);
+  \draw[seta] (jnose.east) -- ++(2.5mm,0) |- (amp.west);
+  \draw[seta] (det) -- (rq12);
+  \draw[seta] (amp) -- (rq3);
+  \draw[seta] (det.east) -- ++(2.5mm,0) |- ([yshift=2mm]rq3.west);
+\end{tikzpicture}

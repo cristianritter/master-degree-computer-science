@@ -34,15 +34,14 @@ repositories of the code smell data set, at the commit the reviewers saw
 (Section~\ref{sec:binding}); and we correlate the two sides
 (Section~\ref{sec:analysis}).
 
-\begin{figure}[t]
+\begin{figure*}[t]
   \centering
-  \fbox{\parbox{0.9\linewidth}{\centering\vspace{2em}pipeline: MLCQ $\rightarrow$ mirrors
-  at the MLCQ commit $\rightarrow$ JNose $\rightarrow$ binding $\rightarrow$ analysis
-  \vspace{2em}}}
-  \caption{Study pipeline. Every number reported in this paper is produced by a versioned
-  script of the replication package.}
+  \input{figuras/pipeline}
+  \caption{Study pipeline. Target precision is the share of audited pairs in which the
+  production class is the target of the test (Section~\ref{sec:binding}). Every number
+  reported in this paper is produced by a versioned script of the replication package.}
   \label{fig:pipeline}
-\end{figure}
+\end{figure*}
 
 \subsection{Code Smell Labels: the MLCQ Data Set}
 \label{sec:mlcq}
