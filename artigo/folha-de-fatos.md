@@ -183,6 +183,8 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FerrosHumanosDet` | 13 | pares do ramo determinístico em que o teste não tem a classe como alvo (todos: o teste não cita a classe) | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FconcordanciaHumanoAuto` | 87,7% | concordância humano final × julgamento automatizado, critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FkappaHumanoAuto` | 0,752 | kappa humano final × julgamento automatizado, critério estrito | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
+| `\FconcordanciaEstrito` | 95,8% | concordância entre avaliadores, critério estrito, vereditos independentes | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
+| `\FkappaEstrito` | 0,917 | kappa de Cohen entre avaliadores, critério estrito, vereditos independentes | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
 | `\FprecisaoHumanaDetAmplo` | 100,0% | precisão humana, ramo determinístico, critério amplo, sobre os pares decididos | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FprecisaoHumanaDetAmploInf` | 90,2% | idem, limite inferior: todo '?' contado como n | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FprecisaoHumanaDetAmploSup` | 100,0% | idem, limite superior: todo '?' contado como s | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
@@ -192,15 +194,5 @@ steps, o que faz desta folha uma segunda apuração.
 | `\FinterrogacoesAmplo` | 20 | pares com veredito final '?', critério amplo | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FconcordanciaHumanoAutoAmplo` | 86,4% | concordância humano final × julgamento automatizado, critério amplo | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
 | `\FkappaHumanoAutoAmplo` | 0,277 | kappa humano final × julgamento automatizado, critério amplo | `steps/step2-binding/dados/auditoria_humana_avaliador1.csv` |
-
-## Pendentes
-
-Macros que o artigo já usa e cujo dado ainda não existe: no PDF aparecem como
-`[?? chave]`. Saem desta lista quando a planilha do avaliador 2 voltar.
-
-| macro | o que será |
-|---|---|
-| `\FconcordanciaEstrito` | concordância entre avaliadores, critério estrito (%) |
-| `\FkappaEstrito` | kappa de Cohen entre avaliadores, critério estrito |
-| `\FconcordanciaAmplo` | concordância entre avaliadores, critério amplo (%) |
-| `\FkappaAmplo` | kappa de Cohen entre avaliadores, critério amplo |
+| `\FconcordanciaAmplo` | 88,6% | concordância entre avaliadores, critério amplo, vereditos independentes | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |
+| `\FkappaAmplo` | 0,495 | kappa de Cohen entre avaliadores, critério amplo, vereditos independentes | `steps/step2-binding/dados/auditoria_humana_avaliador2.csv` |

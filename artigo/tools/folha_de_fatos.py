@@ -592,10 +592,10 @@ def censo():
                                for a in av1 if a["par"] == b["par"]])
             assert abs(st["humanos"][1] - po12) < 1e-9, "concordancia %s difere" % crit
             fato("concordancia" + chave, 100 * po12,
-                 "concordância entre avaliadores, critério %s, antes do consenso" % crit,
+                 "concordância entre avaliadores, critério %s, vereditos independentes" % crit,
                  fonte2, 1, "pct")
             fato("kappa" + chave, k12,
-                 "kappa de Cohen entre avaliadores, critério %s, antes do consenso" % crit, fonte2, 3)
+                 "kappa de Cohen entre avaliadores, critério %s, vereditos independentes" % crit, fonte2, 3)
         else:
             PENDENTES.append(("concordancia" + chave,
                               "concordância entre avaliadores, critério %s (%%)" % crit))

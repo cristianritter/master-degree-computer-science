@@ -144,3 +144,11 @@ Quando o teste não cita o nome da classe de produção nenhuma vez fora de come
 Vale para os dois avaliadores. O efeito é conservador no estrito (o par conta como erro) e
 retira o par do denominador no amplo, com os limites acima. No censo do avaliador 1 são 13
 pares.
+
+## Sem etapa de consenso — 15/11/2026
+
+Decidido depois que os dois avaliadores fecharam os julgamentos independentes. O avaliador 2
+existe para medir a concordância entre humanos, e o kappa é calculado sobre os vereditos
+independentes, então o consenso não o altera. O passo 3 do procedimento (discussão das
+divergências) não é feito: `consenso_estrito` e `consenso_amplo` ficam em branco, e o
+veredito final dos 293 pares é o do avaliador 1. O texto do artigo descreve isso.
